@@ -1,0 +1,31 @@
+.main {
+}
+
+.mainSection{
+display: flex;
+}
+
+header {
+width: 100%;
+}
+
+nav {
+  width:286px;
+  height: 1708px;
+/*   background-color: blueviolet; */
+}
+
+main{
+  width:100%;
+  max-width:2000px;
+  min-width: 500px;
+}
+aside {
+  width: 392px;
+  height: 1708px;
+  background-color: rgb(243, 244, 248);
+}
+
+footer{
+  display: none;
+}

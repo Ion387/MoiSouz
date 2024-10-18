@@ -2,6 +2,7 @@ import s from "./Header.module.css"
 import userWomen from "../../../1Pictures/0Icons/userWomen.png";
 import headerUserMore from "../../../1Pictures/0Icons/headerUserMore.png";
 import Icon from "../../../1Pictures/0Icons/0IconsContainer/IconsContainer";
+import { NavLink } from "react-router-dom";
 
 
 const Header=(props)=>{
@@ -31,7 +32,11 @@ const Header=(props)=>{
 <div className={s.user}>
   <img className={s.userAvatar} src={userWomen} alt='userWomenIcon'/>
   <div className={s.blockNameOfUsers}>
-  <div className={s.userName} >Ирина К.</div>
+  <div className={s.userName} >
+  <NavLink to="/UserPage" className = {s.userName}>Ирина.К.
+ </NavLink>
+
+  </div>
   <div className={s.userType} >Администратор</div>
   </div>
   <div className={s.chevronDown}>

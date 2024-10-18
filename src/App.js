@@ -1,23 +1,28 @@
-import { Provider } from 'react-redux'
-
+import { connect, Provider } from 'react-redux'
 import s from './App.module.css'
 import SiteContent from './Components/SiteContent/SiteContent'
-import store from "./0Redux/0redux-store"
 import LoginPage from './Components/LoginPage/LoginPage'
-import { useState } from 'react'
+import { addSubmitAC, authThunk } from './0Redux/userReducer'
 
 const App = (props) => {
-const [render,setRender]=useState(1)
 return (
 <div className={s.main}>
-<Provider store={store}>
-{store.getState().user.isUserLogin 
+{props.isUserLogged 
 ? 
 <SiteContent/> 
 :
-<LoginPage setRender={setRender}/>} 
-</Provider>
+<LoginPage authThunk={props.authThunk}/>} 
 </div>
 )}
 
-export default App
+
+const mapStateToProps= (state)=>{
+  return{
+    isUserLogged:state.user.isUserLogged,
+  }}
+
+  export default connect(mapStateToProps,{authThunk})(App)
+
+
+
+

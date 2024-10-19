@@ -13,3 +13,7 @@
 .input::placeholder {
   color: rgb(166, 166, 166);
 }
+
+.errorInput {
+  border: rgb(255, 0, 0) solid 1px;
+}

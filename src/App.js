@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import s from "./App.module.css";
 import SiteContent from "./Components/SiteContent/SiteContent";
-import LoginPage from "./Components/LoginPage/LoginPage";
+import LoginPage from "./Components/AuthPages/AuthPage";
 import { authThunkUserTC } from "./0Redux/userReducer";
 
 const App = (props) => {

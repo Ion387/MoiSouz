@@ -11,6 +11,7 @@ import Aside from "./Aside/Aside";
 import s from "./SiteContent.module.css";
 import Content from "./Content/Content";
 import Main from "./Content/Main/Main";
+import UserPage from "./Content/UserPage/UserPage";
 const SiteContent = (props) => {
   return (
     <div className={s.main}>
@@ -35,7 +36,7 @@ const SiteContent = (props) => {
               <Route path="/discounts" element={<Content />} />
               <Route path="/store" element={<Content />} />
               <Route path="/information" element={<Content />} />
-
+              <Route path="/UserPage" element={<UserPage />} />
               {/* <Route path="/Messeges/*" element={<DialogsContainer store={store} />} /> */}
             </Routes>
           </main>

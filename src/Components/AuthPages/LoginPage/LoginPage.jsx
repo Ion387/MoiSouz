@@ -2,10 +2,10 @@ import s from "./LoginPage.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
 import { auth, setProfile } from "0Redux/userReducer";
 import Button from "Components/0Generics/Veil/FormElements/Button/Button";
 import Input from "Components/0Generics/Veil/FormElements/Input/Input";
+import { NavLink } from "react-router-dom";
 
 const LoginPage = (props) => {
   const schema = yup.object().shape({
@@ -28,10 +28,12 @@ const LoginPage = (props) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const { onChange, onBlur, name, ref } = register("email");
+
   const onSubmit = (data) => {
+    console.log(data.email);
     props.authThunkUserTC(data.email, data.password);
   };
-  let myTest = register("email");
   return (
     <div className={s.main}>
       <div className={s.section}>
@@ -40,12 +42,10 @@ const LoginPage = (props) => {
 
           <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
             <div className={s.formTitles}>Адрес электронной почты:</div>
-            {/*            <Input placeholder={"ivanov@mail.ru"} {...myTest} />
-             */}
-            <input
-              className={s.input}
-              placeholder={"ivanov@mail.ru"}
+            <Input
               {...register("email")}
+              errors={errors.email}
+              placeholder={"ivanov@mail.ru"}
             />
 
             <div className={s.flexTitles}>
@@ -53,12 +53,21 @@ const LoginPage = (props) => {
               <div className={s.formTitles}>Забыли пароль?</div>
             </div>
 
-            <input
-              className={s.input}
+            <Input
+              {...register("password")}
+              errors={errors.password}
+              placeholder={"password"}
+            />
+
+            {/*             <input
+              className={
+                !errors.password ? s.input : `${s.input} ${s.errorInput}`
+              }
               type="password"
               placeholder={"password"}
               {...register("password")}
-            />
+            /> */}
+
             <div className={s.checkboxBlock}>
               <input
                 className={s.checkbox}
@@ -67,8 +76,6 @@ const LoginPage = (props) => {
               />{" "}
               <div className={s.checkboxText}>Запомнить пароль</div>
             </div>
-            {/*   {errors.email && <span>почта</span>} */}
-
             <div className={s.submitBlock}>
               <div className={s.submit}>
                 <Button value={"Войти"} />
@@ -76,9 +83,12 @@ const LoginPage = (props) => {
 
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
-                <a href="#" className={s.linkUnderSubmit}>
+                {/*                 <a href="#" className={s.registrationLink}>
                   Регистрация
-                </a>
+                </a> */}
+                <NavLink to="/registration" className={s.linkUnderSubmit}>
+                  Регистрация
+                </NavLink>
               </div>
               {errors.password && (
                 <div className={s.error}>{errors.password.message}</div>

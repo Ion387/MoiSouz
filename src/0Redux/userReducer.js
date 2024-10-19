@@ -3,37 +3,35 @@ import { fetch, setToken } from "API/AxiosApi";
 const UserAC = 0;
 const UserTC = 0;
 
-export const userIsLogedUserAC = () => {
+export const userIsLoggedUserAC = () => {
   return {
     type: "userIsLogged",
   };
 };
 
-export const setUserDataUserAC = (userLogin, email) => {
+export const setUserDataUserAC = (username, email) => {
   return {
     type: "setUserData",
-    userLogin,
+    username,
     email,
   };
 };
 
 const initialState = {
   isUserLogged: false,
-
-  userLogin: "login",
   userId: null,
   userEmail: 0,
   active: true,
-  email: "user@admin.com",
+  email: "",
   firstName: null,
   hashsha1: null,
-  id: 2,
-  lastName: "12345A",
+  id: null,
+  lastName: "",
   roles: ["ROLE_USER"],
   secondName: null,
   updatedAt: "2024-10-15T17:50:35+00:00",
   userIdentifier: "user@admin.com",
-  username: "user@admin.com",
+  username: "",
 };
 
 const userReducer = (state = initialState, action) => {
@@ -47,7 +45,7 @@ const userReducer = (state = initialState, action) => {
     case "setUserData":
       return {
         ...state,
-        userLogin: action.userLogin,
+        username: action.username,
         email: action.email,
       };
 
@@ -56,17 +54,19 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-export const setProfile = async () => {
-  const response = await (
-    await fetch()
-  )({
-    url: "/api/profile",
-    method: "POST",
-  });
-  if (response.status == 200) {
-    // успешный запрос
-    console.log(response.data);
-  }
+export const setProfileUserTC = () => {
+  return async (dispatch) => {
+    let response = await (
+      await fetch()
+    )({
+      url: "/api/profile",
+      method: "POST",
+    });
+    if (response.status == 200) {
+      // успешный запрос
+      dispatch(setUserDataUserAC(response.data.username, response.data.email));
+    }
+  };
 };
 
 export const authThunkUserTC = (email, password) => {
@@ -81,9 +81,9 @@ export const authThunkUserTC = (email, password) => {
     if (response.status == 200) {
       // успешный запрос
       setToken(response.data.token);
-      console.log(response.data);
-      dispatch(userIsLogedUserAC());
-      setProfile();
+      dispatch(userIsLoggedUserAC());
+      /*   setProfile(); */
+      dispatch(setProfileUserTC());
     }
   };
 };

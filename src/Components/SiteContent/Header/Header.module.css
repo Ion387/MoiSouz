@@ -75,9 +75,6 @@ border-radius: 28px;
 }
 
 .blockNameOfUsers{
-
-
-
 }
 
 .userName {
@@ -90,13 +87,10 @@ text-decoration: none;
 .userType {
   font-size: 12px;
   font-weight: 600;
-
-
 }
 
 
 
 .chevronDown{
-
   margin-left: 26px;
 }

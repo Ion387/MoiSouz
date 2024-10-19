@@ -1,7 +1,7 @@
 import s from "./Header.module.css"
-import userWomen from "../../../1Pictures/0Icons/userWomen.png";
-import headerUserMore from "../../../1Pictures/0Icons/headerUserMore.png";
-import Icon from "../../../1Pictures/0Icons/0IconsContainer/IconsContainer";
+import userWomen from "1Pictures/0Icons/userWomen.png";
+import headerUserMore from "1Pictures/0Icons/headerUserMore.png";
+import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import { NavLink } from "react-router-dom";
 
 
@@ -23,7 +23,6 @@ const Header=(props)=>{
 
 <div className={s.bell}>
   <Icon iconName="bellIcon" />
-{/*   <img src={bellIcon} alt='bellIcon'/> */}
   <div className={s.bellCircle}>
   <div className={s.bellCircleNumber}>6</div>
   </div>

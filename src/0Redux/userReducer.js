@@ -1,13 +1,13 @@
 import { fetch, setToken  } from "API/AxiosApi"
 
-const userAC=0
-const userTC=0
+const UserAC=0
+const UserTC=0
 
-export const userIsLoged = () => {return {
+export const userIsLogedUserAC = () => {return {
   type : "userIsLogged"
   }}
 
-  export const setUserData = (userLogin,email) => {return {
+  export const setUserDataUserAC = (userLogin,email) => {return {
     type : "setUserData", userLogin,email
     }}
 
@@ -64,7 +64,7 @@ const userReducer =(state=initialState, action)=> {
     ;
 
 
-    export const authThunk=(email,password)=>{
+    export const authThunkUserTC=(email,password)=>{
       return  async (dispatch)=>{
         let response = await (
           await fetch()
@@ -77,7 +77,7 @@ const userReducer =(state=initialState, action)=> {
               // успешный запрос
               setToken(response.data.token);
               console.log(response.data);
-        dispatch(userIsLoged())
+        dispatch(userIsLogedUserAC())
         dispatch(setProfile())}; }}
 
 

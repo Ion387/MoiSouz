@@ -1,8 +1,8 @@
-import { connect, Provider } from 'react-redux'
+import {connect} from 'react-redux'
 import s from './App.module.css'
 import SiteContent from './Components/SiteContent/SiteContent'
 import LoginPage from './Components/LoginPage/LoginPage'
-import { addSubmitAC, authThunk } from './0Redux/userReducer'
+import {  authThunkUserTC } from './0Redux/userReducer'
 
 const App = (props) => {
 return (
@@ -21,7 +21,7 @@ const mapStateToProps= (state)=>{
     isUserLogged:state.user.isUserLogged,
   }}
 
-  export default connect(mapStateToProps,{authThunk})(App)
+  export default connect(mapStateToProps,{authThunkUserTC})(App)
 
 
 

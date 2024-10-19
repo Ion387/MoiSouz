@@ -1,42 +1,39 @@
-.main{
-width: 100%;
-height: 100%;
-/* background-color:blue; */
-background-color:white;
-border: solid 2px #ddd;
-border-radius: 14px;
+.main {
+  width: 100%;
+  height: 100%;
+  /* background-color:blue; */
+  background-color: white;
+  border: solid 2px #ddd;
+  border-radius: 14px;
 }
 
 .section {
-width: calc(100% - 22px);
-height: 100%;
-margin-left: 17px;
-/* background-color:coral; */
-padding: 1px;
-position: relative;
+  width: calc(100% - 22px);
+  height: 100%;
+  margin-left: 17px;
+  /* background-color:coral; */
+  padding: 1px;
+  position: relative;
 }
 
-
-.bigIcon{
-position: absolute;
-right: 0px;
-top:17px;
+.bigIcon {
+  position: absolute;
+  right: 0px;
+  top: 17px;
 }
 
-.title{
-margin-top: 17px;
-font-size: 16px;
-font-weight: 600;
+.title {
+  margin-top: 17px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.volume{
-position: absolute;
-top:79px;
-font-size: 25px;
-font-weight: 700;
+.volume {
+  position: absolute;
+  top: 79px;
+  font-size: 25px;
+  font-weight: 700;
 }
-
-
 
 .rub {
   margin-left: 2px;
@@ -44,38 +41,36 @@ font-weight: 700;
   font-weight: 700;
 }
 
-.growOrFall{
+.growOrFall {
   position: absolute;
-  top:123px;
-display: flex;
+  top: 123px;
+  display: flex;
 }
 
-.icon{
+.icon {
   margin-top: 4px;
-margin-left: 4px;
+  margin-left: 4px;
 }
 
-.percent{
+.percent {
   margin-left: 5px;
   font-size: 16px;
   font-weight: 600;
-color: rgb(0, 182, 155);
+  color: rgb(0, 182, 155);
 }
 
-.fall.percent{
+.fall.percent {
   color: red;
 }
 
-.percent::after{
-content: "%";
-font-size: 16px;
-font-weight: 600;
-
+.percent::after {
+  content: "%";
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.persentTime{
+.persentTime {
   margin-left: 5px;
   font-size: 16px;
   font-weight: 600;
-
 }

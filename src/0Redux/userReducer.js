@@ -1,88 +1,92 @@
-import { fetch, setToken  } from "API/AxiosApi"
+import { fetch, setToken } from "API/AxiosApi";
 
-const UserAC=0
-const UserTC=0
+const UserAC = 0;
+const UserTC = 0;
 
-export const userIsLogedUserAC = () => {return {
-  type : "userIsLogged"
-  }}
+export const userIsLogedUserAC = () => {
+  return {
+    type: "userIsLogged",
+  };
+};
 
-  export const setUserDataUserAC = (userLogin,email) => {return {
-    type : "setUserData", userLogin,email
-    }}
+export const setUserDataUserAC = (userLogin, email) => {
+  return {
+    type: "setUserData",
+    userLogin,
+    email,
+  };
+};
 
-const initialState ={
-isUserLogged:true,
+const initialState = {
+  isUserLogged: true,
 
- userLogin:'login',
- userId:null,
- userEmail:0,
- active: true,
- email: "user@admin.com",
- firstName: null,
- hashsha1: null,
- id: 2,
- lastName: "12345A",
- roles: ['ROLE_USER'],
- secondName: null,
- updatedAt: "2024-10-15T17:50:35+00:00",
- userIdentifier: "user@admin.com",
- username: "user@admin.com"
-}
+  userLogin: "login",
+  userId: null,
+  userEmail: 0,
+  active: true,
+  email: "user@admin.com",
+  firstName: null,
+  hashsha1: null,
+  id: 2,
+  lastName: "12345A",
+  roles: ["ROLE_USER"],
+  secondName: null,
+  updatedAt: "2024-10-15T17:50:35+00:00",
+  userIdentifier: "user@admin.com",
+  username: "user@admin.com",
+};
 
-const userReducer =(state=initialState, action)=> {
-
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
-  
-  case"userIsLogged": 
+    case "userIsLogged":
       return {
         ...state,
-        isUserLogged:true
-}
+        isUserLogged: true,
+      };
 
-  case"setUserData": 
-  return {
-    ...state,
-    userLogin:action.userLogin,
-    email:action.email
-}
+    case "setUserData":
+      return {
+        ...state,
+        userLogin: action.userLogin,
+        email: action.email,
+      };
 
-  default: return state
-    }}
+    default:
+      return state;
+  }
+};
 
-    export const setProfile = async () => {
-      const response = await (
-        await fetch()
+export const setProfile = async () => {
+  const response = await (
+    await fetch()
+  )({
+    url: "/api/profile",
+    method: "POST",
+  });
+  if (response.status == 200) {
+    // успешный запрос
+    console.log(response.data);
+  }
+};
+
+export const authThunkUserTC = (email, password) => {
+  return async (dispatch) => {
+    let response = await (
+      await fetch()
     )({
-    url: '/api/profile',
-    method: 'POST',
+      url: "/api/login_check",
+      method: "POST",
+      data: { email: email, password: password },
     });
     if (response.status == 200) {
       // успешный запрос
+      setToken(response.data.token);
       console.log(response.data);
-    }}
-    ;
-
-
-    export const authThunkUserTC=(email,password)=>{
-      return  async (dispatch)=>{
-        let response = await (
-          await fetch()
-      )({
-          url: '/api/login_check',
-          method: 'POST',
-          data: {email:email, password:password},
-      });
-          if (response.status == 200) {
-              // успешный запрос
-              setToken(response.data.token);
-              console.log(response.data);
-        dispatch(userIsLogedUserAC())
-        dispatch(setProfile())}; }}
-
-
-
-
+      dispatch(userIsLogedUserAC());
+      dispatch(setProfile());
+    }
+  };
+};
 
 /* export const auth = async (email,password) => {
     try {
@@ -105,6 +109,4 @@ const userReducer =(state=initialState, action)=> {
     }
 }; */
 
-
-
-export default userReducer
+export default userReducer;

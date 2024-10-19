@@ -1,58 +1,57 @@
-.main{
-width: 100%;
-height: 100vh;
+.main {
+  width: 100%;
+  height: 100vh;
 
-background-color: rgb(72, 128, 255);
+  background-color: rgb(72, 128, 255);
 }
 
 .section {
-width: 100%;
-height: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.loginBlock{
-width: 630px;
-max-width: 630px;
-min-width: 300px; 
-height: 613px;
-background-color: white;
-border-radius: 24px;
+.loginBlock {
+  width: 630px;
+  max-width: 630px;
+  min-width: 300px;
+  height: 613px;
+  background-color: white;
+  border-radius: 24px;
 }
 
 /* .loginBlock * {
 font-size: 14px;
 } */
 
-.title{
-margin-top: 55px;
-font-size: 32px;
-font-weight: 700;
-text-align: center;
+.title {
+  margin-top: 55px;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
 }
 
-.loginForm{
-margin: 40px auto 0px auto;
-width: 516px;
-height: 388px;
-/* background-color: brown; */
+.loginForm {
+  margin: 40px auto 0px auto;
+  width: 516px;
+  height: 388px;
+  /* background-color: brown; */
 }
 
-.formTitles{
+.formTitles {
   margin-top: 25px;
   font-size: 18px;
-font-weight: 600;
+  font-weight: 600;
 }
 
-.flexTitles{
+.flexTitles {
   display: flex;
   justify-content: space-between;
 }
 
-
-.input{
+.input {
   margin-top: 15px;
   font-size: 18px;
   font-weight: 500;
@@ -64,70 +63,66 @@ font-weight: 600;
   border: rgb(216, 216, 216) solid 1px;
 }
 
-.input::placeholder{
-
- color: rgb(166, 166, 166)
+.input::placeholder {
+  color: rgb(166, 166, 166);
 }
 
-.checkboxBlock{
+.checkboxBlock {
   margin-top: 23px;
   display: flex;
 }
 
-.checkbox{
-margin: 0px;
-width: 24px;
-height: 23px;
+.checkbox {
+  margin: 0px;
+  width: 24px;
+  height: 23px;
 }
 
-.checkboxText{
-margin-left: 12px;
-font-size: 14px;
-font-weight: 600;
+.checkboxText {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.submitBlock{
-
-text-align: center;
+.submitBlock {
+  text-align: center;
 }
 
-.submit{
-margin-top:25px ;
-margin-left: auto;
-margin-right: auto;
-width: 418px;
-height: 56px;
-color: white;
-background-color: rgb(72, 128, 255);
-border-radius: 8px;
-font-size: 20px;
-font-weight: 700;
-cursor:pointer;
+.submit {
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 418px;
+  height: 56px;
+  color: white;
+  background-color: rgb(72, 128, 255);
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.underSubmit{
-margin-top: 25px;
-display: flex;
-justify-content: center;
+.underSubmit {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
 }
 
-.textUnderSubmit{
+.textUnderSubmit {
   font-size: 18px;
   font-weight: 600;
 }
 
-.linkUnderSubmit{
+.linkUnderSubmit {
   margin-left: 8px;
   font-size: 18px;
   font-weight: 700;
   color: rgb(90, 140, 255);
-
 }
 
-.error{
-  color:rgb(255, 0, 0);
+.error {
+  color: rgb(255, 0, 0);
   margin: 25px;
   font-size: 11px;
   font-weight: 600;
-
 }

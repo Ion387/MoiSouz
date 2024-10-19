@@ -1,17 +1,12 @@
-import React , {useEffect, useState} from "react";
-import s from "./Content.module.css"
+import React, { useEffect, useState } from "react";
+import s from "./Content.module.css";
 
-const Content=(props)=>{
- 
-    
-    return (
-<div className={s.main}>
-<div className={s.section}>
-</div>
+const Content = (props) => {
+  return (
+    <div className={s.main}>
+      <div className={s.section}></div>
+    </div>
+  );
+};
 
-</div>
-
-)}
-
-
-export default Content
+export default Content;

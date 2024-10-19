@@ -1,23 +1,23 @@
 .main {
 }
 
-.mainSection{
-display: flex;
+.mainSection {
+  display: flex;
 }
 
 header {
-width: 100%;
+  width: 100%;
 }
 
 nav {
-  width:286px;
+  width: 286px;
   height: 1708px;
-/*   background-color: blueviolet; */
+  /*   background-color: blueviolet; */
 }
 
-main{
-  width:100%;
-  max-width:2000px;
+main {
+  width: 100%;
+  max-width: 2000px;
   min-width: 500px;
 }
 aside {
@@ -26,6 +26,6 @@ aside {
   background-color: rgb(243, 244, 248);
 }
 
-footer{
+footer {
   display: none;
 }

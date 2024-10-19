@@ -18,7 +18,7 @@ export const setUserDataUserAC = (userLogin, email) => {
 };
 
 const initialState = {
-  isUserLogged: true,
+  isUserLogged: false,
 
   userLogin: "login",
   userId: null,
@@ -83,7 +83,7 @@ export const authThunkUserTC = (email, password) => {
       setToken(response.data.token);
       console.log(response.data);
       dispatch(userIsLogedUserAC());
-      dispatch(setProfile());
+      setProfile();
     }
   };
 };

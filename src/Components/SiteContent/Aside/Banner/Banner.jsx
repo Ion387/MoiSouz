@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import s from "./Banner.module.css";
 import star from "1Pictures/0Icons/star.png";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
-import Veil from "Components/0Generic/Veil/Veil";
+import Veil from "Components/0Generics/Veil/Veil";
 
 const Banner = (props) => {
   return (

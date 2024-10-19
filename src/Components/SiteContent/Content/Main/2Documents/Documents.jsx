@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import s from "./Documents.module.css";
-import BigInfoblock from "../../../../0Generic/Infoblocks/BigInfoblock/BigInfoblock";
+import BigInfoblock from "Components/0Entities/Infoblocks/BigInfoblock/BigInfoblock";
 
 const Documents = (props) => {
   return (

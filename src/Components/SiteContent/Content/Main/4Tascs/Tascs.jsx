@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import s from "./Tascs.module.css";
-import Veil from "../../../../0Generic/Veil/Veil";
+import Veil from "Components/0Generics/Veil/Veil";
 import { NavLink } from "react-router-dom";
-import Icon from "../../../../../1Pictures/0Icons/0IconsContainer/IconsContainer";
+import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const Tascs = (props) => {
   return (

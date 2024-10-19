@@ -10,7 +10,7 @@ const App = (props) => {
       {props.isUserLogged ? (
         <SiteContent />
       ) : (
-        <LoginPage authThunk={props.authThunk} />
+        <LoginPage authThunkUserTC={props.authThunkUserTC} />
       )}
     </div>
   );

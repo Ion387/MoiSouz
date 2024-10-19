@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import s from "./Money.module.css";
-import BigInfoblock from "../../../../0Generic/Infoblocks/BigInfoblock/BigInfoblock";
-import LilInfoblock from "../../../../0Generic/Infoblocks/LilInfoblock/LilInfoblock";
+import BigInfoblock from "Components/0Entities/Infoblocks/BigInfoblock/BigInfoblock";
+import LilInfoblock from "Components/0Entities/Infoblocks/LilInfoblock/LilInfoblock";
 
 const Money = (props) => {
   return (

@@ -1,4 +1,4 @@
-import { fetch, setToken } from "API/AxiosApi";
+import { fetch, setToken } from "4API/AxiosApi";
 
 const UserAC = 0;
 const UserTC = 0;
@@ -18,7 +18,8 @@ export const setUserDataUserAC = (username, email) => {
 };
 
 const initialState = {
-  isUserLogged: false,
+  isUserLogged: true,
+
   userId: null,
   userEmail: 0,
   active: true,
@@ -82,7 +83,6 @@ export const authThunkUserTC = (email, password) => {
       // успешный запрос
       setToken(response.data.token);
       dispatch(userIsLoggedUserAC());
-      /*   setProfile(); */
       dispatch(setProfileUserTC());
     }
   };

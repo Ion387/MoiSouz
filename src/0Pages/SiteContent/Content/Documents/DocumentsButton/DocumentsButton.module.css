@@ -1,0 +1,25 @@
+.button {
+  width: 91px;
+  height: 27px;
+  border-radius: 4.5px;
+  border: none;
+  cursor: pointer;
+}
+
+.button.colorGreen {
+  background-color: green;
+}
+
+.button.colorYellow {
+  background-color: rgb(254, 191, 45);
+}
+
+.button.colorRed {
+  background-color: red;
+}
+
+.text {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}

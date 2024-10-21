@@ -1,8 +1,7 @@
-import Button from "2Generics/FormElements/Button/Button";
 import s from "./Documents.module.css";
 import { connect } from "react-redux";
-import DocumentsButton from "./DocumentsButton/DocumentsButton";
 import SendButton from "./SendButton/SendButton";
+import ColorFlag from "../../../../2Generics/TableElements/ColorFlag/ColorFlag";
 
 const DocumentsPage = (props) => {
   let documentsList = props.documentsList.map((i) => (
@@ -13,7 +12,10 @@ const DocumentsPage = (props) => {
       <div className={s.tableListText}> {i.sendingData}</div>
       <div className={s.tableListText}> {i.answerData}</div>
       <div className={s.tableListText}>
-        <DocumentsButton status={i.status} />
+        <ColorFlag
+          status={i.status}
+          text={{ green: "Исполнено", yellow: "В обработке", red: "Отказано" }}
+        />
       </div>
     </div>
   ));

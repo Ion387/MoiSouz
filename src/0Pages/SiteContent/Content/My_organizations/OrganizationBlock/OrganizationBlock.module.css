@@ -1,0 +1,45 @@
+.main {
+  max-width: 900px;
+  height: 286px;
+  background-color: rgb(255, 255, 255);
+  border: rgb(185, 185, 185) 0.3px solid;
+  border-radius: 14px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.section {
+  margin-left: 25px;
+}
+
+.headerFlex {
+  margin-top: 37px;
+  display: flex;
+  justify-content: space-between;
+}
+.title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.icon {
+  margin-right: 25px;
+  font-size: 28px;
+  font-weight: 700;
+}
+.body {
+}
+.bodyLine {
+  margin-top: 20px;
+}
+.bodyTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+.bodyText {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 22px;
+}

@@ -18,7 +18,7 @@ const initialState = {
       documenType: "Заявлени о вступлении",
       sendingData: "04 Сентября 2024",
       answerData: "04 Сентября 2024",
-      status: "done",
+      status: "green",
     },
     {
       id: 2,
@@ -26,7 +26,7 @@ const initialState = {
       documenType: "Заявлени о выходе",
       sendingData: "28 Сентября 2024",
       answerData: "04 Сентября 2024",
-      status: "wait",
+      status: "yellow",
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ const initialState = {
       documenType: "Заявлени о выходе",
       sendingData: "23 Сентября 2024",
       answerData: "04 Сентября 2024",
-      status: "denied",
+      status: "red",
     },
     {
       id: 4,
@@ -42,7 +42,7 @@ const initialState = {
       documenType: "Заявлени о выходе",
       sendingData: "23 Сентября 2024",
       answerData: "04 Сентября 2024",
-      status: "done",
+      status: "green",
     },
     {
       id: 5,
@@ -50,7 +50,7 @@ const initialState = {
       documenType: "Заявлени о вступлении",
       sendingData: "29 Октября 2024",
       answerData: "04 Сентября 2024",
-      status: "wait",
+      status: "yellow",
     },
     {
       id: 6,
@@ -58,7 +58,7 @@ const initialState = {
       documenType: "Тип 2",
       sendingData: "15 Октября 2024",
       answerData: "04 Сентября 2024",
-      status: "done",
+      status: "green",
     },
     {
       id: 7,
@@ -66,7 +66,7 @@ const initialState = {
       documenType: "Тип 2",
       sendingData: "21 Октября 2024",
       answerData: "04 Сентября 2024",
-      status: "wait",
+      status: "yellow",
     },
     {
       id: 8,
@@ -74,7 +74,7 @@ const initialState = {
       documenType: "Тип 2",
       sendingData: "30 Октября 2024",
       answerData: "04 Сентября 2024",
-      status: "denied",
+      status: "red",
     },
     {
       id: 9,
@@ -82,7 +82,7 @@ const initialState = {
       documenType: "Тип 2",
       sendingData: "09 Января 2019",
       answerData: "04 Сентября 2024",
-      status: "wait",
+      status: "yellow",
     },
   ],
 };

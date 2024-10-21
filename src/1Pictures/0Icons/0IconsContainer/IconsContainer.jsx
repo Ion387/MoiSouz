@@ -838,21 +838,167 @@ const Icon = (props) => {
       );
 
       break;
-
-    case "Icon":
-      iconSvg = "";
+    //Иконки Мои организации
+    case "TriangleOrgIcon":
+      iconSvg = (
+        <svg
+          width="68.643066"
+          height="68.036835"
+          viewBox="0 0 68.6431 68.0368"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            stroke="#979797"
+            stroke-opacity="0"
+            stroke-width="0.000000"
+          />
+          <path
+            id="Многоугольник 1"
+            d="M32.76 21L21.07 41.25C20.3 42.58 21.26 44.25 22.8 44.25L46.19 44.25C47.73 44.25 48.69 42.58 47.92 41.25L36.23 21C35.46 19.66 33.53 19.66 32.76 21Z"
+            fill="#FFFFFF"
+            fill-opacity="1.000000"
+            fill-rule="evenodd"
+          />
+        </svg>
+      );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "CircleOrgIcon":
+      iconSvg = (
+        <svg
+          width="68.643066"
+          height="68.036835"
+          viewBox="0 0 68.6431 68.0368"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            stroke="#979797"
+            stroke-opacity="0"
+            stroke-width="0.000000"
+          />
+          <circle
+            id="Эллипс 2"
+            cx="34.500000"
+            cy="34.500092"
+            r="15.500000"
+            fill="#FFFFFF"
+            fill-opacity="1.000000"
+          />
+        </svg>
+      );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "StarOrgIcon":
+      iconSvg = (
+        <svg
+          width="68.643066"
+          height="68.036804"
+          viewBox="0 0 68.6431 68.0368"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            stroke="#979797"
+            stroke-opacity="0"
+            stroke-width="0.000000"
+          />
+          <path
+            id="Звезда 1"
+            d="M33.54 20.92L30.79 29.4C30.66 29.81 30.27 30.09 29.84 30.09L20.93 30.09C19.96 30.09 19.56 31.33 20.34 31.9L27.55 37.13C27.9 37.39 28.05 37.84 27.91 38.25L25.16 46.73C24.86 47.65 25.91 48.41 26.7 47.84L33.91 42.61C34.26 42.35 34.73 42.35 35.08 42.61L42.29 47.84C43.08 48.41 44.13 47.65 43.83 46.73L41.08 38.25C40.94 37.84 41.09 37.39 41.44 37.13L48.65 31.9C49.43 31.33 49.03 30.09 48.06 30.09L39.15 30.09C38.72 30.09 38.33 29.81 38.2 29.4L35.45 20.92C35.15 20 33.84 20 33.54 20.92Z"
+            fill="#FFFFFF"
+            fill-opacity="1.000000"
+            fill-rule="evenodd"
+          />
+        </svg>
+      );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "TargetOrgIcon":
+      iconSvg = (
+        <svg
+          width="68.643066"
+          height="68.036804"
+          viewBox="0 0 68.6431 68.0368"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="68.643166"
+            height="68.036812"
+            stroke="#979797"
+            stroke-opacity="0"
+            stroke-width="0.000000"
+          />
+          <circle
+            id="Эллипс 3"
+            cx="34.500000"
+            cy="34.500122"
+            r="15.500000"
+            fill="#FFFFFF"
+            fill-opacity="1.000000"
+          />
+          <circle
+            id="Эллипс 3"
+            cx="34.500000"
+            cy="34.500122"
+            r="5.500000"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+          />
+        </svg>
+      );
       break;
 
     case "Icon":

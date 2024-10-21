@@ -31,7 +31,6 @@ const LoginPage = (props) => {
   const { onChange, onBlur, name, ref } = register("email");
 
   const onSubmit = (data) => {
-    console.log(data.email);
     props.authThunkUserTC(data.email, data.password);
   };
   return (

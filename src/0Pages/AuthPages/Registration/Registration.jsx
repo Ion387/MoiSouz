@@ -2,11 +2,9 @@ import s from "./Registration.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
-import { auth, setProfile } from "0Redux/userReducer";
 import Button from "2Generics/FormElements/Button/Button";
 import Input from "2Generics/FormElements/Input/Input";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Registration = (props) => {
   const schema = yup.object().shape({
@@ -14,16 +12,23 @@ const Registration = (props) => {
       .string()
       .email('Введите верный формат почты. Почта должна содержать "@" и "."')
       .required("Введите вашу почту"),
-    name: yup.string().matches(/[А-Я]/).required("Заполните красные поля"),
-    surname: yup
+    firstName: yup.string().matches(/[А-Я]/).required("Заполните красные поля"),
+    lastName: yup
       .string()
       .matches(/[А-Я]/)
       .required("Поле обязаительно для заполнения"),
-    patronymic: yup
+    secondName: yup
       .string()
       .matches(/[А-Я]/)
       .required("Поле обязаительно для заполнения"),
     password: yup
+      .string()
+      .min(
+        5,
+        "Пароль должен содержать не менее 8 символов. В нём должны быть заглавные и строчные буквы, цифры, пробелы и специальные символы"
+      )
+      .required("Password is required please !"),
+    passwordRepeat: yup
       .string()
       .min(
         5,
@@ -38,7 +43,20 @@ const Registration = (props) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {};
+  const navigate = useNavigate();
+  const onSubmit = (data) => {
+    props.registrationUserTC(
+      data.email,
+      data.password,
+      data.passwordRepeat,
+      data.lastName,
+      data.firstName,
+      data.secondName,
+      navigate
+    );
+    /*     navigate("/"); */
+  };
+
   return (
     <div className={s.main}>
       <div className={s.section}>
@@ -63,24 +81,24 @@ const Registration = (props) => {
             <div className={s.formTitles}>Имя</div>
 
             <Input
-              {...register("name")}
-              errors={errors.name}
+              {...register("firstName")}
+              errors={errors.firstName}
               placeholder={"Иван"}
             />
 
             <div className={s.formTitles}>Фамилия</div>
 
             <Input
-              {...register("surname")}
-              errors={errors.surname}
+              {...register("lastName")}
+              errors={errors.lastName}
               placeholder={"Иванов"}
             />
 
             <div className={s.formTitles}>Отчество</div>
 
             <Input
-              {...register("patronymic")}
-              errors={errors.patronymic}
+              {...register("secondName")}
+              errors={errors.secondName}
               placeholder={"Иванович"}
             />
 
@@ -90,6 +108,7 @@ const Registration = (props) => {
 
             <Input
               {...register("password")}
+              type={"password"}
               errors={errors.password}
               placeholder={"password"}
             />
@@ -99,9 +118,10 @@ const Registration = (props) => {
             </div>
 
             <Input
-              {...register("password")}
-              errors={errors.password}
-              placeholder={"password"}
+              {...register("passwordRepeat")}
+              type={"password"}
+              errors={errors.passwordRepeat}
+              placeholder={"passwordRepeat"}
             />
 
             <div className={s.checkboxBlock}>
@@ -115,7 +135,7 @@ const Registration = (props) => {
 
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                <Button value={"Войти"} />
+                <Button value={"Регистрация"} />
               </div>
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>

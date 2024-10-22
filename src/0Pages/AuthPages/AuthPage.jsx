@@ -11,9 +11,16 @@ const AuthPage = (props) => {
           <Routes>
             <Route
               path="/"
-              element={<LoginPage authThunkUserTC={props.authThunkUserTC} />}
+              element={<LoginPage authUserTC={props.authUserTC} />}
             />
-            <Route path="/registration" element={<Registration />} />
+            <Route
+              path="/registration"
+              element={
+                <Registration registrationUserTC={props.registrationUserTC} />
+              }
+
+              /*  registrationUserTC={props.registrationUserTC}  */
+            />
           </Routes>
         </div>
       </div>

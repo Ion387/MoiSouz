@@ -1,6 +1,7 @@
 import s from "./My_organizations.module.css";
 import { connect } from "react-redux";
 import OrganizationBlock from "./OrganizationBlock/OrganizationBlock";
+import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const My_organizations = (props) => {
   return (
@@ -14,6 +15,12 @@ const My_organizations = (props) => {
           <OrganizationBlock organizationBlock={props.organizationBlock[1]} />
           <OrganizationBlock organizationBlock={props.organizationBlock[2]} />
           <OrganizationBlock organizationBlock={props.organizationBlock[3]} />
+        </div>
+        <div className={s.blueArrow1}>
+          <Icon iconName="blueArrowIcon" />
+        </div>
+        <div className={s.blueArrow2}>
+          <Icon iconName="blueArrowIcon" />
         </div>
       </div>
     </div>

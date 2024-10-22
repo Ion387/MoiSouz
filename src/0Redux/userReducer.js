@@ -18,7 +18,7 @@ export const setUserDataUserAC = (username, email) => {
 };
 
 const initialState = {
-  isUserLogged: true,
+  isUserLogged: false,
 
   userId: null,
   userEmail: 0,
@@ -70,7 +70,7 @@ export const setProfileUserTC = () => {
   };
 };
 
-export const authThunkUserTC = (email, password) => {
+export const authUserTC = (email, password, navigate) => {
   return async (dispatch) => {
     let response = await (
       await fetch()
@@ -83,30 +83,42 @@ export const authThunkUserTC = (email, password) => {
       // успешный запрос
       setToken(response.data.token);
       dispatch(userIsLoggedUserAC());
+      navigate("/");
       dispatch(setProfileUserTC());
     }
   };
 };
 
-/* export const auth = async (email,password) => {
-    try {
-        const response = await (
-            await fetch()
-        )({
-            url: '/api/login_check',
-            method: 'POST',
-            data: {email:email, password:password},
-           headers: {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"} 
-        });
-            if (response.status == 200) {
-                // успешный запрос
-                setToken(response.data.token/* response.data );
-               setProfile() 
-            } // else ошибка запроса
-    } catch {
-        // ошибка запроса
-        return;
+export const registrationUserTC = (
+  email,
+  password,
+  passwordRepeat,
+  lastName,
+  firstName,
+  secondName,
+  navigate
+) => {
+  return async (dispatch) => {
+    let response = await (
+      await fetch()
+    )({
+      url: "/api/registration",
+      method: "POST",
+      data: {
+        email: email,
+        password: password,
+        passwordRepeat: passwordRepeat,
+        lastName: lastName,
+        firstName: firstName,
+        secondName: secondName,
+      },
+    });
+    if (response.status == 200) {
+      // успешный запрос
+      setToken(response.data.token);
+      dispatch(authUserTC(email, password, navigate));
     }
-}; */
+  };
+};
 
 export default userReducer;

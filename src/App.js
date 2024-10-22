@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import s from "./App.module.css";
 import SiteContent from "./0Pages/SiteContent/SiteContent";
-import LoginPage from "./0Pages/AuthPages/AuthPage";
-import { authThunkUserTC } from "./0Redux/userReducer";
+import { authUserTC, registrationUserTC } from "./0Redux/userReducer";
+import AuthPage from "./0Pages/AuthPages/AuthPage";
 
 const App = (props) => {
   return (
@@ -10,7 +10,10 @@ const App = (props) => {
       {props.isUserLogged ? (
         <SiteContent />
       ) : (
-        <LoginPage authThunkUserTC={props.authThunkUserTC} />
+        <AuthPage
+          authUserTC={props.authUserTC}
+          registrationUserTC={props.registrationUserTC}
+        />
       )}
     </div>
   );
@@ -22,4 +25,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { authThunkUserTC })(App);
+export default connect(mapStateToProps, { authUserTC, registrationUserTC })(
+  App
+);

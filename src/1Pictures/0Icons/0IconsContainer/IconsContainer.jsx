@@ -1001,8 +1001,26 @@ const Icon = (props) => {
       );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "blueArrowIcon":
+      iconSvg = (
+        <svg
+          style={{ width: "100%" }}
+          width="551.223145"
+          height="38.125000"
+          viewBox="0 0 551.223 38.125"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <path
+            id="Форма 1"
+            d="M10.12 15.75L17.25 8.62L8.62 0L0 8.62L7.12 15.75L7.12 38.12L544.12 38.12L544.12 20.51L551.22 20.51L542.62 5.62L534.02 20.51L541.12 20.51L541.12 35.12L10.12 35.12L10.12 15.75Z"
+            fill="#4880FF"
+            fill-opacity="1.000000"
+            fill-rule="evenodd"
+          />
+        </svg>
+      );
       break;
 
     case "Icon":

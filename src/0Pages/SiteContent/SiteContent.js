@@ -1,10 +1,5 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {
-  ThumbsUpIcon,
-  ExclamationIcon,
-  LightbulbIcon,
-} from "react-line-awesome";
 import Header from "./Header/Header";
 import Navbar from "./Navbar/Navbar";
 import s from "./SiteContent.module.css";

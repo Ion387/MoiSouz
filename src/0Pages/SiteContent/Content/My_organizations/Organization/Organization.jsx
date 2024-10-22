@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import ColorFlag from "2Generics/TableElements/ColorFlag/ColorFlag";
 
 const Organization = (props) => {
-  console.log(props.organizationBlock[0].manager[0]);
   let documentsList = props.organizationBlock[0].manager.map((i) => (
     <div key={i.id} className={s.documentsListRow}>
       <div className={s.indent}></div>

@@ -5,9 +5,10 @@ import * as yup from "yup";
 import { auth, setProfile } from "0Redux/userReducer";
 import Button from "2Generics/FormElements/Button/Button";
 import Input from "2Generics/FormElements/Input/Input";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const LoginPage = (props) => {
+  console.log(props.authUserTC);
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -29,9 +30,10 @@ const LoginPage = (props) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const { onChange, onBlur, name, ref } = register("email");
-
+  const navigate = useNavigate();
   const onSubmit = (data) => {
-    props.authThunkUserTC(data.email, data.password);
+    props.authUserTC(data.email, data.password, navigate);
+    /*     navigate("/"); */
   };
   return (
     <div className={s.main}>
@@ -54,6 +56,7 @@ const LoginPage = (props) => {
 
             <Input
               {...register("password")}
+              type={"password"}
               errors={errors.password}
               placeholder={"password"}
             />
@@ -82,9 +85,6 @@ const LoginPage = (props) => {
 
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
-                {/*                 <a href="#" className={s.registrationLink}>
-                  Регистрация
-                </a> */}
                 <NavLink to="/registration" className={s.linkUnderSubmit}>
                   Регистрация
                 </NavLink>

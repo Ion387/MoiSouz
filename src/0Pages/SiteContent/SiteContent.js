@@ -9,6 +9,9 @@ import UserPage from "./Header/UserPage/UserPage";
 import DocumentsPage from "./Content/Documents/Documents";
 import My_organizations from "./Content/My_organizations/My_organizations";
 import Organization from "./Content/My_organizations/Organization/Organization";
+import Colleagues from "./Content/Colleagues/Colleagues";
+import ContactCard from "./Content/Colleagues/ContactCard/ContactCard";
+import Discounts from "./Content/Discounts/Discounts";
 const SiteContent = (props) => {
   return (
     <div className={s.main}>
@@ -28,10 +31,13 @@ const SiteContent = (props) => {
               <Route path="/tasks" element={<Content />} />
               <Route path="/documents" element={<DocumentsPage />} />
               <Route path="/my_organizations" element={<My_organizations />} />
-              <Route path="/organization" element={<Organization />} />
-              <Route path="/colleagues" element={<Content />} />
+              {/*My_organizations children:*/}
+              <Route path="/organization" element={<Organization />} />{" "}
+              <Route path="/colleagues" element={<Colleagues />} />
+              {/*Colleagues children:*/}
+              <Route path="/userId/:slug" element={<ContactCard />} />
               <Route path="/money" element={<Content />} />
-              <Route path="/discounts" element={<Content />} />
+              <Route path="/discounts" element={<Discounts />} />
               <Route path="/store" element={<Content />} />
               <Route path="/information" element={<Content />} />
               <Route path="/UserPage" element={<UserPage />} />

@@ -33,7 +33,6 @@ const LoginPage = (props) => {
   const navigate = useNavigate();
   const onSubmit = (data) => {
     props.authUserTC(data.email, data.password, navigate);
-    /*     navigate("/"); */
   };
   return (
     <div className={s.main}>

@@ -1022,17 +1022,204 @@ const Icon = (props) => {
         </svg>
       );
       break;
-
-    case "Icon":
-      iconSvg = "";
+    //Иконки скидок
+    case "sunDiscontIcon":
+      iconSvg = (
+        <svg
+          width="69.307739"
+          height="68.000000"
+          viewBox="0 0 69.3077 68"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            fill="#FFF3D6"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            stroke="#FFF3D6"
+            stroke-opacity="1.000000"
+            stroke-width="0.000000"
+          />
+          <path
+            id="path"
+            d="M33.99 51.66C43.2 51.66 50.66 44.2 50.66 35C50.66 25.79 43.2 18.33 33.99 18.33C24.79 18.33 17.33 25.79 17.33 35C17.33 44.2 24.79 51.66 33.99 51.66Z"
+            fill="#FEC53D"
+            fill-opacity="1.000000"
+            fill-rule="nonzero"
+          />
+          <path
+            id="path"
+            d="M50.66 35C50.66 25.79 43.2 18.33 33.99 18.33C24.79 18.33 17.33 25.79 17.33 35C17.33 44.2 24.79 51.66 33.99 51.66C43.2 51.66 50.66 44.2 50.66 35Z"
+            stroke="#FEC53D"
+            stroke-opacity="1.000000"
+            stroke-width="1.500000"
+            stroke-linejoin="round"
+          />
+          <rect
+            id="rect"
+            x="34.000000"
+            y="29.107422"
+            rx="2.000000"
+            width="8.333332"
+            height="8.333332"
+            transform="rotate(45 34.000000 29.107422)"
+            fill="#FEDC89"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="rect"
+            x="34.000000"
+            y="29.107422"
+            rx="2.000000"
+            width="8.333332"
+            height="8.333332"
+            transform="rotate(45 34.000000 29.107422)"
+            stroke="#FEDC89"
+            stroke-opacity="1.000000"
+            stroke-width="1.500000"
+            stroke-linejoin="round"
+          />
+        </svg>
+      );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "presentDiscontIcon":
+      iconSvg = (
+        <svg
+          width="69.307617"
+          height="68.000000"
+          viewBox="0 0 69.3076 68"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            fill="#D8F6E7"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            stroke="#FFF3D6"
+            stroke-opacity="1.000000"
+            stroke-width="0.000000"
+          />
+          <path
+            id="path"
+            d="M45.47 46.41L45.47 30.91L23.52 30.91L23.52 46.41L45.47 46.41Z"
+            fill="#5CC382"
+            fill-opacity="1.000000"
+            fill-rule="nonzero"
+          />
+          <path
+            id="path"
+            d="M45.47 30.91L23.52 30.91L23.52 46.41L45.47 46.41L45.47 30.91Z"
+            stroke="#5CC382"
+            stroke-opacity="1.000000"
+            stroke-width="1.500000"
+            stroke-linejoin="round"
+          />
+          <rect
+            id="rect"
+            x="21.583252"
+            y="25.750000"
+            width="25.833330"
+            height="5.166666"
+            fill="#5CC382"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="rect"
+            x="21.583252"
+            y="25.750000"
+            width="25.833330"
+            height="5.166666"
+            stroke="#5CC382"
+            stroke-opacity="1.000000"
+            stroke-width="1.500000"
+            stroke-linejoin="round"
+          />
+          <path
+            id="path"
+            d="M28.3 21.64L28.27 21.64C27.67 21.05 27.67 20.11 28.27 19.52C28.86 18.92 29.8 18.92 30.39 19.52L30.39 19.55L28.3 21.64ZM38.6 19.55L38.6 19.52C39.2 18.92 40.13 18.92 40.72 19.52C41.32 20.11 41.32 21.05 40.72 21.64L40.69 21.64L38.6 19.55Z"
+            fill="#000000"
+            fill-opacity="0"
+            fill-rule="nonzero"
+          />
+          <path
+            id="path"
+            d="M29.33 20.58L34.5 25.75L39.66 20.58"
+            stroke="#5CC382"
+            stroke-opacity="1.000000"
+            stroke-width="3.000000"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+        </svg>
+      );
       break;
 
-    case "Icon":
-      iconSvg = "";
+    case "growUpDiscontIcon":
+      iconSvg = (
+        <svg
+          width="69.307617"
+          height="68.000000"
+          viewBox="0 0 69.3076 68"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            fill="#D9F7E8"
+            fill-opacity="1.000000"
+          />
+          <rect
+            id="Rectangle"
+            rx="23.000000"
+            width="69.307686"
+            height="68.000000"
+            stroke="#FFF3D6"
+            stroke-opacity="1.000000"
+            stroke-width="0.000000"
+          />
+          <path
+            id="Path 95"
+            d="M23.11 45.88L46.44 45.88C47.3 45.88 48 46.58 48 47.44C48 48.3 47.3 49 46.44 49L21.55 49C20.69 49 20 48.3 20 47.44L20 22.55C20 21.69 20.69 21 21.55 21C22.41 21 23.11 21.69 23.11 22.55L23.11 45.88Z"
+            fill="#4AD991"
+            fill-opacity="1.000000"
+            fill-rule="nonzero"
+          />
+          <g opacity="0.500000" mix-blend-mode="normal">
+            <path
+              id="Path 97"
+              d="M28.91 39.17C28.32 39.8 27.34 39.83 26.71 39.24C26.08 38.65 26.05 37.67 26.64 37.04L32.47 30.82C33.04 30.21 33.98 30.16 34.62 30.7L39.22 34.63L45.22 27.03C45.75 26.36 46.73 26.24 47.4 26.77C48.08 27.31 48.19 28.28 47.66 28.96L40.66 37.83C40.11 38.52 39.1 38.62 38.43 38.04L33.73 34.03L28.91 39.17Z"
+              fill="#4AD991"
+              fill-opacity="1.000000"
+              fill-rule="nonzero"
+            />
+          </g>
+        </svg>
+      );
       break;
 
     case "Icon":

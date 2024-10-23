@@ -1,0 +1,47 @@
+.main {
+  max-width: 500px;
+  min-width: 200px;
+  width: 100%;
+  height: 116px;
+  background-color: rgb(243, 244, 248);
+  padding: 1px;
+}
+
+.section {
+  max-width: 500px;
+  min-width: 200px;
+  height: 116px;
+  background-color: rgb(255, 255, 255);
+  border: rgb(185, 185, 185) 0.3px solid;
+  border-radius: 14px;
+}
+
+.mainFlex {
+  margin-top: 17px;
+  margin-right: 17px;
+  margin-left: 17px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.organizationName {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(32, 34, 36, 0.7);
+}
+
+.numberPeople {
+  margin-top: 29px;
+}
+
+.number {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.people {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(32, 34, 36, 0.7);
+}

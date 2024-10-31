@@ -1,0 +1,27 @@
+.logoBlock {
+  margin-left: 100px;
+}
+
+.headerFlex {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerRightBlock {
+  display: flex;
+  margin-right: 100px;
+}
+
+.enter {
+  margin-right: 10px;
+}
+
+.registration {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}

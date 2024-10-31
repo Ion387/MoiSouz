@@ -10,7 +10,8 @@ header {
 }
 
 nav {
-  width: 286px;
+  width: 100%;
+  max-width: 286px;
   /*   background-color: blueviolet; */
 }
 

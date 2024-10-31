@@ -1,4 +1,4 @@
-import s from "./My_organizations.module.css";
+import s from "./MyOrganizations.module.css";
 import { connect } from "react-redux";
 import OrganizationBlock from "./OrganizationBlock/OrganizationBlock";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";

@@ -1,0 +1,28 @@
+section {
+  width: 100%;
+}
+
+.logoBlock {
+  display: flex;
+  justify-content: center;
+}
+
+.textBlock {
+  margin-top: 37px;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.enter {
+  display: flex;
+  justify-content: center;
+  margin-top: 37px;
+  position: relative;
+}
+
+.likeIcon {
+  position: absolute;
+  left: calc(50% - 110px);
+  top: 18px;
+}

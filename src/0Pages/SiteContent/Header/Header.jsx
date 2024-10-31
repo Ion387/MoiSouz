@@ -3,15 +3,13 @@ import userWomen from "1Pictures/0Icons/userWomen.png";
 import headerUserMore from "1Pictures/0Icons/headerUserMore.png";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import { NavLink } from "react-router-dom";
+import Logo from "2Generics/Logo/Logo";
 
 const Header = (props) => {
   return (
     <div className={s.main}>
       <div className={s.section}>
-        <div className={s.logo}>
-          <span className={s.logoMoi}>Мой</span>
-          <span className={s.logoSouz}>Союз</span>
-        </div>
+        <Logo />
 
         <div className={s.rightHeaderBlock}>
           <div className={s.bell}>

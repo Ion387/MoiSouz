@@ -1,5 +1,6 @@
 .main {
-  width: 286px;
+  width: 100%;
+  max-width: 286px;
   height: 100%;
 }
 

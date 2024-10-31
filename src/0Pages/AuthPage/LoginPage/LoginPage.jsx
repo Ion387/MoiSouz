@@ -2,10 +2,9 @@ import s from "./LoginPage.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { auth, setProfile } from "0Redux/userReducer";
 import Button from "2Generics/FormElements/Button/Button";
 import Input from "2Generics/FormElements/Input/Input";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = (props) => {
   console.log(props.authUserTC);
@@ -29,7 +28,6 @@ const LoginPage = (props) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const { onChange, onBlur, name, ref } = register("email");
   const navigate = useNavigate();
   const onSubmit = (data) => {
     props.authUserTC(data.email, data.password, navigate);
@@ -84,9 +82,9 @@ const LoginPage = (props) => {
 
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
-                <NavLink to="/registration" className={s.linkUnderSubmit}>
+                <Link to="/registration" className={s.linkUnderSubmit}>
                   Регистрация
-                </NavLink>
+                </Link>
               </div>
               {errors.password && (
                 <div className={s.error}>{errors.password.message}</div>

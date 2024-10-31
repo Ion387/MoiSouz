@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "2Generics/FormElements/Button/Button";
 import Input from "2Generics/FormElements/Input/Input";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Registration = (props) => {
   const schema = yup.object().shape({
@@ -139,9 +139,9 @@ const Registration = (props) => {
               </div>
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
-                <NavLink to="/" className={s.linkUnderSubmit}>
+                <Link to="/" className={s.linkUnderSubmit}>
                   Войти
-                </NavLink>
+                </Link>
               </div>
               {(errors.email ||
                 errors.name ||

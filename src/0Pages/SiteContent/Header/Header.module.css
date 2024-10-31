@@ -11,22 +11,6 @@
   align-items: center;
 }
 
-.logo {
-  width: 286px;
-  text-align: right;
-}
-.logo > span {
-  font-weight: 800;
-  font-size: 20px;
-}
-
-.logoMoi {
-  color: rgb(72, 128, 255);
-}
-.logoSouz {
-  margin-right: 25px;
-}
-
 .rightHeaderBlock {
   display: flex;
   width: 224px;

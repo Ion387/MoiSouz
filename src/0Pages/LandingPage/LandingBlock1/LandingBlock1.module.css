@@ -1,0 +1,15 @@
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.section {
+  margin-top: 50px;
+  width: 1131px;
+  height: 508px;
+  display: grid;
+  grid-template-columns: repeat(2, 550px);
+  column-gap: 31px;
+  grid-template-rows: repeat((3, 150px));
+  row-gap: 60px;
+}

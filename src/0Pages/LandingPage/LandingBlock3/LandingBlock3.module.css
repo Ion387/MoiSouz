@@ -1,0 +1,52 @@
+.main {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.section {
+  position: relative;
+  max-width: 1200px;
+  width: 100%;
+  height: 513px;
+  text-align: end;
+}
+
+.title {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 44px;
+}
+
+.topFlex {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottomFlex {
+  margin-top: 9px;
+  margin-left: 170px;
+  width: 750px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.arrowTopAbsoluteBlock {
+  width: 500px;
+  position: absolute;
+  bottom: 144px;
+  left: 310px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.arrowBottomAbsoluteBlock {
+  width: 943px;
+  position: absolute;
+  bottom: 24px;
+  left: 60px;
+  display: flex;
+  justify-content: space-between;
+}

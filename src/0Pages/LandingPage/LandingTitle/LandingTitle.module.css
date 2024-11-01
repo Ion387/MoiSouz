@@ -8,8 +8,8 @@ section {
 }
 
 .textBlock {
-  margin-top: 37px;
   text-align: center;
+  line-height: 40px;
   font-size: 40px;
   font-weight: 300;
 }
@@ -17,7 +17,7 @@ section {
 .enter {
   display: flex;
   justify-content: center;
-  margin-top: 37px;
+  margin-top: 65px;
   position: relative;
 }
 

@@ -7,7 +7,6 @@ import Input from "2Generics/FormElements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = (props) => {
-  console.log(props.authUserTC);
   const schema = yup.object().shape({
     email: yup
       .string()

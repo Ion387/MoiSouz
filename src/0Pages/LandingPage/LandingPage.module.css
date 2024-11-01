@@ -3,10 +3,6 @@
   height: 100vh;
 }
 
-.main * {
-  font-size: 14px;
-}
-
 .landingTitle {
   margin-top: 84px;
 }
@@ -16,5 +12,19 @@
 }
 
 .landingBlock2 {
-  margin-top: 90px;
+  margin-top: 75px;
+}
+
+.landingBlock3 {
+  margin-top: 115px;
+}
+.landingBlock4 {
+  margin-top: 167px;
+}
+.landingBlock5 {
+  margin-top: 169px;
+}
+
+.landingBlock6 {
+  margin-top: 125px;
 }

@@ -10,7 +10,11 @@ const LandingTitle = (props) => {
       <div className={s.section}>
         <div className={s.logoBlock}>
           <Logo
-            style={{
+            moi={{
+              fontSize: "154px",
+              fontWeight: "800",
+            }}
+            souz={{
               fontSize: "154px",
               fontWeight: "800",
             }}

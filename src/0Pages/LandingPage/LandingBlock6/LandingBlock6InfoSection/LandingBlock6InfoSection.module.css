@@ -1,0 +1,51 @@
+.infoblock {
+  width: 273px;
+  height: 665px;
+  border: 3px solid rgb(72, 128, 255);
+  position: relative;
+}
+
+.infoblock * {
+  color: inherit;
+}
+
+.titleBlock {
+  text-align: center;
+}
+.title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.money {
+  margin-top: 23px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.addition {
+  font-size: 13px;
+  font-weight: 400;
+}
+.textBlock {
+  margin-left: 16px;
+  margin-top: 35px;
+}
+
+.boldText {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.text {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.orderButton {
+  width: 273px;
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+}

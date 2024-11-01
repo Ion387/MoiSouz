@@ -1,5 +1,6 @@
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import s from "./LandingBlock2.module.css";
+import Logo from "2Generics/Logo/Logo";
 
 const LandingBlock2 = (props) => {
   return (
@@ -8,6 +9,19 @@ const LandingBlock2 = (props) => {
         <div className={s.title}>ВОЗМОЖНОСТИ СЕРВИСА</div>
         <div className={s.bigIcon}>
           <Icon iconName="LandingBlock2CentralCicleIcon" />
+          <div className={s.iconInnerBlock}>
+            <div className={s.iconInnerBlockLogo}>
+              <Logo
+                moi={{ fontSize: "50px", fontWeight: "800", color: "#fff" }}
+                souz={{ fontSize: "50px", fontWeight: "800" }}
+              />
+            </div>
+          </div>
+          <div className={s.iconInnerBlockText}>
+            модульность решения позволяет
+            <br /> подключать необходимые блоки
+            <br /> в любой момент времени
+          </div>
           <div className={`${s.textAround} ${s.textPosition1}`}>
             Голосования и опросы с использованием технологии блок-чейн
           </div>

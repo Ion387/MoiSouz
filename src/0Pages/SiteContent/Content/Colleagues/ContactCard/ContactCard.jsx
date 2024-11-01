@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 const ContactCard = (props) => {
   const location = useParams();
-  console.log(location.slug);
   const getUserIndex = () => {
     for (let i = 0; i <= props.manager.length; i += 1) {
       if (props.manager[i].id == location.slug) {
@@ -13,8 +12,6 @@ const ContactCard = (props) => {
       }
     }
   };
-
-  console.log(props.manager[getUserIndex()].name);
   /* 
         id: 1,
           name: "Иванов Иван Васильевич",

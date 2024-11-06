@@ -16,9 +16,16 @@
   font-weight: 300;
 }
 
-.bigIcon {
+.centerBlock {
   margin-top: 90px;
   position: relative;
+  display: flex;
+  justify-content: left;
+}
+
+.bigCircle {
+  position: absolute;
+  left: 315px;
 }
 .iconInnerBlock {
   max-width: 1131px;
@@ -33,104 +40,26 @@
   display: flex;
   justify-content: center;
   position: absolute;
+  left: 440px;
   top: 171px;
 }
 
 .iconInnerBlockText {
   max-width: 1131px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
   font-size: 16px;
   font-weight: 600;
   color: #fff;
   position: absolute;
   top: 242px;
+  left: 435px;
 }
 
-.textAround {
-  width: 339px;
-  font-size: 16px;
-  font-weight: 400;
-  position: absolute;
-}
-.textPosition1 {
-  text-align: end;
-  top: -40px;
-  left: 130px;
+.textAroundPosition {
 }
 
-.textPosition2 {
-  text-align: start;
-  top: -40px;
-  left: 655px;
-}
-
-.textPosition3 {
-  top: 60px;
-  left: 75px;
-}
-
-.textPosition4 {
-  top: 60px;
-  left: 740px;
-}
-
-.textPosition5 {
-  width: 249px;
-  text-align: end;
-  top: 140px;
-  left: 60px;
-}
-
-.textPosition6 {
-  width: 302px;
-  text-align: start;
-  top: 140px;
-  left: 820px;
-}
-
-.textPosition7 {
-  width: 339px;
-  text-align: end;
-  top: 245px;
-  left: -35px;
-}
-
-.textPosition8 {
-  width: 313px;
-  text-align: start;
-  top: 245px;
-  left: 830px;
-}
-
-.textPosition9 {
-  text-align: end;
-  top: 385px;
-  left: 10px;
-}
-
-.textPosition10 {
-  text-align: start;
-  top: 385px;
-  left: 780px;
-}
-
-.textPosition11 {
-  text-align: end;
-  top: 470px;
-  left: 110px;
-}
-
-.textPosition12 {
-  text-align: start;
-  top: 470px;
-  left: 680px;
-}
-
-.textPosition13 {
-  text-align: center;
-  top: 556px;
-  left: 390px;
-  /*   right: 398px; */
+@media (max-width: 1150px) {
+  .bigCircle {
+    transform: scale(0.9);
+    width: 50%;
+  }
 }

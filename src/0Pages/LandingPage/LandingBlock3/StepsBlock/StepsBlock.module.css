@@ -28,8 +28,8 @@
 .textBlock {
   margin-top: 13px;
   margin-left: 30px;
-  width: 277px;
-  height: 90px;
+  width: 90%;
+  height: 120px;
   text-align: start;
 }
 .title {
@@ -39,4 +39,44 @@
 .text {
   font-size: 16px;
   font-weight: 400;
+}
+
+@media (max-width: 1050px) {
+  .textBlock {
+    margin-left: 20px;
+  }
+
+  .main {
+    width: 207px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .textBlock {
+    height: 190px;
+  }
+
+  .main {
+    width: 207px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .main {
+    width: 207px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    width: 197px;
+    height: 190px;
+  }
+  .textBlock {
+    margin-left: 10px;
+    height: 240px;
+  }
 }

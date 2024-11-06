@@ -12,15 +12,15 @@ const Registration = (props) => {
       .string()
       .email('Введите верный формат почты. Почта должна содержать "@" и "."')
       .required("Введите вашу почту"),
-    firstName: yup.string().matches(/[А-Я]/).required("Заполните красные поля"),
-    lastName: yup
+    /*     firstName: yup.string().matches(/[А-Я]/).required("Заполните красные поля"), */
+    /*     lastName: yup
       .string()
       .matches(/[А-Я]/)
-      .required("Поле обязаительно для заполнения"),
-    secondName: yup
+      .required("Поле обязаительно для заполнения"), */
+    /*     secondName: yup
       .string()
       .matches(/[А-Я]/)
-      .required("Поле обязаительно для заполнения"),
+      .required("Поле обязаительно для заполнения"), */
     password: yup
       .string()
       .min(
@@ -49,9 +49,9 @@ const Registration = (props) => {
       data.email,
       data.password,
       data.passwordRepeat,
-      data.lastName,
+      /*       data.lastName,
       data.firstName,
-      data.secondName,
+      data.secondName, */
       navigate
     );
     /*     navigate("/"); */
@@ -78,7 +78,7 @@ const Registration = (props) => {
               placeholder={"ivanov@mail.ru"}
             />
 
-            <div className={s.formTitles}>Имя</div>
+            {/*  <div className={s.formTitles}>Имя</div>
 
             <Input
               {...register("firstName")}
@@ -100,7 +100,7 @@ const Registration = (props) => {
               {...register("secondName")}
               errors={errors.secondName}
               placeholder={"Иванович"}
-            />
+            /> */}
 
             <div className={s.flexTitles}>
               <div className={s.formTitles}>Придумайте пароль</div>

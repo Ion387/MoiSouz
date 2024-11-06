@@ -3709,7 +3709,7 @@ const Icon = (props) => {
       break;
   }
 
-  return <span>{iconSvg}</span>;
+  return <div>{iconSvg}</div>;
 };
 
 export default Icon;

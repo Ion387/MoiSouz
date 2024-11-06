@@ -7,6 +7,9 @@
   margin-top: 84px;
 }
 
+.section {
+}
+
 .landingBlock1 {
   margin-top: 53px;
 }
@@ -19,7 +22,7 @@
   margin-top: 115px;
 }
 .landingBlock4 {
-  margin-top: 167px;
+  margin-top: 127px;
 }
 .landingBlock5 {
   margin-top: 169px;
@@ -27,4 +30,10 @@
 
 .landingBlock6 {
   margin-top: 125px;
+}
+
+@media (max-width: 850px) {
+  .landingBlock1 {
+    margin-top: 23px;
+  }
 }

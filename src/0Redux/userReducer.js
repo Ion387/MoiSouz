@@ -15,8 +15,7 @@ export const setUserDataUserAC = (username, email) => {
 };
 
 const initialState = {
-  isUserLogged: false,
-
+  isUserLogged: true,
   userId: null,
   userEmail: 0,
   active: true,

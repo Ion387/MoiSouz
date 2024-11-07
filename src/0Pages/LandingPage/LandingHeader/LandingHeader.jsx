@@ -10,7 +10,7 @@ const LandingHeader = (props) => {
         <Logo />
       </div>
       <div className={s.headerRightBlock}>
-        <Link className={s.enter} to="/">
+        <Link className={s.enter} to="/signin">
           <Button
             value="Войти"
             style={{

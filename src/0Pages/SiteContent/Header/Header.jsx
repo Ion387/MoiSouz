@@ -9,7 +9,9 @@ const Header = (props) => {
   return (
     <div className={s.main}>
       <div className={s.section}>
-        <Logo />
+        <div className={s.logo}>
+          <Logo />
+        </div>
 
         <div className={s.rightHeaderBlock}>
           <div className={s.bell}>

@@ -1,6 +1,6 @@
 .main {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgb(72, 128, 255);
 }
 
@@ -12,7 +12,7 @@
 }
 
 .loginBlock {
-  margin-top: 200px;
+  margin-top: 150px;
   width: 100%;
   max-width: 630px;
   min-width: 300px;

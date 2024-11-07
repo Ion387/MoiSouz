@@ -1,8 +1,5 @@
 import { fetch, setToken } from "4API/AxiosApi";
 
-const UserAC = 0;
-const UserTC = 0;
-
 export const userIsLoggedUserAC = () => {
   return {
     type: "userIsLogged",
@@ -83,7 +80,7 @@ export const authUserTC = (email, password, navigate) => {
       // успешный запрос
       setToken(response.data.token);
       dispatch(userIsLoggedUserAC());
-      navigate("/");
+      navigate("/main");
       dispatch(setProfileUserTC());
     }
   };

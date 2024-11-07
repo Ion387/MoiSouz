@@ -139,7 +139,7 @@ const Registration = (props) => {
               </div>
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
-                <Link to="/" className={s.linkUnderSubmit}>
+                <Link to="/signin" className={s.linkUnderSubmit}>
                   Войти
                 </Link>
               </div>

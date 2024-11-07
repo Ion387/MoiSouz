@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.logo {
+  margin-left: 150px;
+}
+
 .rightHeaderBlock {
   display: flex;
   width: 224px;

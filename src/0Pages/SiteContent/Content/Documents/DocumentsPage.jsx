@@ -1,4 +1,4 @@
-import s from "./Documents.module.css";
+import s from "./DocumentsPage.module.css";
 import { connect } from "react-redux";
 import SendButton from "./SendButton/SendButton";
 import ColorFlag from "../../../../2Generics/TableElements/ColorFlag/ColorFlag";

@@ -24,7 +24,7 @@ const LandingTitle = (props) => {
           комплексное решение для автоматизации <br />
           деятельности профсоюзов
         </div>
-        <Link className={s.enter} to="/">
+        <Link className={s.enter} to="/registration">
           <Button
             value="       Попробовать бесплатно"
             style={{

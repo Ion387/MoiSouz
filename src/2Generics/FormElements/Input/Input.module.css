@@ -1,9 +1,13 @@
+.inputForm {
+  margin-top: 15px;
+}
+
 .input {
   margin-top: 15px;
   font-size: 18px;
   font-weight: 500;
-  width: 516px;
-  height: 52.5px;
+  width: 100%;
+  height: 55px;
   padding-left: 16px;
   border-radius: 8px;
   background-color: rgb(241, 244, 249);
@@ -16,4 +20,19 @@
 
 .errorInput {
   border: rgb(255, 0, 0) solid 1px;
+}
+
+.flexLables {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.formLables {
+  display: block;
+  min-width: 38px;
+  height: 35px;
+  font-size: 18px;
+  font-weight: 600;
 }

@@ -3,6 +3,7 @@ import ContactCard from "0Pages/SiteContent/Content/Colleagues/ContactCard/Conta
 import Content from "0Pages/SiteContent/Content/Content";
 import Discounts from "0Pages/SiteContent/Content/Discounts/Discounts";
 import DocumentsPage from "0Pages/SiteContent/Content/Documents/DocumentsPage";
+import ProfileInfoForm from "0Pages/SiteContent/Content/Documents/ProfileInfoForm/ProfileInfoForm";
 import Main from "0Pages/SiteContent/Content/Main/Main";
 import MyOrganizations from "0Pages/SiteContent/Content/MyOrganizations/MyOrganizations";
 import Organization from "0Pages/SiteContent/Content/MyOrganizations/Organization/Organization";
@@ -26,8 +27,9 @@ const ContentRouting = () => {
       <Route path="/discounts" element={<Discounts />} />
       <Route path="/store" element={<Content />} />
       <Route path="/information" element={<Content />} />
-      <Route path="/UserPage" element={<UserPage />} />
-      {/* <Route path="/Messeges/*" element={<DialogsContainer store={store} />} /> */}
+      <Route path="/incoming" element={<ProfileInfoForm />} />
+      <Route path="/outgoing" element={<ProfileInfoForm />} />
+      <Route path="/drafts" element={<ProfileInfoForm />} />
     </Routes>
   );
 };

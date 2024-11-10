@@ -15,8 +15,9 @@ export const setUserDataUserAC = (username, email) => {
 };
 
 const initialState = {
-  isUserLogged: false,
-
+  isUserLogged: true,
+  /*   временная переменная */
+  isUserFormFilled: false,
   userId: null,
   userEmail: 0,
   active: true,
@@ -81,7 +82,7 @@ export const authUserTC = (email, password, navigate) => {
       setToken(response.data.token);
       dispatch(userIsLoggedUserAC());
       navigate("/main");
-      dispatch(setProfileUserTC());
+      /*  dispatch(setProfileUserTC()); */
     }
   };
 };

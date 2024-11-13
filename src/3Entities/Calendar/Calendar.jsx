@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import "./Calendar.css";
 import dayjs from "dayjs";
 
 export function MyCalendar(props) {
@@ -11,7 +11,6 @@ export function MyCalendar(props) {
     const formatingDate = dayjs(newDate).format("YYYY-MM-DD");
     props.setDate(formatingDate);
   };
-
   return (
     <Calendar
       onChange={onDateChange}

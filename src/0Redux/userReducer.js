@@ -21,7 +21,7 @@ export const setDataUserAC = (data) => {
 };
 
 const initialState = {
-  isUserLogged: false,
+  isUserLogged: true,
   /*   временная переменная */
   isUserFormFilled: false,
   userId: null,

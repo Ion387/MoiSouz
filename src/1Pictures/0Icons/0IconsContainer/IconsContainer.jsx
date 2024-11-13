@@ -3748,8 +3748,8 @@ const Icon = (props) => {
     case "signUpIcon":
       iconSvg = (
         <svg
-          width="36.000000"
-          height="36.000000"
+          width="39.000000"
+          height="39.000000"
           viewBox="0 0 36 36"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -3776,8 +3776,8 @@ const Icon = (props) => {
     case "signDownIcon":
       iconSvg = (
         <svg
-          width="36.000000"
-          height="36.000000"
+          width="39.000000"
+          height="39.000000"
           viewBox="0 0 36 36"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

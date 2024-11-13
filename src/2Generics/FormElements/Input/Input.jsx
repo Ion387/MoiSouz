@@ -13,6 +13,7 @@ const Input = (
     lable,
     lable2,
     lableStyle,
+    value,
   },
   ref
 ) => {
@@ -44,6 +45,7 @@ const Input = (
         id={name}
         ref={ref}
         style={style}
+        value={value}
       />
     </div>
   );

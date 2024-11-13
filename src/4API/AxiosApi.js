@@ -17,3 +17,12 @@ export const fetch = async () => {
 
   return axiosInstance;
 };
+
+/* 
+const response = await (
+            await fetch()
+)({
+   url: '/auth/login',
+   method: 'GET',
+   params: { email, pass, ... },
+}); */

@@ -1,4 +1,5 @@
 import { fetch, setToken } from "4API/AxiosApi";
+import { current } from "@reduxjs/toolkit";
 
 export const userIsLoggedUserAC = () => {
   return {
@@ -6,16 +7,21 @@ export const userIsLoggedUserAC = () => {
   };
 };
 
-export const setUserDataUserAC = (username, email) => {
+export const onFormFilled = () => {
+  return {
+    type: "onFormFilled",
+  };
+};
+
+export const setDataUserAC = (data) => {
   return {
     type: "setUserData",
-    username,
-    email,
+    data,
   };
 };
 
 const initialState = {
-  isUserLogged: true,
+  isUserLogged: false,
   /*   временная переменная */
   isUserFormFilled: false,
   userId: null,
@@ -41,18 +47,52 @@ const userReducer = (state = initialState, action) => {
         isUserLogged: true,
       };
 
-    case "setUserData":
+    case "onFormFilled":
       return {
         ...state,
-        username: action.username,
-        email: action.email,
+        isUserFormFilled: true,
+      };
+
+    case "setDataUserAC":
+      return {
+        ...state,
+        secondName: action.data.secondName,
+        firstName: action.data.firstName,
+        lastName: action.data.lastName,
+        birthdate: action.data.birthdate,
+        education: action.data.education,
+        profession: action.data.profession,
+        position: action.data.position,
+        postcode: action.data.postcode,
+        region: action.data.region,
+        area: action.data.area,
+        city: action.data.city,
+        street: action.data.street,
+        house: action.data.house,
+        flat: action.data.flat,
+        phone: action.data.phone,
+        phoneDop: action.data.phoneDop,
+        children: action.data.children,
+        /* children:[
+        {
+            "name": "Вероника",
+            "gender": "female",
+            "birthdate": "2010-05-12"
+        },
+        {
+            "name": "Андрей",
+            "gender": "male",
+            "birthdate": "2015-11-06"
+}] */
+
+        hobbies: action.hobbies,
       };
 
     default:
       return state;
   }
 };
-
+/* Пример Thunk
 export const setProfileUserTC = () => {
   return async (dispatch) => {
     let response = await (
@@ -63,10 +103,10 @@ export const setProfileUserTC = () => {
     });
     if (response.status == 200) {
       // успешный запрос
-      dispatch(setUserDataUserAC(response.data.username, response.data.email));
+      dispatch(setDataUserAC(response.data));
     }
   };
-};
+}; */
 
 export const authUserTC = (email, password, navigate) => {
   return async (dispatch) => {
@@ -115,6 +155,54 @@ export const registrationUserTC = (
       // успешный запрос
       setToken(response.data.token);
       dispatch(authUserTC(email, password, navigate));
+    }
+  };
+};
+
+export const onProfileInfoFormTC = (data, navigate) => {
+  console.log("Thunk start");
+  const currentPayload = {
+    secondName: data.secondName,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    birthdate: data.birthdate,
+    gender: data.gender,
+    education: data.education,
+    profession: [data.profession],
+    position: [data.position],
+    address: {
+      postcode: data.postcode,
+      region: data.region,
+      area: data.area,
+      city: data.city,
+      street: data.street,
+      house: data.house,
+      flat: data.flat,
+    },
+    phone: data.phone,
+    phoneDop: data.phoneDop,
+    children: [
+      {
+        childrenName: data.childrenName,
+        childrenGender: data.childrenGender,
+        childrenBirthdate: data.childrenBirthdate,
+      },
+    ],
+    hobbies: data.hobbies,
+  };
+  return async (dispatch) => {
+    let response = await (
+      await fetch()
+    )({
+      url: "/api/private/profile",
+      method: "POST",
+      data: currentPayload,
+    });
+    if (response.status == 200) {
+      // успешный запрос
+      console.log("Good response ");
+      dispatch(onFormFilled());
+      navigate("/main");
     }
   };
 };

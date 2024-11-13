@@ -177,7 +177,7 @@ const organizationReducer = (state = initialState, action) => {
     });
     if (response.status == 200) {
       // успешный запрос
-      dispatch(setUserDataUserAC(response.data.username, response.data.email));
+      dispatch(setDataUserAC(response.data.username, response.data.email));
     }
   };
 };

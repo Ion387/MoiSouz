@@ -64,61 +64,24 @@ const Registration = (props) => {
           <div className={s.title}>Регистрация</div>
 
           <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
-            <div className={s.formTitles}>Адрес электронной почты:</div>
-
-            {/*            <input
-              className={!errors.email ? s.input : `${s.input} ${s.errorInput}`}
-              placeholder={"ivanov@mail.ru"}
-              {...register("email")}
-            /> */}
-
             <Input
+              lable={"Адрес электронной почты:"}
               {...register("email")}
               errors={errors.email}
               placeholder={"ivanov@mail.ru"}
             />
 
-            {/*  <div className={s.formTitles}>Имя</div>
-
-            <Input
-              {...register("firstName")}
-              errors={errors.firstName}
-              placeholder={"Иван"}
-            />
-
-            <div className={s.formTitles}>Фамилия</div>
-
-            <Input
-              {...register("lastName")}
-              errors={errors.lastName}
-              placeholder={"Иванов"}
-            />
-
-            <div className={s.formTitles}>Отчество</div>
-
-            <Input
-              {...register("secondName")}
-              errors={errors.secondName}
-              placeholder={"Иванович"}
-            /> */}
-
-            <div className={s.flexTitles}>
-              <div className={s.formTitles}>Придумайте пароль</div>
-            </div>
-
             <Input
               {...register("password")}
+              lable={"Придумайте пароль"}
               type={"password"}
               errors={errors.password}
               placeholder={"password"}
             />
 
-            <div className={s.flexTitles}>
-              <div className={s.formTitles}>Повторите пароль</div>
-            </div>
-
             <Input
               {...register("passwordRepeat")}
+              lable={"Повторите пароль"}
               type={"password"}
               errors={errors.passwordRepeat}
               placeholder={"passwordRepeat"}

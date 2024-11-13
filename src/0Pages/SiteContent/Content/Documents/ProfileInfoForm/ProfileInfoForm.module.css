@@ -1,13 +1,12 @@
 .main {
   width: 100%;
-  height: 300vh;
+  padding-bottom: 52px;
 }
 
 .section {
   margin-left: 20px;
   margin-top: 55px;
   width: calc(100% - 40px);
-  height: 100%;
 }
 
 .title {
@@ -21,7 +20,8 @@
   padding-top: 1px;
   width: calc(100% - 128px);
   min-width: 300px;
-  height: 250vh;
+  padding-bottom: 38px;
+  /*   height: 250vh; */
   background-color: white;
   border-radius: 24px;
 }
@@ -35,13 +35,13 @@ font-size: 14px;
   width: calc (100% - 128px);
   min-width: 300px;
 
-  height: 388px;
   /* background-color: brown; */
 }
 
 .checkboxBlock {
   margin-top: 23px;
   display: flex;
+  justify-content: center;
 }
 
 .checkbox {
@@ -51,37 +51,23 @@ font-size: 14px;
 }
 
 .checkboxText {
+  width: 382px;
   margin-left: 12px;
   font-size: 14px;
   font-weight: 600;
 }
 
 .submitBlock {
-  text-align: center;
+  margin-top: 45px;
 }
 
-.submit {
-  margin-top: 25px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.underSubmit {
-  margin-top: 25px;
-  display: flex;
+.gridButton {
+  margin: 0 auto;
+  width: 386px;
   justify-content: center;
-}
-
-.textUnderSubmit {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.linkUnderSubmit {
-  margin-left: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  color: rgb(90, 140, 255);
+  display: grid;
+  grid-template-columns: calc(50% - 13px) calc(50% - 13px);
+  column-gap: 26px;
 }
 
 .error {
@@ -129,28 +115,34 @@ font-size: 14px;
   column-gap: 20px;
 }
 
+.childrenRelative {
+  margin-top: 50px;
+  position: relative;
+}
+
+.childrenLableFlex {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: -25px;
+}
+
+.lableChildren {
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .gridChildrens {
   display: grid;
   grid-template-columns: calc(30% - 13px) calc(30% - 13px) calc(40% - 14px);
   column-gap: 20px;
 }
 
-.gridButton {
-  margin: 0 auto;
-  width: 386px;
-  justify-content: center;
-  display: grid;
-  grid-template-columns: calc(50% - 13px) calc(50% - 13px);
-  column-gap: 26px;
+.icon {
+  padding-bottom: 20px;
 }
 
-.childrenLableFlex {
-  margin-top: 25px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.lableChildren {
-  font-size: 18px;
-  font-weight: 500;
+.pointer {
+  cursor: pointer;
 }

@@ -31,6 +31,7 @@ const LoginPage = (props) => {
   const onSubmit = (data) => {
     props.authUserTC(data.email, data.password, navigate);
   };
+
   return (
     <div className={s.main}>
       <div className={s.section}>
@@ -38,20 +39,18 @@ const LoginPage = (props) => {
           <div className={s.title}>Вход</div>
 
           <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
-            <div className={s.formTitles}>Адрес электронной почты:</div>
+            {/*             <div className={s.formTitles}>Адрес электронной почты:</div> */}
             <Input
               {...register("email")}
+              lable={"Адрес электронной почты:"}
               errors={errors.email}
               placeholder={"ivanov@mail.ru"}
             />
 
-            <div className={s.flexTitles}>
-              <div className={s.formTitles}>Пароль</div>
-              <div className={s.formTitles}>Забыли пароль?</div>
-            </div>
-
             <Input
               {...register("password")}
+              lable={"Пароль"}
+              lable2={"Забыли пароль?"}
               type={"password"}
               errors={errors.password}
               placeholder={"password"}

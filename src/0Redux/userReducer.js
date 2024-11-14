@@ -1,4 +1,4 @@
-import { fetch, setToken } from "4API/AxiosApi";
+import { clearToken, fetch, setToken } from "4API/AxiosApi";
 import { current } from "@reduxjs/toolkit";
 
 export const userIsLoggedUserAC = () => {
@@ -73,18 +73,6 @@ const userReducer = (state = initialState, action) => {
         phone: action.data.phone,
         phoneDop: action.data.phoneDop,
         children: action.data.children,
-        /* children:[
-        {
-            "name": "Вероника",
-            "gender": "female",
-            "birthdate": "2010-05-12"
-        },
-        {
-            "name": "Андрей",
-            "gender": "male",
-            "birthdate": "2015-11-06"
-}] */
-
         hobbies: action.hobbies,
       };
 
@@ -92,21 +80,6 @@ const userReducer = (state = initialState, action) => {
       return state;
   }
 };
-/* Пример Thunk
-export const setProfileUserTC = () => {
-  return async (dispatch) => {
-    let response = await (
-      await fetch()
-    )({
-      url: "/api/profile",
-      method: "POST",
-    });
-    if (response.status == 200) {
-      // успешный запрос
-      dispatch(setDataUserAC(response.data));
-    }
-  };
-}; */
 
 export const authUserTC = (email, password, navigate) => {
   return async (dispatch) => {
@@ -131,12 +104,10 @@ export const registrationUserTC = (
   email,
   password,
   passwordRepeat,
-  lastName,
-  firstName,
-  secondName,
   navigate
 ) => {
   return async (dispatch) => {
+    console.log("registrationUserTC");
     let response = await (
       await fetch()
     )({
@@ -146,13 +117,11 @@ export const registrationUserTC = (
         email: email,
         password: password,
         passwordRepeat: passwordRepeat,
-        lastName: lastName,
-        firstName: firstName,
-        secondName: secondName,
       },
     });
     if (response.status == 200) {
       // успешный запрос
+      clearToken();
       setToken(response.data.token);
       dispatch(authUserTC(email, password, navigate));
     }
@@ -160,7 +129,6 @@ export const registrationUserTC = (
 };
 
 export const onProfileInfoFormTC = (data, navigate) => {
-  console.log("Thunk start");
   const currentPayload = {
     secondName: data.secondName,
     firstName: data.firstName,
@@ -200,7 +168,6 @@ export const onProfileInfoFormTC = (data, navigate) => {
     });
     if (response.status == 200) {
       // успешный запрос
-      console.log("Good response ");
       dispatch(onFormFilled());
       navigate("/main");
     }

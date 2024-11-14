@@ -45,6 +45,7 @@ const Registration = (props) => {
 
   const navigate = useNavigate();
   const onSubmit = (data) => {
+    console.log("Submit");
     props.registrationUserTC(
       data.email,
       data.password,

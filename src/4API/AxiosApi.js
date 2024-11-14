@@ -12,8 +12,10 @@ export const setToken = (value) => localStorage.setItem(KEY, value);
 export const clearToken = () => localStorage.removeItem(KEY);
 
 export const fetch = async () => {
-  axiosInstance.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  axiosInstance.defaults.timeout = 5000;
+  if (getToken()) {
+    axiosInstance.defaults.headers.Authorization = `Bearer ${getToken()}`;
+    axiosInstance.defaults.timeout = 5000;
+  }
 
   return axiosInstance;
 };

@@ -3,6 +3,8 @@ import s from "./App.module.css";
 import { authUserTC, registrationUserTC } from "./0Redux/userReducer";
 import { BrowserRouter } from "react-router-dom";
 import AuthRouting from "6Routing/AuthRouting";
+import { clearToken } from "4API/AxiosApi";
+import { useEffect } from "react";
 
 const App = (props) => {
   return (

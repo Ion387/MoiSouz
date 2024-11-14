@@ -17,7 +17,7 @@ import Selector from "2Generics/FormElements/Selector/Selector";
 const ProfileInfoForm = (props) => {
   const [birthdate, setBirthdate] = useState("");
   const [childrenBirthdate, setChildrenBirthdate] = useState("");
-
+  /* коментарий */
   const [isCalendarPicked, setIsCalendarPicked] = useState(false);
   const [isChildrenCalendarPicked, setIsChildrenCalendarPicked] =
     useState(false);

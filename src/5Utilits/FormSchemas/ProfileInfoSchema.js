@@ -32,6 +32,7 @@ hobbies;
 */
 
 const ruNames = /[а-яА-яёЁ]$/;
+const ruNamesFree = /[а-яА-яёЁ,.-]$/;
 const numbers = /[0-9]$/;
 const phone = /[0-9+-]$/;
 const phoneRegExp = /[+7][0-9]{10}$/;
@@ -50,17 +51,15 @@ export const profileInfoSchema = yup.object().shape({
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   /*   birthdate: yup.string().required("Поле обязательно для заполнения"), */
-  education: yup
-    .string()
-    .matches(ruNames, "Поле заполненно не верно")
-    .required("Поле обязательно для заполнения"),
+  education: yup.string().required("Поле обязательно для заполнения"),
+  gender: yup.string().required("Поле обязательно для заполнения"),
   profession: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   position: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   postcode: yup
     .string()
@@ -70,19 +69,19 @@ export const profileInfoSchema = yup.object().shape({
     .required("Поле обязательно для заполнения"),
   region: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   area: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   city: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   street: yup
     .string()
-    .matches(ruNames, "Поле заполненно не верно")
+    .matches(ruNamesFree, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   house: yup.string().required("Поле обязательно для заполнения"),
   flat: yup.string().required("Поле обязательно для заполнения"),
@@ -102,16 +101,10 @@ export const profileInfoSchema = yup.object().shape({
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
-  childrenGender: yup
+  childrenGender: yup.string().required("Поле обязательно для заполнения"),
+  childrenBirthdate: yup.string().required("Поле обязательно для заполнения"),
+  /*   hobbies: yup
     .string()
     .matches(ruNames, "Поле заполненно не верно")
-    .required("Поле обязательно для заполнения"),
-  childrenBirthdate: yup
-    .string()
-    .matches(ruNames, "Поле заполненно не верно")
-    .required("Поле обязательно для заполнения"),
-  hobbies: yup
-    .string()
-    .matches(ruNames, "Поле заполненно не верно")
-    .required("Поле обязательно для заполнения"),
+    .required("Поле обязательно для заполнения"), */
 });

@@ -1,23 +1,28 @@
 import { connect } from "react-redux";
 import s from "./App.module.css";
-import { authUserTC, registrationUserTC } from "./0Redux/userReducer";
+import {
+  authUserTC,
+  getProfileUserTC,
+  registrationUserTC,
+} from "./0Redux/userReducer";
 import { BrowserRouter } from "react-router-dom";
 import AuthRouting from "6Routing/AuthRouting";
-import { clearToken } from "4API/AxiosApi";
-import { useEffect } from "react";
+import CheckLogin from "0Pages/AuthPages/CheckLogin/CheckLogin";
 
 const App = (props) => {
   return (
     <BrowserRouter>
-      <div className={s.main}>
-        <div className={s.section}>
-          <AuthRouting
-            isUserLogged={props.isUserLogged}
-            authUserTC={props.authUserTC}
-            registrationUserTC={props.registrationUserTC}
-          />
+      <CheckLogin>
+        <div className={s.main}>
+          <div className={s.section}>
+            <AuthRouting
+              isUserLogged={props.isUserLogged}
+              authUserTC={props.authUserTC}
+              registrationUserTC={props.registrationUserTC}
+            />
+          </div>
         </div>
-      </div>
+      </CheckLogin>
     </BrowserRouter>
   );
 };
@@ -28,6 +33,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { authUserTC, registrationUserTC })(
-  App
-);
+export default connect(mapStateToProps, {
+  authUserTC,
+  registrationUserTC,
+  getProfileUserTC,
+})(App);

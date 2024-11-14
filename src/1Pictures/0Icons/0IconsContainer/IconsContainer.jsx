@@ -3801,14 +3801,118 @@ const Icon = (props) => {
         </svg>
       );
       break;
-    case "Icon":
-      iconSvg = "";
+    case "addSomethingIcon":
+      iconSvg = (
+        <svg
+          width="24.000000"
+          height="24.000000"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <clipPath id="clip223_397">
+              <rect
+                id="Папка - добавить"
+                width="24.000000"
+                height="24.000000"
+                fill="white"
+                fill-opacity="0"
+              />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#clip223_397)">
+            <path
+              id="path"
+              d="M2.5 4C2.5 3.44 2.94 3 3.5 3L9.5 3L12 6L20.5 6C21.05 6 21.5 6.44 21.5 7L21.5 20C21.5 20.55 21.05 21 20.5 21L3.5 21C2.94 21 2.5 20.55 2.5 20L2.5 4Z"
+              fill="#000000"
+              fill-opacity="0"
+              fill-rule="nonzero"
+            />
+            <path
+              id="path"
+              d="M3.5 3L9.5 3L12 6L20.5 6C21.05 6 21.5 6.44 21.5 7L21.5 20C21.5 20.55 21.05 21 20.5 21L3.5 21C2.94 21 2.5 20.55 2.5 20L2.5 4C2.5 3.44 2.94 3 3.5 3Z"
+              stroke="#A6A6A6"
+              stroke-opacity="1.000000"
+              stroke-width="1.500000"
+              stroke-linejoin="round"
+            />
+            <path
+              id="path"
+              d="M9.02 14.23L9 14.25C8.58 14.25 8.25 13.92 8.25 13.5C8.25 13.08 8.58 12.75 9 12.75L9.02 12.77L9.02 14.23ZM14.98 12.77L15 12.75C15.41 12.75 15.75 13.08 15.75 13.5C15.75 13.92 15.41 14.25 15 14.25L14.98 14.23L14.98 12.77Z"
+              fill="#000000"
+              fill-opacity="0"
+              fill-rule="nonzero"
+            />
+            <path
+              id="path"
+              d="M9 13.5L15 13.5"
+              stroke="#A6A6A6"
+              stroke-opacity="1.000000"
+              stroke-width="1.500000"
+              stroke-linecap="round"
+            />
+            <path
+              id="path"
+              d="M11.27 10.52L11.25 10.5C11.25 10.08 11.58 9.75 12 9.75C12.41 9.75 12.75 10.08 12.75 10.5L12.73 10.52L11.27 10.52ZM12.73 16.48L12.75 16.5C12.75 16.92 12.41 17.25 12 17.25C11.58 17.25 11.25 16.92 11.25 16.5L11.27 16.48L12.73 16.48Z"
+              fill="#000000"
+              fill-opacity="0"
+              fill-rule="nonzero"
+            />
+            <path
+              id="path"
+              d="M12 10.5L12 16.5"
+              stroke="#A6A6A6"
+              stroke-opacity="1.000000"
+              stroke-width="1.500000"
+              stroke-linecap="round"
+            />
+          </g>
+        </svg>
+      );
       break;
-    case "Icon":
-      iconSvg = "";
+    case "choiceNotPickerIcon":
+      iconSvg = (
+        <svg
+          width="16.000000"
+          height="16.000000"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <circle
+            id="Эллипс 36"
+            cx="8.000000"
+            cy="8.000000"
+            r="7.500000"
+            stroke="#D8D8D8"
+            stroke-opacity="1.000000"
+            stroke-width="1.000000"
+          />
+        </svg>
+      );
       break;
-    case "Icon":
-      iconSvg = "";
+    case "choicePickerIcon":
+      iconSvg = (
+        <svg
+          width="16.000000"
+          height="16.000000"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <circle
+            id="Эллипс 36"
+            cx="8.000000"
+            cy="8.000000"
+            r="8.000000"
+            fill="#5A8CFF"
+            fill-opacity="1.000000"
+          />
+        </svg>
+      );
       break;
     case "Icon":
       iconSvg = "";

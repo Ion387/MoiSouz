@@ -58,6 +58,7 @@
 .userAvatar {
   background-color: rgb(216, 216, 216);
   border-radius: 28px;
+  cursor: pointer;
 }
 
 .blockNameOfUsers {

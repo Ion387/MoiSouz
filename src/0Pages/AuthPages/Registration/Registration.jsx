@@ -45,7 +45,6 @@ const Registration = (props) => {
 
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    console.log("Submit");
     props.registrationUserTC(
       data.email,
       data.password,
@@ -99,7 +98,7 @@ const Registration = (props) => {
 
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                <Button value={"Регистрация"} />
+                <Button value={"Регистрация"} type={"submit"} />
               </div>
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>

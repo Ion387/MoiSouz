@@ -6,8 +6,9 @@ const Button = (props) => {
       <input
         style={props.style}
         className={s.submit}
-        type="submit"
+        type={props.type}
         value={props.value}
+        onClick={props.onClick}
       />
     </div>
   );

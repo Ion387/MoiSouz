@@ -75,7 +75,7 @@ const LoginPage = (props) => {
             </div>
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                <Button value={"Войти"} />
+                <Button value={"Войти"} type={"submit"} />
               </div>
 
               <div className={s.underSubmit}>

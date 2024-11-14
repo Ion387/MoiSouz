@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import dayjs from "dayjs";

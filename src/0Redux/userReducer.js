@@ -15,8 +15,32 @@ export const onFormFilled = () => {
 
 export const setDataUserAC = (data) => {
   return {
-    type: "setUserData",
+    type: "setDataUserAC",
     data,
+  };
+};
+
+export const loading = () => {
+  return {
+    type: "loading",
+  };
+};
+
+export const endLoading = () => {
+  return {
+    type: "endLoading",
+  };
+};
+
+export const InitUserAC = () => {
+  return {
+    type: "InitUserAC",
+  };
+};
+
+export const logoutUserAC = () => {
+  return {
+    type: "logoutUserAC",
   };
 };
 
@@ -24,19 +48,9 @@ const initialState = {
   isUserLogged: false,
   /*   временная переменная */
   isUserFormFilled: false,
-  userId: null,
-  userEmail: 0,
-  active: true,
-  email: "",
-  firstName: null,
-  hashsha1: null,
+  isLoading: false,
+  isInited: false,
   id: null,
-  lastName: "",
-  roles: ["ROLE_USER"],
-  secondName: null,
-  updatedAt: "2024-10-15T17:50:35+00:00",
-  userIdentifier: "user@admin.com",
-  username: "",
 };
 
 const userReducer = (state = initialState, action) => {
@@ -56,26 +70,30 @@ const userReducer = (state = initialState, action) => {
     case "setDataUserAC":
       return {
         ...state,
-        secondName: action.data.secondName,
-        firstName: action.data.firstName,
-        lastName: action.data.lastName,
-        birthdate: action.data.birthdate,
-        education: action.data.education,
-        profession: action.data.profession,
-        position: action.data.position,
-        postcode: action.data.postcode,
-        region: action.data.region,
-        area: action.data.area,
-        city: action.data.city,
-        street: action.data.street,
-        house: action.data.house,
-        flat: action.data.flat,
-        phone: action.data.phone,
-        phoneDop: action.data.phoneDop,
-        children: action.data.children,
-        hobbies: action.hobbies,
+        ...action.data,
       };
 
+    case "loading":
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case "endLoading":
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case "InitUserAC":
+      return {
+        ...state,
+        isInited: true,
+      };
+    case "logoutUserAC":
+      return {
+        ...state,
+        isUserLogged: false,
+      };
     default:
       return state;
   }
@@ -83,20 +101,49 @@ const userReducer = (state = initialState, action) => {
 
 export const authUserTC = (email, password, navigate) => {
   return async (dispatch) => {
-    let response = await (
-      await fetch()
-    )({
-      url: "/api/login_check",
-      method: "POST",
-      data: { email: email, password: password },
-    });
-    if (response.status == 200) {
-      // успешный запрос
-      setToken(response.data.token);
-      dispatch(userIsLoggedUserAC());
-      navigate("/main");
-      /*  dispatch(setProfileUserTC()); */
-    }
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/login_check",
+        method: "POST",
+        data: { email: email, password: password },
+      });
+      if (response.status == 200) {
+        // успешный запрос
+        setToken(response.data.token);
+        dispatch(userIsLoggedUserAC());
+        navigate("/main");
+        /*  dispatch(setProfileUserTC()); */
+      }
+    } catch {}
+  };
+};
+
+export const getProfileUserTC = (navigate) => {
+  return async (dispatch) => {
+    try {
+      dispatch(loading());
+      dispatch(InitUserAC());
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/private/profile",
+        method: "GET",
+      });
+      if (response.status == 200) {
+        // успешный запрос
+        dispatch(userIsLoggedUserAC());
+        dispatch(setDataUserAC(response.data));
+        navigate("/main");
+        dispatch(endLoading());
+        return;
+        /*  dispatch(setProfileUserTC()); */
+      }
+    } catch {}
+    clearToken();
+    dispatch(endLoading());
+    navigate("/");
   };
 };
 
@@ -107,24 +154,25 @@ export const registrationUserTC = (
   navigate
 ) => {
   return async (dispatch) => {
-    console.log("registrationUserTC");
-    let response = await (
-      await fetch()
-    )({
-      url: "/api/registration",
-      method: "POST",
-      data: {
-        email: email,
-        password: password,
-        passwordRepeat: passwordRepeat,
-      },
-    });
-    if (response.status == 200) {
-      // успешный запрос
-      clearToken();
-      setToken(response.data.token);
-      dispatch(authUserTC(email, password, navigate));
-    }
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/registration",
+        method: "POST",
+        data: {
+          email: email,
+          password: password,
+          passwordRepeat: passwordRepeat,
+        },
+      });
+      if (response.status == 200) {
+        // успешный запрос
+
+        setToken(response.data.token);
+        dispatch(authUserTC(email, password, navigate));
+      }
+    } catch {}
   };
 };
 
@@ -156,21 +204,24 @@ export const onProfileInfoFormTC = (data, navigate) => {
         childrenBirthdate: data.childrenBirthdate,
       },
     ],
-    hobbies: data.hobbies,
+    hobbies: data.hobbies.map((i) => i && i),
   };
+  console.log();
   return async (dispatch) => {
-    let response = await (
-      await fetch()
-    )({
-      url: "/api/private/profile",
-      method: "POST",
-      data: currentPayload,
-    });
-    if (response.status == 200) {
-      // успешный запрос
-      dispatch(onFormFilled());
-      navigate("/main");
-    }
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/private/profile",
+        method: "POST",
+        data: currentPayload,
+      });
+      if (response.status == 200) {
+        // успешный запрос
+        dispatch(onFormFilled());
+        navigate("/main");
+      }
+    } catch {}
   };
 };
 

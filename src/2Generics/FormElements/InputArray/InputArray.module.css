@@ -14,12 +14,8 @@
   border: rgb(216, 216, 216) solid 1px;
 }
 
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-indent: 1px;
-  text-overflow: "";
-  cursor: pointer;
+.input::placeholder {
+  color: rgb(166, 166, 166);
 }
 
 .errorInput {
@@ -32,11 +28,22 @@ select {
   justify-content: space-between;
 }
 
+.flexLablesReduce {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+
 .formLables {
+  margin-top: 15px;
   display: flex;
   align-items: center;
   min-width: 38px;
   height: 30px;
   font-size: 18px;
   font-weight: 600;
+}
+
+.addReduceIcon {
+  cursor: pointer;
 }

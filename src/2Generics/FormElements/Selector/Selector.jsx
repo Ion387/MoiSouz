@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./Selector.module.css";
 
-const Selector = (
+const MySelector = (
   {
     onChange,
     onBlur,
@@ -34,6 +34,7 @@ const Selector = (
         ref={ref}
         style={style}
         value={value}
+        errors={errors}
       >
         {options}
       </select>
@@ -41,5 +42,5 @@ const Selector = (
   );
 };
 
-const MySelector = React.forwardRef(Selector);
-export default MySelector;
+const Selector = React.forwardRef(MySelector);
+export default Selector;

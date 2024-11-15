@@ -157,36 +157,3 @@
     width: 415px;
   }
 }
-
-@media (max-width: 630px) {
-  .section {
-    width: 580px;
-    margin-left: 25%;
-    margin-bottom: 150%;
-  }
-
-  .bottomFlex {
-    width: 385px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-  .topFlex {
-    display: flex;
-    flex-direction: column;
-    gap: 370px;
-    position: relative;
-  }
-
-  .stepNumber[data-step="2"] {
-    position: absolute;
-    top: -1150px;
-    right: 250px;
-  }
-
-  .stepNumber[data-step="4"] {
-    position: absolute;
-    top: -630px;
-    left: -60px;
-  }
-}

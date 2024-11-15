@@ -5,7 +5,6 @@ import { connect, useSelector } from "react-redux";
 
 const CheckLogin = (props) => {
   const user = useSelector((state) => state.user);
-  console.log("user", user);
   const navigate = useNavigate();
 
   useEffect(() => {

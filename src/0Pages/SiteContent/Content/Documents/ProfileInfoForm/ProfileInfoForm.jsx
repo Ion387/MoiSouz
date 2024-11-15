@@ -1,5 +1,5 @@
 import s from "./ProfileInfoForm.module.css";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "2Generics/FormElements/Button/Button";
 import Input from "2Generics/FormElements/Input/Input";
@@ -10,17 +10,13 @@ import { profileInfoSchema } from "5Utilits/FormSchemas/ProfileInfoSchema";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { onProfileInfoFormTC } from "0Redux/userReducer";
-import { MyCalendar } from "3Entities/Calendar/Calendar";
 import ModalChoicePicker from "3Entities/ModalChoicePicker/ModalChoicePicker";
 import Selector from "2Generics/FormElements/Selector/Selector";
+import DatePicker from "2Generics/FormElements/DatePicker/DatePicker";
+import InputArray from "2Generics/FormElements/InputArray/InputArray";
+import InputArray3 from "2Generics/FormElements/InputArray3/InputArray3";
 
 const ProfileInfoForm = (props) => {
-  const [birthdate, setBirthdate] = useState("");
-  const [childrenBirthdate, setChildrenBirthdate] = useState("");
-  /* коментарий */
-  const [isCalendarPicked, setIsCalendarPicked] = useState(false);
-  const [isChildrenCalendarPicked, setIsChildrenCalendarPicked] =
-    useState(false);
   const educationSelect = [
     "Высшее",
     "Среднее профессиональное",
@@ -29,6 +25,7 @@ const ProfileInfoForm = (props) => {
   ];
 
   const childrenGenderSelect = ["Мужской", "Женский"];
+
   const genderSelect = ["Мужской", "Женский"];
 
   const hobbiesPickArray = [
@@ -53,15 +50,21 @@ const ProfileInfoForm = (props) => {
   const [choicePickedHobby, setChoicePickedHobby] = useState(
     hobbiesPickArray.map((i) => null)
   );
-
+  //avatar
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  //selects
+  const [isEducationClicked, setIsEducationClicked] = useState(false);
+  const [isGenderClicked, setIsGenderClicked] = useState(false);
+  const [isChildrenGenderClicked, setIsChildrenGenderClicked] = useState(false);
+  //calendar
+  const [isBirthdayCalendarOpen, setIsBirthdayCalendarOpen] = useState(false);
+  const [birthdate, setBirthdate] = useState("");
+  const [childrenBirthdate, setChildrenBirthdate] = useState("");
+  const [isChildrenCalendarOpen, setIsChildrenCalendarOpen] = useState(false);
+  //modal
   const [isChoiceHobbyPicked, setIsChoiceHobbyPicked] = useState(false);
   const [isHobbiesSubmited, setIsHobbiesSubmited] = useState(false);
   const [hobbyPickedShow, setHobbyPickedShow] = useState();
-  const [aditionalProfessionQuantity, setAditionalProfessionQuantity] =
-    useState(1);
-  useEffect(() => {
-    setIsCalendarPicked(false);
-  }, [birthdate]);
 
   useEffect(() => {
     setIsChoiceHobbyPicked(false);
@@ -80,14 +83,23 @@ const ProfileInfoForm = (props) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(profileInfoSchema) });
+
+  //Prevyu image
+  const previewAvatarHandler = (e) => {
+    const file = e.target.files[0];
+
+    const urlImage = URL.createObjectURL(file);
+
+    setAvatarPreview(urlImage);
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onSubmit = (data) => {
     const rigntPickedHobby = choicePickedHobby.map((i) => i && i);
-    console.log(rigntPickedHobby);
     /*     const rightData = {
       ...data,
       birthdate: birthdate,
@@ -95,12 +107,15 @@ const ProfileInfoForm = (props) => {
     };
     dispatch(onProfileInfoFormTC(rightData, navigate)); */
   };
-
+  /*   fields = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]; */
   return (
     <div className={s.main}>
       <div className={s.section}>
         <div className={s.title}>Анкета профиля</div>
+
         <div className={s.formBlock}>
+          {/*   test */}
+
           <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
             <div className={s.nameAvatarGrid}>
               <Input
@@ -113,21 +128,29 @@ const ProfileInfoForm = (props) => {
               />
 
               <label className={s.inputAvatarBlock}>
-                <div className={s.inputLableBlock}>
-                  <input
-                    className={s.inputAvatar}
-                    type="file"
-                    {...register("userAvatar")}
-                  />
-                  <div className={s.inputAvatarText}>
-                    Добавить
-                    <br />
-                    фото
+                <input
+                  onChange={previewAvatarHandler}
+                  className={s.inputAvatar}
+                  id="image-file"
+                  type="file"
+                  /*   {...register("userAvatar")}  */
+                />
+                {avatarPreview ? (
+                  <div className={s.avaterPreview}>
+                    <img src={avatarPreview} className={s.avaterPreview} />
                   </div>
-                  <div className={s.addAvatarIcon}>
-                    <Icon iconName="addSomethingIcon" />
+                ) : (
+                  <div className={s.inputLableBlock}>
+                    <div className={s.inputAvatarText}>
+                      Добавить
+                      <br />
+                      фото
+                    </div>
+                    <div className={s.addAvatarIcon}>
+                      <Icon iconName="addSomethingIcon" />
+                    </div>
                   </div>
-                </div>
+                )}
               </label>
 
               <Input
@@ -148,78 +171,59 @@ const ProfileInfoForm = (props) => {
               placeholder={"Иванович"}
             />
             <div className={s.gridBirthDataEducationGender}>
-              <div
-                className={s.calendar}
-                onClick={() => setIsCalendarPicked("true")}
-              >
-                <Input
-                  {...register("birthdate")}
-                  lable={"Дата рождения"}
-                  lable2={false}
-                  style={{ width: "100%" }}
-                  /*  errors={errors.secondName} */
-                  placeholder={"1980-05-08"}
-                  /*  errors={errors.birthdate} */
-                  value={birthdate}
-                />
+              <DatePicker
+                setIsCalendarOpen={setIsBirthdayCalendarOpen}
+                setDate={setBirthdate}
+                {...register("birthdate")}
+                lable={"Дата рождения"}
+                placeholder={"1980-05-08"}
+                value={birthdate}
+                isCalendarOpen={isBirthdayCalendarOpen}
+              />
 
-                {isCalendarPicked === "true" && (
-                  <MyCalendar
-                    setIsCalendarPicked={setIsCalendarPicked}
-                    setDate={setBirthdate}
-                    isCalendarPicked={isCalendarPicked}
-                  />
-                )}
+              <div onClick={() => setIsEducationClicked(true)}>
+                <Selector
+                  {...register("education")}
+                  optionValue={educationSelect}
+                  placeholder={"Высшее"}
+                  errors={errors.education}
+                  lable={"Образование"}
+                  style={
+                    !isEducationClicked ? { color: "rgb(166, 166, 166)" } : {}
+                  }
+                />
               </div>
 
-              <Selector
-                {...register("education")}
-                optionValue={educationSelect}
-                placeholder={"Высшее"}
-                errors={errors.education}
-                lable={"Образование"}
-              />
-
-              {/*           <Input
-                {...register("education")}
-                lable={"Образование"}
-                lable2={false}
-                style={{ width: "100%" }}
-                errors={errors.education}
-                placeholder={"Высшее"}
-              /> */}
-              <Selector
-                {...register("gender")}
-                optionValue={genderSelect}
-                errors={errors.gender}
-                placeholder={"Мужской"}
-                lable={"Пол"}
-              />
-              {/*               <Input
-                {...register("gender")}
-                lable={"Пол"}
-                lable2={false}
-                style={{ width: "100%" }}
-                errors={errors.education}
-                placeholder={"Мужской"}
-              /> */}
+              <div onClick={() => setIsGenderClicked(true)}>
+                <Selector
+                  {...register("gender")}
+                  optionValue={genderSelect}
+                  errors={errors.gender}
+                  placeholder={"Мужской"}
+                  lable={"Пол"}
+                  style={
+                    !isGenderClicked ? { color: "rgb(166, 166, 166)" } : {}
+                  }
+                />
+              </div>
             </div>
-            <Input
+
+            <InputArray
               {...register("profession")}
               lable={"Основная профессия"}
-              lable2={<Icon iconName={"signUpIcon"} />}
-              style={{ width: "100%" }}
+              lable2={"Дополнительная профессия"}
               errors={errors.profession}
               placeholder={"Бухгалтер"}
             />
-            <Input
+
+            <InputArray
               {...register("position")}
               lable={"Должность"}
-              lable2={<Icon iconName={"signUpIcon"} />}
-              style={{ width: "100%" }}
+              lable2={"Дополнительная должность"}
               errors={errors.position}
-              placeholder={"Бухгалтер"}
+              placeholder={"Главный бухгалтер"}
             />
+
             <div className={s.gridAdressIndexAdressRegion}>
               <Input
                 {...register("postcode")}
@@ -300,11 +304,29 @@ const ProfileInfoForm = (props) => {
                 placeholder={"+7 999 999 88 70"}
               />
             </div>
-            <div className={s.childrenRelative}>
+
+            <InputArray3
+              {...register("childrenName")}
+              {...register("childrenGender")}
+              {...register("childrenBirthdate")}
+              style={{ width: "100%" }}
+              errors={errors.childrenName}
+              placeholder={"Имя"}
+              lable={"Дети"}
+              setIsChildrenGenderClicked={setIsChildrenGenderClicked}
+              childrenGenderSelect={childrenGenderSelect}
+              isChildrenGenderClicked={isChildrenGenderClicked}
+              childrenBirthdate={childrenBirthdate}
+              isChildrenCalendarOpen={isChildrenCalendarOpen}
+              setIsChildrenCalendarOpen={setIsChildrenCalendarOpen}
+              setChildrenBirthdate={setChildrenBirthdate}
+            />
+
+            {/*           <div className={s.childrenRelative}>
               <div className={s.childrenLableFlex}>
                 <div className={s.lableChildren}>Дети</div>
 
-                <Icon iconName={"signUpIcon"} />
+                <Icon iconName={"addInputIcon"} />
               </div>
             </div>
             <div className={s.gridChildrens}>
@@ -315,46 +337,30 @@ const ProfileInfoForm = (props) => {
                 placeholder={"Имя"}
                 lableStyle={{ height: "0px" }}
               />
-
-              <Selector
-                {...register("childrenGender")}
-                optionValue={childrenGenderSelect}
-                style={{ width: "100%" }}
-                placeholder={"Пол"}
-                /*     lable={"Образование"} */
-                errors={errors.childrenGender}
+              <div onClick={() => setIsChildrenGenderClicked(true)}>
+                <Selector
+                  {...register("childrenGender")}
+                  optionValue={childrenGenderSelect}
+                  placeholder={"Пол"}
+                  errors={errors.childrenGender}
+                  lableStyle={{ height: "0px" }}
+                  style={
+                    !isChildrenGenderClicked
+                      ? { color: "rgb(166, 166, 166)" }
+                      : {}
+                  }
+                />
+              </div>
+              <DatePicker
+                value={childrenBirthdate}
+                isCalendarOpen={isChildrenCalendarOpen}
+                setIsCalendarOpen={setIsChildrenCalendarOpen}
+                setDate={setChildrenBirthdate}
+                {...register("childrenBirthdate")}
+                placeholder={"Дата рождения"}
                 lableStyle={{ height: "0px" }}
               />
-              {/*            <Input
-                {...register("childrenGender")}
-                lable2={false}
-                style={{ width: "100%" }}
-                errors={errors.childrenGender}
-                placeholder={"Пол"}
-                lableStyle={{ height: "0px" }}
-              /> */}
-              <div
-                onClick={() => setIsCalendarPicked("true")}
-                className={s.calendar}
-              >
-                <Input
-                  {...register("childrenBirthdate")}
-                  lable2={false}
-                  style={{ width: "100%" }}
-                  errors={errors.childrenBirthdate}
-                  placeholder={"Дата рождения"}
-                  lableStyle={{ height: "0px" }}
-                  /*   value={childrenBirthdate} */
-                />
-                {/*                 {isChildrenCalendarPicked === "true" && (
-                  <MyCalendar
-                    setIsCalendarPicked={setIsChildrenCalendarPicked}
-                    setDate={setChildrenBirthdate}
-                    isCalendarPicked={isChildrenCalendarPicked}
-                  />
-                )} */}
-              </div>
-            </div>
+            </div> */}
 
             <div
               className={s.choiceHobbies}

@@ -206,7 +206,6 @@ export const onProfileInfoFormTC = (data, navigate) => {
     ],
     hobbies: data.hobbies.map((i) => i && i),
   };
-  console.log();
   return async (dispatch) => {
     try {
       let response = await (

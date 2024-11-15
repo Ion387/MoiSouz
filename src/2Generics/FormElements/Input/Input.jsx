@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./Input.module.css";
 
-const Input = (
+const MyInput = (
   {
     onChange,
     onBlur,
@@ -51,5 +51,5 @@ const Input = (
   );
 };
 
-const MyInput = React.forwardRef(Input);
-export default MyInput;
+const Input = React.forwardRef(MyInput);
+export default Input;

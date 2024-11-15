@@ -13,7 +13,7 @@ const LandingBlock3 = (props) => {
         </div>
 
         <div className={s.topFlex}>
-          <div className={`${s.stepsBlock} ${s.stepNumber}`} data-step="1">
+          <div className={s.stepsBlock}>
             <StepsBlock
               step={"Шаг 1."}
               title={"Зарегистрируйстесь"}
@@ -22,7 +22,7 @@ const LandingBlock3 = (props) => {
               }
             />
           </div>
-          <div className={`${s.stepsBlock} ${s.stepNumber}`} data-step="3">
+          <div className={s.stepsBlock}>
             <StepsBlock
               step={"Шаг 3."}
               title={"Ввод основных данных"}
@@ -31,7 +31,7 @@ const LandingBlock3 = (props) => {
               }
             />
           </div>
-          <div className={`${s.stepsBlock} ${s.stepNumber}`} data-step="5">
+          <div className={s.stepsBlock}>
             <StepsBlock
               step={"Шаг 5."}
               title={"Настройте структуру и автоматизируйте процессы"}
@@ -42,7 +42,7 @@ const LandingBlock3 = (props) => {
           </div>
         </div>
         <div className={s.bottomFlex}>
-          <div className={`${s.stepsBlock} ${s.stepNumber}`} data-step="2">
+          <div className={s.stepsBlock}>
             <StepsBlock
               step={"Шаг 2."}
               title={"Выберите опции и оплатите"}
@@ -51,7 +51,7 @@ const LandingBlock3 = (props) => {
               }
             />
           </div>
-          <div className={`${s.stepsBlock} ${s.stepNumber}`} data-step="4">
+          <div className={s.stepsBlock}>
             <StepsBlock
               step={"Шаг 4."}
               title={"Изучите возможности Элементума"}

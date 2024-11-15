@@ -3745,7 +3745,7 @@ const Icon = (props) => {
         </svg>
       );
       break;
-    case "signUpIcon":
+    case "addInputIcon":
       iconSvg = (
         <svg
           width="39.000000"
@@ -3773,7 +3773,7 @@ const Icon = (props) => {
         </svg>
       );
       break;
-    case "signDownIcon":
+    case "reduceInputIcon":
       iconSvg = (
         <svg
           width="39.000000"

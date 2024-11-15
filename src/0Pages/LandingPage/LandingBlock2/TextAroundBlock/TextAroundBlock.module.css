@@ -164,20 +164,20 @@
     gap: 30px;
     margin-left: 20%;
   }
-  .textPosition8,
+  /*   .textPosition8,
   .textPosition9,
   .textPosition10,
   .textPosition11,
   .textPosition12 {
     display: none;
-  }
+  } */
 }
 
 @media (max-width: 700px) {
-  .textPosition2,
+  /*   .textPosition2,
   .textPosition4,
   .textPosition6,
   .textPosition7 {
     display: none;
-  }
+  } */
 }

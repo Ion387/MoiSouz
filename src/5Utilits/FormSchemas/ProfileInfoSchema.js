@@ -97,12 +97,24 @@ export const profileInfoSchema = yup.object().shape({
     .min(8, "Поле заполненно не верно")
     .max(16, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
-  childrenName: yup
+  //пример массива
+  children: yup.array().of(
+    yup.object().shape({
+      childrenName: yup
+        .string()
+        .matches(ruNames, "Поле заполненно не верно")
+        .required("Поле обязательно для заполнения"),
+      childrenGender: yup.string().required("Поле обязательно для заполнения"),
+      childrenBirthdate: yup.string().required("Введите текст варианта ответа"),
+    })
+  ),
+
+  /*   childrenName: yup
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
   childrenGender: yup.string().required("Поле обязательно для заполнения"),
-  childrenBirthdate: yup.string().required("Поле обязательно для заполнения"),
+  childrenBirthdate: yup.string().required("Поле обязательно для заполнения"), */
   /*   hobbies: yup
     .string()
     .matches(ruNames, "Поле заполненно не верно")

@@ -55,6 +55,10 @@ const MyInputArray = (
             className={s.addReduceIcon}
             onClick={() => {
               append(1);
+              setIsChildrenGenderClicked((prev) => [
+                ...prev,
+                { id: isChildrenGenderClicked.length, value: false },
+              ]);
             }}
           >
             <Icon iconName={"addInputIcon"} />
@@ -94,7 +98,23 @@ const MyInputArray = (
               errors={errors}
             />
 
-            <div onClick={() => setIsChildrenGenderClicked(true)}>
+            <div
+              onClick={() => {
+                console.log("prev", isChildrenGenderClicked);
+                console.log("index", index);
+                console.log("id", isChildrenGenderClicked[index].id);
+                setIsChildrenGenderClicked(
+                  isChildrenGenderClicked.map(
+                    (i) =>
+                      isChildrenGenderClicked[index].id === index && {
+                        ...i,
+                        value: true,
+                      }
+                  )
+                );
+                console.log("post", isChildrenGenderClicked);
+              }}
+            >
               <Selector
                 {...register("childrenGender")}
                 optionValue={childrenGenderSelect}
@@ -103,7 +123,7 @@ const MyInputArray = (
                 /*        errors={errors.childrenGender} */
                 lableStyle={{ height: "0px" }}
                 style={
-                  !isChildrenGenderClicked
+                  !isChildrenGenderClicked[index].value
                     ? { color: "rgb(166, 166, 166)" }
                     : {}
                 }
@@ -112,9 +132,9 @@ const MyInputArray = (
 
             <DatePicker
               value={childrenBirthdate}
-              isCalendarOpen={isChildrenCalendarOpen}
+              isCalendarOpen={isChildrenCalendarOpen[index]}
               setIsCalendarOpen={setIsChildrenCalendarOpen}
-              setDate={setChildrenBirthdate}
+              setDate={setChildrenBirthdate[index]}
               {...register("childrenBirthdate")}
               placeholder={"Дата рождения"}
               lableStyle={{ height: "0px" }}

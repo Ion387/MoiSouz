@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { profileInfoSchema } from "5Utilits/FormSchemas/ProfileInfoSchema";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { onProfileInfoFormTC } from "0Redux/userReducer";
+import { onProfileInfoFormTC, postAvatarUserTC } from "0Redux/userReducer";
 import ModalChoicePicker from "3Entities/ModalChoicePicker/ModalChoicePicker";
 import Selector from "2Generics/FormElements/Selector/Selector";
 import DatePicker from "2Generics/FormElements/DatePicker/DatePicker";
@@ -55,12 +55,12 @@ const ProfileInfoForm = (props) => {
   //selects
   const [isEducationClicked, setIsEducationClicked] = useState(false);
   const [isGenderClicked, setIsGenderClicked] = useState(false);
-  const [isChildrenGenderClicked, setIsChildrenGenderClicked] = useState(false);
+  const [isChildrenGenderClicked, setIsChildrenGenderClicked] = useState([]);
   //calendar
   const [isBirthdayCalendarOpen, setIsBirthdayCalendarOpen] = useState(false);
   const [birthdate, setBirthdate] = useState("");
-  const [childrenBirthdate, setChildrenBirthdate] = useState("");
-  const [isChildrenCalendarOpen, setIsChildrenCalendarOpen] = useState(false);
+  const [childrenBirthdate, setChildrenBirthdate] = useState([""]);
+  const [isChildrenCalendarOpen, setIsChildrenCalendarOpen] = useState([false]);
   //modal
   const [isChoiceHobbyPicked, setIsChoiceHobbyPicked] = useState(false);
   const [isHobbiesSubmited, setIsHobbiesSubmited] = useState(false);
@@ -90,10 +90,13 @@ const ProfileInfoForm = (props) => {
   //Prevyu image
   const previewAvatarHandler = (e) => {
     const file = e.target.files[0];
+    console.log(file);
 
     const urlImage = URL.createObjectURL(file);
-
+    const formData = new FormData();
+    formData.append("avatar", file);
     setAvatarPreview(urlImage);
+    dispatch(postAvatarUserTC(formData));
   };
 
   const navigate = useNavigate();
@@ -310,7 +313,7 @@ const ProfileInfoForm = (props) => {
               {...register("childrenGender")}
               {...register("childrenBirthdate")}
               style={{ width: "100%" }}
-              errors={errors.childrenName}
+              /*  errors={errors.childrenName} */
               placeholder={"Имя"}
               lable={"Дети"}
               setIsChildrenGenderClicked={setIsChildrenGenderClicked}

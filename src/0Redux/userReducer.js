@@ -1,4 +1,4 @@
-import { clearToken, fetch, setToken } from "4API/AxiosApi";
+import { clearToken, fetch, fetchFile, setToken } from "4API/AxiosApi";
 import { current } from "@reduxjs/toolkit";
 
 export const userIsLoggedUserAC = () => {
@@ -219,6 +219,28 @@ export const onProfileInfoFormTC = (data, navigate) => {
         // успешный запрос
         dispatch(onFormFilled());
         navigate("/main");
+      }
+    } catch {}
+  };
+};
+
+export const postAvatarUserTC = (datas) => {
+  console.log("start post avatar");
+  return async (dispatch) => {
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/private/avatar",
+        method: "POST",
+        data: datas,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        // успешный запрос
+
+        console.log("avatar post");
+        console.log(response);
       }
     } catch {}
   };

@@ -103,14 +103,13 @@ const ProfileInfoForm = (props) => {
   const dispatch = useDispatch();
   const onSubmit = (data) => {
     const rigntPickedHobby = choicePickedHobby.map((i) => i && i);
-    /*     const rightData = {
+    const rightData = {
       ...data,
       birthdate: birthdate,
       hobbies: rigntPickedHobby,
     };
-    dispatch(onProfileInfoFormTC(rightData, navigate)); */
+    dispatch(onProfileInfoFormTC(rightData, navigate));
   };
-  /*   fields = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]; */
   return (
     <div className={s.main}>
       <div className={s.section}>

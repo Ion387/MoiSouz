@@ -42,7 +42,7 @@ export const profileInfoSchema = yup.object().shape({
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
-  firstName: yup
+  /*  firstName: yup
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
@@ -50,7 +50,7 @@ export const profileInfoSchema = yup.object().shape({
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
-  /*   birthdate: yup.string().required("Поле обязательно для заполнения"), */
+     birthdate: yup.string().required("Поле обязательно для заполнения"), 
   education: yup.string().required("Поле обязательно для заполнения"),
   gender: yup.string().required("Поле обязательно для заполнения"),
   profession: yup
@@ -105,7 +105,7 @@ export const profileInfoSchema = yup.object().shape({
         .matches(ruNames, "Поле заполненно не верно")
         .required("Поле обязательно для заполнения"),
       childrenGender: yup.string().required("Поле обязательно для заполнения"),
-      childrenBirthdate: yup.string().required("Введите текст варианта ответа"),
+      childrenBirthdate: yup.string().required("Введите текст варианта ответа"), 
     })
   ),
 

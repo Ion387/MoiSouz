@@ -178,6 +178,35 @@ export const registrationUserTC = (
 
 export const onProfileInfoFormTC = (data, navigate) => {
   const currentPayload = {
+    secondName: "Кормушкин",
+    firstName: "Владимир",
+    lastName: "Ярославович",
+    birthdate: "1984.09.04",
+    gender: "male",
+    education: "высшее",
+    profession: ["программист"],
+    position: ["программист"],
+    address: {
+      postcode: "123456",
+      region: "Нижегородская обл.",
+      area: "Нижегородская обл.",
+      city: "Нижний Новгород",
+      street: "Крупской",
+      house: "20",
+      flat: "34",
+    },
+    phone: "+79108768990",
+    phoneDop: "+79108768990",
+    children: [
+      {
+        childrenName: "Владислав",
+        childrenGender: "male",
+        childrenBirthdate: "2016.02.04",
+      },
+    ],
+    hobbies: ["ролики"],
+    /* 
+  const currentPayload = {
     secondName: data.secondName,
     firstName: data.firstName,
     lastName: data.lastName,
@@ -204,7 +233,7 @@ export const onProfileInfoFormTC = (data, navigate) => {
         childrenBirthdate: data.childrenBirthdate,
       },
     ],
-    hobbies: data.hobbies.map((i) => i && i),
+    hobbies: data.hobbies.map((i) => i && i), */
   };
   return async (dispatch) => {
     try {

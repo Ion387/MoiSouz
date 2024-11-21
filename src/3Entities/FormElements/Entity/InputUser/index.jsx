@@ -7,50 +7,40 @@ import Input from "2Generics/Elements/Input/Input";
 import Selector from "2Generics/Elements/Selector/Selector";
 import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
+import InputAvatar from "2Generics/Elements/InputAvatar";
 
 const educationSelect = [
-  "Высшее",
-  "Среднее профессиональное",
-  "Среднее общее образование",
-  "Основное общее образование",
+  { value: "Высшее", label: "Высшее" },
+  { value: "Среднее профессиональное", label: "Среднее профессиональное" },
+  { value: "Среднее общее образование", label: "Среднее общее образование" },
+  { value: "Основное общее образование", label: "Основное общее образование" },
 ];
 
-const genderSelect = ["Мужской", "Женский"];
+const genderSelect = [
+  { value: "male", label: "Мужской" },
+  { value: "female", label: "Женский" },
+];
 
 export const InputUserResolvers = {
-  lname: yup
+  lastName: yup
     .string()
     .matches(/[а-яА-яёЁ]$/, "Фамилия заполненно не верно")
     .required("Укажите Фамилия"),
-  fname: yup
+  firstName: yup
     .string()
     .matches(/[а-яА-яёЁ]$/, "Имя заполненно не верно")
     .required("Укажите Имя"),
-  mname: yup
+  middleName: yup
     .string()
     .matches(/[а-яА-яёЁ]$/, "Отчество заполненно не верно")
     .required("Укажите Отчество"),
-  bdate: yup.string().required("Укажите Дату рождения"),
+  birthdate: yup.string().required("Укажите Дату рождения"),
   education: yup.string().required("Укажите Образование"),
   gender: yup.string().required("Укажите Пол"),
   avatar: yup.string().required("Укажите Фото"),
 };
 
 const InputUser = ({ prename = "" }) => {
-  //avatar
-  const [avatarPreview, setAvatarPreview] = useState(null);
-  //calendar
-  const [isBirthdayCalendarOpen, setIsBirthdayCalendarOpen] = useState(false);
-
-  const previewAvatarHandler = (e) => {
-    const file = e.target.files[0];
-
-    const urlImage = URL.createObjectURL(file);
-    const formData = new FormData();
-    formData.append("avatar", file);
-    setAvatarPreview(urlImage);
-  };
-
   const { control, watch } = useFormContext();
 
   return (
@@ -59,7 +49,7 @@ const InputUser = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}lname`}
+          name={`${prename}lastName`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -76,46 +66,14 @@ const InputUser = ({ prename = "" }) => {
           control={control}
           name={`${prename}avatar`}
           render={({ field, fieldState: { error } }) => (
-            <label
-              className={s.inputAvatarBlock}
-              style={error && { borderColor: "red" }}
-            >
-              <input
-                onChange={previewAvatarHandler}
-                className={s.inputAvatar}
-                id="image-file"
-                type="file"
-              />
-
-              {avatarPreview ? (
-                <div className={s.avaterPreview}>
-                  <img
-                    src={avatarPreview}
-                    className={s.avaterPreview}
-                    alt="input-avatar"
-                    onLoad={({ target }) => field.onChange(target.src)}
-                  />
-                </div>
-              ) : (
-                <div className={s.inputLableBlock}>
-                  <div className={s.inputAvatarText}>
-                    Добавить
-                    <br />
-                    фото
-                  </div>
-                  <div className={s.addAvatarIcon}>
-                    <Icon iconName="addSomethingIcon" />
-                  </div>
-                </div>
-              )}
-            </label>
+            <InputAvatar {...field} error={error} />
           )}
         />
 
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}fname`}
+          name={`${prename}firstName`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -131,7 +89,7 @@ const InputUser = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}mname`}
+        name={`${prename}middleName`}
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
@@ -146,14 +104,13 @@ const InputUser = ({ prename = "" }) => {
       <div className={s.gridBirthDataEducationGender}>
         <Controller
           control={control}
-          name={`${prename}bdate`}
+          name={`${prename}birthdate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
-              setIsCalendarOpen={setIsBirthdayCalendarOpen}
-              lable={"Дата рождения"}
-              placeholder={"1980-05-08"}
+              lable="Дата рождения"
+              placeholder="1980-05-08"
+              value={field.value}
               onChange={(date) => field.onChange(date)}
-              isCalendarOpen={isBirthdayCalendarOpen}
               errors={error}
             />
           )}

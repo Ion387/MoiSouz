@@ -1,28 +1,21 @@
 import s from "./ProfileInfoForm.module.css";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormProfile from "3Entities/Forms/FormProfile";
+import { onProfileInfoFormTC, postAvatarUserTC } from "0Redux/userReducer";
 
 const ProfileInfoForm = (props) => {
+  const { data } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  /*
-  const onSubmit = (data) => {
-    const rigntPickedHobby = choicePickedHobby.map((i) => i && i);
-    const rightData = {
-      ...data,
-      birthdate: birthdate,
-      hobbies: rigntPickedHobby,
-    };
-    dispatch(onProfileInfoFormTC(rightData, navigate));
-  };
-  */
 
   const onSubmit = (data) => {
-    console.log("SUBMIT", data);
+    dispatch(postAvatarUserTC(data.avatar));
+    dispatch(onProfileInfoFormTC(data, navigate));
   };
 
-  return <FormProfile onSubmit={onSubmit} />;
+  return <FormProfile defaultValues={data} onSubmit={onSubmit} />;
 };
 
 export default ProfileInfoForm;

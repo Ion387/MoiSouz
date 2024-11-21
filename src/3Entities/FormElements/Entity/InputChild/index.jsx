@@ -7,21 +7,21 @@ import Input from "2Generics/Elements/Input/Input";
 import Selector from "2Generics/Elements/Selector/Selector";
 import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
 
-const genderSelect = ["Мужской", "Женский"];
+const genderSelect = [
+  { value: "male", label: "Мужской" },
+  { value: "female", label: "Женский" },
+];
 
 export const InputChildResolvers = {
-  fname: yup
+  firstName: yup
     .string()
     .matches(/[а-яА-яёЁ]$/, "Имя заполненно не верно")
     .required("Укажите Имя"),
   gender: yup.string().required("Укажите Пол"),
-  bdate: yup.string().required("Укажите Дату рождения"),
+  birthdate: yup.string().required("Укажите Дату рождения"),
 };
 
 const InputChild = ({ prename = "" }) => {
-  //calendar
-  const [isBirthdayCalendarOpen, setIsBirthdayCalendarOpen] = useState(false);
-
   const { control, watch } = useFormContext();
 
   return (
@@ -29,7 +29,7 @@ const InputChild = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}fname`}
+        name={`${prename}firstName`}
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
@@ -64,14 +64,13 @@ const InputChild = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}bdate`}
+        name={`${prename}birthdate`}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            setIsCalendarOpen={setIsBirthdayCalendarOpen}
-            lable={"Дата рождения"}
-            placeholder={"1980-05-08"}
+            lable="Дата рождения"
+            placeholder="1980-05-08"
+            value={field.value}
             onChange={(date) => field.onChange(date)}
-            isCalendarOpen={isBirthdayCalendarOpen}
             style={{ width: "100%" }}
             errors={error}
           />

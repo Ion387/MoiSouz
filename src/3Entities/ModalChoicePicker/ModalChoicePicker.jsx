@@ -8,24 +8,28 @@ const ModalChoicePicker = (props) => {
   const choiceList = props.lableArray.map((el, index) => (
     <div
       className={s.choiceItem}
-      key={el}
+      key={el.value}
       onClick={() => {
-        if (props.choice?.includes(el) != true) {
+        if (
+          props.choice?.some((elChoice) => elChoice.value == el.value) == false
+        ) {
           props.setChoice((prevState) => [...prevState, el]);
         } else {
-          props.setChoice((prevState) => prevState.filter((f) => f != el));
+          props.setChoice((prevState) =>
+            prevState.filter((f) => f.value != el.value),
+          );
         }
       }}
     >
       <div className={s.choiceIndicator}>
-        {props.choice?.includes(el) ? (
+        {props.choice?.some((elChoice) => elChoice.value == el.value) ? (
           <Icon iconName="choicePickerIcon" />
         ) : (
           <Icon iconName="choiceNotPickerIcon" />
         )}
       </div>
 
-      {el}
+      {el.label}
     </div>
   ));
   const submitHandler = (e) => {

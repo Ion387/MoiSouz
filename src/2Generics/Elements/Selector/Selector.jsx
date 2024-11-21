@@ -13,11 +13,13 @@ const MySelector = (
     lable,
     lableStyle,
     value,
-    optionValue,
+    optionValue, // { value: string; label: string; }[]
   },
-  ref
+  ref,
 ) => {
-  const options = optionValue.map((i) => <option>{i}</option>);
+  const options = optionValue.map((el) => (
+    <option value={el.value}>{el.label}</option>
+  ));
   return (
     <div className={s.inputForm}>
       {

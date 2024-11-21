@@ -23,47 +23,53 @@ import InputSelectorModal from "3Entities/FormElements/Base/InputSelectorModal";
 import Submit from "3Entities/FormElements/Base/Submit";
 
 const hobbiesPickArray = [
-  "Спорт",
-  "Ходьба",
-  "Бег",
-  "Футбол",
-  "Хоккей",
-  "Волейбол",
-  "Плавание",
-  "Бадминтон",
-  "Настольный теннис",
-  "Большой теннис",
-  "Лыжи",
-  "Единоборства",
-  "Баскетбол",
-  "Велоспорт",
-  "Спортивное ориентирование",
-  "Коньки",
-  "Ролики",
+  { value: "Спорт", label: "Спорт" },
+  { value: "Ходьба", label: "Ходьба" },
+  { value: "Бег", label: "Бег" },
+  { value: "Футбол", label: "Футбол" },
+  { value: "Хоккей", label: "Хоккей" },
+  { value: "Волейбол", label: "Волейбол" },
+  { value: "Плавание", label: "Плавание" },
+  { value: "Бадминтон", label: "Бадминтон" },
+  { value: "Настольный теннис", label: "Настольный теннис" },
+  { value: "Большой теннис", label: "Большой теннис" },
+  { value: "Лыжи", label: "Лыжи" },
+  { value: "Единоборства", label: "Единоборства" },
+  { value: "Баскетбол", label: "Баскетбол" },
+  { value: "Велоспорт", label: "Велоспорт" },
+  { value: "Спортивное ориентирование", label: "Спортивное ориентирование" },
+  { value: "Коньки", label: "Коньки" },
+  { value: "Ролики", label: "Ролики" },
 ];
 
-const Form = ({ onSubmit }) => {
+const Form = ({ defaultValues, onSubmit }) => {
   const methods = useForm({
     resolver: yupResolver(
       yup.object().shape({
         ...InputUserResolvers,
-        professions: InputArrayResolversAs(
+        profession: InputArrayResolversAs(
           yup.string().required("Укажите Профессию"),
         ),
-        positions: InputArrayResolversAs(
+        position: InputArrayResolversAs(
           yup.string().required("Укажите Должность"),
         ),
-        ...InputAddressResolvers,
+        address: yup.object().shape(InputAddressResolvers),
         ...InputPhoneResolvers,
-        childs: InputArrayResolversAs(yup.object().shape(InputChildResolvers)),
+        children: InputArrayResolversAs(
+          yup.object().shape(InputChildResolvers),
+        ),
         hobbies: yup
           .array()
           .of(yup.string())
           .required("Укажите Увлечения")
           .min(1, "Укажите Увлечения"),
-        approval: yup.boolean().required("Укажите Согласие").oneOf([true]),
+        approval: yup
+          .boolean()
+          .required("Укажите Согласие")
+          .oneOf([true], "Укажите Согласие"),
       }),
     ),
+    defaultValues,
   });
   const {
     handleSubmit,
@@ -81,33 +87,33 @@ const Form = ({ onSubmit }) => {
               <InputUser />
 
               <InputArray
-                name="professions"
+                name="profession"
                 label="Основная профессия"
                 label2="Дополнительная профессия"
                 placeholder="Бухгалтер"
                 render={({ register, ...props }) => (
                   <Input type="text" {...props} {...register()} />
                 )}
-                preadd
+                preadd={!defaultValues}
               />
 
               <InputArray
-                name="positions"
+                name="position"
                 label="Должность"
                 label2="Дополнительная должность"
                 placeholder="Главный бухгалтер"
                 render={({ register, ...props }) => (
                   <Input type="text" {...props} {...register()} />
                 )}
-                preadd
+                preadd={!defaultValues}
               />
 
-              <InputAddress />
+              <InputAddress prename="address." />
 
               <InputPhone extra />
 
               <InputArray
-                name="childs"
+                name="children"
                 label="Дети"
                 render={({ register, ...props }) => (
                   <InputChild {...props} prename={`${register().name}.`} />

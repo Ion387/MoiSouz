@@ -1,31 +1,26 @@
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import s from "./DatePicker.module.css";
 
 export function MyDatePicker(
-  {
-    name,
-    placeholder,
-    errors,
-    style,
-    lable,
-    lableStyle,
-    value,
-    onChange,
-    calendarPickBirthdayHandler,
-    isCalendarOpen,
-    setIsCalendarOpen,
-  },
+  { name, placeholder, errors, style, lable, lableStyle, value, onChange },
   ref,
 ) {
-  const [date, setDate] = useState(value);
+  const [date, setDate] = useState();
+  const [open, setOpen] = useState();
+
+  useEffect(() => {
+    if (value == null) return;
+    setDate(dayjs(value).format("YYYY-MM-DD"));
+  }, [value]);
+
   const onDateChange = (newDate) => {
     const formatingDate = dayjs(newDate).format("YYYY-MM-DD");
     setDate(formatingDate);
     onChange(formatingDate);
-    setIsCalendarOpen(false);
+    setOpen(false);
   };
   return (
     <div className={s.calendarMain}>
@@ -35,7 +30,7 @@ export function MyDatePicker(
       <div
         className={s.calendar}
         onClick={() => {
-          setIsCalendarOpen(true);
+          setOpen(true);
         }}
       >
         <input
@@ -47,16 +42,17 @@ export function MyDatePicker(
           id={name}
           ref={ref}
           style={style}
-          value={value || date}
+          value={date}
         />
       </div>
-      {isCalendarOpen === true && (
+      {open === true && (
         <Calendar
           onChange={onDateChange}
           on
           showNeighboringMonth={false}
           locale={"ru"}
-          defaultActiveStartDate={new Date(2000, 0, 0)}
+          value={date && new Date(date)}
+          //defaultActiveStartDate={new Date("2000-01-01")}
         />
       )}
     </div>

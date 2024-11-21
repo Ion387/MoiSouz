@@ -6,7 +6,7 @@ import Input from "2Generics/Elements/Input/Input";
 
 export const InputPhoneResolvers = {
   phone: yup.string().required("Укажите Номер телефона"),
-  phoneExtra: yup.string(),
+  phoneDop: yup.string(),
 };
 
 const InputPhone = ({ prename = "", extra = false }) => {
@@ -33,7 +33,7 @@ const InputPhone = ({ prename = "", extra = false }) => {
           <Controller
             className={s.tel}
             control={control}
-            name={`${prename}phoneExtra`}
+            name={`${prename}phoneDop`}
             render={({ field, fieldState: { error } }) => (
               <Input
                 {...field}

@@ -5,25 +5,27 @@ import ModalChoicePicker from "3Entities/ModalChoicePicker/ModalChoicePicker";
 
 const SelectorModal = ({
   style,
-  data = [],
+  data = [], // { value: string; label: string; }[]
   onChange,
-  value = [],
+  value = [], // string[] - value[]
   label,
   ...rest
 }) => {
-  const [select, setSelect] = useState(value);
+  const [select, setSelect] = useState(
+    data.filter((el) => value.includes(el.value)),
+  );
 
   //modal
   const [show, setShow] = useState(false);
 
   const handleSubmit = (data) => {
     setShow(false);
-    onChange && onChange(data);
+    onChange && onChange(data.map((el) => el.value));
   };
 
   const handleCancel = () => {
     setShow(false);
-    setSelect(value);
+    setSelect(data.filter((el) => value.includes(el.value)));
   };
 
   return (

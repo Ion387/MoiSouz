@@ -50,7 +50,9 @@ const initialState = {
   isUserFormFilled: false,
   isLoading: false,
   isInited: false,
-  id: null,
+  data: {
+    id: null,
+  },
 };
 
 const userReducer = (state = initialState, action) => {
@@ -70,7 +72,7 @@ const userReducer = (state = initialState, action) => {
     case "setDataUserAC":
       return {
         ...state,
-        ...action.data,
+        data: { ...action.data },
       };
 
     case "loading":
@@ -135,7 +137,7 @@ export const getProfileUserTC = (navigate) => {
         // успешный запрос
         dispatch(userIsLoggedUserAC());
         dispatch(setDataUserAC(response.data));
-        navigate("/main");
+        //navigate("/main");
         dispatch(endLoading());
         return;
         /*  dispatch(setProfileUserTC()); */
@@ -151,7 +153,7 @@ export const registrationUserTC = (
   email,
   password,
   passwordRepeat,
-  navigate
+  navigate,
 ) => {
   return async (dispatch) => {
     try {
@@ -177,64 +179,7 @@ export const registrationUserTC = (
 };
 
 export const onProfileInfoFormTC = (data, navigate) => {
-  const currentPayload = {
-    secondName: "Кормушкин",
-    firstName: "Владимир",
-    lastName: "Ярославович",
-    birthdate: "1984.09.04",
-    gender: "male",
-    education: "высшее",
-    profession: ["программист"],
-    position: ["программист"],
-    address: {
-      postcode: "123456",
-      region: "Нижегородская обл.",
-      area: "Нижегородская обл.",
-      city: "Нижний Новгород",
-      street: "Крупской",
-      house: "20",
-      flat: "34",
-    },
-    phone: "+79108768990",
-    phoneDop: "+79108768990",
-    children: [
-      {
-        childrenName: "Владислав",
-        childrenGender: "male",
-        childrenBirthdate: "2016.02.04",
-      },
-    ],
-    hobbies: ["ролики"],
-    /* 
-  const currentPayload = {
-    secondName: data.secondName,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    birthdate: data.birthdate,
-    gender: data.gender,
-    education: data.education,
-    profession: [data.profession],
-    position: [data.position],
-    address: {
-      postcode: data.postcode,
-      region: data.region,
-      area: data.area,
-      city: data.city,
-      street: data.street,
-      house: data.house,
-      flat: data.flat,
-    },
-    phone: data.phone,
-    phoneDop: data.phoneDop,
-    children: [
-      {
-        childrenName: data.childrenName,
-        childrenGender: data.childrenGender,
-        childrenBirthdate: data.childrenBirthdate,
-      },
-    ],
-    hobbies: data.hobbies.map((i) => i && i), */
-  };
+  console.log(data);
   return async (dispatch) => {
     try {
       let response = await (
@@ -242,19 +187,21 @@ export const onProfileInfoFormTC = (data, navigate) => {
       )({
         url: "/api/private/profile",
         method: "POST",
-        data: currentPayload,
+        data,
       });
       if (response.status == 200) {
         // успешный запрос
         dispatch(onFormFilled());
-        navigate("/main");
+        //navigate("/main");
       }
     } catch {}
   };
 };
 
-export const postAvatarUserTC = (datas) => {
-  console.log("start post avatar");
+export const postAvatarUserTC = (blob) => {
+  const formData = new FormData();
+  formData.append("avatar", new File([blob], "name"));
+
   return async (dispatch) => {
     try {
       let response = await (
@@ -262,14 +209,10 @@ export const postAvatarUserTC = (datas) => {
       )({
         url: "/api/private/avatar",
         method: "POST",
-        data: datas,
+        data: formData,
       });
-      console.log(response);
       if (response.status == 200) {
         // успешный запрос
-
-        console.log("avatar post");
-        console.log(response);
       }
     } catch {}
   };

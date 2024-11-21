@@ -1,18 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import s from "./index.module.css";
 
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const InputAvatar = ({ value, onChange, error }) => {
-  const [preview, setPreview] = useState(value);
+  const [preview, setPreview] = useState(null);
 
-  const previewHandler = (e) => {
+  useEffect(() => {
+    if (value == null) {
+      setPreview(null);
+      return;
+    }
+    switch (typeof value) {
+      case "object":
+        const urlImage = URL.createObjectURL(value);
+        const formData = new FormData();
+        formData.append("avatar", value);
+        setPreview(urlImage);
+        break;
+
+      case "string":
+        setPreview(`${process.env.REACT_APP_SERVER_PATH}${value}`);
+        break;
+
+      default:
+        break;
+    }
+  }, [value]);
+
+  const onInput = (e) => {
     const file = e.target.files[0];
-
-    const urlImage = URL.createObjectURL(file);
-    const formData = new FormData();
-    formData.append("avatar", file);
-    setPreview(urlImage);
+    if (file == null) return;
+    onChange && onChange(file);
   };
 
   return (
@@ -21,7 +40,7 @@ const InputAvatar = ({ value, onChange, error }) => {
       style={error && { borderColor: "red" }}
     >
       <input
-        onChange={previewHandler}
+        onChange={onInput}
         className={s.inputAvatar}
         id="image-file"
         type="file"
@@ -29,12 +48,7 @@ const InputAvatar = ({ value, onChange, error }) => {
 
       {preview ? (
         <div className={s.avaterPreview}>
-          <img
-            src={preview}
-            className={s.avaterPreview}
-            alt="input-avatar"
-            onLoad={({ target }) => onChange && onChange(target.src)}
-          />
+          <img src={preview} className={s.avaterPreview} alt="input-avatar" />
         </div>
       ) : (
         <div className={s.inputLableBlock}>

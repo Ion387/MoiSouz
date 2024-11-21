@@ -12,6 +12,7 @@ const ProfileInfoForm = (props) => {
 
   const onSubmit = (data) => {
     dispatch(postAvatarUserTC(data.avatar));
+    delete data.avatar;
     dispatch(onProfileInfoFormTC(data, navigate));
   };
 

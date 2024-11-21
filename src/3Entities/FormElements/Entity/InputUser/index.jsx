@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./index.module.css";
@@ -6,7 +5,6 @@ import s from "./index.module.css";
 import Input from "2Generics/Elements/Input/Input";
 import Selector from "2Generics/Elements/Selector/Selector";
 import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
-import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import InputAvatar from "2Generics/Elements/InputAvatar";
 
 const educationSelect = [
@@ -37,7 +35,7 @@ export const InputUserResolvers = {
   birthdate: yup.string().required("Укажите Дату рождения"),
   education: yup.string().required("Укажите Образование"),
   gender: yup.string().required("Укажите Пол"),
-  avatar: yup.string().required("Укажите Фото"),
+  avatar: yup.mixed().required("Укажите Фото"),
 };
 
 const InputUser = ({ prename = "" }) => {

@@ -198,12 +198,13 @@ export const onProfileInfoFormTC = (data, navigate) => {
   };
 };
 
-export const postAvatarUserTC = (blob) => {
-  const formData = new FormData();
-  formData.append("avatar", new File([blob], "name"));
-
+export const postAvatarUserTC = (file) => {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      if (typeof file != "object") return;
+
       let response = await (
         await fetch()
       )({

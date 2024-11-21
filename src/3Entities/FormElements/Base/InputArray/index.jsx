@@ -1,51 +1,48 @@
 import React, { useEffect } from "react";
-import s from "./InputArray.module.css";
-import Input from "../Input/Input";
-import { profileInfoSchema } from "5Utilits/FormSchemas/ProfileInfoSchema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import * as yup from "yup";
+import s from "./index.module.css";
+
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
-const MyInputArray = (
-  {
-    onChange,
-    onBlur,
-    name,
-    placeholder,
-    errors,
-    type,
-    style,
-    lable,
-    lable2,
-    lableStyle,
-    value,
-  },
-  ref
-) => {
-  const { register, handleSubmit, control, reset } = useForm({
-    resolver: yupResolver(profileInfoSchema),
-  });
+export const InputArrayResolversAs = (resolve) => yup.array().of(resolve);
+
+const InputArray = ({
+  name,
+  placeholder,
+  style,
+  label,
+  label2,
+  render,
+  preadd,
+}) => {
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = useFormContext();
 
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
       control, // control props comes from useForm (optional: if you are using FormProvider)
-      name: "test", // unique name for your Field Array
-    }
+      name, // unique name for your Field Array
+    },
   );
   useEffect(() => {
-    append(0);
+    if (preadd == true) append();
   }, []);
+
   return (
     <div className={s.inputForm}>
       <div className={s.flexLables}>
         <lable for={name} className={s.formLables}>
-          {lable}
+          {label}
         </lable>
         <lable for={name} className={s.formLables}>
           <div
             className={s.addReduceIcon}
             onClick={() => {
-              append(1);
+              append();
             }}
           >
             <Icon iconName={"addInputIcon"} />
@@ -54,11 +51,11 @@ const MyInputArray = (
       </div>
 
       {fields.map((field, index) => (
-        <div className={s.inputBlock}>
+        <div key={field.id} className={s.inputBlock}>
           {index > 0 && (
             <div className={s.flexLables}>
               <lable for={name} className={s.formLables}>
-                {lable2}
+                {label2}
               </lable>
               <lable for={name} className={s.formLables}>
                 <div
@@ -73,25 +70,21 @@ const MyInputArray = (
             </div>
           )}
 
-          <Input
-            type={type || "text"}
-            className={!errors ? s.input : `${s.input} ${s.errorInput}`}
-            placeholder={placeholder}
-            onChange={onChange}
-            /*     onBlur={onBlur} */
-            name={name}
-            id={name}
-            ref={ref}
-            style={style}
-            value={value}
-            lableStyle={{ height: "0px" }}
-            errors={errors}
-          />
+          {render({
+            className:
+              errors[name] && errors[name][index]
+                ? `${s.input} ${s.errorInput}`
+                : s.input,
+            placeholder,
+            style,
+            lableStyle: { height: "0px" },
+            errors: errors[name] && errors[name][index],
+            register: () => register(`${name}.${index}`),
+          })}
         </div>
       ))}
     </div>
   );
 };
 
-const InputArray = React.forwardRef(MyInputArray);
-export default InputArray;
+export default React.forwardRef(InputArray);

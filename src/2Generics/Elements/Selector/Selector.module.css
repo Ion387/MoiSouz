@@ -1,6 +1,6 @@
-.calendarMain {
+.inputForm {
   margin-top: 20px;
-  position: relative;
+  width: 100%;
 }
 
 .input {
@@ -15,8 +15,12 @@
   border: rgb(216, 216, 216) solid 1px;
 }
 
-.input::placeholder {
-  color: rgb(166, 166, 166);
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+  cursor: pointer;
 }
 
 .errorInput {

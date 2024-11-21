@@ -1,6 +1,6 @@
-import MyInput from "2Generics/FormElements/Input/Input";
+import MyInput from "2Generics/Elements/Input/Input";
 import s from "./InputAdder.module.css";
-import Input from "2Generics/FormElements/Input/Input";
+import Input from "2Generics/Elements/Input/Input";
 
 const InputAdder = (props) => {
   let inputList = null;

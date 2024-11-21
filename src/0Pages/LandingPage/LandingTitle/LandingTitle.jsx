@@ -1,7 +1,7 @@
 import Logo from "2Generics/Logo/Logo";
 import s from "./LandingTitle.module.css";
 import { Link } from "react-router-dom";
-import Button from "2Generics/FormElements/Button/Button";
+import Button from "2Generics/Elements/Button/Button";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const LandingTitle = (props) => {

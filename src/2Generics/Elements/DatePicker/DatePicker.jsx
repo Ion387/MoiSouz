@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState } from "react";
 import s from "./DatePicker.module.css";
 
 export function MyDatePicker(
@@ -13,17 +13,18 @@ export function MyDatePicker(
     lable,
     lableStyle,
     value,
-    setDate,
+    onChange,
     calendarPickBirthdayHandler,
     isCalendarOpen,
     setIsCalendarOpen,
   },
-  ref
+  ref,
 ) {
-  /*   const [date, setDate] = useState(new Date()); */
+  const [date, setDate] = useState(value);
   const onDateChange = (newDate) => {
     const formatingDate = dayjs(newDate).format("YYYY-MM-DD");
     setDate(formatingDate);
+    onChange(formatingDate);
     setIsCalendarOpen(false);
   };
   return (
@@ -46,7 +47,7 @@ export function MyDatePicker(
           id={name}
           ref={ref}
           style={style}
-          value={value}
+          value={value || date}
         />
       </div>
       {isCalendarOpen === true && (

@@ -15,7 +15,7 @@ const MyInput = (
     lableStyle,
     value,
   },
-  ref
+  ref,
 ) => {
   return (
     <div className={s.inputForm}>

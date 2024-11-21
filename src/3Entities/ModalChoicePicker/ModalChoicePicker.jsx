@@ -2,42 +2,35 @@ import Calendar from "react-calendar";
 import s from "./ModalChoicePicker.module.css";
 import dayjs from "dayjs";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
-import Button from "2Generics/FormElements/Button/Button";
+import Button from "2Generics/Elements/Button/Button";
 
 const ModalChoicePicker = (props) => {
-  const choiceList = props.lableArray.map((i, index) => (
+  const choiceList = props.lableArray.map((el, index) => (
     <div
       className={s.choiceItem}
-      key={i}
+      key={el}
       onClick={() => {
-        if (!props.choice[index]) {
-          props.setChoice((prevState) => {
-            const newState = [...prevState];
-            newState[index] = i;
-            return newState;
-          });
+        if (props.choice?.includes(el) != true) {
+          props.setChoice((prevState) => [...prevState, el]);
         } else {
-          props.setChoice((prevState) => {
-            const newState = [...prevState];
-            newState[index] = null;
-            return newState;
-          });
+          props.setChoice((prevState) => prevState.filter((f) => f != el));
         }
       }}
     >
       <div className={s.choiceIndicator}>
-        {props.choice[index] ? (
+        {props.choice?.includes(el) ? (
           <Icon iconName="choicePickerIcon" />
         ) : (
           <Icon iconName="choiceNotPickerIcon" />
         )}
       </div>
 
-      {i}
+      {el}
     </div>
   ));
-  const submitHandler = () => {
-    props.submit(props.choice);
+  const submitHandler = (e) => {
+    e.stopPropagation();
+    props.submit(props.choice.filter((el) => el));
   };
   return (
     <div className={s.modalChoicePicker}>
@@ -54,8 +47,9 @@ const ModalChoicePicker = (props) => {
             color: "rgb(117, 117, 117)",
             fontSize: "14px",
           }}
-          onClick={() => {
-            props.cancel(false);
+          onClick={(e) => {
+            e.stopPropagation();
+            props.cancel();
           }}
         />
         <Button

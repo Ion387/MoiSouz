@@ -2,8 +2,8 @@ import s from "./LoginPage.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "2Generics/FormElements/Button/Button";
-import Input from "2Generics/FormElements/Input/Input";
+import Button from "2Generics/Elements/Button/Button";
+import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = (props) => {
@@ -16,7 +16,7 @@ const LoginPage = (props) => {
       .string()
       .min(
         5,
-        "Пароль должен содержать не менее 8 символов. В нём должны быть заглавные и строчные буквы, цифры, пробелы и специальные символы"
+        "Пароль должен содержать не менее 8 символов. В нём должны быть заглавные и строчные буквы, цифры, пробелы и специальные символы",
       )
       .required("Password is required please !"),
   });

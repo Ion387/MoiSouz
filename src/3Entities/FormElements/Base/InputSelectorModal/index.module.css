@@ -1,0 +1,4 @@
+.input {
+  width: calc (100% - 128px);
+  min-width: 300px;
+}

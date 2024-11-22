@@ -18,6 +18,7 @@ const App = (props) => {
             <AuthRouting
               isUserLogged={props.isUserLogged}
               authUserTC={props.authUserTC}
+              getProfileUserTC={props.getProfileUserTC}
               registrationUserTC={props.registrationUserTC}
             />
           </div>

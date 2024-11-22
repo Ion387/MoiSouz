@@ -1,17 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProfileUserTC } from "0Redux/userReducer";
 import { connect, useSelector } from "react-redux";
 
 const CheckLogin = (props) => {
+  const [checked, setChecked] = useState(false);
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
-    props.getProfileUserTC(navigate);
+    const load = async () => {
+      await props.getProfileUserTC(navigate);
+      setChecked(true);
+    };
+    load();
   }, []);
   if (user.isInited == false) return null;
-  if (user.isLoading) return null;
+  if (checked == false) return null;
 
   return props.children;
 };

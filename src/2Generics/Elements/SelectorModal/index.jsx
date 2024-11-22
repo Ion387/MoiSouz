@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import s from "./index.module.css";
 import Input from "../Input/Input";
 import ModalChoicePicker from "3Entities/ModalChoicePicker/ModalChoicePicker";
@@ -14,9 +14,22 @@ const SelectorModal = ({
   const [select, setSelect] = useState(
     data.filter((el) => value.includes(el.value)),
   );
-
-  //modal
   const [show, setShow] = useState(false);
+  const refContainer = createRef();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (refContainer.current == null) return;
+        if (refContainer.current.contains(e.target)) return;
+        setShow(false);
+      },
+      { signal: controller.signal },
+    );
+    return () => controller.abort();
+  }, [show]);
 
   const handleSubmit = (data) => {
     setShow(false);
@@ -29,12 +42,13 @@ const SelectorModal = ({
   };
 
   return (
-    <div className={s.inputForm}>
+    <div className={s.inputForm} ref={refContainer}>
       <div className={s.choiceHobbies} onClick={() => setShow(true)}>
         <Input
           value={value && value.join(", ")}
           style={{ ...(style || {}), width: "100%", cursor: "pointer" }}
           lable={label}
+          autocomplete="off"
           {...rest}
         />
         {show && (

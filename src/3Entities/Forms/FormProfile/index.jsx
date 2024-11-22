@@ -94,7 +94,7 @@ const Form = ({ defaultValues, onSubmit }) => {
                 render={({ register, ...props }) => (
                   <Input type="text" {...props} {...register()} />
                 )}
-                preadd={!defaultValues}
+                preadd={!defaultValues || !defaultValues.profession}
               />
 
               <InputArray
@@ -105,7 +105,7 @@ const Form = ({ defaultValues, onSubmit }) => {
                 render={({ register, ...props }) => (
                   <Input type="text" {...props} {...register()} />
                 )}
-                preadd={!defaultValues}
+                preadd={!defaultValues || !defaultValues.position}
               />
 
               <InputAddress prename="address." />

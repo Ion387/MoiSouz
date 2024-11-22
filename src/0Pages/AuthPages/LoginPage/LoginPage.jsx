@@ -5,8 +5,12 @@ import * as yup from "yup";
 import Button from "2Generics/Elements/Button/Button";
 import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Loader from "2Generics/Loader";
 
 const LoginPage = (props) => {
+  const { isLoading, error } = useSelector((store) => store.user);
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -28,8 +32,8 @@ const LoginPage = (props) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const navigate = useNavigate();
-  const onSubmit = (data) => {
-    props.authUserTC(data.email, data.password, navigate);
+  const onSubmit = async (data) => {
+    await props.authUserTC(data.email, data.password, navigate);
   };
 
   return (
@@ -45,6 +49,7 @@ const LoginPage = (props) => {
               lable={"Адрес электронной почты:"}
               errors={errors.email}
               placeholder={"ivanov@mail.ru"}
+              disabled={isLoading}
             />
 
             <Input
@@ -54,6 +59,7 @@ const LoginPage = (props) => {
               type={"password"}
               errors={errors.password}
               placeholder={"password"}
+              disabled={isLoading}
             />
 
             {/*             <input
@@ -69,18 +75,29 @@ const LoginPage = (props) => {
               <input
                 className={s.checkbox}
                 type={"checkbox"}
+                disabled={isLoading}
                 {...register("rememberMe")}
               />{" "}
               <div className={s.checkboxText}>Запомнить пароль</div>
             </div>
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                <Button value={"Войти"} type={"submit"} />
+                {isLoading != true && (
+                  <Button
+                    value={"Войти"}
+                    type={"submit"}
+                    disabled={isLoading}
+                  />
+                )}
+                <Loader visible={isLoading} />
               </div>
 
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
-                <Link to="/registration" className={s.linkUnderSubmit}>
+                <Link
+                  to={isLoading == false && "/registration"}
+                  className={s.linkUnderSubmit}
+                >
                   Регистрация
                 </Link>
               </div>
@@ -90,6 +107,7 @@ const LoginPage = (props) => {
               {errors.email && (
                 <div className={s.error}>{errors.email.message}</div>
               )}
+              {error && <div className={s.error}>{error}</div>}
             </div>
           </form>
         </div>

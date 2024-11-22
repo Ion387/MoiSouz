@@ -13,7 +13,7 @@ const MySelector = (
     lable,
     lableStyle,
     value,
-    optionValue, // { value: string; label: string; }[]
+    optionValue = [], // { value: string; label: string; }[]
   },
   ref,
 ) => {
@@ -35,9 +35,12 @@ const MySelector = (
         id={name}
         ref={ref}
         style={style}
-        value={value}
+        //value={value}
         errors={errors}
       >
+        <option hidden disabled selected value>
+          {optionValue[0]?.label || ""}
+        </option>
         {options}
       </select>
     </div>

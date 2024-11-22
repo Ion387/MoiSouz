@@ -10,27 +10,14 @@ const axiosInstance = axios.create({
 export const getToken = () => localStorage.getItem(KEY);
 export const setToken = (value) => localStorage.setItem(KEY, value);
 export const clearToken = () => localStorage.removeItem(KEY);
-
-export const fetch = async () => {
-  if (getToken()) {
-    axiosInstance.defaults.headers.Authorization = `Bearer ${getToken()}`;
-  }
-  return axiosInstance;
+export const hasToken = () => {
+  const token = getToken();
+  return token != null && token != "undefined";
 };
 
-/* export const fetchFile = async () => {
-  if (getToken()) {
-    axiosInstanceFile.defaults.headers.Authorization = `Bearer ${getToken()}`;
-    axiosInstanceFile.defaults.headers.ContentType = "multipart/form-data";
-  }
+export const fetch = async () => {
+  axiosInstance.defaults.headers.Authorization = hasToken()
+    ? `Bearer ${getToken()}`
+    : null;
   return axiosInstance;
-}; */
-
-/* 
-const response = await (
-            await fetch()
-)({
-   url: '/auth/login',
-   method: 'GET',
-   params: { email, pass, ... },
-}); */
+};

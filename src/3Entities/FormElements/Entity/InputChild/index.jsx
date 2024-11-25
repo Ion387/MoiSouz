@@ -29,7 +29,7 @@ const InputChild = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}firstName`}
+        name={`${prename}childrenName`}
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
@@ -44,7 +44,7 @@ const InputChild = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}gender`}
+        name={`${prename}childrenGender`}
         render={({ field, fieldState: { error } }) => (
           <Selector
             {...field}
@@ -53,7 +53,7 @@ const InputChild = ({ prename = "" }) => {
             placeholder={"Мужской"}
             lable={"Пол"}
             style={
-              (watch(`${prename}gender`) || "").trim()
+              (watch(`${prename}childrenGender`) || "").trim()
                 ? { width: "100%" }
                 : { width: "100%", color: "rgb(166, 166, 166)" }
             }
@@ -64,7 +64,7 @@ const InputChild = ({ prename = "" }) => {
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}birthdate`}
+        name={`${prename}childrenBirthdate`}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
             lable="Дата рождения"

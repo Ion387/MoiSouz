@@ -214,7 +214,7 @@ export const registrationUserTC = (
           await dispatch(authUserTC(email, password, navigate));
         }
       } else {
-        await dispatch(error(response.data.message));
+        await dispatch(error(response?.data?.message));
       }
     } catch {}
     await dispatch(endLoading());

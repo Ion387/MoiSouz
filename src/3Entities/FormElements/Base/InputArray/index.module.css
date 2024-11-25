@@ -23,7 +23,7 @@
 }
 
 .flexLables {
-  height: 30px;
+  height: auto;
   display: flex;
   justify-content: space-between;
 }

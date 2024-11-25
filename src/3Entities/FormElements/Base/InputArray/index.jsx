@@ -29,6 +29,7 @@ const InputArray = ({
     },
   );
   useEffect(() => {
+    if (fields.length > 0) return;
     if (preadd == true) append();
   }, []);
 
@@ -52,7 +53,7 @@ const InputArray = ({
 
       {fields.map((field, index) => (
         <div key={field.id} className={s.inputBlock}>
-          {index > 0 && (
+          {(preadd != true || index > 0) && (
             <div className={s.flexLables}>
               <lable for={name} className={s.formLables}>
                 {label2}

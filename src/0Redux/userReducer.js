@@ -129,7 +129,7 @@ export const authUserTC = (email, password, navigate) => {
         method: "POST",
         data: { email: email, password: password },
       });
-      if (response.status == 200) {
+      if (response.status == 200 && response.data && response.data.token) {
         // успешный запрос
         setToken(response.data.token);
         await dispatch(userIsLoggedUserAC());

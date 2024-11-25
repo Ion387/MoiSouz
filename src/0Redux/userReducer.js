@@ -141,7 +141,7 @@ export const authUserTC = (email, password, navigate) => {
         await dispatch(error(response.data.message));
       }
     } catch ({ response }) {
-      await dispatch(error(response.data.message));
+      await dispatch(error(response?.data?.message || "Ошибка"));
     }
     await dispatch(endLoading());
     return false;

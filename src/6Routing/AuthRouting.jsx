@@ -20,7 +20,12 @@ const AuthRouting = (props) => {
 
             <Route
               path="/signin"
-              element={<LoginPage authUserTC={props.authUserTC} />}
+              element={
+                <LoginPage
+                  authUserTC={props.authUserTC}
+                  getProfileUserTC={props.getProfileUserTC}
+                />
+              }
             />
 
             <Route

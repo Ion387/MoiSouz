@@ -1,6 +1,13 @@
 import { clearToken, fetch, fetchFile, setToken } from "4API/AxiosApi";
 import { current } from "@reduxjs/toolkit";
 
+export const error = (message) => {
+  return {
+    type: "error",
+    data: message,
+  };
+};
+
 export const userIsLoggedUserAC = () => {
   return {
     type: "userIsLogged",
@@ -50,6 +57,7 @@ const initialState = {
   isUserFormFilled: false,
   isLoading: false,
   isInited: false,
+  error: null, // null | string
   data: {
     id: null,
   },
@@ -57,6 +65,12 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "error":
+      return {
+        ...state,
+        error: action.data,
+      };
+
     case "userIsLogged":
       return {
         ...state,
@@ -79,6 +93,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        error: null,
       };
 
     case "endLoading":
@@ -92,9 +107,11 @@ const userReducer = (state = initialState, action) => {
         isInited: true,
       };
     case "logoutUserAC":
+      clearToken();
       return {
         ...state,
         isUserLogged: false,
+        data: { id: null },
       };
     default:
       return state;
@@ -103,6 +120,7 @@ const userReducer = (state = initialState, action) => {
 
 export const authUserTC = (email, password, navigate) => {
   return async (dispatch) => {
+    await dispatch(loading());
     try {
       let response = await (
         await fetch()
@@ -111,22 +129,30 @@ export const authUserTC = (email, password, navigate) => {
         method: "POST",
         data: { email: email, password: password },
       });
-      if (response.status == 200) {
+      if (response.status == 200 && response.data && response.data.token) {
         // успешный запрос
         setToken(response.data.token);
-        dispatch(userIsLoggedUserAC());
-        navigate("/main");
+        await dispatch(userIsLoggedUserAC());
+        await dispatch(getProfileUserTC(navigate));
+        //navigate("/main");
         /*  dispatch(setProfileUserTC()); */
+        return true;
+      } else {
+        await dispatch(error(response.data.message));
       }
-    } catch {}
+    } catch ({ response }) {
+      await dispatch(error(response?.data?.message || "Ошибка"));
+    }
+    await dispatch(endLoading());
+    return false;
   };
 };
 
 export const getProfileUserTC = (navigate) => {
   return async (dispatch) => {
     try {
-      dispatch(loading());
-      dispatch(InitUserAC());
+      await dispatch(loading());
+      await dispatch(InitUserAC());
       let response = await (
         await fetch()
       )({
@@ -135,17 +161,27 @@ export const getProfileUserTC = (navigate) => {
       });
       if (response.status == 200) {
         // успешный запрос
-        dispatch(userIsLoggedUserAC());
-        dispatch(setDataUserAC(response.data));
+        await dispatch(userIsLoggedUserAC());
+        await dispatch(setDataUserAC(response.data));
         //navigate("/main");
-        dispatch(endLoading());
-        return;
+        await dispatch(endLoading());
+        return response.data;
         /*  dispatch(setProfileUserTC()); */
       }
     } catch {}
-    clearToken();
-    dispatch(endLoading());
-    navigate("/");
+    await dispatch(endLoading());
+    await dispatch(logoutUserAC());
+    switch (window.location.pathname) {
+      case "/":
+      case "/signin":
+      case "/registration":
+        break;
+
+      default:
+        navigate("/");
+        break;
+    }
+    return null;
   };
 };
 
@@ -156,6 +192,7 @@ export const registrationUserTC = (
   navigate,
 ) => {
   return async (dispatch) => {
+    await dispatch(loading());
     try {
       let response = await (
         await fetch()
@@ -169,18 +206,26 @@ export const registrationUserTC = (
         },
       });
       if (response.status == 200) {
-        // успешный запрос
-
-        setToken(response.data.token);
-        dispatch(authUserTC(email, password, navigate));
+        if (response.data.status == "error") {
+          await dispatch(error(response.data.description));
+        } else {
+          // успешный запрос
+          setToken(response.data.token);
+          await dispatch(authUserTC(email, password, navigate));
+        }
+      } else {
+        await dispatch(error(response.data.message));
       }
-    } catch {}
+    } catch ({ response }) {
+      await dispatch(error(response?.data?.message || "Ошибка"));
+    }
+    await dispatch(endLoading());
   };
 };
 
 export const onProfileInfoFormTC = (data, navigate) => {
-  console.log(data);
   return async (dispatch) => {
+    await dispatch(loading());
     try {
       let response = await (
         await fetch()
@@ -191,15 +236,17 @@ export const onProfileInfoFormTC = (data, navigate) => {
       });
       if (response.status == 200) {
         // успешный запрос
-        dispatch(onFormFilled());
+        await dispatch(onFormFilled());
         //navigate("/main");
       }
     } catch {}
+    await dispatch(endLoading());
   };
 };
 
 export const postAvatarUserTC = (file) => {
   return async (dispatch) => {
+    await dispatch(loading());
     try {
       const formData = new FormData();
       formData.append("avatar", file);
@@ -216,6 +263,7 @@ export const postAvatarUserTC = (file) => {
         // успешный запрос
       }
     } catch {}
+    await dispatch(endLoading());
   };
 };
 

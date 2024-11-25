@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import "./Calendar.css";
-import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import moment from "moment";
+import React, { createRef, useEffect, useState } from "react";
 import s from "./DatePicker.module.css";
 
 export function MyDatePicker(
@@ -10,20 +10,34 @@ export function MyDatePicker(
 ) {
   const [date, setDate] = useState();
   const [open, setOpen] = useState();
+  const refContainer = createRef();
 
   useEffect(() => {
     if (value == null) return;
-    setDate(dayjs(value).format("YYYY-MM-DD"));
+    setDate(moment(value, "DD.MM.YYYY").format("YYYY-MM-DD"));
   }, [value]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (refContainer.current == null) return;
+        if (refContainer.current.contains(e.target)) return;
+        setOpen(false);
+      },
+      { signal: controller.signal },
+    );
+    return () => controller.abort();
+  }, [open]);
+
   const onDateChange = (newDate) => {
-    const formatingDate = dayjs(newDate).format("YYYY-MM-DD");
-    setDate(formatingDate);
-    onChange(formatingDate);
+    setDate(moment(newDate).format("YYYY-MM-DD"));
+    onChange(moment(newDate).format("DD.MM.YYYY"));
     setOpen(false);
   };
   return (
-    <div className={s.calendarMain}>
+    <div className={s.calendarMain} ref={refContainer}>
       <lable for={name} className={s.formLables} style={lableStyle}>
         {lable}
       </lable>
@@ -46,14 +60,17 @@ export function MyDatePicker(
         />
       </div>
       {open === true && (
-        <Calendar
-          onChange={onDateChange}
-          on
-          showNeighboringMonth={false}
-          locale={"ru"}
-          value={date && new Date(date)}
-          //defaultActiveStartDate={new Date("2000-01-01")}
-        />
+        <>
+          {/*<div className={s.bgClose} onClick={setOpen(false)}></div>*/}
+          <Calendar
+            onChange={onDateChange}
+            on
+            showNeighboringMonth={false}
+            locale={"ru"}
+            value={date && new Date(date)}
+            //defaultActiveStartDate={new Date("2000-01-01")}
+          />
+        </>
       )}
     </div>
   );

@@ -14,6 +14,8 @@ const MyInput = (
     lable2,
     lableStyle,
     value,
+    disabled,
+    autocomplete,
   },
   ref,
 ) => {
@@ -46,6 +48,8 @@ const MyInput = (
         ref={ref}
         style={style}
         value={value}
+        disabled={disabled}
+        autoComplete={autocomplete}
       />
     </div>
   );

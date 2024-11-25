@@ -5,8 +5,12 @@ import * as yup from "yup";
 import Button from "2Generics/Elements/Button/Button";
 import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Loader from "2Generics/Loader";
 
 const Registration = (props) => {
+  const { isLoading, error } = useSelector((store) => store.user);
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -69,6 +73,7 @@ const Registration = (props) => {
               {...register("email")}
               errors={errors.email}
               placeholder={"ivanov@mail.ru"}
+              disabled={isLoading}
             />
 
             <Input
@@ -77,6 +82,7 @@ const Registration = (props) => {
               type={"password"}
               errors={errors.password}
               placeholder={"password"}
+              disabled={isLoading}
             />
 
             <Input
@@ -85,12 +91,14 @@ const Registration = (props) => {
               type={"password"}
               errors={errors.passwordRepeat}
               placeholder={"passwordRepeat"}
+              disabled={isLoading}
             />
 
             <div className={s.checkboxBlock}>
               <input
                 className={s.checkbox}
                 type={"checkbox"}
+                disabled={isLoading}
                 {...register("rememberMe")}
               />{" "}
               <div className={s.checkboxText}>Запомнить пароль</div>
@@ -98,11 +106,21 @@ const Registration = (props) => {
 
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                <Button value={"Регистрация"} type={"submit"} />
+                {isLoading != true && (
+                  <Button
+                    value={"Регистрация"}
+                    type={"submit"}
+                    disabled={isLoading}
+                  />
+                )}
+                <Loader visible={isLoading} />
               </div>
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
-                <Link to="/signin" className={s.linkUnderSubmit}>
+                <Link
+                  to={isLoading == false && "/signin"}
+                  className={s.linkUnderSubmit}
+                >
                   Войти
                 </Link>
               </div>
@@ -115,6 +133,7 @@ const Registration = (props) => {
               {errors.password && (
                 <div className={s.error}>{errors.password.message}</div>
               )}
+              {error && <div className={s.error}>{error}</div>}
             </div>
           </form>
         </div>

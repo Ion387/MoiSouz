@@ -9,6 +9,7 @@ const Button = (props) => {
         type={props.type}
         value={props.value}
         onClick={props.onClick}
+        disabled={props.disabled}
       />
     </div>
   );

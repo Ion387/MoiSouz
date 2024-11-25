@@ -13,10 +13,12 @@
 
 .loginBlock {
   margin-top: 150px;
+  padding-top: 55px;
+  padding-bottom: 30px;
   width: 100%;
   max-width: 630px;
   min-width: 300px;
-  height: 676px;
+  height: fit-content;
   background-color: white;
   border-radius: 24px;
 }
@@ -26,7 +28,6 @@ font-size: 14px;
 } */
 
 .title {
-  margin-top: 55px;
   font-size: 32px;
   font-weight: 700;
   text-align: center;
@@ -35,7 +36,7 @@ font-size: 14px;
 .loginForm {
   margin: 40px auto 0px auto;
   width: 516px;
-  height: 388px;
+  height: auto;
   /* background-color: brown; */
 }
 

@@ -4,6 +4,11 @@
   width: 100%;
 }
 
+.bgClose {
+  width: 100px;
+  height: 100px;
+}
+
 .input {
   margin-top: 15px;
   font-size: 18px;

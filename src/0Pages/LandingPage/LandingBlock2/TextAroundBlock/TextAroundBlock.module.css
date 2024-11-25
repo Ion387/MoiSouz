@@ -90,7 +90,7 @@
   left: 390px;
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1170px) {
   .bigCircle {
     transform: scale(0.9);
     width: 50%;
@@ -115,25 +115,14 @@
     position: static;
   }
 
-  /* .containerOfTextAround {
-    position: absolute;
-    top: 500px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    flex-direction: row;
-    flex-wrap: wrap;
-  } */
-
   .containerOfTextAround {
+    position: static;
     display: grid;
-    grid-template-columns: repeat(3, minmax(350px, 550px));
-    gap: 35px;
+    grid-template-columns: repeat(3, 280px);
+    gap: 25px;
     justify-content: center;
     top: 520px;
-    /* align-items: center; */
-    margin-left: 15px;
-    margin-right: 15px;
+    margin: 130px auto 0px;
   }
   .textPosition13 {
     display: none;
@@ -148,36 +137,28 @@
     border-radius: 50%; /* Сделать точку круглой */
     margin-right: 10px; /* Расстояние между точкой и текстом */
   }
-}
-
-@media (max-width: 1050px) {
-  .containerOfTextAround {
-    grid-template-columns: repeat(2, minmax(35px, 550px));
-    gap: 30px;
-    margin-left: 15%;
+  .textAround {
+    width: 280px;
   }
 }
 
-@media (max-width: 825px) {
+@media (max-width: 950px) {
   .containerOfTextAround {
-    grid-template-columns: repeat(1, minmax(35px, 550px));
+    grid-template-columns: repeat(2, minmax(35px, 280px));
     gap: 30px;
-    margin-left: 20%;
   }
-  /*   .textPosition8,
-  .textPosition9,
-  .textPosition10,
-  .textPosition11,
-  .textPosition12 {
-    display: none;
-  } */
+}
+
+@media (max-width: 725px) {
+  .containerOfTextAround {
+    grid-template-columns: repeat(1, minmax(35px, 350px));
+    gap: 30px;
+    margin-left: 5%;
+  }
+  .textAround {
+    width: 350px;
+  }
 }
 
 @media (max-width: 700px) {
-  /*   .textPosition2,
-  .textPosition4,
-  .textPosition6,
-  .textPosition7 {
-    display: none;
-  } */
 }

@@ -6,41 +6,39 @@ import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const LandingTitle = (props) => {
   return (
-    <div className={s.main}>
-      <div className={s.section}>
-        <div className={s.logoBlock}>
-          <Logo
-            moi={{
-              fontSize: "154px",
-              fontWeight: "800",
-            }}
-            souz={{
-              fontSize: "154px",
-              fontWeight: "800",
-            }}
-          />
-        </div>
-        <div className={s.textBlock}>
-          комплексное решение для автоматизации <br />
-          деятельности профсоюзов
-        </div>
-        <Link className={s.enter} to="/registration">
-          <Button
-            value="       Попробовать бесплатно"
-            style={{
-              width: "274px",
-              height: "54px",
-              fontSize: "16px",
-              fontWeight: "600",
-              borderRadius: "17px",
-            }}
-          />
-          <div className={s.likeIcon}>
-            <Icon iconName="landingLikeIcon" />
-          </div>
-        </Link>
+    <>
+      <div className={s.logoBlock}>
+        <Logo
+          moi={{
+            fontSize: "154px",
+            fontWeight: "800",
+          }}
+          souz={{
+            fontSize: "154px",
+            fontWeight: "800",
+          }}
+        />
       </div>
-    </div>
+      <div className={s.textBlock}>
+        комплексное решение для автоматизации <br />
+        деятельности профсоюзов
+      </div>
+      <Link className={s.enter} to="/registration">
+        <Button
+          value="       Попробовать бесплатно"
+          style={{
+            width: "274px",
+            height: "54px",
+            fontSize: "16px",
+            fontWeight: "600",
+            borderRadius: "17px",
+          }}
+        />
+        <div className={s.likeIcon}>
+          <Icon iconName="landingLikeIcon" />
+        </div>
+      </Link>
+    </>
   );
 };
 

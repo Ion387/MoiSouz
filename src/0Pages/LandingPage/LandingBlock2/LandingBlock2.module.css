@@ -5,7 +5,6 @@
 }
 
 .section {
-  max-width: 1131px;
   width: 100%;
   height: 800px;
   text-align: center;
@@ -19,62 +18,75 @@
 .centerBlock {
   margin-top: 90px;
   position: relative;
-  display: flex;
-  justify-content: left;
 }
 
-.bigCircle {
-  position: absolute;
-  left: 315px;
+.bigCircleBlock {
+  position: relative;
+  width: 400px;
+  margin: 0 auto;
 }
 .iconInnerBlock {
-  max-width: 1131px;
-  height: 800px;
+  position: absolute;
   display: flex;
-  margin-left: 25px;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 800px;
   top: 0px;
+  left: 0px;
 }
 
 .iconInnerBlockLogo {
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  left: 440px;
-  top: 171px;
+  margin-top: 140px;
 }
 
 .iconInnerBlockText {
-  max-width: 1131px;
+  margin-top: 8px;
   font-size: 16px;
   font-weight: 600;
   color: #fff;
-  position: absolute;
-  top: 242px;
-  left: 435px;
+  width: 300px;
 }
 
-@media (max-width: 1150px) {
-  .bigCircle {
-    transform: scale(0.9);
-    width: 50%;
-  }
+.iconInnerBlockButton {
+  margin-top: 45px;
+}
 
+.textAroundPosition {
+  width: 100%;
+  position: absolute;
+  left: -315px;
+}
+
+@media (max-width: 1170px) {
   .main {
+    height: 1200px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 30%;
+    margin-top: 0px;
+    justify-content: start;
+  }
+  .bigCircleBlock {
+    width: 500px;
+    position: static;
+    margin: 0 auto;
+  }
+
+  .textAroundPosition {
+    margin: 0 auto;
+    position: static;
+    width: 90%;
   }
 }
 
 @media (max-width: 1050px) {
-  .main {
-    margin-bottom: 55%;
+  .textAroundPosition {
+    left: 50px;
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 725px) {
   .main {
-    margin-bottom: 120%;
+    height: 1600px;
   }
 }

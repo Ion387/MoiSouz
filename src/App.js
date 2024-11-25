@@ -12,17 +12,17 @@ import CheckLogin from "0Pages/AuthPages/CheckLogin/CheckLogin";
 const App = (props) => {
   return (
     <BrowserRouter>
-      <CheckLogin>
-        <div className={s.main}>
-          <div className={s.section}>
-            <AuthRouting
-              isUserLogged={props.isUserLogged}
-              authUserTC={props.authUserTC}
-              registrationUserTC={props.registrationUserTC}
-            />
-          </div>
+      {/*     <CheckLogin> */}
+      <div className={s.main}>
+        <div className={s.section}>
+          <AuthRouting
+            isUserLogged={props.isUserLogged}
+            authUserTC={props.authUserTC}
+            registrationUserTC={props.registrationUserTC}
+          />
         </div>
-      </CheckLogin>
+      </div>
+      {/*      </CheckLogin> */}
     </BrowserRouter>
   );
 };

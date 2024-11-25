@@ -28,20 +28,19 @@ const LandingPage = (props) => {
         <section className={s.landingBlock3}>
           <LandingBlock3 />
         </section>
-        <section className={s.landingBlock4}>
+        {/*       <section className={s.landingBlock4}>
           <LandingBlock4 />
         </section>
-
         <section className={s.landingBlock5}>
           <LandingBlock5 />
         </section>
-
-        <section className={s.landingBlock6}>
+         */}
+        {/*         <section className={s.landingBlock6}>
           <LandingBlock6 />
-        </section>
-        <section className={s.landingFooter}>
+        </section> */}
+        {/*         <section className={s.landingFooter}>
           <LandingFooter />
-        </section>
+        </section> */}
       </div>
     </div>
   );

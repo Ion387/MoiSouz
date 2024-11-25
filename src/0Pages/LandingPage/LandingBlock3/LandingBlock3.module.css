@@ -6,8 +6,7 @@
 
 .section {
   position: relative;
-  width: 1200px;
-
+  max-width: 1200px;
   height: 553px;
 }
 
@@ -160,8 +159,7 @@
 
 @media (max-width: 630px) {
   .section {
-    width: 580px;
-    margin-left: 25%;
+    width: 500px;
     margin-bottom: 150%;
   }
 

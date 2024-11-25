@@ -33,3 +33,12 @@
     display: flex;
   }
 }
+
+@media (max-width: 825px) {
+  .textBlockInfoblock {
+    margin-top: 20px;
+    margin-left: 25px;
+    width: 300px;
+    height: 150px;
+  }
+}

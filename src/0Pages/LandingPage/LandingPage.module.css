@@ -31,9 +31,3 @@
 .landingBlock6 {
   margin-top: 125px;
 }
-
-@media (max-width: 850px) {
-  .landingBlock1 {
-    margin-top: 23px;
-  }
-}

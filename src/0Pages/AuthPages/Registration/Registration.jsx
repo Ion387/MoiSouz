@@ -9,7 +9,9 @@ import { useSelector } from "react-redux";
 import Loader from "2Generics/Loader";
 
 const Registration = (props) => {
-  const { isLoading, error } = useSelector((store) => store.user);
+  const { isLoading, error } = useSelector((state) => state.loading);
+
+  /*   const [TypeOfRegistrationUserAC, setTypeOfRegistrationUserAC] = useState(); */
 
   const schema = yup.object().shape({
     email: yup
@@ -48,17 +50,14 @@ const Registration = (props) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const navigate = useNavigate();
+
   const onSubmit = (data) => {
     props.registrationUserTC(
       data.email,
       data.password,
       data.passwordRepeat,
-      /*       data.lastName,
-      data.firstName,
-      data.secondName, */
       navigate,
     );
-    /*     navigate("/"); */
   };
 
   return (
@@ -68,6 +67,27 @@ const Registration = (props) => {
           <div className={s.title}>Регистрация</div>
 
           <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
+            {/*             {isRegistrationClicked && (
+              <div className={s.modalChooseTypeOfRegistration}>
+                <div className={s.topButtonOfChoice}>
+                  <Button
+                    value={"СТАТЬ УЧАСТНИКОМ ПРОФСОЮЗА"}
+                    type={"submit"}
+                    disabled={isLoading}
+                    onClick={onClickUserHandler}
+                  />
+                </div>
+                <div className={s.bottomButtonOfChoice}>
+                  <Button
+                    value={"ЗАРЕГИСТРИРОВАТЬ ПРОФСОЮЗ"}
+                    type={"submit"}
+                    disabled={isLoading}
+                    onClick={() => onClickPartnerHandler}
+                  />
+                </div>
+              </div>
+            )} */}
+
             <Input
               lable={"Адрес электронной почты:"}
               {...register("email")}
@@ -106,11 +126,11 @@ const Registration = (props) => {
 
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                {isLoading != true && (
+                {isLoading !== true && (
                   <Button
                     value={"Регистрация"}
-                    type={"submit"}
                     disabled={isLoading}
+                    type="submit"
                   />
                 )}
                 <Loader visible={isLoading} />
@@ -118,7 +138,7 @@ const Registration = (props) => {
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
                 <Link
-                  to={isLoading == false && "/signin"}
+                  to={isLoading === false && "/signin"}
                   className={s.linkUnderSubmit}
                 >
                   Войти

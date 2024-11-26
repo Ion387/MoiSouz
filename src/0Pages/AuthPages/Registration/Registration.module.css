@@ -34,10 +34,10 @@ font-size: 14px;
 }
 
 .loginForm {
+  position: relative;
   margin: 40px auto 0px auto;
   width: 516px;
   height: auto;
-  /* background-color: brown; */
 }
 
 .formTitles {
@@ -105,4 +105,24 @@ font-size: 14px;
 
 .error:nth-child(2) {
   margin: 5px;
+}
+
+.modalChooseTypeOfRegistration {
+  position: absolute;
+  margin: 0px auto 0px auto;
+  width: 530px;
+  height: 520px;
+  background-color: #fff;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topButtonOfChoice {
+  margin-top: 100px;
+}
+
+.bottomButtonOfChoice {
+  margin-top: 50px;
 }

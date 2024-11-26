@@ -16,7 +16,6 @@ const Main = (props) => {
         <section className={s.sectionDocuments}>
           <Documents />
         </section>
-        Appeals
         <section className={s.sectionAppeals}>
           <Appeals />
         </section>

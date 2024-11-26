@@ -1,41 +1,17 @@
-import { clearToken, fetch, fetchFile, setToken } from "4API/AxiosApi";
-import { current } from "@reduxjs/toolkit";
+import { clearToken, fetch, setToken } from "4API/AxiosApi";
+import { endLoading, error, loading } from "./loadingReducer";
+import { setPartnerNavAC, setWithRegNavAC } from "./navReducer";
 
-export const error = (message) => {
+/* export const changeROLESUserAC = (ROLE) => {
   return {
-    type: "error",
-    data: message,
+    type: "setLoggedUserAC",
+    ROLE,
   };
-};
+}; */
 
-export const userIsLoggedUserAC = () => {
+export const setLoggedUserAC = () => {
   return {
-    type: "userIsLogged",
-  };
-};
-
-export const onFormFilled = () => {
-  return {
-    type: "onFormFilled",
-  };
-};
-
-export const setDataUserAC = (data) => {
-  return {
-    type: "setDataUserAC",
-    data,
-  };
-};
-
-export const loading = () => {
-  return {
-    type: "loading",
-  };
-};
-
-export const endLoading = () => {
-  return {
-    type: "endLoading",
+    type: "setLoggedUserAC",
   };
 };
 
@@ -51,13 +27,27 @@ export const logoutUserAC = () => {
   };
 };
 
+export const setDataUserAC = (data) => {
+  return {
+    type: "setDataUserAC",
+    data,
+  };
+};
+
+export const choseTypeOfRegistrationUserAC = (typeOfRegistration) => {
+  return {
+    type: "choseTypeOfRegistrationUserAC",
+    typeOfRegistration,
+  };
+};
+
 const initialState = {
   isUserLogged: false,
+  isUserNowRegistered: false,
   /*   временная переменная */
   isUserFormFilled: false,
-  isLoading: false,
   isInited: false,
-  error: null, // null | string
+  typeOfRegistration: null,
   data: {
     id: null,
   },
@@ -65,47 +55,12 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "error":
-      return {
-        ...state,
-        error: action.data,
-      };
-
-    case "userIsLogged":
+    case "setLoggedUserAC":
       return {
         ...state,
         isUserLogged: true,
       };
 
-    case "onFormFilled":
-      return {
-        ...state,
-        isUserFormFilled: true,
-      };
-
-    case "setDataUserAC":
-      return {
-        ...state,
-        data: { ...action.data },
-      };
-
-    case "loading":
-      return {
-        ...state,
-        isLoading: true,
-        error: null,
-      };
-
-    case "endLoading":
-      return {
-        ...state,
-        isLoading: false,
-      };
-    case "InitUserAC":
-      return {
-        ...state,
-        isInited: true,
-      };
     case "logoutUserAC":
       clearToken();
       return {
@@ -113,39 +68,28 @@ const userReducer = (state = initialState, action) => {
         isUserLogged: false,
         data: { id: null },
       };
+
+    case "choseTypeOfRegistrationUserAC":
+      console.log(action.typeOfRegistration);
+      return {
+        ...state,
+        typeOfRegistration: action.typeOfRegistration,
+      };
+
+    case "setDataUserAC":
+      return {
+        ...state,
+        data: { ...action.data },
+      };
+    case "InitUserAC":
+      return {
+        ...state,
+        isInited: true,
+      };
+
     default:
       return state;
   }
-};
-
-export const authUserTC = (email, password, navigate) => {
-  return async (dispatch) => {
-    await dispatch(loading());
-    try {
-      let response = await (
-        await fetch()
-      )({
-        url: "/api/login_check",
-        method: "POST",
-        data: { email: email, password: password },
-      });
-      if (response.status == 200 && response.data && response.data.token) {
-        // успешный запрос
-        setToken(response.data.token);
-        await dispatch(userIsLoggedUserAC());
-        await dispatch(getProfileUserTC(navigate));
-        //navigate("/main");
-        /*  dispatch(setProfileUserTC()); */
-        return true;
-      } else {
-        await dispatch(error(response.data.message));
-      }
-    } catch ({ response }) {
-      await dispatch(error(response?.data?.message || "Ошибка"));
-    }
-    await dispatch(endLoading());
-    return false;
-  };
 };
 
 export const getProfileUserTC = (navigate) => {
@@ -159,11 +103,17 @@ export const getProfileUserTC = (navigate) => {
         url: "/api/private/profile",
         method: "GET",
       });
-      if (response.status == 200) {
+      if (response.status === 200) {
         // успешный запрос
-        await dispatch(userIsLoggedUserAC());
+        if (!response.data.firstName) {
+          await dispatch(setWithRegNavAC());
+        } else {
+          await dispatch(setPartnerNavAC());
+        }
+        await dispatch(setLoggedUserAC());
         await dispatch(setDataUserAC(response.data));
-        //navigate("/main");
+        /*   navigate("/main"); */
+
         await dispatch(endLoading());
         return response.data;
         /*  dispatch(setProfileUserTC()); */
@@ -182,6 +132,35 @@ export const getProfileUserTC = (navigate) => {
         break;
     }
     return null;
+  };
+};
+
+export const authUserTC = (email, password, navigate) => {
+  return async (dispatch) => {
+    await dispatch(loading());
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: "/api/login_check",
+        method: "POST",
+        data: { email: email, password: password },
+      });
+      if (response.status === 200 && response.data && response.data.token) {
+        // успешный запрос
+        setToken(response.data.token);
+        await dispatch(setLoggedUserAC());
+        await dispatch(getProfileUserTC(navigate));
+        /*  dispatch(setProfileUserTC()); */
+        return true;
+      } else {
+        await dispatch(error(response.data.message));
+      }
+    } catch ({ response }) {
+      await dispatch(error(response?.data?.message || "Ошибка"));
+    }
+    await dispatch(endLoading());
+    return false;
   };
 };
 
@@ -205,13 +184,14 @@ export const registrationUserTC = (
           passwordRepeat: passwordRepeat,
         },
       });
-      if (response.status == 200) {
-        if (response.data.status == "error") {
+      if (response.status === 200) {
+        if (response.data.status === "error") {
           await dispatch(error(response.data.description));
         } else {
           // успешный запрос
           setToken(response.data.token);
-          await dispatch(authUserTC(email, password, navigate));
+          /* await dispatch(authUserTC(email, password, navigate)); */
+          navigate("/signin");
         }
       } else {
         await dispatch(error(response.data.message));
@@ -219,50 +199,6 @@ export const registrationUserTC = (
     } catch ({ response }) {
       await dispatch(error(response?.data?.message || "Ошибка"));
     }
-    await dispatch(endLoading());
-  };
-};
-
-export const onProfileInfoFormTC = (data, navigate) => {
-  return async (dispatch) => {
-    await dispatch(loading());
-    try {
-      let response = await (
-        await fetch()
-      )({
-        url: "/api/private/profile",
-        method: "POST",
-        data,
-      });
-      if (response.status == 200) {
-        // успешный запрос
-        await dispatch(onFormFilled());
-        //navigate("/main");
-      }
-    } catch {}
-    await dispatch(endLoading());
-  };
-};
-
-export const postAvatarUserTC = (file) => {
-  return async (dispatch) => {
-    await dispatch(loading());
-    try {
-      const formData = new FormData();
-      formData.append("avatar", file);
-      if (typeof file != "object") return;
-
-      let response = await (
-        await fetch()
-      )({
-        url: "/api/private/avatar",
-        method: "POST",
-        data: formData,
-      });
-      if (response.status == 200) {
-        // успешный запрос
-      }
-    } catch {}
     await dispatch(endLoading());
   };
 };

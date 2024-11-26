@@ -1,15 +1,23 @@
 import s from "./Navbar.module.css";
 import { useLocation } from "react-router-dom";
 import NavbarLink from "./NavbarLink/NavbarLink";
-import {
+/* import {
   afterDocumentsNavlinkData,
   beforeDocumentsNavlinkData,
   bottomNavlinkData,
   linksInsideDocuments,
-} from "6Routing/NavlinkData";
+} from "6Routing/NavlinkData"; */
 import InsideDocumentsLink from "./InsideDocumentsLink/InsideDocumentsLink";
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
+  const {
+    beforeDocumentsNavlinkData,
+    afterDocumentsNavlinkData,
+    bottomNavlinkData,
+    linksInsideDocuments,
+  } = useSelector((state) => state.nav);
+
   const checkIsLinkActive = () => {
     if (props.isUserFormFilled) {
       return (navData) =>
@@ -40,14 +48,14 @@ const Navbar = (props) => {
       />
     ));
   const location = useLocation();
-  const linksInDocuments = linksInsideDocuments.map((i) => (
+  /*  const linksInDocuments = linksInsideDocuments.map((i) => (
     <InsideDocumentsLink
       linkName={i.linkName}
       link={i.link}
       className={notDependsLinkClassName()}
       location={location.pathname}
     />
-  ));
+  )); */
 
   const isDocumentsLinksShowing = () => {
     if (
@@ -62,9 +70,32 @@ const Navbar = (props) => {
     }
   };
 
-  const beforeDocNavlinkData = navlinkMap(beforeDocumentsNavlinkData);
-  const afterDocNavlinkData = navlinkMap(afterDocumentsNavlinkData);
-  const bottomlinkData = navlinkMap(bottomNavlinkData);
+  let beforeDocNavlinkData = null;
+  if (beforeDocumentsNavlinkData) {
+    beforeDocNavlinkData = navlinkMap(beforeDocumentsNavlinkData);
+  }
+
+  let afterDocNavlinkData = null;
+  if (afterDocumentsNavlinkData) {
+    afterDocNavlinkData = navlinkMap(afterDocumentsNavlinkData);
+  }
+
+  let bottomlinkData = null;
+  if (bottomNavlinkData) {
+    bottomlinkData = navlinkMap(bottomNavlinkData);
+  }
+
+  let linksInDocuments = null;
+  if (linksInsideDocuments) {
+    linksInDocuments = linksInsideDocuments.map((i) => (
+      <InsideDocumentsLink
+        linkName={i.linkName}
+        link={i.link}
+        className={notDependsLinkClassName()}
+        location={location.pathname}
+      />
+    ));
+  }
   return (
     <div className={s.main}>
       <div className={s.section}>

@@ -1,0 +1,62 @@
+.main {
+  margin-top: 21px;
+  width: 298px;
+  height: 252px;
+  background-color: rgb(243, 244, 248);
+}
+
+.section {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 6px 6px 54px 0px rgba(0, 0, 0, 0.05) inset;
+  border-radius: 14px;
+  position: relative;
+  padding: 1px;
+  border: solid rgba(0, 0, 0, 0.08) 1px;
+}
+
+.bannerName {
+  margin-left: 19px;
+  margin-top: 17px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.bannerContent {
+  text-align: center;
+}
+
+.star {
+  width: 100%;
+  top: 30%;
+  position: absolute;
+}
+
+.bannerFooter {
+  margin-top: 140px;
+  margin-left: 19px;
+}
+.bannerFooterTitle {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bannerFooterAdd {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.soonIcon {
+  width: 100%;
+  text-align: center;
+  top: 44%;
+  position: absolute;
+  z-index: 1;
+}
+
+.clockText {
+  font-size: 18px;
+  font-weight: 700;
+}

@@ -1,15 +1,3 @@
-import { fetch, setToken } from "4API/AxiosApi";
-
-const DocumentsAC = 0;
-const DocumentsTC = 0;
-
-/* export const userIsLoggedUserAC = () => {
-  return {
-    type: "userIsLogged",
-  };
-};
- */
-
 const initialState = {
   documentsList: [
     {
@@ -111,24 +99,6 @@ const documentsReducer = (state = initialState, action) => {
     if (response.status == 200) {
       // успешный запрос
       dispatch(setDataUserAC(response.data.username, response.data.email));
-    }
-  };
-};
-
-export const authThunkUserTC = (email, password) => {
-  return async (dispatch) => {
-    let response = await (
-      await fetch()
-    )({
-      url: "/api/login_check",
-      method: "POST",
-      data: { email: email, password: password },
-    });
-    if (response.status == 200) {
-      // успешный запрос
-      setToken(response.data.token);
-      dispatch(userIsLoggedUserAC());
-      dispatch(setProfileUserTC());
     }
   };
 };

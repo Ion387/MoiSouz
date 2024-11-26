@@ -1,14 +1,15 @@
 import s from "./Header.module.css";
-import userWomen from "1Pictures/0Icons/userWomen.png";
+import undefinedAvatar from "1Pictures/Simple/UndefinedAvatar.png";
 import headerUserMore from "1Pictures/0Icons/headerUserMore.png";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import { NavLink } from "react-router-dom";
 import Logo from "2Generics/Logo/Logo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAC } from "0Redux/userReducer";
 import { clearToken } from "4API/AxiosApi";
 
 const Header = (props) => {
+  const { data } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const onclickHandler = () => {
     clearToken();
@@ -32,17 +33,21 @@ const Header = (props) => {
           <div className={s.user}>
             <img
               className={s.userAvatar}
-              src={userWomen}
-              alt="userWomenIcon"
+              src={
+                data.avatar
+                  ? `${process.env.REACT_APP_SERVER_PATH}${data.avatar}`
+                  : undefinedAvatar
+              }
+              alt="avatar"
               onClick={onclickHandler}
             />
             <div className={s.blockNameOfUsers}>
               <div className={s.userName}>
                 <NavLink to="/UserPage" className={s.userName}>
-                  Ирина.К.
+                  {data.middleName || "Гость"}
                 </NavLink>
               </div>
-              <div className={s.userType}>Администратор</div>
+              <div className={s.userType}>Пользователь</div>
             </div>
             <div className={s.chevronDown}>
               <img src={headerUserMore} />

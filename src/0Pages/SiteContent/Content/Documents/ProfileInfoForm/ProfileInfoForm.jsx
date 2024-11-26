@@ -1,8 +1,7 @@
-import s from "./ProfileInfoForm.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FormProfile from "3Entities/Forms/FormProfile";
-import { onProfileInfoFormTC, postAvatarUserTC } from "0Redux/userReducer";
+import { onProfileInfoFormTC, postAvatarUserTC } from "0Redux/userFormsReducer";
 
 const ProfileInfoForm = (props) => {
   const { data } = useSelector((state) => state.user);
@@ -12,8 +11,9 @@ const ProfileInfoForm = (props) => {
 
   const onSubmit = (data) => {
     dispatch(postAvatarUserTC(data.avatar));
+    const newData = { ...data, ROLES: ["ADIT"] };
     delete data.avatar;
-    dispatch(onProfileInfoFormTC(data, navigate));
+    dispatch(onProfileInfoFormTC(newData, navigate));
   };
 
   return <FormProfile defaultValues={data} onSubmit={onSubmit} />;

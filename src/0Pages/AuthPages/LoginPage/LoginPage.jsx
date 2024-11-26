@@ -9,8 +9,7 @@ import { useSelector } from "react-redux";
 import Loader from "2Generics/Loader";
 
 const LoginPage = (props) => {
-  const { isLoading, error } = useSelector((store) => store.user);
-
+  const { isLoading, error } = useSelector((state) => state.loading);
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -62,15 +61,6 @@ const LoginPage = (props) => {
               disabled={isLoading}
             />
 
-            {/*             <input
-              className={
-                !errors.password ? s.input : `${s.input} ${s.errorInput}`
-              }
-              type="password"
-              placeholder={"password"}
-              {...register("password")}
-            /> */}
-
             <div className={s.checkboxBlock}>
               <input
                 className={s.checkbox}
@@ -82,7 +72,7 @@ const LoginPage = (props) => {
             </div>
             <div className={s.submitBlock}>
               <div className={s.submit}>
-                {isLoading != true && (
+                {isLoading !== true && (
                   <Button
                     value={"Войти"}
                     type={"submit"}
@@ -95,7 +85,7 @@ const LoginPage = (props) => {
               <div className={s.underSubmit}>
                 <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
                 <Link
-                  to={isLoading == false && "/registration"}
+                  to={isLoading === false && "/registration"}
                   className={s.linkUnderSubmit}
                 >
                   Регистрация

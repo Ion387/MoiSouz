@@ -4,41 +4,26 @@ import ContactCard from "0Pages/SiteContent/Content/Colleagues/ContactCard/Conta
 import Content from "0Pages/SiteContent/Content/Content";
 import Discounts from "0Pages/SiteContent/Content/Discounts/Discounts";
 import DocumentsPage from "0Pages/SiteContent/Content/Documents/DocumentsPage";
-import ProfileInfoForm from "0Pages/SiteContent/Content/Documents/ProfileInfoForm/ProfileInfoForm";
 import Main from "0Pages/SiteContent/Content/Main/Main";
 import MyOrganizations from "0Pages/SiteContent/Content/MyOrganizations/MyOrganizations";
 import Organization from "0Pages/SiteContent/Content/MyOrganizations/Organization/Organization";
-import UserMain from "0Pages/SiteContent/UserContent/UserMain/UserMain";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import MainUser from "0Pages/SiteContent/ContentUser/MainUser/MainUser";
+import UserAnketForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/UserAnketForm";
+import CreateTradeUnionForm from "0Pages/SiteContent/Content/Documents/Forms/CreateTradeUnionForm/CreateTradeUnionForm";
+import JoinToTradeUnionForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/JoinToTradeUnionForm/JoinToTradeUnionForm";
 
 const ContentRouting = () => {
   const { data, typeOfRegistration } = useSelector((state) => state.user);
-  let isShowUserProfileForm = false;
-  let isShowProfsouzProfileForm = false;
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!data.firstName) {
       navigate("/discounts");
     }
   }, []);
-
-  useEffect(() => {
-    switch (true) {
-      case typeOfRegistration === "USER":
-        isShowUserProfileForm = true;
-        break;
-      case typeOfRegistration === "TRADEUNION":
-        isShowUserProfileForm = true;
-        break;
-      case typeOfRegistration === "TRADEUNIONEND":
-        isShowProfsouzProfileForm = true;
-        break;
-      default:
-        break;
-    }
-  }, [typeOfRegistration]);
 
   return (
     <Routes>
@@ -61,9 +46,9 @@ const ContentRouting = () => {
               <Route path="/discounts" element={<Discounts />} />
               <Route path="/store" element={<Content />} />
               <Route path="/information" element={<Content />} />
-              <Route path="/incoming" element={<ProfileInfoForm />} />
-              <Route path="/outgoing" element={<ProfileInfoForm />} />
-              <Route path="/drafts" element={<ProfileInfoForm />} />
+              <Route path="/incoming" element={<UserAnketForm />} />
+              <Route path="/outgoing" element={<UserAnketForm />} />
+              <Route path="/drafts" element={<UserAnketForm />} />
             </>
           )}
         </>
@@ -100,25 +85,34 @@ const ContentRouting = () => {
       )} */}
 
       {/* <Route path="/*" element={<ChoiceRole />} /> */}
+
       {!data.firstName && (
         <>
-          <Route path="/*" element={<ProfileInfoForm />} />
+          <Route path="/*" element={<UserAnketForm />} />
           <Route path="/discounts" element={<Discounts />} />
         </>
       )}
 
       {data.firstName && (
         <>
-          <Route path="/*" element={<UserMain />} />
-          <Route path="/profileForm" element={<ProfileInfoForm />} />
-          <Route path="/entry" element={<ChoiceRole />} />
+          <Route path="/*" element={<ChoiceRole />} />
+          <Route path="/profile" element={<UserAnketForm />} />
+          <Route path="/discounts" element={<Discounts />} />
+          <Route
+            path="/joinTradeUnionForm"
+            element={<JoinToTradeUnionForm />}
+          />
+          <Route
+            path="/createTradeUnionForm"
+            element={<CreateTradeUnionForm />}
+          />
         </>
       )}
 
       {typeOfRegistration === "TRADEUNION" && (
         <>
           <Route path="/*" element={<Main />} />
-          <Route path="/profileForm" element={<ProfileInfoForm />} />
+          <Route path="/profileForm" element={<UserAnketForm />} />
         </>
       )}
     </Routes>

@@ -3914,8 +3914,33 @@ const Icon = (props) => {
         </svg>
       );
       break;
-    case "Icon":
-      iconSvg = "";
+    case "headerLineIcon":
+      iconSvg = (
+        <svg
+          width="169.595459"
+          height="0.599976"
+          viewBox="0 0 169.595 0.599976"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <path
+            id="Divider"
+            d="M0.32 0.59L0 0.59L0 0L0.32 0L0.32 0.59ZM169.27 0L169.59 0L169.59 0.59L169.27 0.59L169.27 0Z"
+            fill="#FFFFFF"
+            fill-opacity="1.000000"
+            fill-rule="nonzero"
+          />
+          <path
+            id="Divider"
+            d="M0.3 0.29L169.29 0.29"
+            stroke="#E0E0E0"
+            stroke-opacity="1.000000"
+            stroke-width="0.600000"
+            stroke-linecap="square"
+          />
+        </svg>
+      );
       break;
     case "Icon":
       iconSvg = "";

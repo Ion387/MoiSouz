@@ -106,9 +106,9 @@ export const getProfileUserTC = (navigate) => {
       if (response.status === 200) {
         // успешный запрос
         if (!response.data.firstName) {
-          await dispatch(setWithRegNavAC());
+          dispatch(setWithRegNavAC());
         } else {
-          await dispatch(setPartnerNavAC());
+          dispatch(setWithRegNavAC());
         }
         await dispatch(setLoggedUserAC());
         await dispatch(setDataUserAC(response.data));

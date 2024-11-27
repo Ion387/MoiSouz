@@ -6,7 +6,7 @@ import Button from "2Generics/Elements/Button/Button";
 import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Loader from "2Generics/Loader";
+import Loader from "2Generics/Loader/Loader";
 
 const LoginPage = (props) => {
   const { isLoading, error } = useSelector((state) => state.loading);

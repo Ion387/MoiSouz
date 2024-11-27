@@ -44,7 +44,7 @@ const Header = (props) => {
             <div className={s.blockNameOfUsers}>
               <div className={s.userName}>
                 <NavLink to="/UserPage" className={s.userName}>
-                  {data.middleName || "Гость"}
+                  {data.lastName || "Гость"}
                 </NavLink>
               </div>
               <div className={s.userType}>Пользователь</div>

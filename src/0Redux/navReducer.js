@@ -38,21 +38,6 @@ const navReducer = (state = initialState, action) => {
             isLinkChangeWithFillUserForm: false,
           },
         ],
-
-        linksInsideDocuments: [
-          {
-            linkName: "Входящие",
-            link: "/incoming",
-          },
-          {
-            linkName: "Исходящие",
-            link: "/outgoing",
-          },
-          {
-            linkName: "Черновики",
-            link: "/drafts",
-          },
-        ],
       };
 
     case "setPartnerNavAC":

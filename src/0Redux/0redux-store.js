@@ -5,6 +5,8 @@ import organizationReducer from "./organizationReducer.js";
 import userFormsReducer from "./userFormsReducer.js";
 import loadingReducer from "./loadingReducer.js";
 import navReducer from "./navReducer.js";
+import tradeUnionReducer from "./tradeUnionReducer.js";
+import tradeUnionFormsReducer from "./tradeUnionFormsReducer.js";
 
 let store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ let store = configureStore({
     documents: documentsReducer,
     organization: organizationReducer,
     nav: navReducer,
+    tradeUnion: tradeUnionReducer,
+    tradeUnionForms: tradeUnionFormsReducer,
   },
 });
 

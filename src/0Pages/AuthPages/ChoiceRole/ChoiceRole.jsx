@@ -3,6 +3,7 @@ import s from "./ChoiceRole.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { choseTypeOfRegistrationUserAC } from "0Redux/userReducer";
 import { useNavigate } from "react-router-dom";
+
 const ChoiceRole = () => {
   const { isLoading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
@@ -10,11 +11,11 @@ const ChoiceRole = () => {
 
   const onClickUserHandler = () => {
     dispatch(choseTypeOfRegistrationUserAC("USER"));
-    navigate("/profileForm");
+    navigate("/joinTradeUnionForm");
   };
   const onClickPartnerHandler = () => {
     dispatch(choseTypeOfRegistrationUserAC("TRADEUNION"));
-    navigate("/profileForm");
+    navigate("/createTradeUnionForm");
   };
   return (
     <div className={s.main}>

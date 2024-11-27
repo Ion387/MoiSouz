@@ -1,0 +1,51 @@
+.input {
+  width: calc (100% - 128px);
+  min-width: 300px;
+
+  /* background-color: brown; */
+}
+
+.inputLableBlock {
+  margin-top: 60px;
+}
+
+.gridAdressIndexAdressRegion {
+  display: grid;
+  grid-template-columns: calc(40% - 20px) 60%;
+  column-gap: 20px;
+}
+
+.gridAdressMunicipalityAdressCity {
+  display: grid;
+  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  column-gap: 20px;
+}
+
+.gridAdressMunicipalityAdressCity > lable {
+  height: 0px;
+}
+
+.gridStreetHouseFlat {
+  display: grid;
+  grid-template-columns: calc(50% - 10px) calc(25% - 15px) calc(25% - 15px);
+  column-gap: 20px;
+}
+
+.error {
+  color: rgb(255, 0, 0);
+  margin-top: 15px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.error:nth-child(2) {
+  margin: 5px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.calendar {
+  position: relative;
+}

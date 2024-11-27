@@ -40,7 +40,7 @@ const userFormsReducer = (state = initialState, action) => {
   }
 };
 
-export const onProfileInfoFormTC = (data, navigate) => {
+export const submitUserAnketFormTC = (data, navigate) => {
   return async (dispatch) => {
     await dispatch(loading());
     try {

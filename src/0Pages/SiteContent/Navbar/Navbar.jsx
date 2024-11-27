@@ -9,6 +9,7 @@ import NavbarLink from "./NavbarLink/NavbarLink";
 } from "6Routing/NavlinkData"; */
 import InsideDocumentsLink from "./InsideDocumentsLink/InsideDocumentsLink";
 import { useSelector } from "react-redux";
+import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const Navbar = (props) => {
   const {
@@ -100,11 +101,15 @@ const Navbar = (props) => {
     <div className={s.main}>
       <div className={s.section}>
         {beforeDocNavlinkData}
-        {isDocumentsLinksShowing() && (
+        {isDocumentsLinksShowing() && linksInsideDocuments && (
           <div className={s.documentsInnerLinks}>{linksInDocuments}</div>
         )}
         {afterDocNavlinkData}
-        <div className={s.bottomLinkData}>{bottomlinkData}</div>
+
+        <div className={s.bottomLinkData}>
+          <Icon iconName="headerLineIcon" />
+          {bottomlinkData}
+        </div>
       </div>
     </div>
   );

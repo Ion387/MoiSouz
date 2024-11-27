@@ -2,10 +2,12 @@
   width: 100%;
   max-width: 286px;
   height: 100%;
+  background-color: #fff;
+  padding-top: 1px;
 }
 
 .section {
-  margin-top: 11px;
+  margin-top: 10px;
   width: 188px;
   height: 587px;
   margin-left: auto;
@@ -19,14 +21,11 @@
   text-decoration: none;
 }
 
-.navLinkButton * {
-  font-size: 14px;
-  font-weight: 600;
+.documentsInnerLinks {
+  margin-top: 15px;
 }
 
 .active {
-  font-size: 14px;
-  font-weight: 600;
   background-color: rgb(72, 128, 255);
 }
 .active * {
@@ -38,9 +37,7 @@
 }
 
 .bottomLinkData {
-  margin-top: 15px;
-}
-
-.documentsInnerLinks {
-  margin-top: 30px;
+  display: flex;
+  align-items: end;
+  flex-direction: column;
 }

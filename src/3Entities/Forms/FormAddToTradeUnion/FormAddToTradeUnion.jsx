@@ -92,7 +92,7 @@ const FormAddToTradeUnion = ({ defaultValues, onSubmit }) => {
                 label="Я соглашаюсь на обработку персональных данных Согласие с политикой обработки персональных данных"
               />
 
-              <Submit errors={errors} />
+              <Submit errors={errors} value="Вступить" />
             </form>
           </FormProvider>
         </div>

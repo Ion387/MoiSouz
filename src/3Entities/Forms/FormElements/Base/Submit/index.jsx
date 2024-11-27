@@ -3,7 +3,7 @@ import s from "./index.module.css";
 
 import Button from "2Generics/Elements/Button/Button";
 
-const Submit = ({ errors }) => {
+const Submit = ({ errors, value }) => {
   const messages = useMemo(() => {
     if (!errors) return [];
     let result = [];
@@ -34,7 +34,7 @@ const Submit = ({ errors }) => {
           type={"button"}
         />
         <Button
-          value={"Сохранить"}
+          value={value || "Сохранить"}
           style={{ width: "180px" }}
           type={"submit"}
         />

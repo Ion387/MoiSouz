@@ -45,7 +45,7 @@ const InputAddToTradeUnion = ({ prename = "" }) => {
           render={({ field, fieldState: { error } }) => (
             <Selector
               {...field}
-              lable={"Выберите профсоюз"}
+              lable={"Выберите профсоюз из списка"}
               optionValue={tradeUnionSelect}
               placeholder={"Высшее"}
               errors={error}

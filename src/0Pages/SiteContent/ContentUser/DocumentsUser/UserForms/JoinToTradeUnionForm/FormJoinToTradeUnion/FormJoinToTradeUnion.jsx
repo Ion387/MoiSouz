@@ -3,10 +3,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import Submit from "3Entities/Forms/FormElements/Base/Submit";
-import Button from "2Generics/Elements/Button/Button";
+import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 import InputJoinToTradeUnion from "./Inputs/InputJoinToTradeUnion/InputJoinToTradeUnion";
-import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox/InputCheckBox";
+import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/InputCheckBox";
 
 const FormJoinToTradeUnion = ({
   defaultValues,

@@ -2,9 +2,9 @@ import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./InputTradeUnionHeader.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
-import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
-import InputPicture from "2Generics/Elements/InputPicture/InputPicture";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
+import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
+import InputPicture from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 
 const educationSelect = [
   { value: "Высшее", label: "Высшее" },

@@ -2,8 +2,8 @@ import s from "./Registration.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "2Generics/Elements/Button/Button";
-import Input from "2Generics/Elements/Input/Input";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "2Generics/Loader/Loader";
@@ -62,27 +62,6 @@ const Registration = () => {
           <div className={s.title}>Регистрация</div>
 
           <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
-            {/*             {isRegistrationClicked && (
-              <div className={s.modalChooseTypeOfRegistration}>
-                <div className={s.topButtonOfChoice}>
-                  <Button
-                    value={"СТАТЬ УЧАСТНИКОМ ПРОФСОЮЗА"}
-                    type={"submit"}
-                    disabled={isLoading}
-                    onClick={onClickUserHandler}
-                  />
-                </div>
-                <div className={s.bottomButtonOfChoice}>
-                  <Button
-                    value={"ЗАРЕГИСТРИРОВАТЬ ПРОФСОЮЗ"}
-                    type={"submit"}
-                    disabled={isLoading}
-                    onClick={() => onClickPartnerHandler}
-                  />
-                </div>
-              </div>
-            )} */}
-
             <Input
               lable={"Адрес электронной почты:"}
               {...register("email")}

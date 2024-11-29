@@ -1,6 +1,6 @@
 import s from "./DocumentsPage.module.css";
 import { useSelector } from "react-redux";
-import SendButton from "../../../../2Generics/Elements/SendButton/SendButton";
+import SendButton from "../../../../3Entities/Forms/FormElements/Base/SendButton/SendButton";
 import ColorFlag from "../../../../2Generics/TableElements/ColorFlag/ColorFlag";
 
 const DocumentsPage = (props) => {

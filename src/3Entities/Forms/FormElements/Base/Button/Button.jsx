@@ -5,7 +5,7 @@ const Button = (props) => {
     <div>
       <input
         style={props.style}
-        className={s.submit}
+        className={!props.white ? s.button : s.whiteButton}
         type={props.type}
         value={props.value}
         onClick={props.onClick}

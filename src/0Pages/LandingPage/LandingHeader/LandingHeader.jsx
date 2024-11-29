@@ -1,7 +1,7 @@
 import Logo from "2Generics/Logo/Logo";
 import s from "./LandingHeader.module.css";
 import { Link } from "react-router-dom";
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 
 const LandingHeader = (props) => {
   return (

@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import s from "./InputCheckBox.module.css";
 
-import CheckBox from "2Generics/Elements/CheckBox/CheckBox";
+import CheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/CheckBox/CheckBox";
 
 const InputCheckBox = ({ name = "", prename = "", label }) => {
   const { control } = useFormContext();

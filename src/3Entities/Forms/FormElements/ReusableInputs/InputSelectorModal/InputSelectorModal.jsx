@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
-import s from "./index.module.css";
+import s from "./InputSelectorModal.module.css";
 
-import SelectorModal from "2Generics/Elements/SelectorModal/SelectorModal";
+import SelectorModal from "3Entities/Forms/FormElements/ReusableInputs/InputSelectorModal/SelectorModal/SelectorModal";
 
 const InputSelectorModal = ({
   name = "",

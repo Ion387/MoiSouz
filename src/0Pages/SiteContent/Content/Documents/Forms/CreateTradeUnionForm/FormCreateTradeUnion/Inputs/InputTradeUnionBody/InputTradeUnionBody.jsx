@@ -2,8 +2,8 @@ import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./InputTradeUnionBody.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
-import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
+import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
 import InputAddress from "../../../../../../../../../3Entities/Forms/FormElements/ReusableInputs/InputAddress/InputAddress";
 
 const educationSelect = [

@@ -7,8 +7,8 @@ import { InputArrayResolversAs } from "3Entities/Forms/FormElements/Base/InputAr
 import { InputAddressResolvers } from "3Entities/Forms/FormElements/ReusableInputs/InputAddress/InputAddress";
 import { InputPhoneResolvers } from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputPhone/InputPhone";
 import { InputChildResolvers } from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputChild/InputChild";
-import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox/InputCheckBox";
-import Submit from "3Entities/Forms/FormElements/Base/Submit";
+import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/InputCheckBox";
+import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
 import InputTradeUnionHeader from "./Inputs/InputTradeUnionHeader/InputTradeUnionHeader";
 import InputTradeUnionBody from "./Inputs/InputTradeUnionBody/InputTradeUnionBody";
 

@@ -1,7 +1,7 @@
 import s from "./FormUserAnket.module.css";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Input from "2Generics/Elements/Input/Input";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 import * as yup from "yup";
 import InputUser, { InputUserResolvers } from "./Inputs/InputUser/InputUser";
 import InputArray, {
@@ -16,9 +16,9 @@ import InputPhone, {
 import InputChild, {
   InputChildResolvers,
 } from "./Inputs/InputChild/InputChild";
-import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox/InputCheckBox";
-import InputSelectorModal from "3Entities/Forms/FormElements/Base/InputSelectorModal";
-import Submit from "3Entities/Forms/FormElements/Base/Submit";
+import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/InputCheckBox";
+import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
+import InputSelectorModal from "3Entities/Forms/FormElements/ReusableInputs/InputSelectorModal/InputSelectorModal";
 
 const hobbiesPickArray = [
   { value: "Спорт", label: "Спорт" },

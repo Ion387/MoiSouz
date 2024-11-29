@@ -2,7 +2,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./InputAddress.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 
 export const InputAddressResolvers = {
   postcode: yup.string().required("Укажите Индекс"),

@@ -1,6 +1,6 @@
 import s from "./ModalChoicePicker.module.css";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 
 const ModalChoicePicker = (props) => {
   const choiceList = props.lableArray.map((el, index) => (

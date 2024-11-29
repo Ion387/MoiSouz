@@ -1,4 +1,4 @@
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 import s from "./ChoiceRole.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { choseTypeOfRegistrationUserAC } from "0Redux/userReducer";

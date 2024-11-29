@@ -3,7 +3,7 @@ import s from "./LandingBlock2.module.css";
 import Logo from "2Generics/Logo/Logo";
 import TextAroundBlock from "./TextAroundBlock/TextAroundBlock";
 import { Link } from "react-router-dom";
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 
 const LandingBlock2 = (props) => {
   return (

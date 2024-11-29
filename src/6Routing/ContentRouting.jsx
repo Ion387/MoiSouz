@@ -14,6 +14,7 @@ import MainUser from "0Pages/SiteContent/ContentUser/MainUser/MainUser";
 import CreateTradeUnionForm from "0Pages/SiteContent/Content/Documents/Forms/CreateTradeUnionForm/CreateTradeUnionSubmit";
 import JoinToTradeUnionForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/JoinToTradeUnionForm/JoinToTradeUnionSubmit";
 import UserAnketSubmit from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/UserAnketSubmit";
+import UserPage from "0Pages/SiteContent/Header/UserPage/UserPage";
 
 const ContentRouting = () => {
   const { data, typeOfRegistration } = useSelector((state) => state.user);
@@ -102,6 +103,7 @@ const ContentRouting = () => {
             path="/joinTradeUnionForm"
             element={<JoinToTradeUnionForm />}
           />
+          <Route path="/userPage" element={<UserPage />} />
           <Route
             path="/createTradeUnionForm"
             element={<CreateTradeUnionForm />}

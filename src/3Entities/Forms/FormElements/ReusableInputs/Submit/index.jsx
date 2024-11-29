@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import s from "./index.module.css";
 
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 
 const Submit = ({ errors, value }) => {
   const messages = useMemo(() => {

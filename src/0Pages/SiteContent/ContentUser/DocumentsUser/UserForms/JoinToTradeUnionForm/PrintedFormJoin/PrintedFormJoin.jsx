@@ -1,6 +1,6 @@
 import s from "./PrintedFormJoin.module.css";
 import moment from "moment";
-import Button from "2Generics/Elements/Button/Button";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 import React, { useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 

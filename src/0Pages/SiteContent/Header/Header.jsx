@@ -4,17 +4,11 @@ import headerUserMore from "1Pictures/0Icons/headerUserMore.png";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import { NavLink } from "react-router-dom";
 import Logo from "2Generics/Logo/Logo";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutUserAC } from "0Redux/userReducer";
-import { clearToken } from "4API/AxiosApi";
+import { useSelector } from "react-redux";
 
 const Header = (props) => {
   const { data } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const onclickHandler = () => {
-    clearToken();
-    dispatch(logoutUserAC());
-  };
+
   return (
     <div className={s.main}>
       <div className={s.section}>
@@ -30,7 +24,7 @@ const Header = (props) => {
             </div>
           </div>
 
-          <div className={s.user}>
+          <NavLink className={s.user} to="/userPage">
             <img
               className={s.userAvatar}
               src={
@@ -39,20 +33,16 @@ const Header = (props) => {
                   : undefinedAvatar
               }
               alt="avatar"
-              onClick={onclickHandler}
             />
             <div className={s.blockNameOfUsers}>
-              <div className={s.userName}>
-                <NavLink to="/UserPage" className={s.userName}>
-                  {data.lastName || "Гость"}
-                </NavLink>
-              </div>
+              <div className={s.userName}> {data.lastName || "Гость"}</div>
               <div className={s.userType}>Пользователь</div>
             </div>
+
             <div className={s.chevronDown}>
               <img src={headerUserMore} />
             </div>
-          </div>
+          </NavLink>
         </div>
       </div>
     </div>

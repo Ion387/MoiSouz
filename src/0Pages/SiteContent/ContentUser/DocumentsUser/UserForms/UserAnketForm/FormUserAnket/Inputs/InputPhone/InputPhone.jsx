@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { Controller, useFormContext } from "react-hook-form";
 import s from "./InputPhone.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 
 export const InputPhoneResolvers = {
   phone: yup.string().required("Укажите Номер телефона"),

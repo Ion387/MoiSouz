@@ -2,11 +2,12 @@ import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./InputJoinToTradeUnion.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
-import Selector from "2Generics/Elements/Selector/Selector";
-import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
-import InputAvatar from "2Generics/Elements/InputPicture/InputPicture";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
+import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
+import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
+import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const tradeUnionSelect = [
   {
@@ -43,82 +44,27 @@ const InputJoinToTradeUnion = ({ prename = "" }) => {
   const { control, watch } = useFormContext();
 
   const { data } = useSelector((state) => state.user);
-
+  const date = moment(new Date()).format("DD.MM.YYYY");
   return (
     <div className={s.input}>
       <div className={s.dateNumberGrid}>
         <Input value={"123"} lable={"Номер документа"} lable2={false} />
-        <Input value={"123"} lable={"Дата документа"} lable2={false} />
-
-        <Controller
-          control={control}
-          name={`${prename}birthdate`}
-          render={({ field, fieldState: { error } }) => (
-            <DatePicker
-              lable="Дата документа"
-              placeholder="19.08.1980"
-              value={field.value}
-              onChange={(date) => field.onChange(date)}
-              errors={error}
-            />
-          )}
-        />
+        <Input value={date} lable={"Дата документа"} lable2={false} />
       </div>
+      <Input value={data.lastName} lable={"Фамилия"} lable2={false} />
+      <Input value={data.firstName} lable={"Имя"} lable2={false} />
+      <Input value={data.middleName} lable={"Отчество"} lable2={false} />
 
       <Controller
         className={s.field}
         control={control}
-        name={`${prename}firstName`}
+        name={`${prename}position`}
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
-            lable={"Имя"}
-            lable2={false}
-            placeholder={"Иван"}
-            errors={error}
-          />
-        )}
-      />
-
-      <Controller
-        className={s.field}
-        control={control}
-        name={`${prename}firstName`}
-        render={({ field, fieldState: { error } }) => (
-          <Input
-            {...field}
-            lable={"Фамилия"}
-            lable2={false}
-            placeholder={"Иванов"}
-            errors={error}
-          />
-        )}
-      />
-
-      <Controller
-        className={s.field}
-        control={control}
-        name={`${prename}firstName`}
-        render={({ field, fieldState: { error } }) => (
-          <Input
-            {...field}
-            lable={"Отчество"}
-            lable2={false}
-            placeholder={"Иванович"}
-            errors={error}
-          />
-        )}
-      />
-      <Controller
-        className={s.field}
-        control={control}
-        name={`${prename}firstName`}
-        render={({ field, fieldState: { error } }) => (
-          <Input
-            {...field}
+            value={data.position}
             lable={"Должность"}
             lable2={false}
-            placeholder={"Бухгалтер"}
             errors={error}
           />
         )}

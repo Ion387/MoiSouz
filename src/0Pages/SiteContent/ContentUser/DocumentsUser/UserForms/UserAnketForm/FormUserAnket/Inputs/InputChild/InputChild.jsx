@@ -3,9 +3,9 @@ import { Controller, useFormContext } from "react-hook-form";
 import * as yup from "yup";
 import s from "./InputChild.module.css";
 
-import Input from "2Generics/Elements/Input/Input";
-import Selector from "2Generics/Elements/Selector/Selector";
-import DatePicker from "2Generics/Elements/DatePicker/DatePicker";
+import Input from "3Entities/Forms/FormElements/Base/Input/Input";
+import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
+import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
 
 const genderSelect = [
   { value: "male", label: "Мужской" },

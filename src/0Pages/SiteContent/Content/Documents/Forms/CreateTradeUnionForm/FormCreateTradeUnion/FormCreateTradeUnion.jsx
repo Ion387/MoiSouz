@@ -2,15 +2,15 @@ import s from "./FormCreateTradeUnion.module.css";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { InputUserResolvers } from "3Entities/Forms/FormElements/Entity/InputUser/InputUser";
+import { InputUserResolvers } from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputUser/InputUser";
 import { InputArrayResolversAs } from "3Entities/Forms/FormElements/Base/InputArray";
-import { InputAddressResolvers } from "3Entities/Forms/FormElements/Entity/InputAddress/InputAddress";
-import { InputPhoneResolvers } from "3Entities/Forms/FormElements/Entity/InputPhone/InputPhone";
-import { InputChildResolvers } from "3Entities/Forms/FormElements/Entity/InputChild/InputChild";
-import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox";
+import { InputAddressResolvers } from "3Entities/Forms/FormElements/ReusableInputs/InputAddress/InputAddress";
+import { InputPhoneResolvers } from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputPhone/InputPhone";
+import { InputChildResolvers } from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputChild/InputChild";
+import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox/InputCheckBox";
 import Submit from "3Entities/Forms/FormElements/Base/Submit";
-import InputTradeUnionHeader from "../FormElements/Entity/InputTradeUnionHeader/InputTradeUnionHeader";
-import InputTradeUnionBody from "../FormElements/Entity/InputTradeUnionBody/InputTradeUnionBody";
+import InputTradeUnionHeader from "./Inputs/InputTradeUnionHeader/InputTradeUnionHeader";
+import InputTradeUnionBody from "./Inputs/InputTradeUnionBody/InputTradeUnionBody";
 
 const FormCreateTradeUnion = ({ defaultValues, onSubmit }) => {
   const methods = useForm({

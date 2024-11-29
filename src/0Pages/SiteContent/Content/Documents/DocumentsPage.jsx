@@ -1,10 +1,12 @@
 import s from "./DocumentsPage.module.css";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import SendButton from "../../../../2Generics/Elements/SendButton/SendButton";
 import ColorFlag from "../../../../2Generics/TableElements/ColorFlag/ColorFlag";
 
 const DocumentsPage = (props) => {
-  let documentsList = props.documentsList.map((i) => (
+  const { documentsListStore } = useSelector((state) => state.documents);
+
+  let documentsList = documentsListStore.map((i) => (
     <div key={i.id} className={s.documentsListRow}>
       <div className={s.indent}></div>
       <div className={s.tableListText}> {i.organization}</div>
@@ -45,10 +47,4 @@ const DocumentsPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    documentsList: state.documents.documentsList,
-  };
-};
-
-export default connect(mapStateToProps)(DocumentsPage);
+export default DocumentsPage;

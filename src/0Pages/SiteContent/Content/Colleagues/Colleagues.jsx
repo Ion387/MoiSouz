@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import ColleagueOrganizationBlock from "./ColleagueOrganizationBlock/ColleagueOrganizationBlock";
 import s from "./Colleagues.module.css";
-import { connect } from "react-redux";
-import ContactCard from "./ContactCard/ContactCard";
+import { useSelector } from "react-redux";
 
-const Colleagues = (props) => {
-  let documentsList = props.organizationBlock[0].manager.map((i) => (
+const Colleagues = () => {
+  const { organizationBlock } = useSelector((state) => state.organization);
+  let documentsList = organizationBlock[0].manager.map((i) => (
     <div key={i.id} className={s.documentsListRow}>
       <div className={s.indent}></div>
 
@@ -13,9 +13,7 @@ const Colleagues = (props) => {
         {i.name}
       </Link>
 
-      <div className={s.tableListText}>
-        {props.organizationBlock[0].organization}
-      </div>
+      <div className={s.tableListText}>{organizationBlock[0].organization}</div>
       <div className={s.tableListText}> {i.post}</div>
       <div className={s.tableListText}> {i.contacts}</div>
       <div className={s.tableListText}></div>
@@ -30,12 +28,12 @@ const Colleagues = (props) => {
         <div className={s.collegueOrganizationBlocks}>
           <div className={s.collegueOrgBlock}>
             <ColleagueOrganizationBlock
-              organizationBlock={props.organizationBlock[0]}
+              organizationBlock={organizationBlock[0]}
             />
           </div>
           <div className={s.collegueOrgBlock}>
             <ColleagueOrganizationBlock
-              organizationBlock={props.organizationBlock[1]}
+              organizationBlock={organizationBlock[1]}
             />
           </div>
         </div>
@@ -56,10 +54,4 @@ const Colleagues = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    organizationBlock: state.organization.organizationBlock,
-  };
-};
-
-export default connect(mapStateToProps)(Colleagues);
+export default Colleagues;

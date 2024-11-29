@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import s from "./index.module.css";
+import s from "./InputCheckBox.module.css";
 
 import CheckBox from "2Generics/Elements/CheckBox/CheckBox";
 

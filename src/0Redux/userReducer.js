@@ -50,6 +50,39 @@ const initialState = {
   typeOfRegistration: null,
   data: {
     id: null,
+
+    /* 
+    ROLES:["ROLE_USER"]
+    hobbies:["Плавание"]
+    address:{area(pin):"Нижегородская обл."
+    profession(профессия):["Бухгалтер"]
+     position(должность):["Главный бухгалтер"]
+
+city(pin):"Нижний Новгород"
+flat(pin):"34"
+house(pin):"20"
+postcode(pin):"123456"
+region(pin):"Нижегородская обл."
+street(pin):"Крупской"}
+
+avatar(pin):"/media/avatars/20241127081307-653f8ac7-f958-4149-8456-dcf6f8147de5.png"
+birthdate(pin):"27.11.2024"
+children(pin):
+education(pin):"Высшее"
+email(pin):"ion06@bk.ru"
+firstName(pin):"Владимир"
+gender(pin):"male"
+guid(pin):"653f8ac7-f958-4149-8456-dcf6f8147de5"
+hasTradeunionProfile(pin):false
+hasUserProfile(pin):true
+id(pin):93
+isActive(pin):true
+lastName(pin):"Кормушкин"
+middleName(pin):"Ярославович"
+name(pin):"Кормушкин В.Я."
+phone(pin):"1123123123"
+phoneDop(pin):"1231231233"
+    */
   },
 };
 

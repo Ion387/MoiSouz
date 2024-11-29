@@ -4,11 +4,20 @@
 
   /* background-color: brown; */
 }
-.nameAvatarGrid {
-  display: grid;
-  grid-template-columns: calc(100% - 153px) 128px;
-  grid-template-rows: 121px 121px;
+.input * {
   column-gap: 25px;
+}
+
+.dateNumberGrid {
+  display: grid;
+  grid-template-columns: 34% calc(34% - 25px) calc(30% - 25px);
+  grid-template-rows: 121px;
+}
+
+.dateJoinUTNameGrid {
+  display: grid;
+  grid-template-columns: calc(40% - 12px) calc(60% - 13px);
+  grid-template-rows: 121px;
 }
 
 .checkboxBlock {

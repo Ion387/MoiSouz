@@ -5,10 +5,12 @@ import * as yup from "yup";
 import Button from "2Generics/Elements/Button/Button";
 import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "2Generics/Loader/Loader";
+import { registrationUserTC } from "0Redux/userReducer";
 
-const Registration = (props) => {
+const Registration = () => {
+  const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.loading);
 
   /*   const [TypeOfRegistrationUserAC, setTypeOfRegistrationUserAC] = useState(); */
@@ -18,15 +20,6 @@ const Registration = (props) => {
       .string()
       .email('Введите верный формат почты. Почта должна содержать "@" и "."')
       .required("Введите вашу почту"),
-    /*     firstName: yup.string().matches(/[А-Я]/).required("Заполните красные поля"), */
-    /*     lastName: yup
-      .string()
-      .matches(/[А-Я]/)
-      .required("Поле обязаительно для заполнения"), */
-    /*     secondName: yup
-      .string()
-      .matches(/[А-Я]/)
-      .required("Поле обязаительно для заполнения"), */
     password: yup
       .string()
       .min(
@@ -52,11 +45,13 @@ const Registration = (props) => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    props.registrationUserTC(
-      data.email,
-      data.password,
-      data.passwordRepeat,
-      navigate,
+    dispatch(
+      registrationUserTC(
+        data.email,
+        data.password,
+        data.passwordRepeat,
+        navigate,
+      ),
     );
   };
 

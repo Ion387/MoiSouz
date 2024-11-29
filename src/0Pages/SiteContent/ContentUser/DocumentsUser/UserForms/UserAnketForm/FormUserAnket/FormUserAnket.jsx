@@ -1,28 +1,24 @@
-import s from "./FormAddToTradeUnion.module.css";
+import s from "./FormUserAnket.module.css";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "2Generics/Elements/Input/Input";
 import * as yup from "yup";
-import InputUser, {
-  InputUserResolvers,
-} from "3Entities/Forms/FormElements/Entity/InputUser/InputUser";
+import InputUser, { InputUserResolvers } from "./Inputs/InputUser/InputUser";
 import InputArray, {
   InputArrayResolversAs,
 } from "3Entities/Forms/FormElements/Base/InputArray";
 import InputAddress, {
   InputAddressResolvers,
-} from "3Entities/Forms/FormElements/Entity/InputAddress/InputAddress";
+} from "3Entities/Forms/FormElements/ReusableInputs/InputAddress/InputAddress";
 import InputPhone, {
   InputPhoneResolvers,
-} from "3Entities/Forms/FormElements/Entity/InputPhone/InputPhone";
+} from "./Inputs/InputPhone/InputPhone";
 import InputChild, {
   InputChildResolvers,
-} from "3Entities/Forms/FormElements/Entity/InputChild/InputChild";
-import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox";
+} from "./Inputs/InputChild/InputChild";
+import InputCheckBox from "3Entities/Forms/FormElements/Base/InputCheckBox/InputCheckBox";
 import InputSelectorModal from "3Entities/Forms/FormElements/Base/InputSelectorModal";
 import Submit from "3Entities/Forms/FormElements/Base/Submit";
-import Selector from "2Generics/Elements/Selector/Selector";
-import InputAddToTradeUnion from "../FormElements/Entity/InputAddToTradeUnion/InputAddToTradeUnion";
 
 const hobbiesPickArray = [
   { value: "Спорт", label: "Спорт" },
@@ -44,7 +40,7 @@ const hobbiesPickArray = [
   { value: "Ролики", label: "Ролики" },
 ];
 
-const FormAddToTradeUnion = ({ defaultValues, onSubmit }) => {
+const FormUserAnket = ({ defaultValues, onSubmit }) => {
   const methods = useForm({
     resolver: yupResolver(
       yup.object().shape({
@@ -81,18 +77,60 @@ const FormAddToTradeUnion = ({ defaultValues, onSubmit }) => {
   return (
     <div className={s.main}>
       <div className={s.section}>
-        <div className={s.title}>Вступить в профсоюз</div>
+        <div className={s.title}>Анкета профиля</div>
+
         <div className={s.formBlock}>
           <FormProvider {...methods}>
             <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-              <InputAddToTradeUnion />
+              <InputUser />
+
+              <InputArray
+                name="profession"
+                label="Специальность по образованию"
+                label2="Дополнительная профессия"
+                placeholder="Бухгалтер"
+                render={({ register, ...props }) => (
+                  <Input type="text" {...props} {...register()} />
+                )}
+                preadd
+              />
+
+              <InputArray
+                name="position"
+                label="Должность"
+                label2="Дополнительная должность"
+                placeholder="Главный бухгалтер"
+                render={({ register, ...props }) => (
+                  <Input type="text" {...props} {...register()} />
+                )}
+                preadd
+              />
+
+              <InputAddress prename="address." />
+
+              <InputPhone extra />
+
+              <InputArray
+                name="children"
+                label="Дети"
+                render={({ register, ...props }) => (
+                  <InputChild {...props} prename={`${register().name}.`} />
+                )}
+              />
+
+              <InputSelectorModal
+                name="hobbies"
+                label="Увлечения"
+                placeholder="Выберите из списка"
+                data={hobbiesPickArray}
+              />
 
               <InputCheckBox
                 name="approval"
                 label="Я соглашаюсь на обработку персональных данных Согласие с политикой обработки персональных данных"
               />
 
-              <Submit errors={errors} value="Вступить" />
+              <Submit errors={errors} />
             </form>
           </FormProvider>
         </div>
@@ -101,4 +139,4 @@ const FormAddToTradeUnion = ({ defaultValues, onSubmit }) => {
   );
 };
 
-export default FormAddToTradeUnion;
+export default FormUserAnket;

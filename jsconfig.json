@@ -2,5 +2,8 @@
   "compilerOptions": {
     "baseUrl": "src"
   },
-  "include": ["src", "src/3Entities/Forms/FormCreateTradeUnion/.jsx"]
+  "include": [
+    "src",
+    "src/0Pages/SiteContent/Content/Documents/Forms/CreateTradeUnionForm/FormCreateTradeUnion/.jsx"
+  ]
 }

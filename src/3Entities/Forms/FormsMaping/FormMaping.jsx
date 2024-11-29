@@ -1,10 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
 import s from "./FormsMaping.module.css";
-import { InputUserResolvers } from "../FormElements/Entity/InputUser/InputUser";
+import { InputUserResolvers } from "../../../0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputUser/InputUser";
 import { InputArrayResolversAs } from "../FormElements/Base/InputArray";
-import { InputAddressResolvers } from "../FormElements/Entity/InputAddress/InputAddress";
-import { InputPhoneResolvers } from "../FormElements/Entity/InputPhone/InputPhone";
-import { InputChildResolvers } from "../FormElements/Entity/InputChild/InputChild";
+import { InputAddressResolvers } from "../FormElements/ReusableInputs/InputAddress/InputAddress";
+import { InputPhoneResolvers } from "../../../0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputPhone/InputPhone";
+import { InputChildResolvers } from "../../../0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/FormUserAnket/Inputs/InputChild/InputChild";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 

@@ -1,10 +1,11 @@
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import s from "./Organization.module.css";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import ColorFlag from "2Generics/TableElements/ColorFlag/ColorFlag";
 
-const Organization = (props) => {
-  let documentsList = props.organizationBlock[0].manager.map((i) => (
+const Organization = () => {
+  const { organizationBlock } = useSelector((state) => state.organization);
+  let documentsList = organizationBlock[0].manager.map((i) => (
     <div key={i.id} className={s.documentsListRow}>
       <div className={s.indent}></div>
       <div className={s.tableListText}> {i.name}</div>
@@ -44,27 +45,25 @@ const Organization = (props) => {
                     Уникальный номер в системе:
                   </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].UnicalId}
+                    {organizationBlock[0].UnicalId}
                   </span>
                 </div>
                 <div>
                   <span className={s.requisiteTitle}>ИНН/КПП: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].INN +
-                      "/" +
-                      props.organizationBlock[0].KPP}
+                    {organizationBlock[0].INN + "/" + organizationBlock[0].KPP}
                   </span>
                 </div>
                 <div>
                   <span className={s.requisiteTitle}>ОГРН: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].OGRN}
+                    {organizationBlock[0].OGRN}
                   </span>
                 </div>
                 <div>
                   <span className={s.requisiteTitle}>Адрес: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].adress}
+                    {organizationBlock[0].adress}
                   </span>
                 </div>
               </div>
@@ -79,19 +78,19 @@ const Organization = (props) => {
                 <div>
                   <span className={s.requisiteTitle}>Банк: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].bank}
+                    {organizationBlock[0].bank}
                   </span>
                 </div>
                 <div>
                   <span className={s.requisiteTitle}>БИК: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].BIK}
+                    {organizationBlock[0].BIK}
                   </span>
                 </div>
                 <div>
                   <span className={s.requisiteTitle}>Р/с: </span>
                   <span className={s.requisiteText}>
-                    {props.organizationBlock[0].rs}
+                    {organizationBlock[0].rs}
                   </span>
                 </div>
               </div>
@@ -122,10 +121,10 @@ const Organization = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+/* const mapStateToProps = (state) => {
   return {
     organizationBlock: state.organization.organizationBlock,
   };
-};
+}; */
 
-export default connect(mapStateToProps)(Organization);
+export default Organization;

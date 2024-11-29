@@ -11,7 +11,7 @@ import InsideDocumentsLink from "./InsideDocumentsLink/InsideDocumentsLink";
 import { useSelector } from "react-redux";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
-const Navbar = (props) => {
+const Navbar = () => {
   const {
     beforeDocumentsNavlinkData,
     afterDocumentsNavlinkData,
@@ -19,8 +19,10 @@ const Navbar = (props) => {
     linksInsideDocuments,
   } = useSelector((state) => state.nav);
 
+  const { isUserFormFilled } = useSelector((state) => state.user);
+
   const checkIsLinkActive = () => {
-    if (props.isUserFormFilled) {
+    if (isUserFormFilled) {
       return (navData) =>
         navData.isActive ? `${s.navLinkButton} ${s.active}` : s.navLinkButton;
     } else {
@@ -38,7 +40,7 @@ const Navbar = (props) => {
         link={
           !i.isLinkChangeWithFillUserForm
             ? i.link
-            : props.isUserFormFilled
+            : isUserFormFilled
               ? i.link
               : "#"
         }

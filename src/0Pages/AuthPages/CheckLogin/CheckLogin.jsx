@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProfileUserTC } from "0Redux/userReducer";
-import { connect, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const CheckLogin = (props) => {
   const [checked, setChecked] = useState(false);
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const load = async () => {
-      await props.getProfileUserTC(navigate);
+      await dispatch(getProfileUserTC(navigate));
       setChecked(true);
     };
     load();
@@ -21,12 +21,4 @@ const CheckLogin = (props) => {
   return props.children;
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isUserLogged: state.user.isUserLogged,
-  };
-};
-
-export default connect(mapStateToProps, {
-  getProfileUserTC,
-})(CheckLogin);
+export default CheckLogin;

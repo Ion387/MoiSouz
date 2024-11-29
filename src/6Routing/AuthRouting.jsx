@@ -13,30 +13,11 @@ const AuthRouting = (props) => {
       <Routes>
         {!isUserLogged && (
           <>
-            <Route
-              path="/*"
-              element={
-                <LandingPage registrationUserTC={props.registrationUserTC} />
-              }
-            />
+            <Route path="/*" element={<LandingPage />} />
 
-            <Route
-              path="/signin"
-              element={
-                <LoginPage
-                  authUserTC={props.authUserTC}
-                  getProfileUserTC={props.getProfileUserTC}
-                />
-              }
-            />
+            <Route path="/signin" element={<LoginPage />} />
 
-            <Route
-              path="/registration"
-              element={
-                <Registration registrationUserTC={props.registrationUserTC} />
-              }
-              registrationUserTC={props.registrationUserTC}
-            />
+            <Route path="/registration" element={<Registration />} />
           </>
         )}
 

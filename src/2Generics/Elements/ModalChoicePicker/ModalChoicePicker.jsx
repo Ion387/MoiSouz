@@ -1,6 +1,4 @@
-import Calendar from "react-calendar";
 import s from "./ModalChoicePicker.module.css";
-import dayjs from "dayjs";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import Button from "2Generics/Elements/Button/Button";
 

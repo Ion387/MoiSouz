@@ -11,9 +11,9 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import MainUser from "0Pages/SiteContent/ContentUser/MainUser/MainUser";
-import UserAnketForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/UserAnketForm";
-import CreateTradeUnionForm from "0Pages/SiteContent/Content/Documents/Forms/CreateTradeUnionForm/CreateTradeUnionForm";
-import JoinToTradeUnionForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/JoinToTradeUnionForm/JoinToTradeUnionForm";
+import CreateTradeUnionForm from "0Pages/SiteContent/Content/Documents/Forms/CreateTradeUnionForm/CreateTradeUnionSubmit";
+import JoinToTradeUnionForm from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/JoinToTradeUnionForm/JoinToTradeUnionSubmit";
+import UserAnketSubmit from "0Pages/SiteContent/ContentUser/DocumentsUser/UserForms/UserAnketForm/UserAnketSubmit";
 
 const ContentRouting = () => {
   const { data, typeOfRegistration } = useSelector((state) => state.user);
@@ -46,9 +46,9 @@ const ContentRouting = () => {
               <Route path="/discounts" element={<Discounts />} />
               <Route path="/store" element={<Content />} />
               <Route path="/information" element={<Content />} />
-              <Route path="/incoming" element={<UserAnketForm />} />
-              <Route path="/outgoing" element={<UserAnketForm />} />
-              <Route path="/drafts" element={<UserAnketForm />} />
+              <Route path="/incoming" element={<UserAnketSubmit />} />
+              <Route path="/outgoing" element={<UserAnketSubmit />} />
+              <Route path="/drafts" element={<UserAnketSubmit />} />
             </>
           )}
         </>
@@ -88,7 +88,7 @@ const ContentRouting = () => {
 
       {!data.firstName && (
         <>
-          <Route path="/*" element={<UserAnketForm />} />
+          <Route path="/*" element={<UserAnketSubmit />} />
           <Route path="/discounts" element={<Discounts />} />
         </>
       )}
@@ -96,7 +96,7 @@ const ContentRouting = () => {
       {data.firstName && (
         <>
           <Route path="/*" element={<ChoiceRole />} />
-          <Route path="/profile" element={<UserAnketForm />} />
+          <Route path="/profile" element={<UserAnketSubmit />} />
           <Route path="/discounts" element={<Discounts />} />
           <Route
             path="/joinTradeUnionForm"
@@ -112,7 +112,7 @@ const ContentRouting = () => {
       {typeOfRegistration === "TRADEUNION" && (
         <>
           <Route path="/*" element={<Main />} />
-          <Route path="/profileForm" element={<UserAnketForm />} />
+          <Route path="/profileForm" element={<UserAnketSubmit />} />
         </>
       )}
     </Routes>

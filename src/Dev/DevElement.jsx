@@ -1,7 +1,7 @@
-import { connect } from "react-redux";
 import s from "./DevElement.module.css";
 import Navbar from "0Pages/SiteContent/Navbar/Navbar";
 import Header from "0Pages/SiteContent/Header/Header";
+
 const SiteContent = (props) => {
   return (
     <div className={s.main}>
@@ -10,7 +10,7 @@ const SiteContent = (props) => {
       </header>
       <div className={s.mainSection}>
         <nav>
-          <Navbar isUserFormFilled={props.isUserFormFilled} />
+          <Navbar />
         </nav>
 
         <main></main>
@@ -20,7 +20,4 @@ const SiteContent = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { isUserFormFilled: state.user.isUserFormFilled };
-};
-export default connect(mapStateToProps)(SiteContent);
+export default SiteContent;

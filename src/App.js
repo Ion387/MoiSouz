@@ -1,11 +1,5 @@
-import { connect } from "react-redux";
 import s from "./App.module.css";
 import React from "react";
-import {
-  authUserTC,
-  getProfileUserTC,
-  registrationUserTC,
-} from "./0Redux/userReducer";
 import { BrowserRouter /* Route, Routes */ } from "react-router-dom";
 import AuthRouting from "6Routing/AuthRouting";
 import CheckLogin from "0Pages/AuthPages/CheckLogin/CheckLogin";
@@ -32,12 +26,4 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {};
-};
-
-export default connect(mapStateToProps, {
-  authUserTC,
-  registrationUserTC,
-  getProfileUserTC,
-})(App);
+export default App;

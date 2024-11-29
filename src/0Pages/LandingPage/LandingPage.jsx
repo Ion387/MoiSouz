@@ -8,8 +8,10 @@ import LandingBlock4 from "./LandingBlock4/LandingBlock4";
 import LandingBlock5 from "./LandingBlock5/LandingBlock5";
 import LandingBlock6 from "./LandingBlock6/LandingBlock6";
 import LandingFooter from "./LandingFooter/LandingFooter";
+import { useDispatch } from "react-redux";
 
-const LandingPage = (props) => {
+const LandingPage = () => {
+  const dispatch = useDispatch();
   return (
     <div className={s.main}>
       <div className={s.section}>
@@ -28,19 +30,20 @@ const LandingPage = (props) => {
         <section className={s.landingBlock3}>
           <LandingBlock3 />
         </section>
-        {/*       <section className={s.landingBlock4}>
+        {/*     Сделал адаптацию до этого */}
+        <section className={s.landingBlock4}>
           <LandingBlock4 />
         </section>
         <section className={s.landingBlock5}>
           <LandingBlock5 />
         </section>
-         */}
-        {/*         <section className={s.landingBlock6}>
+
+        <section className={s.landingBlock6}>
           <LandingBlock6 />
-        </section> */}
-        {/*         <section className={s.landingFooter}>
+        </section>
+        <section className={s.landingFooter}>
           <LandingFooter />
-        </section> */}
+        </section>
       </div>
     </div>
   );

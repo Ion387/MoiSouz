@@ -5,10 +5,12 @@ import * as yup from "yup";
 import Button from "2Generics/Elements/Button/Button";
 import Input from "2Generics/Elements/Input/Input";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "2Generics/Loader/Loader";
+import { authUserTC } from "0Redux/userReducer";
 
 const LoginPage = (props) => {
+  const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.loading);
   const schema = yup.object().shape({
     email: yup
@@ -32,7 +34,7 @@ const LoginPage = (props) => {
 
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    await props.authUserTC(data.email, data.password, navigate);
+    await dispatch(authUserTC(data.email, data.password, navigate));
   };
 
   return (

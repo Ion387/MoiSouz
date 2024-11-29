@@ -1,7 +1,7 @@
 import React, { createRef, useEffect, useState } from "react";
 import s from "./SelectorModal.module.css";
 import Input from "../Input/Input";
-import ModalChoicePicker from "3Entities/ModalChoicePicker/ModalChoicePicker";
+import ModalChoicePicker from "2Generics/Elements/ModalChoicePicker/ModalChoicePicker";
 
 const SelectorModal = ({
   style,

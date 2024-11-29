@@ -3,7 +3,7 @@ import axios from "axios";
 const KEY = "user.token";
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_PATH}:8080/`,
+  baseURL: `${process.env.REACT_APP_SERVER_PATH}/`,
   method: "POST",
 });
 

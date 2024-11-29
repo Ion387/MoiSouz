@@ -1,12 +1,39 @@
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 import s from "./LandingBlock6.module.css";
 import LandingBlock6InfoSection from "./LandingBlock6InfoSection/LandingBlock6InfoSection";
+import { Link } from "react-router-dom";
+import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 
 const LandingBlock6 = (props) => {
   return (
     <div className={s.main}>
       <div className={s.section}>
         <div className={s.title}>ТАРИФЫ</div>
+        <div className={s.autoBlock}>
+          <div className={s.autoIcon}>
+            <Icon iconName="landingAutoIcon" />
+          </div>
+          <div className={s.freeBlock}>
+            <div className={s.freeBlock_title}>БЕСПЛАТНО</div>
+            <div className={s.freeBlock_text}>
+              базовый функционал <br />
+              навсегда
+            </div>
+          </div>
+          <div className={s.rightAutoBlock}>
+            - Учет участников Профсоюза и Единый цифровой паспорт участника
+            <br />- Формирование и ведение учетной карточки члена Профсоюза
+            <br />- Возможность работы в одном ЛК по нескольким организациям
+            <br />- Защита персональных данных <br />- Реклама от партнеров
+          </div>
+          <Link to="/registration" className={s.autoButton}>
+            <Button
+              value={"Попробовать бесплатно"}
+              style={{ fontSize: "16px", fontWeight: "600", width: "226px" }}
+            />
+          </Link>
+        </div>
+
         <div className={s.block6Sections}>
           <div className={s.block6Section}>
             <LandingBlock6InfoSection
@@ -17,8 +44,6 @@ const LandingBlock6 = (props) => {
               styleBoldText={{}}
               boldText={"- Маркетплейс специальных предложений от партнеров"}
               text={["- Отключение рекламы"]}
-              ButtonValue={"Бесплатно"}
-              buttonStyle={{ width: "226px", height: "54px" }}
             />
           </div>
           <div className={s.block6Section}>
@@ -38,8 +63,6 @@ const LandingBlock6 = (props) => {
                 "- API для интеграции с 1С, платежными сервисами, внешними ИС",
                 "- База знаний 1Тб дискового пространства",
               ]}
-              ButtonValue={"Оформить подписку"}
-              buttonStyle={{ width: "226px", height: "54px" }}
             />
           </div>
           <div className={s.block6Section}>
@@ -63,10 +86,11 @@ const LandingBlock6 = (props) => {
                 "- Голосования и опросы с использованием технологии блок-чейн",
                 "- База знаний 3Тб дискового пространства",
               ]}
-              ButtonValue={"Оформить подписку"}
               buttonStyle={{
                 width: "226px",
                 height: "54px",
+                fontSize: "16px",
+                fontWeight: "600",
                 backgroundColor: "white",
                 color: "rgb(72, 128, 255)",
               }}
@@ -77,7 +101,7 @@ const LandingBlock6 = (props) => {
               styleInfoblock={{}}
               title={"ВОЗДУХ"}
               money={"ИНДИВИДУАЛЬНО"}
-              addition={"за пользователя в месяц"}
+              addition={"за пользователя* в месяц"}
               styleBoldText={{ position: "absolute" }}
               boldText={""}
               text={[
@@ -86,8 +110,7 @@ const LandingBlock6 = (props) => {
                 "- Выделенный сервер",
                 "- Поддержка 24/7",
               ]}
-              ButtonValue={"Оформить подписку"}
-              buttonStyle={{ width: "226px", height: "54px" }}
+              bottomBlock
             />
           </div>
         </div>

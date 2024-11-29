@@ -15,6 +15,10 @@
   border: rgb(216, 216, 216) solid 1px;
 }
 
+.input:disabled {
+  color: rgb(105, 108, 107);
+}
+
 .input::placeholder {
   color: rgb(166, 166, 166);
 }

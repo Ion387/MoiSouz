@@ -1,7 +1,7 @@
 .main {
   display: flex;
   justify-content: center;
-  height: 846px;
+  height: 1046px;
 }
 
 .section {
@@ -15,6 +15,39 @@
   line-height: 44px;
   text-align: center;
   margin-right: 20px;
+}
+
+.autoBlock {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+.autoIcon {
+}
+
+.freeBlock {
+  margin-top: 20px;
+  margin-left: 31px;
+}
+.freeBlock_title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 33px;
+}
+.freeBlock_text {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+.rightAutoBlock {
+  margin-left: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+.autoButton {
+  margin-top: 40px;
 }
 
 .block6Sections {

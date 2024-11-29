@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.boldText {
+  font-weight: 600;
+}
+
 .textBlock {
   text-align: center;
   line-height: 40px;

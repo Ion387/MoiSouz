@@ -9,7 +9,7 @@ import { useReactToPrint } from "react-to-print";
 const JoinToTradeUnionForm = (props) => {
   const [savePDF, setSavePDF] = useState(0);
   const { data } = useSelector((state) => state.user);
-
+  const dataForm = { ...data, position: data.position && data.position[0] };
   const { toPDF, targetRef } = usePDF({
     filename: "Заявление о вступлении.pdf",
   });
@@ -52,7 +52,7 @@ const JoinToTradeUnionForm = (props) => {
         />
       </div>
       <FormAddToTradeUnion
-        defaultValues={data}
+        defaultValues={dataForm}
         onSubmit={onSubmit}
         /*           setIsShowPrintedForm={setIsShowPrintedForm} */
         cancelHandler={cancelHandler}

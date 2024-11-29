@@ -16,7 +16,6 @@ const MyInput = (
     value,
     disabled,
     autocomplete,
-    constantValue,
   },
   ref,
 ) => {
@@ -37,32 +36,21 @@ const MyInput = (
           </lable>
         </div>
       )}
-      {!constantValue ? (
-        <input
-          type={type || "text"}
-          className={!errors ? s.input : `${s.input} ${s.errorInput}`}
-          placeholder={placeholder}
-          onChange={onChange}
-          /*     onBlur={onBlur} */
-          name={name}
-          id={name}
-          ref={ref}
-          value={value}
-          style={style}
-          disabled={disabled}
-          autoComplete={autocomplete}
-        />
-      ) : (
-        <input
-          className={s.input}
-          name={name}
-          id={name}
-          style={style}
-          value={constantValue}
-          disabled={disabled}
-          autoComplete={autocomplete}
-        />
-      )}
+
+      <input
+        type={type || "text"}
+        className={!errors ? s.input : `${s.input} ${s.errorInput}`}
+        placeholder={placeholder}
+        onChange={onChange}
+        /*     onBlur={onBlur} */
+        name={name}
+        id={name}
+        ref={ref}
+        value={value}
+        style={style}
+        disabled={disabled}
+        autoComplete={autocomplete}
+      />
     </div>
   );
 };

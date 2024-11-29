@@ -32,6 +32,7 @@ const LandingBlock2 = (props) => {
                     backgroundColor: "#fff",
                     color: "black",
                     width: "226px",
+                    fontSize: "16px",
                   }}
                 />
               </Link>

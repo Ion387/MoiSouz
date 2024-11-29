@@ -48,25 +48,29 @@ const InputJoinToTradeUnion = ({ prename = "" }) => {
   return (
     <div className={s.input}>
       <div className={s.dateNumberGrid}>
-        <Input value={"123"} lable={"Номер документа"} lable2={false} />
-        <Input value={date} lable={"Дата документа"} lable2={false} />
+        <Input
+          value={"123"}
+          lable={"Номер документа"}
+          lable2={false}
+          disabled
+        />
+        <Input value={date} lable={"Дата документа"} lable2={false} disabled />
       </div>
-      <Input value={data.lastName} lable={"Фамилия"} lable2={false} />
-      <Input value={data.firstName} lable={"Имя"} lable2={false} />
-      <Input value={data.middleName} lable={"Отчество"} lable2={false} />
+      <Input value={data.lastName} lable={"Фамилия"} lable2={false} disabled />
+      <Input value={data.firstName} lable={"Имя"} lable2={false} disabled />
+      <Input
+        value={data.middleName}
+        lable={"Отчество"}
+        lable2={false}
+        disabled
+      />
 
       <Controller
         className={s.field}
         control={control}
         name={`${prename}position`}
         render={({ field, fieldState: { error } }) => (
-          <Input
-            {...field}
-            value={data.position}
-            lable={"Должность"}
-            lable2={false}
-            errors={error}
-          />
+          <Input {...field} lable={"Должность"} lable2={false} errors={error} />
         )}
       />
 

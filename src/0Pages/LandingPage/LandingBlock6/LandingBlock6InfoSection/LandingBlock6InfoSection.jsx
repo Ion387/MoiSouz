@@ -21,10 +21,26 @@ const LandingBlock6InfoSection = (props) => {
         </div>
         <div className={`${s.text} ${s.textColor}`}>{text}</div>
       </div>
+      {props.bottomBlock && (
+        <div className={s.addBottomBlock}>
+          * Для организаций с количеством <br /> пользователей от 25 000 до 75
+          000 тысяч <br />
+          предусмотрены индивидуальные условия
+        </div>
+      )}
+
       <Link to="/" className={s.orderButton}>
         <Button
-          value={props.ButtonValue}
-          style={props.buttonStyle || { width: "226px", height: "54px" }}
+          value={"Оформить подписку"}
+          style={
+            props.buttonStyle || {
+              width: "226px",
+              height: "54px",
+              fontSize: "16px",
+              fontWeight: "600",
+              color: "#fff",
+            }
+          }
         />
       </Link>
     </div>

@@ -51,6 +51,7 @@ const SelectorModal = ({
           autocomplete="off"
           {...rest}
         />
+
         {show && (
           <ModalChoicePicker
             lableArray={data}

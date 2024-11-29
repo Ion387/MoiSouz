@@ -20,8 +20,9 @@ const LandingTitle = (props) => {
         />
       </div>
       <div className={s.textBlock}>
-        комплексное решение для автоматизации <br />
-        деятельности профсоюзов
+        комплексное сервисное решение для{" "}
+        <span className={s.boldText}>автоматизации</span> <br />
+        деятельности <span className={s.boldText}>профсоюзов</span>
       </div>
       <Link className={s.enter} to="/registration">
         <Button

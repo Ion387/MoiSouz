@@ -7,6 +7,7 @@ import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
 import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 import InputJoinToTradeUnion from "./Inputs/InputJoinToTradeUnion/InputJoinToTradeUnion";
 import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/InputCheckBox";
+import PDFsave from "1Pictures/Simple/PDFsave.png";
 
 const FormJoinToTradeUnion = ({
   defaultValues,
@@ -58,9 +59,23 @@ const FormJoinToTradeUnion = ({
                 label="Я соглашаюсь на обработку персональных данных Согласие с политикой обработки персональных данных"
               />
 
-              <Submit errors={errors} value="Вступить" />
+              <div className={s.PDFBlock}>
+                <div className={s.PDFElement}>
+                  <img src={PDFsave} />
+                  <div className={s.PDFText}>
+                    Заявление о вступлении в Профсоюз
+                  </div>
+                </div>
+                <div className={s.PDFElement}>
+                  <img src={PDFsave} />
+                  <div className={s.PDFText}>
+                    Скачать заявление об удержании <br />
+                    членских взносов из заработной платы
+                  </div>
+                </div>
+              </div>
               <div className={s.bottomButtons}>
-                <Button
+                {/*                 <Button
                   value={"Скачать"}
                   onClick={saveHandler}
                   style={{
@@ -72,6 +87,27 @@ const FormJoinToTradeUnion = ({
                   onClick={printHandler}
                   style={{
                     width: "190px",
+                  }}
+                /> */}
+
+                <Button
+                  value={"Отменить"}
+                  style={{
+                    width: "168px",
+                  }}
+                  white
+                />
+                <Button
+                  value={"Сохранить в черновики"}
+                  style={{
+                    width: "225px",
+                  }}
+                />
+                <Button
+                  value={"Отправить"}
+                  white
+                  style={{
+                    width: "168px",
                   }}
                 />
               </div>

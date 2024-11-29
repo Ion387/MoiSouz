@@ -72,8 +72,30 @@ font-size: 14px;
 }
 
 .bottomButtons {
-  width: 400px;
+  width: 600px;
   margin: 40px auto 0px;
   display: flex;
   gap: 24px;
+}
+
+.PDFBlock {
+  width: 497px;
+  margin: 50px auto 0px;
+}
+
+.PDFElement {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.PDFsave {
+}
+
+.PDFText {
+  margin-left: 15px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: rgb(32, 34, 36, 0.8);
 }

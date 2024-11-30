@@ -6,7 +6,7 @@ import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
 const LandingTitle = (props) => {
   return (
-    <>
+    <div className={s.main}>
       <div className={s.logoBlock}>
         <Logo
           moi={{
@@ -20,9 +20,8 @@ const LandingTitle = (props) => {
         />
       </div>
       <div className={s.textBlock}>
-        комплексное сервисное решение для{" "}
-        <span className={s.boldText}>автоматизации</span> <br />
-        деятельности <span className={s.boldText}>профсоюзов</span>
+        комплексное сервисное решение для автоматизации <br />
+        деятельности профсоюзов
       </div>
       <Link className={s.enter} to="/registration">
         <Button
@@ -39,7 +38,7 @@ const LandingTitle = (props) => {
           <Icon iconName="landingLikeIcon" />
         </div>
       </Link>
-    </>
+    </div>
   );
 };
 

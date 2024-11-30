@@ -1,20 +1,19 @@
 .main {
-  width: 100%;
+  margin-top: 37px;
+  margin: 0 auto;
   height: 114px;
   background-color: rgb(243, 244, 248);
-  display: flex;
-  justify-content: center;
-}
-
-.section {
-  width: calc(100% - 180px);
-  margin-top: 37px;
   text-align: center;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.section {
 }
 
 .contacts {
+  margin-left: 140px;
 }
 .contactText {
   font-size: 14px;
@@ -24,7 +23,9 @@
 .logo {
   margin-top: 5px;
 }
+
 .links {
+  margin-right: 140px;
   text-align: start;
 }
 
@@ -32,4 +33,16 @@
   text-decoration: none;
   font-size: 14px;
   font-weight: 400;
+}
+
+@media (max-width: 1000px) {
+  .links {
+    margin-right: 30px;
+  }
+}
+
+@media (max-width: 555px) {
+  .links {
+    margin-right: 15px;
+  }
 }

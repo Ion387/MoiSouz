@@ -56,27 +56,23 @@
   .textBlock {
     height: 190px;
   }
-
-  .main {
-    width: 207px;
-    height: 190px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .main {
-    width: 207px;
-    height: 190px;
-  }
 }
 
 @media (max-width: 700px) {
   .main {
-    width: 197px;
+    width: 100%;
     height: 190px;
   }
   .textBlock {
+    text-align: center;
     margin-left: 30px;
-    height: 240px;
+    height: 40px;
+  }
+  .text {
+    margin-top: 5px;
+  }
+
+  .stepRectangle {
+    margin: 0 auto;
   }
 }

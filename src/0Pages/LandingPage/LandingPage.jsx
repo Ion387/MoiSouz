@@ -37,7 +37,6 @@ const LandingPage = () => {
         <section className={s.landingBlock5}>
           <LandingBlock5 />
         </section>
-
         <section className={s.landingBlock6}>
           <LandingBlock6 />
         </section>

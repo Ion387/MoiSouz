@@ -25,3 +25,21 @@
   display: flex;
   align-items: center;
 }
+
+@media (max-width: 1000px) {
+  .logoBlock {
+    margin-left: 30px;
+  }
+  .headerRightBlock {
+    margin-right: 30px;
+  }
+}
+
+@media (max-width: 555px) {
+  .logoBlock {
+    margin-left: 20px;
+  }
+  .headerRightBlock {
+    margin-right: 20px;
+  }
+}

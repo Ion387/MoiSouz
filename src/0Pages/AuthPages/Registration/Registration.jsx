@@ -12,9 +12,6 @@ import { registrationUserTC } from "0Redux/userReducer";
 const Registration = () => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.loading);
-
-  /*   const [TypeOfRegistrationUserAC, setTypeOfRegistrationUserAC] = useState(); */
-
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -57,80 +54,79 @@ const Registration = () => {
 
   return (
     <div className={s.main}>
-      <div className={s.section}>
-        <div className={s.loginBlock}>
-          <div className={s.title}>Регистрация</div>
+      <div className={s.loginBlock}>
+        <div className={s.title}>Регистрация</div>
 
-          <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              lable={"Адрес электронной почты:"}
-              {...register("email")}
-              errors={errors.email}
-              placeholder={"ivanov@mail.ru"}
+        <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            lable={"Адрес электронной почты:"}
+            {...register("email")}
+            errors={errors.email}
+            placeholder={"ivanov@mail.ru"}
+            disabled={isLoading}
+          />
+
+          <Input
+            {...register("password")}
+            lable={"Придумайте пароль"}
+            type={"password"}
+            errors={errors.password}
+            placeholder={"password"}
+            disabled={isLoading}
+          />
+
+          <Input
+            {...register("passwordRepeat")}
+            lable={"Повторите пароль"}
+            type={"password"}
+            errors={errors.passwordRepeat}
+            placeholder={"passwordRepeat"}
+            disabled={isLoading}
+          />
+
+          <div className={s.checkboxBlock}>
+            <input
+              className={s.checkbox}
+              type={"checkbox"}
               disabled={isLoading}
-            />
+              {...register("rememberMe")}
+            />{" "}
+            <div className={s.checkboxText}>Запомнить пароль</div>
+          </div>
 
-            <Input
-              {...register("password")}
-              lable={"Придумайте пароль"}
-              type={"password"}
-              errors={errors.password}
-              placeholder={"password"}
-              disabled={isLoading}
-            />
-
-            <Input
-              {...register("passwordRepeat")}
-              lable={"Повторите пароль"}
-              type={"password"}
-              errors={errors.passwordRepeat}
-              placeholder={"passwordRepeat"}
-              disabled={isLoading}
-            />
-
-            <div className={s.checkboxBlock}>
-              <input
-                className={s.checkbox}
-                type={"checkbox"}
-                disabled={isLoading}
-                {...register("rememberMe")}
-              />{" "}
-              <div className={s.checkboxText}>Запомнить пароль</div>
-            </div>
-
-            <div className={s.submitBlock}>
-              <div className={s.submit}>
-                {isLoading !== true && (
-                  <Button
-                    value={"Регистрация"}
-                    disabled={isLoading}
-                    type="submit"
-                  />
-                )}
-                <Loader visible={isLoading} />
-              </div>
-              <div className={s.underSubmit}>
-                <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
-                <Link
-                  to={isLoading === false && "/signin"}
-                  className={s.linkUnderSubmit}
-                >
-                  Войти
-                </Link>
-              </div>
-              {(errors.email ||
-                errors.name ||
-                errors.surname ||
-                errors.patronymic) && (
-                <div className={s.error}>{"Поле заполнено неверно"}</div>
+          <div className={s.submitBlock}>
+            <div className={s.submit}>
+              {isLoading !== true && (
+                <Button
+                  value={"Регистрация"}
+                  disabled={isLoading}
+                  type="submit"
+                  style={{ width: "90%" }}
+                />
               )}
-              {errors.password && (
-                <div className={s.error}>{errors.password.message}</div>
-              )}
-              {error && <div className={s.error}>{error}</div>}
+              <Loader visible={isLoading} />
             </div>
-          </form>
-        </div>
+            <div className={s.underSubmit}>
+              <div className={s.textUnderSubmit}>Уже есть аккаунт?</div>
+              <Link
+                to={isLoading === false && "/signin"}
+                className={s.linkUnderSubmit}
+              >
+                Войти
+              </Link>
+            </div>
+            {(errors.email ||
+              errors.name ||
+              errors.surname ||
+              errors.patronymic) && (
+              <div className={s.error}>{"Поле заполнено неверно"}</div>
+            )}
+            {errors.password && (
+              <div className={s.error}>{errors.password.message}</div>
+            )}
+            {error && <div className={s.error}>{error}</div>}
+          </div>
+        </form>
       </div>
     </div>
   );

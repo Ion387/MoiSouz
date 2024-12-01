@@ -39,70 +39,69 @@ const LoginPage = (props) => {
 
   return (
     <div className={s.main}>
-      <div className={s.section}>
-        <div className={s.loginBlock}>
-          <div className={s.title}>Вход</div>
+      <div className={s.loginBlock}>
+        <div className={s.title}>Вход</div>
 
-          <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
-            {/*             <div className={s.formTitles}>Адрес электронной почты:</div> */}
-            <Input
-              {...register("email")}
-              lable={"Адрес электронной почты:"}
-              errors={errors.email}
-              placeholder={"ivanov@mail.ru"}
+        <form className={s.loginForm} onSubmit={handleSubmit(onSubmit)}>
+          {/*             <div className={s.formTitles}>Адрес электронной почты:</div> */}
+          <Input
+            {...register("email")}
+            lable={"Адрес электронной почты:"}
+            errors={errors.email}
+            placeholder={"ivanov@mail.ru"}
+            disabled={isLoading}
+          />
+
+          <Input
+            {...register("password")}
+            lable={"Пароль"}
+            lable2={"Забыли пароль?"}
+            type={"password"}
+            errors={errors.password}
+            placeholder={"password"}
+            disabled={isLoading}
+          />
+
+          <div className={s.checkboxBlock}>
+            <input
+              className={s.checkbox}
+              type={"checkbox"}
               disabled={isLoading}
-            />
-
-            <Input
-              {...register("password")}
-              lable={"Пароль"}
-              lable2={"Забыли пароль?"}
-              type={"password"}
-              errors={errors.password}
-              placeholder={"password"}
-              disabled={isLoading}
-            />
-
-            <div className={s.checkboxBlock}>
-              <input
-                className={s.checkbox}
-                type={"checkbox"}
-                disabled={isLoading}
-                {...register("rememberMe")}
-              />{" "}
-              <div className={s.checkboxText}>Запомнить пароль</div>
-            </div>
-            <div className={s.submitBlock}>
-              <div className={s.submit}>
-                {isLoading !== true && (
-                  <Button
-                    value={"Войти"}
-                    type={"submit"}
-                    disabled={isLoading}
-                  />
-                )}
-                <Loader visible={isLoading} />
-              </div>
-
-              <div className={s.underSubmit}>
-                <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
-                <Link
-                  to={isLoading === false && "/registration"}
-                  className={s.linkUnderSubmit}
-                >
-                  Регистрация
-                </Link>
-              </div>
-              {errors.password && (
-                <div className={s.error}>{errors.password.message}</div>
+              {...register("rememberMe")}
+            />{" "}
+            <div className={s.checkboxText}>Запомнить пароль</div>
+          </div>
+          <div className={s.submitBlock}>
+            <div className={s.submit}>
+              {isLoading !== true && (
+                <Button
+                  value={"Войти"}
+                  type={"submit"}
+                  disabled={isLoading}
+                  style={{ width: "90%" }}
+                />
               )}
-              {errors.email && (
-                <div className={s.error}>{errors.email.message}</div>
-              )}
-              {error && <div className={s.error}>{error}</div>}
+              <Loader visible={isLoading} />
             </div>
-          </form>
-        </div>
+
+            <div className={s.underSubmit}>
+              <div className={s.textUnderSubmit}>Ещё нет аккаунта?</div>
+              <Link
+                to={isLoading === false && "/registration"}
+                className={s.linkUnderSubmit}
+              >
+                Регистрация
+              </Link>
+            </div>
+            {errors.password && (
+              <div className={s.error}>{errors.password.message}</div>
+            )}
+            {errors.email && (
+              <div className={s.error}>{errors.email.message}</div>
+            )}
+            {error && <div className={s.error}>{error}</div>}
+          </div>
+        </form>
       </div>
     </div>
   );

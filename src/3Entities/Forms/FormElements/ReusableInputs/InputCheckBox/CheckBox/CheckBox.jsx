@@ -1,7 +1,16 @@
 import React from "react";
 import s from "./CheckBox.module.css";
 
-const CheckBox = ({ errors, style, label, onChange, value, name, ...rest }) => {
+const CheckBox = ({
+  errors,
+  style,
+  label,
+  lableStyle,
+  onChange,
+  value,
+  name,
+  ...rest
+}) => {
   return (
     <div className={s.inputForm}>
       <div className={s.checkboxBlock}>
@@ -15,7 +24,7 @@ const CheckBox = ({ errors, style, label, onChange, value, name, ...rest }) => {
           defaultChecked={value}
           {...rest}
         />
-        <label className={s.checkboxText} for={name}>
+        <label className={s.checkboxText} for={name} style={lableStyle}>
           {label}
         </label>
       </div>

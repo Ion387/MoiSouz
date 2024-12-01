@@ -8,6 +8,8 @@ import { useReactToPrint } from "react-to-print";
 
 const JoinToTradeUnionForm = (props) => {
   const [savePDF, setSavePDF] = useState(0);
+  const [isShowPrintedForm, setIsShowPrintedForm] = useState(0);
+
   const { data } = useSelector((state) => state.user);
   const dataForm = { ...data, position: data.position && data.position[0] };
   const { toPDF, targetRef } = usePDF({
@@ -15,13 +17,12 @@ const JoinToTradeUnionForm = (props) => {
   });
 
   const printRef = useRef();
-
   const cancelHandler = () => {};
 
-  const saveHandler = () => {
+  /*   const saveHandler = () => {
     setSavePDF(savePDF + 1);
-    /*     setIsShowPrintedForm(false); */
-  };
+
+  }; */
 
   const printHandler = useReactToPrint({
     printRef,
@@ -41,24 +42,28 @@ const JoinToTradeUnionForm = (props) => {
 
   return (
     <div>
-      <div>
-        <PrintedFormJoin
-          savePDF={savePDF}
-          targetRef={targetRef}
-          printRef={printRef}
-          toPDF={toPDF}
-          /*  toPDF={toPDF} */
-          /*             setIsShowPrintedForm={setIsShowPrintedForm} */
+      {isShowPrintedForm ? (
+        <div>
+          <PrintedFormJoin
+            savePDF={savePDF}
+            targetRef={targetRef}
+            printRef={printRef}
+            toPDF={toPDF}
+            setIsShowPrintedForm={setIsShowPrintedForm}
+            /*  saveHandler={saveHandler} */
+            printHandler={printHandler}
+          />
+        </div>
+      ) : (
+        <FormAddToTradeUnion
+          defaultValues={dataForm}
+          onSubmit={onSubmit}
+          setIsShowPrintedForm={setIsShowPrintedForm}
+          cancelHandler={cancelHandler}
+          /*       saveHandler={saveHandler} */
+          printHandler={printHandler}
         />
-      </div>
-      <FormAddToTradeUnion
-        defaultValues={dataForm}
-        onSubmit={onSubmit}
-        /*           setIsShowPrintedForm={setIsShowPrintedForm} */
-        cancelHandler={cancelHandler}
-        saveHandler={saveHandler}
-        printHandler={printHandler}
-      />
+      )}
       ;
     </div>
   );

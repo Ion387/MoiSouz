@@ -8,6 +8,8 @@ import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker"
 import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/PDFinputBody/PDFinputBody";
+import CheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/CheckBox/CheckBox";
 
 const tradeUnionSelect = [
   {
@@ -20,6 +22,14 @@ const tradeUnionSelect = [
   { value: "profsouz2", label: "Профсоюз металлургов" },
   { value: "profsouz3", label: "Профсоюз медицинских работников" },
 ];
+
+let paimentValueSelect = [{ value: 1, label: "1%" }];
+for (let i = 1; i < 99; i += 1) {
+  paimentValueSelect = [
+    ...paimentValueSelect,
+    { value: i + 1, label: i + 1 + "%" },
+  ];
+}
 
 export const InputUserResolvers = {
   lastName: yup
@@ -77,7 +87,7 @@ const InputJoinToTradeUnion = ({ prename = "" }) => {
       <div className={s.dateJoinUTNameGrid}>
         <Controller
           control={control}
-          name={`${prename}birthdate`}
+          name={`${prename}joindate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
               lable="Дата вступления"
@@ -92,19 +102,84 @@ const InputJoinToTradeUnion = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}education`}
+          name={`${prename}tradeUnionName`}
           render={({ field, fieldState: { error } }) => (
             <Selector
               {...field}
               lable={"Выберите профсоюз из списка"}
               optionValue={tradeUnionSelect}
-              placeholder={"Высшее"}
               errors={error}
               style={
-                (watch(`${prename}education`) || "").trim()
+                (watch(`${prename}tradeUnionName`) || "").trim()
                   ? {}
                   : { color: "rgb(166, 166, 166)" }
               }
+            />
+          )}
+        />
+      </div>
+
+      <Controller
+        className={s.field}
+        control={control}
+        name={`${prename}paimentValue`}
+        render={({ field, fieldState: { error } }) => (
+          <Selector
+            {...field}
+            lable={"Размер взносов в профсоюз от заработной платы"}
+            optionValue={paimentValueSelect}
+            placeholder={"Высшее"}
+            errors={error}
+            style={
+              (watch(`${prename}paimentValue`) || "").trim()
+                ? {}
+                : { color: "rgb(166, 166, 166)" }
+            }
+          />
+        )}
+      />
+
+      <div className={s.input}>
+        <Controller
+          control={control}
+          name={`${prename}dataProcessAgree`}
+          render={({ field, fieldState: { error } }) => (
+            <CheckBox
+              {...field}
+              lableStyle={{ maxWidth: "582px" }}
+              label={
+                "Я соглашаюсь на обработку персональных данных Согласие с политикой обработки персональных данных"
+              }
+              errors={error}
+            />
+          )}
+        />
+      </div>
+
+      <div className={s.inputPdf}>
+        <Controller
+          className={s.field}
+          control={control}
+          name={`${prename}PDFjoinTradeUnion`}
+          render={({ field, fieldState: { error } }) => (
+            <PDFinputBody
+              {...field}
+              error={error}
+              label="Загрузите заявление на вступление"
+            />
+          )}
+        />
+      </div>
+      <div className={s.inputPdf}>
+        <Controller
+          className={s.field}
+          control={control}
+          name={`${prename}PDFacceptPayment`}
+          render={({ field, fieldState: { error } }) => (
+            <PDFinputBody
+              {...field}
+              error={error}
+              label="Загрузите заявление о согласии с вступительными взносами"
             />
           )}
         />

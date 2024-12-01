@@ -20,10 +20,14 @@
   grid-template-rows: 121px;
 }
 
-.checkboxBlock {
-  margin-top: 23px;
-  display: flex;
-  justify-content: center;
+.checkBoxBlock {
+  max-width: 533px;
+  margin: 20px auto 0px;
+}
+
+.inputPdf {
+  max-width: 497px;
+  margin: 20px auto 0px;
 }
 
 .error {

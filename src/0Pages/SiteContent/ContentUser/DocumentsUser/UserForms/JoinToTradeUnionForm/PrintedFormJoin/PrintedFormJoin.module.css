@@ -1,10 +1,19 @@
+.main {
+}
+
+.buttons {
+  margin: 20px auto;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+}
+
 .printedForm {
   margin: 25px auto 0px;
   background-color: #fff;
   height: 2246px;
   width: 800px;
   padding-top: 1px;
-  display: none;
 }
 
 .printedForm * {

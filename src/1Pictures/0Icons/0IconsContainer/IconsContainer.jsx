@@ -4207,8 +4207,27 @@ const Icon = (props) => {
         </svg>
       );
       break;
-    case "Icon":
-      iconSvg = "";
+    case "PDFClose":
+      iconSvg = (
+        <svg
+          width="9.999512"
+          height="10.000488"
+          viewBox="0 0 9.99951 10.0005"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs />
+          <g opacity="0.800000" mix-blend-mode="normal">
+            <path
+              id="Форма 3"
+              d="M0 8.41L3.49 4.92L0.08 1.51L1.6 0L5 3.4L8.39 0.01L9.98 1.6L6.59 4.99L9.99 8.39L8.48 9.91L5.07 6.5L1.58 10L0 8.41Z"
+              fill="#202224"
+              fill-opacity="1.000000"
+              fill-rule="nonzero"
+            />
+          </g>
+        </svg>
+      );
       break;
     case "Icon":
       iconSvg = "";

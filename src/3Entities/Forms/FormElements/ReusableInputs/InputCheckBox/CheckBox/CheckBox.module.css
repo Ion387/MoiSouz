@@ -36,7 +36,7 @@
 }
 
 .checkboxText {
-  width: 382px;
+  max-width: 382px;
   margin-left: 12px;
   font-size: 14px;
   font-weight: 600;

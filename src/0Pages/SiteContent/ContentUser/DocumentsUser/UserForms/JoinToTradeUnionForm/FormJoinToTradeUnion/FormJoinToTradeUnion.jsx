@@ -11,6 +11,7 @@ import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
 import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
 import CheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/CheckBox/CheckBox";
+import InputPDF from "3Entities/Forms/FormElements/Base/InputPDF/InputPDF";
 
 const tradeUnionSelect = [
   {
@@ -194,7 +195,7 @@ const FormJoinToTradeUnion = ({
                   control={control}
                   name={`${prename}PDFjoinTradeUnion`}
                   render={({ field, fieldState: { error } }) => (
-                    <inputPdf
+                    <InputPDF
                       {...field}
                       error={error}
                       label="Загрузите заявление на вступление"
@@ -208,7 +209,7 @@ const FormJoinToTradeUnion = ({
                   control={control}
                   name={`${prename}PDFacceptPayment`}
                   render={({ field, fieldState: { error } }) => (
-                    <inputPdf
+                    <InputPDF
                       {...field}
                       error={error}
                       label="Загрузите заявление о согласии с вступительными взносами"

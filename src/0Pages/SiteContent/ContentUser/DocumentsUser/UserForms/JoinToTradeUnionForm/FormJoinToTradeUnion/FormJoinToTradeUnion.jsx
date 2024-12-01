@@ -7,7 +7,6 @@ import Button from "3Entities/Forms/FormElements/Base/Button/Button";
 /* import InputJoinToTradeUnion from "./Inputs/InputJoinToTradeUnion/InputJoinToTradeUnion"; */
 import moment from "moment";
 import { useSelector } from "react-redux";
-import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/InputPDF";
 import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
 import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
@@ -195,7 +194,7 @@ const FormJoinToTradeUnion = ({
                   control={control}
                   name={`${prename}PDFjoinTradeUnion`}
                   render={({ field, fieldState: { error } }) => (
-                    <PDFinputBody
+                    <inputPdf
                       {...field}
                       error={error}
                       label="Загрузите заявление на вступление"
@@ -209,7 +208,7 @@ const FormJoinToTradeUnion = ({
                   control={control}
                   name={`${prename}PDFacceptPayment`}
                   render={({ field, fieldState: { error } }) => (
-                    <PDFinputBody
+                    <inputPdf
                       {...field}
                       error={error}
                       label="Загрузите заявление о согласии с вступительными взносами"

@@ -73,14 +73,14 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         />
       </div>
 
-      <InputAddress />
+      <InputAddress lable={"Адрес регистрации"} prename="address." />
       <div className={s.dateOfCreationGrid}>
         <Controller
           control={control}
           name={`${prename}birthdate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
-              lable="Дата образования"
+              lable="Дата регистрации юр.лица"
               placeholder="15.05.2005"
               value={field.value}
               onChange={(date) => field.onChange(date)}

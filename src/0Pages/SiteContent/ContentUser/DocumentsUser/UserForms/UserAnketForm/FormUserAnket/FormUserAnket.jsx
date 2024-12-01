@@ -106,7 +106,7 @@ const FormUserAnket = ({ defaultValues, onSubmit }) => {
                 preadd
               />
 
-              <InputAddress prename="address." />
+              <InputAddress prename="address." lable="Адрес проживания" />
 
               <InputPhone extra />
 

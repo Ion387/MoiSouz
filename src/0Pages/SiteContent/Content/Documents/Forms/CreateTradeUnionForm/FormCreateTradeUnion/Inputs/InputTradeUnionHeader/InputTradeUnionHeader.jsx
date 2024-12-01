@@ -74,7 +74,7 @@ const InputTradeUnionHeader = ({ prename = "" }) => {
           name={`${prename}birthdate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
-              lable="Дата образования"
+              lable="Дата образования по протоколу"
               placeholder="15.05.2005"
               value={field.value}
               onChange={(date) => field.onChange(date)}

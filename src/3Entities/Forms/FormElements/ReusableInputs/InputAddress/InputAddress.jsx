@@ -14,7 +14,7 @@ export const InputAddressResolvers = {
   flat: yup.string(),
 };
 
-const InputAddress = ({ prename = "" }) => {
+const InputAddress = ({ prename = "", lable }) => {
   const { control } = useFormContext();
 
   return (
@@ -27,7 +27,7 @@ const InputAddress = ({ prename = "" }) => {
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
-              lable="Адрес проживания"
+              lable={lable}
               placeholder="Индекс"
               errors={error}
             />

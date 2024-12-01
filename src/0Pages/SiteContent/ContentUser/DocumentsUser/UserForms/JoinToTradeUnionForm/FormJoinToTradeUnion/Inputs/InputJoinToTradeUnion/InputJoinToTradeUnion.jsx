@@ -8,7 +8,7 @@ import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker"
 import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/InputPDF";
+import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/PDFinputBody";
 import CheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/CheckBox/CheckBox";
 
 const tradeUnionSelect = [

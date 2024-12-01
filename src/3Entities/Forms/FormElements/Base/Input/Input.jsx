@@ -28,12 +28,12 @@ const MyInput = (
       )}
       {lable2 && (
         <div className={s.flexLables}>
-          <lable for={name} className={s.formLables}>
+          <label for={name} className={s.formLables}>
             {lable}
-          </lable>
-          <lable for={name} className={s.formLables}>
+          </label>
+          <label for={name} className={s.formLables}>
             {lable2}
-          </lable>
+          </label>
         </div>
       )}
 

@@ -1,27 +1,61 @@
-import { Controller, useFormContext } from "react-hook-form";
-import * as yup from "yup";
-import s from "./InputUser.module.css";
+import { useEffect, useState } from "react";
+import s from "./InputPDF.module.css";
+import PDFloading from "1Pictures/Simple/PDFloading.png";
+import PDFloaded from "1Pictures/Simple/PDFloaded.png";
+import { object } from "yup";
+import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
 
-import Input from "3Entities/Forms/FormElements/Base/Input/Input";
-import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
-import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
-import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
+const InputPDF = ({ value, onChange, error, label, labelStyle }) => {
+  const [preview, setPreview] = useState(false);
 
-const InputUser = ({ prename = "" }) => {
-  const { control, watch } = useFormContext();
+  const onInput = (e) => {
+    const file = e.target.files[0];
+    if (file == null) return;
+    onChange && onChange(file);
+  };
+
+  const cancelPDFHandler = () => {
+    setTimeout(() => setPreview(false), 10);
+    value = null;
+  };
+
+  useEffect(() => {
+    if (typeof value === "object") {
+      setPreview(true);
+    }
+  }, [value]);
 
   return (
-    <>
-      <Controller
-        className={s.field}
-        control={control}
-        name={`${prename}avatar`}
-        render={({ field, fieldState: { error } }) => (
-          <InputAvatar {...field} error={error} label="фото" />
+    <label className={s.inputPDFBlock}>
+      <div className={s.PDFBlock}>
+        {preview ? (
+          <div className={s.PDFloaded}>
+            <img src={PDFloaded} alt="PDF icon" />
+            <div className={s.PDFText}>{value.name}</div>
+            <div className={s.PDFclose} onClick={cancelPDFHandler}>
+              <Icon iconName="PDFClose" />
+            </div>
+          </div>
+        ) : (
+          <div className={s.PDFloading}>
+            <div className={s.input}>
+              <input
+                accept=".pdf"
+                onChange={onInput}
+                className={s.inputAvatar}
+                id="image-file"
+                type="file"
+              />
+            </div>
+            <img src={PDFloading} alt="PDF icon" />
+            <div className={s.PDFText} style={labelStyle}>
+              {label}
+            </div>
+          </div>
         )}
-      />
-    </>
+      </div>
+    </label>
   );
 };
 
-export default InputUser;
+export default InputPDF;

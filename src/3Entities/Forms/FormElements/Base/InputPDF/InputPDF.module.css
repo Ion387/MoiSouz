@@ -1,20 +1,44 @@
-.input {
-  width: calc (100% - 128px);
-  min-width: 300px;
-
-  /* background-color: brown; */
-}
-.nameAvatarGrid {
-  display: grid;
-  grid-template-columns: calc(100% - 153px) 128px;
-  grid-template-rows: 121px 121px;
-  column-gap: 25px;
+.inputPDFBlock {
+  margin-top: 50px;
 }
 
-.checkboxBlock {
-  margin-top: 23px;
+.PDFloaded {
   display: flex;
-  justify-content: center;
+  align-items: center;
+}
+.PDFloading {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.inputLableBlock {
+  margin-top: 60px;
+}
+
+.PDFBlock {
+  width: 470px;
+  margin: 50px auto 0px;
+}
+
+.input {
+  height: 100%;
+  display: none;
+}
+
+.PDFElement {
+  margin-top: 50px;
+}
+
+.PDFsave {
+}
+
+.PDFText {
+  margin-left: 15px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  color: rgb(32, 34, 36, 0.8);
 }
 
 .error {
@@ -28,16 +52,6 @@
   margin: 5px;
 }
 
-.gridBirthDataEducationGender {
-  display: grid;
-  grid-template-columns: calc(30% - 20px) calc(35% - 10px) calc(35% - 10px);
-  column-gap: 20px;
-}
-
-.pointer {
+.PDFclose {
   cursor: pointer;
-}
-
-.calendar {
-  position: relative;
 }

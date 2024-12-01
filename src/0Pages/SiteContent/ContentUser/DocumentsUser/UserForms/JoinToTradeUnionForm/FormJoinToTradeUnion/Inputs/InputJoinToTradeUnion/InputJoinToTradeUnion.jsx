@@ -8,7 +8,7 @@ import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker"
 import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/PDFinputBody/PDFinputBody";
+import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/InputPDF";
 import CheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/CheckBox/CheckBox";
 
 const tradeUnionSelect = [
@@ -30,25 +30,6 @@ for (let i = 1; i < 99; i += 1) {
     { value: i + 1, label: i + 1 + "%" },
   ];
 }
-
-export const InputUserResolvers = {
-  lastName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Фамилия заполненно не верно")
-    .required("Укажите Фамилия"),
-  firstName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Имя заполненно не верно")
-    .required("Укажите Имя"),
-  middleName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Отчество заполненно не верно")
-    .required("Укажите Отчество"),
-  birthdate: yup.string().required("Укажите Дату рождения"),
-  education: yup.string().required("Укажите Образование"),
-  gender: yup.string().required("Укажите Пол"),
-  avatar: yup.mixed().required("Укажите Фото"),
-};
 
 const InputJoinToTradeUnion = ({ prename = "" }) => {
   const { control, watch } = useFormContext();

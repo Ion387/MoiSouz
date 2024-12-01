@@ -39,6 +39,13 @@ const LandingBlock6 = (props) => {
             style={{ fontSize: "16px", fontWeight: "600", width: "490px" }}
           />
         </Link>
+
+        <Link to="/registration" className={s.autoBlock_button_mobile}>
+          <Button
+            value={"Попробовать бесплатно"}
+            style={{ fontSize: "16px", fontWeight: "600", width: "340px" }}
+          />
+        </Link>
       </div>
 
       <div className={s.block6Sections}>

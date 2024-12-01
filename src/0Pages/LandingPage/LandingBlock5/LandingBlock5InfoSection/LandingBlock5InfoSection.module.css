@@ -41,3 +41,12 @@
     text-align: center;
   }
 }
+
+@media (max-width: 555px) {
+  .leftTextBlock {
+    width: 350px;
+  }
+  .rightTextBlock {
+    width: 350px;
+  }
+}

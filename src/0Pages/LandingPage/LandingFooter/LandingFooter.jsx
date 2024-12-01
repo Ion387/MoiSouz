@@ -20,9 +20,9 @@ const LandingFooter = (props) => {
           {/* commit */}
         </div>
         <div>
-          <Link className={s.link} to="/">
+          {/*           <Link className={s.link} to="/">
             Работа
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

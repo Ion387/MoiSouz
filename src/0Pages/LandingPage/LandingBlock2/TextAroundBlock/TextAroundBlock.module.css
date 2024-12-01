@@ -153,4 +153,7 @@
   .containerOfTextAround {
     margin-top: 0px;
   }
+  .textAround {
+    width: 330px;
+  }
 }

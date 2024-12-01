@@ -1,10 +1,7 @@
 .main {
   display: flex;
-  justify-content: center;
-}
-
-.section {
-  width: 780px;
+  align-items: center;
+  flex-direction: column;
 }
 
 .title {
@@ -16,7 +13,6 @@
 
 .block5Sections {
   margin-top: 64px;
-  width: 100%;
   position: relative;
 }
 

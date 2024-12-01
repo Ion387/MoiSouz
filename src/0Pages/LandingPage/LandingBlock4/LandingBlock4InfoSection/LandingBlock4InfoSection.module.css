@@ -69,3 +69,20 @@
     margin-left: 40px;
   }
 }
+
+@media (max-width: 555px) {
+  .infoblock {
+    width: 335px;
+    margin: 0px auto;
+    grid-template-columns: 60px 270px;
+  }
+  .icon {
+    transform: scale(0.7) translate(-12px, -140px);
+  }
+  .mainTextBlock {
+    width: 250px;
+  }
+  .rightTextBlock {
+    width: 250px;
+  }
+}

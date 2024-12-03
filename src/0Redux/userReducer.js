@@ -178,7 +178,7 @@ export const getProfileUserTC = (navigate) => {
         break;
 
       default:
-        navigate("/");
+        /*   navigate("/"); */
         break;
     }
     return null;

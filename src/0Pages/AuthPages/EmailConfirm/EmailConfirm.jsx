@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import { confirmEmailUserTC } from "0Redux/userReducer";
 
 const EmailConfirm = () => {
-  const slug = useParams;
+  const params = useParams();
+  const slug = params.slug;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   useEffect(() => {
     setTimeout(() => {
       dispatch(confirmEmailUserTC(slug, navigate));
@@ -18,7 +18,9 @@ const EmailConfirm = () => {
     <div className={s.main}>
       <div className={s.loginBlock}>
         <div className={s.title}>
-          Почта подтвеждена, спасибо за регистрацию!
+          Почта подтвеждена.
+          <br />
+          Спасибо за регистрацию!
         </div>
       </div>
     </div>

@@ -17,7 +17,6 @@ const AuthRouting = (props) => {
             <Route path="/*" element={<LandingPage />} />
 
             <Route path="/signin" element={<LoginPage />} />
-
             <Route path="/registration" element={<Registration />} />
             <Route path="/confirm/email/:slug" element={<EmailConfirm />} />
           </>

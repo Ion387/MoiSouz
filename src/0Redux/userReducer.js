@@ -261,11 +261,11 @@ export const confirmEmailUserTC = (slug, navigate) => {
         await fetch()
       )({
         url: `/api/confirm/email/${slug}`,
-        method: "POST",
+        method: "GET",
       });
-      if (response.status === 200 && response.data && response.data.token) {
+      if (response.status === 200 && response.data) {
         // успешный запрос
-        navigate("/signin");
+        /*   navigate("/signin"); */
         return true;
       } else {
         await dispatch(error(response.data.message));

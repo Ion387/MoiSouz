@@ -1,4 +1,5 @@
 /* import AuthPage from "0Pages/AuthPage/AuthPage"; */
+import EmailConfirm from "0Pages/AuthPages/EmailConfirm/EmailConfirm";
 import LoginPage from "0Pages/AuthPages/LoginPage/LoginPage";
 import Registration from "0Pages/AuthPages/Registration/Registration";
 import LandingPage from "0Pages/LandingPage/LandingPage";
@@ -18,6 +19,7 @@ const AuthRouting = (props) => {
             <Route path="/signin" element={<LoginPage />} />
 
             <Route path="/registration" element={<Registration />} />
+            <Route path="/confirm/email/:slug" element={<EmailConfirm />} />
           </>
         )}
 

@@ -41,6 +41,13 @@ export const choseTypeOfRegistrationUserAC = (typeOfRegistration) => {
   };
 };
 
+/* export const setRegSlugUserAC = (slug) => {
+  return {
+    type: "setRegSlugUserAC",
+    slug,
+  };
+}; */
+
 const initialState = {
   isUserLogged: false,
   isUserNowRegistered: false,
@@ -125,7 +132,11 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isInited: true,
       };
-
+    /*     case "setRegSlugUserAC":
+      return {
+        ...state,
+        slug: action.slug,
+      }; */
     default:
       return state;
   }
@@ -239,6 +250,31 @@ export const registrationUserTC = (
       await dispatch(error(response?.data?.message || "Ошибка"));
     }
     await dispatch(endLoading());
+  };
+};
+
+export const confirmEmailUserTC = (slug, navigate) => {
+  return async (dispatch) => {
+    await dispatch(loading());
+    try {
+      let response = await (
+        await fetch()
+      )({
+        url: `/api/confirm/email/${slug}`,
+        method: "POST",
+      });
+      if (response.status === 200 && response.data && response.data.token) {
+        // успешный запрос
+        navigate("/signin");
+        return true;
+      } else {
+        await dispatch(error(response.data.message));
+      }
+    } catch ({ response }) {
+      await dispatch(error(response?.data?.message || "Ошибка"));
+    }
+    await dispatch(endLoading());
+    return false;
   };
 };
 

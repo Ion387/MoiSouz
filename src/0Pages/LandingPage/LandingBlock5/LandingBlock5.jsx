@@ -15,7 +15,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"РОСТ ДОХОДА И ЭКОНОМИЯ ДО 20 000 РУБЛЕЙ"}
+            leftText={"РОСТ ДОХОДА И ЭКОНОМИЯ ДО <br/> 20 000 РУБЛЕЙ"}
             rightText={
               "Повышение заработной платы и улучшение условий труда в организациях с сильным Профсоюзом. Маркетплейс предложений партнеров позволяет получить скидки и снизить стоимость товаров и услуг"
             }
@@ -23,7 +23,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"МИНИМУМ КОНФЛИКТОВ"}
+            leftText={"МИНИМУМ <br/> КОНФЛИКТОВ"}
             rightText={
               "Снижение количества трудовых конфликтов и и увеличение скорости их разрешения с четким отслеживанием статуса работы по обращению"
             }
@@ -31,7 +31,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"РОСТ ДОВЕРИЯ К ПРОФСОЮЗУ"}
+            leftText={"РОСТ ДОВЕРИЯ <br/>К ПРОФСОЮЗУ"}
             rightText={
               "Открытая и прозрачная система голосований и невозможность подделки результатов повышают доверие к Профсоюзу и его лидерам"
             }
@@ -39,7 +39,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"ПОВЫШЕНИЕ ИНТЕРЕСА"}
+            leftText={"ПОВЫШЕНИЕ <br/>ИНТЕРЕСА"}
             rightText={
               "К общественной деятельности, рост инициативы и понимания результатов, которые возможно достигнуть за общественную работу в т.ч. за счет геймификации процесса"
             }
@@ -47,7 +47,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"СОЦИАЛЬНЫЙ ЛИФТ"}
+            leftText={"СОЦИАЛЬНЫЙ <br/>ЛИФТ"}
             rightText={
               "Для общественных активистов на основании подтверждённых результатов общественной деятельности и невозможности манипулирования фактами"
             }
@@ -55,7 +55,7 @@ const LandingBlock5 = (props) => {
         </div>
         <div className={s.block5Section}>
           <LandingBlock5InfoSection
-            leftText={"ЗАЩИТА ДАННЫХ"}
+            leftText={"ЗАЩИТА <br/>ДАННЫХ"}
             rightText={
               "Персональные данные защищены в соответствии с требованиями законодательства"
             }

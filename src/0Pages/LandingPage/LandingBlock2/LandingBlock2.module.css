@@ -47,6 +47,11 @@
   margin-top: 45px;
 }
 
+.iconInnerBlockButton:hover {
+  transition: 0.5s;
+  transform: scale(1.05);
+}
+
 .textAroundPosition {
   width: 100%;
   position: absolute;

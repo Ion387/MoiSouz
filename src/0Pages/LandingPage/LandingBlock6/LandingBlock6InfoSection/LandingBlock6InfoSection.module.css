@@ -58,3 +58,7 @@
   display: flex;
   justify-content: center;
 }
+.orderButton:hover {
+  transition: 0.5s;
+  transform: scale(1.05);
+}

@@ -19,6 +19,11 @@
   position: relative;
 }
 
+.enter:hover {
+  transition: 0.5s;
+  transform: scale(1.05);
+}
+
 .likeIcon {
   position: absolute;
   left: calc(50% - 110px);

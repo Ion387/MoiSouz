@@ -49,6 +49,11 @@
   margin-top: 40px;
 }
 
+.autoBlock_button:hover {
+  transition: 0.5s;
+  transform: scale(1.05);
+}
+
 .autoBlock_button_table {
   display: none;
 }

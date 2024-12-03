@@ -54,7 +54,7 @@ const LandingBlock3 = (props) => {
           <div className={s.stepNumber} data-step="4">
             <StepsBlock
               step={"Шаг 4."}
-              title={"Изучите возможности Элементума"}
+              title={"Изучите возможности"}
               text={
                 "Видеоинструкция и примеры использования сервиса доступны в любой момент времени"
               }

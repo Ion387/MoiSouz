@@ -24,7 +24,7 @@
 }
 
 .bottomFlex {
-  margin-top: 9px;
+  margin-top: 28px;
   margin-left: 170px;
   margin-right: 280px;
   width: 750px;
@@ -35,7 +35,7 @@
 .arrowTopAbsoluteBlock {
   width: 510px;
   position: absolute;
-  bottom: 174px;
+  bottom: 154px;
   left: 340px;
   display: flex;
   justify-content: space-between;
@@ -44,7 +44,7 @@
 .arrowBottomAbsoluteBlock {
   width: 943px;
   position: absolute;
-  bottom: 74px;
+  bottom: 54px;
   left: 60px;
   display: flex;
   justify-content: space-between;

@@ -9,11 +9,8 @@
   align-items: center;
 }
 
-.section {
-}
-
 .contacts {
-  margin-left: 140px;
+  margin-left: 246px;
 }
 .contactText {
   font-size: 14px;
@@ -39,10 +36,22 @@
   .links {
     margin-right: 30px;
   }
+
+  .contacts {
+    margin-left: 136px;
+  }
 }
 
 @media (max-width: 555px) {
   .links {
     margin-right: 15px;
+    display: none;
+  }
+  .contacts {
+    display: none;
+    margin-left: 121px;
+  }
+  .logo {
+    display: none;
   }
 }

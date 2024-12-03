@@ -1,4 +1,6 @@
 .main {
+  width: 900px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -12,31 +14,32 @@
 }
 
 .block5Sections {
+  width: 100%;
   margin-top: 64px;
   position: relative;
 }
 
 .vertikalLineIcon {
   position: absolute;
-  right: calc(50% + 25px);
-  top: -20px;
+  right: calc(50% + 44px);
+  top: -25px;
 }
 
 .block5Section {
-  margin-top: 30px;
   width: 100%;
 }
 
-.block5Section:first-child {
-  margin-top: 200px;
-}
-
-@media (max-width: 800px) {
-  .section {
+@media (max-width: 900px) {
+  .main {
     width: 600px;
   }
   .block5Section {
     margin-top: 5px;
+  }
+
+  .vertikalLineIcon {
+    right: calc(50% + 20px);
+    top: 20px;
   }
 }
 

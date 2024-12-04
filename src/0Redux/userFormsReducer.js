@@ -16,7 +16,7 @@ export const choseTypeOfRegistrationUserAC = (typeOfRegistration) => {
   };
 };
 
-export const onFormFilled = () => {
+export const onFormFilledUserAC = () => {
   return {
     type: "onFormFilled",
   };
@@ -53,7 +53,7 @@ export const submitUserAnketFormTC = (data, navigate) => {
       });
       if (response.status === 200) {
         // успешный запрос
-        await dispatch(onFormFilled());
+        await dispatch(onFormFilledUserAC());
         await dispatch(getProfileUserTC());
         navigate("/entry");
       }

@@ -40,13 +40,44 @@ export const InputUserResolvers = {
 const InputTradeUnionBody = ({ prename = "" }) => {
   const { control, watch } = useFormContext();
 
+  /* 
+  inn: 
+  kpp: 
+  address: { yup.object().shape({
+    postcode: 
+    region: 
+    area: 
+    city: 
+    street: 
+    house: 
+    flat: }
+  registrationDate:
+  okato:
+  oktmo: 
+
+  chairman:{
+    lastName: 
+    firstName: 
+    middleName: 
+    inn: }
+  chairmanEmail
+  chairmanPhone
+  bank: {
+    bank: 
+    rs: ,
+    bik:
+    ks:}
+ 
+  email
+  phone  */
+
   return (
     <div className={s.input}>
       <div className={s.grid50prc}>
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}lastName`}
+          name={`${prename}inn`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -60,7 +91,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}kpp`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -73,11 +104,109 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         />
       </div>
 
-      <InputAddress lable={"Адрес регистрации"} prename="address." />
+      <div className={s.inputAdress}>
+        <div className={s.gridAdressIndexAdressRegion}>
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.postcode`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lable={"Адрес регистрации"}
+                placeholder="Индекс"
+                errors={error}
+              />
+            )}
+          />
+
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.region`}
+            render={({ field, fieldState: { error } }) => (
+              <Input {...field} placeholder="Регион" errors={error} />
+            )}
+          />
+        </div>
+        <div className={s.gridAdressMunicipalityAdressCity}>
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.area`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lableStyle={{ height: "0px" }}
+                placeholder="Муниципальное образование"
+                errors={error}
+              />
+            )}
+          />
+
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.city`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lableStyle={{ height: "0px" }}
+                placeholder="Населенный пункт"
+                errors={error}
+              />
+            )}
+          />
+        </div>
+        <div className={s.gridStreetHouseFlat}>
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.street`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lableStyle={{ height: "0px" }}
+                placeholder="Улица"
+                errors={error}
+              />
+            )}
+          />
+
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.house`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lableStyle={{ height: "0px" }}
+                placeholder="Дом/Здание"
+                errors={error}
+              />
+            )}
+          />
+
+          <Controller
+            className={s.field}
+            control={control}
+            name={`address.flat`}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                {...field}
+                lableStyle={{ height: "0px" }}
+                placeholder="Квартира"
+                errors={error}
+              />
+            )}
+          />
+        </div>
+      </div>
+
       <div className={s.dateOfCreationGrid}>
         <Controller
           control={control}
-          name={`${prename}birthdate`}
+          name={`${prename}registrationDate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
               lable="Дата регистрации юр.лица"
@@ -91,7 +220,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}okato`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -106,7 +235,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}oktmo`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -122,7 +251,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`chairman.lastName`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -136,7 +265,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`chairman.firstName`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -151,7 +280,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`chairman.middleName`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -166,7 +295,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`chairman.inn`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -184,7 +313,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}chairmanEmail`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -198,7 +327,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}chairmanPhone`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -216,7 +345,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`bank.bank`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -230,7 +359,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`bank.rs`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -244,7 +373,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`bank.bik`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -259,7 +388,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`bank.ks`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -277,7 +406,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}email`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -291,7 +420,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}phone`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}
@@ -309,19 +438,3 @@ const InputTradeUnionBody = ({ prename = "" }) => {
 };
 
 export default InputTradeUnionBody;
-
-{
-  /* <Controller
-  control={control}
-  name={`${prename}birthdate`}
-  render={({ field, fieldState: { error } }) => (
-    <DatePicker
-      lable="Дата образования"
-      placeholder="15.05.2005"
-      value={field.value}
-      onChange={(date) => field.onChange(date)}
-      errors={error}
-    />
-  )}
-/>; */
-}

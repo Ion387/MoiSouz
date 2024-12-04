@@ -60,3 +60,38 @@
 .calendar {
   position: relative;
 }
+
+.inputAdress {
+  width: calc (100% - 128px);
+  min-width: 300px;
+}
+
+.gridAdressIndexAdressRegion {
+  display: grid;
+  grid-template-columns: calc(40% - 20px) 60%;
+  column-gap: 20px;
+}
+
+.gridAdressMunicipalityAdressCity {
+  display: grid;
+  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  column-gap: 20px;
+}
+
+.gridAdressMunicipalityAdressCity > lable {
+  height: 0px;
+}
+
+.gridStreetHouseFlat {
+  display: grid;
+  grid-template-columns: calc(50% - 10px) calc(25% - 15px) calc(25% - 15px);
+  column-gap: 20px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.calendar {
+  position: relative;
+}

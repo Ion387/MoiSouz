@@ -1,12 +1,8 @@
-.input {
+.inputAdress {
   width: calc (100% - 128px);
   min-width: 300px;
 
   /* background-color: brown; */
-}
-
-.inputLableBlock {
-  margin-top: 60px;
 }
 
 .gridAdressIndexAdressRegion {

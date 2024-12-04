@@ -7,13 +7,15 @@ import {
 } from "0Redux/tradeUnionFormsReducer";
 
 const CreateTradeUnionSubmit = (props) => {
-  const { data } = useSelector((state) => state.tradeUnion);
+  const { data } = useSelector((state) => state.tradeUnion.data);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    const logo = data.avatar;
-    delete data.avatar;
+    console.log(data);
+    const logo = data.logo;
+    delete data.logo;
+
     dispatch(submitCreateTUFormTC(data, navigate));
     dispatch(postLogoTUFormTC(logo));
   };

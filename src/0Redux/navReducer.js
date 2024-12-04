@@ -30,14 +30,7 @@ const navReducer = (state = initialState, action) => {
             isLinkChangeWithFillUserForm: false,
           },
         ],
-        bottomNavlinkData: [
-          {
-            linkName: "Скидки, льготы",
-            iconName: "discountsIcon",
-            link: "/discounts",
-            isLinkChangeWithFillUserForm: false,
-          },
-        ],
+        bottomNavlinkData: [],
       };
 
     case "setPartnerNavAC":

@@ -1,6 +1,7 @@
 import { fetch } from "4API/AxiosApi";
 import { endLoading, loading } from "./loadingReducer";
 import { getProfileUserTC } from "./userReducer";
+import { getDataTUTC } from "./tradeUnionReducer";
 
 export const error = (message) => {
   return {
@@ -9,14 +10,7 @@ export const error = (message) => {
   };
 };
 
-export const choseTypeOfRegistrationUserAC = (typeOfRegistration) => {
-  return {
-    type: "choseTypeOfRegistrationUserAC",
-    typeOfRegistration: false,
-  };
-};
-
-export const onFormFilled = () => {
+export const onFormFilledUTAC = () => {
   return {
     type: "onFormFilled",
   };
@@ -32,7 +26,7 @@ const tradeUnionFormsReducer = (state = initialState, action) => {
     case "onFormFilled":
       return {
         ...state,
-        isUserFormFilled: true,
+        isTUFormFilled: true,
       };
 
     default:
@@ -42,30 +36,29 @@ const tradeUnionFormsReducer = (state = initialState, action) => {
 
 export const submitCreateTUFormTC = (data, navigate) => {
   return async (dispatch) => {
-    /*   await dispatch(loading());
+    await dispatch(loading());
     try {
       let response = await (
         await fetch()
       )({
-        url: "/api/private/profile",
+        url: "/api/private/tradeunion-owner",
         method: "POST",
         data,
       });
       if (response.status === 200) {
         // успешный запрос
-        await dispatch(onFormFilled());
-        await dispatch(getProfileUserTC());
+        await dispatch(onFormFilledUTAC());
+        await dispatch(getDataTUTC());
         navigate("/entry");
       }
     } catch {}
     await dispatch(endLoading());
-*/
   };
 };
 
 export const postLogoTUFormTC = (file) => {
   return async (dispatch) => {
-    /*     await dispatch(loading());
+    await dispatch(loading());
     try {
       const formData = new FormData();
       formData.append("avatar", file);
@@ -74,7 +67,7 @@ export const postLogoTUFormTC = (file) => {
       let response = await (
         await fetch()
       )({
-        url: "/api/private/avatar",
+        url: "/api/private/tradeunion-logo",
         method: "POST",
         data: formData,
       });
@@ -82,7 +75,7 @@ export const postLogoTUFormTC = (file) => {
         // успешный запрос
       }
     } catch {}
-    await dispatch(endLoading()); */
+    await dispatch(endLoading());
   };
 };
 

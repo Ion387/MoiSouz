@@ -18,7 +18,7 @@ const InputAddress = ({ prename = "", lable }) => {
   const { control } = useFormContext();
 
   return (
-    <div className={s.input}>
+    <div className={s.inputAdress}>
       <div className={s.gridAdressIndexAdressRegion}>
         <Controller
           className={s.field}

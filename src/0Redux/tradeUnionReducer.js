@@ -17,15 +17,7 @@ export const setDataTUAC = (data) => {
 };
 
 const initialState = {
-  isUserLogged: false,
-  isUserNowRegistered: false,
-  /*   временная переменная */
-  isUserFormFilled: false,
-  isInited: false,
-  typeOfRegistration: null,
-  data: {
-    id: null,
-  },
+  data: {},
 };
 
 const tradeUnionReducer = (state = initialState, action) => {
@@ -48,17 +40,17 @@ export const getDataTUTC = (navigate) => {
       let response = await (
         await fetch()
       )({
-        url: "/api/private/profile",
+        url: "/api/private/tradeunion-owner",
         method: "GET",
       });
       if (response.status === 200) {
         // успешный запрос
-        /*         if (!response.data.firstName) {
+        if (!response.data.firstName) {
           dispatch(setWithRegNavAC());
         } else {
           dispatch(setWithRegNavAC());
         }
-        await dispatch(setDataTUAC(response.data)); */
+        await dispatch(setDataTUAC(response.data));
         /*   navigate("/main"); */
         /*        await dispatch(endLoading());
         return response.data; */

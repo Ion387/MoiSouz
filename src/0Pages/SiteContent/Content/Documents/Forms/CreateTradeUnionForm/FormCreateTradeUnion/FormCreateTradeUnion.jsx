@@ -11,34 +11,11 @@ import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputChec
 import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
 import InputTradeUnionHeader from "./Inputs/InputTradeUnionHeader/InputTradeUnionHeader";
 import InputTradeUnionBody from "./Inputs/InputTradeUnionBody/InputTradeUnionBody";
+import { createTradeUnionSchema } from "5Utilits/FormSchemas/UnionTradeSchemas/createTradeUnionSchema";
 
 const FormCreateTradeUnion = ({ defaultValues, onSubmit }) => {
   const methods = useForm({
-    resolver: yupResolver(
-      yup.object().shape({
-        ...InputUserResolvers,
-        profession: InputArrayResolversAs(
-          yup.string().required("Укажите Профессию"),
-        ),
-        position: InputArrayResolversAs(
-          yup.string().required("Укажите Должность"),
-        ),
-        address: yup.object().shape(InputAddressResolvers),
-        ...InputPhoneResolvers,
-        children: InputArrayResolversAs(
-          yup.object().shape(InputChildResolvers),
-        ),
-        hobbies: yup
-          .array()
-          .of(yup.string())
-          .required("Укажите Увлечения")
-          .min(1, "Укажите Увлечения"),
-        approval: yup
-          .boolean()
-          .required("Укажите Согласие")
-          .oneOf([true], "Укажите Согласие"),
-      }),
-    ),
+    resolver: yupResolver(createTradeUnionSchema),
     defaultValues,
   });
   const {

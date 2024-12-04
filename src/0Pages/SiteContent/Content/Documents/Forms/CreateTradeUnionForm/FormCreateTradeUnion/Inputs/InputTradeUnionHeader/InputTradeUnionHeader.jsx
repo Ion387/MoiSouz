@@ -18,25 +18,10 @@ const genderSelect = [
   { value: "female", label: "Женский" },
 ];
 
-export const InputUserResolvers = {
-  lastName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Фамилия заполненно не верно")
-    .required("Укажите Фамилия"),
-  firstName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Имя заполненно не верно")
-    .required("Укажите Имя"),
-  middleName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Отчество заполненно не верно")
-    .required("Укажите Отчество"),
-  birthdate: yup.string().required("Укажите Дату рождения"),
-  education: yup.string().required("Укажите Образование"),
-  gender: yup.string().required("Укажите Пол"),
-  avatar: yup.mixed().required("Укажите Фото"),
-};
-
+/* title:
+  creationDate: 
+  logo: 
+  ogrn:  */
 const InputTradeUnionHeader = ({ prename = "" }) => {
   const { control, watch } = useFormContext();
 
@@ -47,7 +32,7 @@ const InputTradeUnionHeader = ({ prename = "" }) => {
           <Controller
             className={s.field}
             control={control}
-            name={`${prename}lastName`}
+            name={`${prename}title`}
             render={({ field, fieldState: { error } }) => (
               <Input
                 {...field}
@@ -63,7 +48,7 @@ const InputTradeUnionHeader = ({ prename = "" }) => {
           <Controller
             className={s.field}
             control={control}
-            name={`${prename}avatar`}
+            name={`${prename}logo`}
             render={({ field, fieldState: { error } }) => (
               <InputPicture {...field} error={error} label="логотип" />
             )}
@@ -71,7 +56,7 @@ const InputTradeUnionHeader = ({ prename = "" }) => {
         </div>
         <Controller
           control={control}
-          name={`${prename}birthdate`}
+          name={`${prename}creationDate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
               lable="Дата образования по протоколу"
@@ -86,7 +71,7 @@ const InputTradeUnionHeader = ({ prename = "" }) => {
         <Controller
           className={s.field}
           control={control}
-          name={`${prename}firstName`}
+          name={`${prename}ogrn`}
           render={({ field, fieldState: { error } }) => (
             <Input
               {...field}

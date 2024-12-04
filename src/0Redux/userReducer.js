@@ -253,7 +253,7 @@ export const registrationUserTC = (
   };
 };
 
-export const confirmEmailUserTC = (slug, navigate) => {
+export const confirmEmailUserTC = (slug) => {
   return async (dispatch) => {
     await dispatch(loading());
     try {
@@ -264,8 +264,8 @@ export const confirmEmailUserTC = (slug, navigate) => {
         method: "GET",
       });
       if (response.status === 200 && response.data) {
+        await dispatch(endLoading());
         // успешный запрос
-        /*   navigate("/signin"); */
         return true;
       } else {
         await dispatch(error(response.data.message));

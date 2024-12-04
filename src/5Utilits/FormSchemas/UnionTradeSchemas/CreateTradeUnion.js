@@ -1,43 +1,5 @@
 import * as yup from "yup";
 
-/* 
-TUName
-TUCreationData
-
-
-*/
-
-/* secondName;
-firstName;
-lastName;
-birthdate;
-education;
-profession: ["Бухгалтер", "Политолог"],
-position: ["Бухгалтер", "Водитель"],
-postcode;
-region;
-area;
-city;
-street;
-house;
-flat;
-phone;
-phoneDop;
-children: [
-        {
-            "name": "Вероника",
-            "gender": "female",
-            "birthdate": "2010-05-12"
-        },
-        {
-            "name": "Андрей",
-            "gender": "male",
-            "birthdate": "2015-11-06"
-}]
-
-hobbies; 
-*/
-
 const ruNames = /[а-яА-яёЁ]$/;
 const ruNamesFree = /[а-яА-яёЁ,.-]$/;
 const numbers = /[0-9]$/;
@@ -49,6 +11,7 @@ export const profileInfoSchema = yup.object().shape({
     .string()
     .matches(ruNames, "Поле заполненно не верно")
     .required("Поле обязательно для заполнения"),
+
   /*  firstName: yup
     .string()
     .matches(ruNames, "Поле заполненно не верно")

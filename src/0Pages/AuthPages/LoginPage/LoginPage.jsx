@@ -34,6 +34,7 @@ const LoginPage = (props) => {
 
   const navigate = useNavigate();
   const onSubmit = async (data) => {
+    console.log("223123");
     await dispatch(authUserTC(data.email, data.password, navigate));
   };
 

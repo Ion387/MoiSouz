@@ -133,27 +133,26 @@ const InputUser = ({ prename = "" }) => {
             />
           )}
         />
-
-        <Controller
-          className={s.field}
-          control={control}
-          name={`${prename}gender`}
-          render={({ field, fieldState: { error } }) => (
-            <Selector
-              {...field}
-              lable={"Пол"}
-              optionValue={genderSelect}
-              placeholder={"Мужской"}
-              errors={error}
-              style={
-                (watch(`${prename}gender`) || "").trim()
-                  ? {}
-                  : { color: "rgb(166, 166, 166)" }
-              }
-            />
-          )}
-        />
       </div>
+      <Controller
+        className={s.field}
+        control={control}
+        name={`${prename}gender`}
+        render={({ field, fieldState: { error } }) => (
+          <Selector
+            {...field}
+            lable={"Пол"}
+            optionValue={genderSelect}
+            placeholder={"Мужской"}
+            errors={error}
+            style={
+              (watch(`${prename}gender`) || "").trim()
+                ? {}
+                : { color: "rgb(166, 166, 166)" }
+            }
+          />
+        )}
+      />
     </div>
   );
 };

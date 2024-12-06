@@ -30,8 +30,8 @@ font-size: 14px;
 } */
 
 .form {
-  margin: 4px 64px 0px 64px;
-  width: calc (100% - 128px);
+  margin: 4px 63px 0px 63px;
+  width: calc (100% - 126px);
   min-width: 300px;
 
   /* background-color: brown; */

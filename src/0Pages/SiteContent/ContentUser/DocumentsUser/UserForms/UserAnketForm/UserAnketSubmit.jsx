@@ -15,10 +15,11 @@ const UserAnketSubmit = (props) => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    const avatar = data.avatar;
+    console.log(data);
+    /*     const avatar = data.avatar;
     delete data.avatar;
     dispatch(submitUserAnketFormTC(data, navigate));
-    dispatch(postAvatarUserTC(avatar));
+    dispatch(postAvatarUserTC(avatar)); */
   };
 
   return (

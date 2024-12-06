@@ -6,9 +6,9 @@
 }
 .nameAvatarGrid {
   display: grid;
-  grid-template-columns: calc(100% - 153px) 128px;
+  grid-template-columns: 449px 128px;
   grid-template-rows: 121px 121px;
-  column-gap: 25px;
+  column-gap: 18px;
 }
 
 .checkboxBlock {
@@ -30,7 +30,7 @@
 
 .gridBirthDataEducationGender {
   display: grid;
-  grid-template-columns: calc(30% - 20px) calc(35% - 10px) calc(35% - 10px);
+  grid-template-columns: 172px 404px;
   column-gap: 20px;
 }
 

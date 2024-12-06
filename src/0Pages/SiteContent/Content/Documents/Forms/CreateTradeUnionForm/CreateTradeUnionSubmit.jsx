@@ -10,14 +10,13 @@ const CreateTradeUnionSubmit = (props) => {
   const { data } = useSelector((state) => state.tradeUnion.data);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const onSubmit = (data) => {
     console.log(data);
-    const logo = data.logo;
+    /*     const logo = data.logo;
     delete data.logo;
 
     dispatch(submitCreateTUFormTC(data, navigate));
-    dispatch(postLogoTUFormTC(logo));
+    dispatch(postLogoTUFormTC(logo)); */
   };
 
   return <FormCreateTradeUnion defaultValues={data} onSubmit={onSubmit} />;

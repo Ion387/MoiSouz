@@ -94,12 +94,12 @@ const LoginPage = (props) => {
                 Регистрация
               </Link>
             </div>
-            {errors.password && (
+            {/*             {errors.password && (
               <div className={s.error}>{errors.password.message}</div>
             )}
             {errors.email && (
               <div className={s.error}>{errors.email.message}</div>
-            )}
+            )} */}
             {error && <div className={s.error}>{error}</div>}
           </div>
         </form>

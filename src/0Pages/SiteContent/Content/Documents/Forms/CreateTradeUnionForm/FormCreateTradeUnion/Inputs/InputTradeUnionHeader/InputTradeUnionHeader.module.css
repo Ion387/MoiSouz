@@ -6,9 +6,9 @@
 }
 .nameAvatarGrid {
   display: grid;
-  grid-template-columns: calc(40% - 89px) calc(60% - 89px) 128px;
+  grid-template-columns: 172px 257px 128px;
   grid-template-rows: 121px 121px;
-  column-gap: 25px;
+  column-gap: 19px;
 }
 
 .nameTradeUnionInput {

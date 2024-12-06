@@ -7,8 +7,8 @@
   justify-content: center;
   cursor: pointer;
   width: 128px;
-  height: 172px;
-  border: 2px solid rgb(216, 216, 216);
+  height: 178px;
+  border: 1px solid rgb(216, 216, 216);
   border-radius: 8px;
   background-color: rgb(241, 244, 249);
 }
@@ -34,15 +34,19 @@
 .inputAvatarText {
   position: relative;
   color: rgb(166, 166, 166);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 200;
+  /*  font-weight: 500; */
+
+  /*   font-size: 14px;
+  font-weight: 600; */
   text-align: center;
   border: none;
   transition: background-color 0.2s;
 }
 
 .addAvatarIcon {
-  margin-left: 24px;
+  margin-left: 29px;
   margin-top: 10px;
 }
 

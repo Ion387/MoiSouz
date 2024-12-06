@@ -129,7 +129,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
             )}
           />
         </div>
-        <div className={s.gridAdressMunicipalityAdressCity}>
+        <div className={s.grid50prc}>
           <Controller
             className={s.field}
             control={control}
@@ -209,7 +209,7 @@ const InputTradeUnionBody = ({ prename = "" }) => {
           name={`${prename}registrationDate`}
           render={({ field, fieldState: { error } }) => (
             <DatePicker
-              lable="Дата регистрации юр.лица"
+              lable="Дата пост. на учет "
               placeholder="15.05.2005"
               value={field.value}
               onChange={(date) => field.onChange(date)}

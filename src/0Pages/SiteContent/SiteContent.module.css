@@ -1,4 +1,6 @@
 .main {
+  margin: 0px auto;
+  max-width: 1440px;
   background-color: rgb(243, 244, 248);
 }
 

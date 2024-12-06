@@ -4,30 +4,36 @@
 
   /* background-color: brown; */
 }
-.nameAvatarGrid {
-  display: grid;
-  grid-template-columns: calc(40% - 89px) calc(60% - 89px) 128px;
-  grid-template-rows: 121px 121px;
-  column-gap: 25px;
-}
 
 .grid50prc {
   display: grid;
-  grid-template-columns: calc(50% - 12.5px) calc(50% - 12.5px);
-  column-gap: 25px;
+  grid-template-columns: calc(50% - 8.5px) calc(50% - 8.5px);
+  column-gap: 17px;
+}
+
+.gridAdressIndexAdressRegion {
+  display: grid;
+  grid-template-columns: 172px 405px;
+  column-gap: 17px;
+}
+
+.gridStreetHouseFlat {
+  display: grid;
+  grid-template-columns: 288px 145px 129px;
+  column-gap: 17px;
 }
 
 .dateOfCreationGrid {
   display: grid;
-  grid-template-columns: calc(30% - 16px) calc(35% - 17px) calc(35% - 17px);
-  column-gap: 25px;
+  grid-template-columns: 172px 190px 193px;
+  column-gap: 20px;
 }
 
 .Grid50prc2row {
   display: grid;
-  grid-template-columns: calc(50% - 12.5px) calc(50% - 12.5px);
+  grid-template-columns: calc(50% - 8.5px) calc(50% - 8.5px);
   grid-template-rows: 121px 121px;
-  column-gap: 25px;
+  column-gap: 17px;
 }
 
 .checkboxBlock {
@@ -59,33 +65,6 @@
 
 .calendar {
   position: relative;
-}
-
-.inputAdress {
-  width: calc (100% - 128px);
-  min-width: 300px;
-}
-
-.gridAdressIndexAdressRegion {
-  display: grid;
-  grid-template-columns: calc(40% - 20px) 60%;
-  column-gap: 20px;
-}
-
-.gridAdressMunicipalityAdressCity {
-  display: grid;
-  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
-  column-gap: 20px;
-}
-
-.gridAdressMunicipalityAdressCity > lable {
-  height: 0px;
-}
-
-.gridStreetHouseFlat {
-  display: grid;
-  grid-template-columns: calc(50% - 10px) calc(25% - 15px) calc(25% - 15px);
-  column-gap: 20px;
 }
 
 .pointer {

@@ -221,26 +221,26 @@ const FormJoinToTradeUnion = ({
 
             <div className={s.buttons}>
               <Button
-                value={"Отменить"}
+                value={"Редактировать"}
                 style={{
                   width: "168px",
                 }}
                 white
               />
               <Button
-                value={"Сохранить в черновики"}
+                value={"Сохранить в черновик"}
                 style={{
                   width: "225px",
                 }}
               />
 
-              <Button
+              {/*               <Button
                 value={"Распечатать"}
                 style={{
                   width: "225px",
                 }}
                 onClick={() => setIsShowPrintedForm(true)}
-              />
+              /> */}
 
               <Button
                 value={"Отправить"}

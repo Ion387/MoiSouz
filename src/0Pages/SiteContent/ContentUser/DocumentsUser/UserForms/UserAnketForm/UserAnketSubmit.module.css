@@ -1,0 +1,10 @@
+.anketSubmit {
+  width: 100%;
+  display: flex;
+}
+
+.banner {
+  width: 298px;
+  height: 246px;
+  margin-top: 88px;
+}

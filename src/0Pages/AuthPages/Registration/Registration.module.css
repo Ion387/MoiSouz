@@ -2,6 +2,7 @@
   background-color: rgb(72, 128, 255);
   display: flex;
   justify-content: center;
+  height: 100vh;
   padding-top: 100px;
   padding-bottom: 150px;
 }

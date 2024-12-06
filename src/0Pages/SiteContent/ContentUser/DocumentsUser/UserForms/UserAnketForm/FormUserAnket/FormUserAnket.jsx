@@ -78,7 +78,6 @@ const FormUserAnket = ({ defaultValues, onSubmit }) => {
     <div className={s.main}>
       <div className={s.section}>
         <div className={s.title}>Анкета профиля</div>
-
         <div className={s.formBlock}>
           <FormProvider {...methods}>
             <form className={s.form} onSubmit={handleSubmit(onSubmit)}>

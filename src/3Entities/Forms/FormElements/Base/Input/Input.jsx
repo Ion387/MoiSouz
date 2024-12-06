@@ -51,6 +51,7 @@ const MyInput = (
         disabled={disabled}
         autoComplete={autocomplete}
       />
+      <div className={s.errors}>{errors?.message}</div>
     </div>
   );
 };

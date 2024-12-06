@@ -1,3 +1,5 @@
+import s from "./UserAnketSubmit.module.css";
+import banner from "1Pictures/Work/Featured Product.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,7 +21,13 @@ const UserAnketSubmit = (props) => {
     dispatch(postAvatarUserTC(avatar));
   };
 
-  return <FormUserAnket defaultValues={data} onSubmit={onSubmit} />;
+  return (
+    <div className={s.anketSubmit}>
+      <FormUserAnket defaultValues={data} onSubmit={onSubmit} />
+
+      <img src={banner} alt="banner" className={s.banner} />
+    </div>
+  );
 };
 
 export default UserAnketSubmit;

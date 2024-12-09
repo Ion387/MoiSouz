@@ -10,6 +10,7 @@ const MySelector = (
     errors,
     type,
     style,
+    formStyle,
     lable,
     lableStyle,
     value,
@@ -21,7 +22,7 @@ const MySelector = (
     <option value={el.value}>{el.label}</option>
   ));
   return (
-    <div className={s.inputForm}>
+    <div style={formStyle} className={s.inputForm}>
       {
         <lable for={name} className={s.formLables} style={lableStyle}>
           {lable}

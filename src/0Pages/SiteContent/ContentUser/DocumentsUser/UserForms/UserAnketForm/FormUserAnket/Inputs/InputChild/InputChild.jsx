@@ -36,6 +36,7 @@ const InputChild = ({ prename = "" }) => {
             lable2={false}
             placeholder={"Иван"}
             errors={error}
+            formStyle={{ marginTop: "0px" }}
           />
         )}
       />
@@ -51,6 +52,7 @@ const InputChild = ({ prename = "" }) => {
             errors={error}
             placeholder={"Мужской"}
             lable={"Пол"}
+            formStyle={{ marginTop: "0px" }}
             style={
               (watch(`${prename}childrenGender`) || "").trim()
                 ? { width: "100%" }
@@ -69,6 +71,7 @@ const InputChild = ({ prename = "" }) => {
             lable="Дата рождения"
             placeholder="1980-05-08"
             value={field.value}
+            formStyle={{ marginTop: "0px" }}
             onChange={(date) => field.onChange(date)}
             style={{ width: "100%" }}
             errors={error}

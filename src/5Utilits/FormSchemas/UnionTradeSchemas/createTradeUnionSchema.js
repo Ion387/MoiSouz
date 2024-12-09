@@ -33,7 +33,6 @@ export const createTradeUnionSchema = yup.object().shape({
         "house": "6 корпус 1",
         "flat": "289"
     }, 
-
     */
   address: yup.object().shape({
     postcode: yup.string().required("Укажите Индекс"),

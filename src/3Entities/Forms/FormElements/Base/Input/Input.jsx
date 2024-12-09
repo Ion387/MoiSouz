@@ -10,6 +10,7 @@ const MyInput = (
     errors,
     type,
     style,
+    formStyle,
     lable,
     lable2,
     lableStyle,
@@ -19,8 +20,9 @@ const MyInput = (
   },
   ref,
 ) => {
+  console.log(style);
   return (
-    <div className={s.inputForm}>
+    <div style={formStyle} className={s.inputForm}>
       {!lable2 && (
         <lable for={name} className={s.formLables} style={lableStyle}>
           {lable}

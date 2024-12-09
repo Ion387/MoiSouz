@@ -1,12 +1,12 @@
 import s from "./Logo.module.css";
 
-const Logo = (props) => {
+const Logo = ({ style, white }) => {
   return (
     <div className={s.logo}>
-      <span style={props.moi} className={s.logoMoi}>
+      <span style={style} className={!white ? s.logoMoi : s.logoMoiWhite}>
         Мой
       </span>
-      <span style={props.souz} className={s.logoSouz}>
+      <span style={style} className={s.logoSouz}>
         Союз
       </span>
     </div>

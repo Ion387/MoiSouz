@@ -89,7 +89,12 @@ const FormUserAnket = ({ defaultValues, onSubmit }) => {
                 label2="Дополнительная профессия"
                 placeholder="Бухгалтер"
                 render={({ register, ...props }) => (
-                  <Input type="text" {...props} {...register()} />
+                  <Input
+                    /*       labelStyle={{ height: "0px" }} */
+
+                    {...props}
+                    {...register()}
+                  />
                 )}
                 preadd
               />

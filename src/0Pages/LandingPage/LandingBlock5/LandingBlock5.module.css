@@ -44,8 +44,8 @@
 }
 
 @media (max-width: 630px) {
-  .section {
-    /*   width: 350px; */
+  .main {
+    width: 300px;
   }
   .block5Section {
     margin-top: 5px;

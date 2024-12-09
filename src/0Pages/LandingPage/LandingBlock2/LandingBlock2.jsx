@@ -18,10 +18,7 @@ const LandingBlock2 = (props) => {
           </div>
           <div className={s.iconInnerBlock}>
             <div className={s.iconInnerBlockLogo}>
-              <Logo
-                moi={{ fontSize: "50px", fontWeight: "800", color: "#fff" }}
-                souz={{ fontSize: "50px", fontWeight: "800" }}
-              />
+              <Logo style={{ fontSize: "50px" }} white />
             </div>
             <div className={s.iconInnerBlockText}>
               модульность решения позволяет

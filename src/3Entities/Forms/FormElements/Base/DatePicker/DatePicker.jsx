@@ -5,7 +5,17 @@ import React, { createRef, useEffect, useState } from "react";
 import s from "./DatePicker.module.css";
 
 export function MyDatePicker(
-  { name, placeholder, errors, style, lable, lableStyle, value, onChange },
+  {
+    name,
+    placeholder,
+    errors,
+    style,
+    formStyle,
+    lable,
+    lableStyle,
+    value,
+    onChange,
+  },
   ref,
 ) {
   const [date, setDate] = useState();
@@ -37,7 +47,7 @@ export function MyDatePicker(
     setOpen(false);
   };
   return (
-    <div className={s.calendarMain} ref={refContainer}>
+    <div style={formStyle} className={s.calendarMain} ref={refContainer}>
       <lable for={name} className={s.formLables} style={lableStyle}>
         {lable}
       </lable>

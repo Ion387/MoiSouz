@@ -1,12 +1,6 @@
 import s from "./Navbar.module.css";
 import { useLocation } from "react-router-dom";
 import NavbarLink from "./NavbarLink/NavbarLink";
-/* import {
-  afterDocumentsNavlinkData,
-  beforeDocumentsNavlinkData,
-  bottomNavlinkData,
-  linksInsideDocuments,
-} from "6Routing/NavlinkData"; */
 import InsideDocumentsLink from "./InsideDocumentsLink/InsideDocumentsLink";
 import { useSelector } from "react-redux";
 import Icon from "1Pictures/0Icons/0IconsContainer/IconsContainer";
@@ -51,14 +45,6 @@ const Navbar = () => {
       />
     ));
   const location = useLocation();
-  /*  const linksInDocuments = linksInsideDocuments.map((i) => (
-    <InsideDocumentsLink
-      linkName={i.linkName}
-      link={i.link}
-      className={notDependsLinkClassName()}
-      location={location.pathname}
-    />
-  )); */
 
   const isDocumentsLinksShowing = () => {
     if (

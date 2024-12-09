@@ -1,11 +1,9 @@
 import { Controller, useFormContext } from "react-hook-form";
-import * as yup from "yup";
 import s from "./InputJoinToTradeUnion.module.css";
 
 import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 import Selector from "3Entities/Forms/FormElements/Base/Selector/Selector";
 import DatePicker from "3Entities/Forms/FormElements/Base/DatePicker/DatePicker";
-import InputAvatar from "3Entities/Forms/FormElements/Base/InputPicture/InputPicture";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import PDFinputBody from "3Entities/Forms/FormElements/Base/InputPDF/PDFinputBody";

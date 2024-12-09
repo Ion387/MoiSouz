@@ -13,7 +13,7 @@ const Header = (props) => {
     <div className={s.main}>
       <div className={s.section}>
         <div className={s.logo}>
-          <Logo />
+          <Logo style={{ fontSize: "32px" }} />
         </div>
 
         <div className={s.rightHeaderBlock}>

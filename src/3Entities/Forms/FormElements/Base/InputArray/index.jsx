@@ -50,24 +50,25 @@ const InputArray = ({
           </div>
         </lable>
       </div>
-
       {fields.map((field, index) => (
         <div key={field.id} className={s.inputBlock}>
           {(preadd != true || index > 0) && (
-            <div className={s.flexLables}>
-              <lable for={name} className={s.formLables}>
-                {label2}
-              </lable>
-              <lable for={name} className={s.formLables}>
-                <div
-                  className={s.addReduceIcon}
-                  onClick={() => {
-                    remove(index);
-                  }}
-                >
-                  <Icon iconName={"reduceInputIcon"} />
-                </div>
-              </lable>
+            <div className={s.additionInputs}>
+              <div className={s.flexLables}>
+                <lable for={name} className={s.formLables}>
+                  {label2}
+                </lable>
+                <lable for={name} className={s.formLables}>
+                  <div
+                    className={s.reduceIcon}
+                    onClick={() => {
+                      remove(index);
+                    }}
+                  >
+                    <Icon iconName={"reduceInputIcon"} />
+                  </div>
+                </lable>
+              </div>
             </div>
           )}
 
@@ -77,7 +78,8 @@ const InputArray = ({
                 ? `${s.input} ${s.errorInput}`
                 : s.input,
             placeholder,
-            style,
+            formStyle: { marginTop: "5px" },
+            style: { marginTop: "0px" },
             lableStyle: { height: "0px" },
             errors: errors[name] && errors[name][index],
             register: () => register(`${name}.${index}`),

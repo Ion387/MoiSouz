@@ -1,5 +1,4 @@
 .calendarMain {
-  margin-top: 25px;
   position: relative;
   width: 100%;
 }
@@ -42,4 +41,14 @@
   font-size: 18px;
   font-weight: 250;
   /*  font-weight: 600; */
+}
+
+.errors {
+  height: 30px;
+  padding-top: 5px;
+}
+.errorsText {
+  font-size: 14px;
+  font-weight: 250;
+  color: red;
 }

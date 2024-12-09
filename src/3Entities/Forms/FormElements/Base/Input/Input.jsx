@@ -10,7 +10,6 @@ const MyInput = (
     errors,
     type,
     style,
-    formStyle,
     lable,
     lable2,
     lableStyle,
@@ -22,7 +21,7 @@ const MyInput = (
 ) => {
   console.log(style);
   return (
-    <div style={formStyle} className={s.inputForm}>
+    <div className={s.inputForm}>
       {!lable2 && (
         <lable for={name} className={s.formLables} style={lableStyle}>
           {lable}
@@ -53,7 +52,9 @@ const MyInput = (
         disabled={disabled}
         autoComplete={autocomplete}
       />
-      <div className={s.errors}>{errors?.message}</div>
+      <div className={s.errors}>
+        <div className={s.errorsText}>{errors?.message}</div>
+      </div>
     </div>
   );
 };

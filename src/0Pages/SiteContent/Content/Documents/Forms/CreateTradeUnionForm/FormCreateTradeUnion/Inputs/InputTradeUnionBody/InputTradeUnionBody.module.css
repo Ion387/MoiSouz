@@ -32,7 +32,7 @@
 .Grid50prc2row {
   display: grid;
   grid-template-columns: calc(50% - 8.5px) calc(50% - 8.5px);
-  grid-template-rows: 121px 121px;
+  grid-template-rows: 121px 81px;
   column-gap: 17px;
 }
 

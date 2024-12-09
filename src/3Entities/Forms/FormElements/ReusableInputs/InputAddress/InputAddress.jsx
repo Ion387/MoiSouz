@@ -4,16 +4,6 @@ import s from "./InputAddress.module.css";
 
 import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 
-export const InputAddressResolvers = {
-  postcode: yup.string().required("Укажите Индекс"),
-  region: yup.string().required("Укажите Регион"),
-  area: yup.string().required("Укажите Муниципальное образование"),
-  city: yup.string().required("Укажите Населенный пункт"),
-  street: yup.string().required("Укажите Улица"),
-  house: yup.string().required("Укажите Дом/Здание"),
-  flat: yup.string(),
-};
-
 const InputAddress = ({ prename = "", lable }) => {
   const { control } = useFormContext();
 

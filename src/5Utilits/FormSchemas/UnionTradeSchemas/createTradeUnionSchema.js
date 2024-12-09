@@ -13,16 +13,16 @@ export const createTradeUnionSchema = yup.object().shape({
     .required("Поле обязательно для заполнения"),
  */
   /*"Название компании", */
-  title: yup.string().required("Поле обязате"),
+  title: yup.string().required("Не заполнено"),
   /*"1989-12-03"*/
-  creationDate: yup.string().required("Поле обязател"),
-  logo: yup.mixed().required("Укажите Фото"),
+  creationDate: yup.string().required("Не заполнено"),
+  logo: yup.mixed().required("Не заполнено"),
   /*"ogrn": "ogrn", */
-  ogrn: yup.string().required("Поле обязат"),
+  ogrn: yup.string().required("Не заполнено"),
   /*"inn": "inn", */
-  inn: yup.string().required("Поле обязательно для запо"),
+  inn: yup.string().required("Не заполнено"),
   /*    "kpp": "kpp", */
-  kpp: yup.string().required("По"),
+  kpp: yup.string().required("Не заполнено"),
 
   /*"address":{
         "postcode": "143400",
@@ -39,16 +39,16 @@ export const createTradeUnionSchema = yup.object().shape({
     region: yup.string().required("Укажите Регион"),
     area: yup.string().required("Укажите Муниципальное образование"),
     city: yup.string().required("Укажите Населенный пункт"),
-    street: yup.string().required("Укажите Улица"),
+    street: yup.string().required("Укажите Улицу"),
     house: yup.string().required("Укажите Дом/Здание"),
     flat: yup.string(),
   }),
   /*"registrationDate": "1999-12-03" */
-  registrationDate: yup.string().required("Пол"),
+  registrationDate: yup.string().required("Не заполнено"),
   /*"okato": "okato"*/
-  okato: yup.string().required("Поле обязательно для заполнен"),
+  okato: yup.string().required("Не заполнено"),
   /*"oktmo": "oktmo"*/
-  oktmo: yup.string().required("Поле обяз"),
+  oktmo: yup.string().required("Не заполнено"),
   /*    "chairman": {
         "lastName": "Павлов",
         "firstName": "Павел",
@@ -61,9 +61,9 @@ export const createTradeUnionSchema = yup.object().shape({
     inn: yup.string().required("Не заполнено"),
   }),
   /*"chairmanEmail": "mail@mail.com", */
-  chairmanEmail: yup.string().required("Поле обязательно для заполн"),
+  chairmanEmail: yup.string().required("Не заполнено"),
   /*"chairmanPhone": "+71234567891", */
-  chairmanPhone: yup.string().required("Поле обязате"),
+  chairmanPhone: yup.string().required("Не заполнено"),
   bank: yup.object().shape({
     bank: yup.string().required("Не заполнено"),
     rs: yup.string().required("Не заполнено"),
@@ -71,10 +71,10 @@ export const createTradeUnionSchema = yup.object().shape({
     ks: yup.string().required("Не заполнено"),
   }),
   /*"email": "mail1@mail1.com", */
-  email: yup.string().required("Поле обязательно для заполне"),
+  email: yup.string().required("Не заполнено"),
 
   /*"phone": "+71234567891" */
-  phone: yup.string().required("Поле обязател"),
+  phone: yup.string().required("Не заполнено"),
 });
 
 /* 
@@ -116,8 +116,6 @@ export const createTradeUnionSchema = yup.object().shape({
 
 /* 
   JSON
-
-
 {
     "title": "Название компании",
     "creationDate": "1989-12-03",

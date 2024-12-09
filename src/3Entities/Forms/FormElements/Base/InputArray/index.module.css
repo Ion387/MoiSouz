@@ -1,5 +1,5 @@
 .inputForm {
-  margin-top: 25px;
+  /*   margin-top: 25px; */
 }
 
 .input {
@@ -52,8 +52,4 @@
 .reduceIcon {
   /*   margin-top: 25px; */
   cursor: pointer;
-}
-
-.additionInputs {
-  margin-top: 25px;
 }

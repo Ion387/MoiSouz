@@ -12,15 +12,6 @@ const genderSelect = [
   { value: "female", label: "Женский" },
 ];
 
-export const InputChildResolvers = {
-  childrenName: yup
-    .string()
-    .matches(/[а-яА-яёЁ]$/, "Имя заполненно не верно")
-    .required("Укажите Имя"),
-  childrenGender: yup.string().required("Укажите Пол"),
-  childrenBirthdate: yup.string().required("Укажите Дату рождения"),
-};
-
 const InputChild = ({ prename = "" }) => {
   const { control, watch } = useFormContext();
   return (

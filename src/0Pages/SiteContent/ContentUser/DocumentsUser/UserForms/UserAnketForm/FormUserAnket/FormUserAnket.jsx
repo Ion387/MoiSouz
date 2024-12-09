@@ -19,6 +19,7 @@ import InputChild, {
 import InputCheckBox from "3Entities/Forms/FormElements/ReusableInputs/InputCheckBox/InputCheckBox";
 import Submit from "3Entities/Forms/FormElements/ReusableInputs/Submit";
 import InputSelectorModal from "3Entities/Forms/FormElements/ReusableInputs/InputSelectorModal/InputSelectorModal";
+import { userAnketSchema } from "5Utilits/FormSchemas/UserSchemas/UserAnketSchema/userAnketSchema";
 
 const hobbiesPickArray = [
   { value: "Спорт", label: "Спорт" },
@@ -42,31 +43,7 @@ const hobbiesPickArray = [
 
 const FormUserAnket = ({ defaultValues, onSubmit }) => {
   const methods = useForm({
-    resolver: yupResolver(
-      yup.object().shape({
-        ...InputUserResolvers,
-        profession: InputArrayResolversAs(
-          yup.string().required("Укажите Профессию"),
-        ),
-        position: InputArrayResolversAs(
-          yup.string().required("Укажите Должность"),
-        ),
-        address: yup.object().shape(InputAddressResolvers),
-        ...InputPhoneResolvers,
-        children: InputArrayResolversAs(
-          yup.object().shape(InputChildResolvers),
-        ),
-        hobbies: yup
-          .array()
-          .of(yup.string())
-          .required("Укажите Увлечения")
-          .min(1, "Укажите Увлечения"),
-        approval: yup
-          .boolean()
-          .required("Укажите Согласие")
-          .oneOf([true], "Укажите Согласие"),
-      }),
-    ),
+    resolver: yupResolver(userAnketSchema),
     defaultValues,
   });
   const {

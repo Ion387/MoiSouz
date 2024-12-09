@@ -82,6 +82,9 @@ export function MyDatePicker(
           />
         </>
       )}
+      <div className={s.errors}>
+        <div className={s.errorsText}>{errors?.message}</div>
+      </div>
     </div>
   );
 }

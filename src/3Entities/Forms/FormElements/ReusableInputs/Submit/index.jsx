@@ -40,9 +40,9 @@ const Submit = ({ errors, value }) => {
         />
       </div>
 
-      {messages.map((el) => (
+      {/*       {messages.map((el) => (
         <div className={s.error}>{el}</div>
-      ))}
+      ))} */}
     </div>
   );
 };

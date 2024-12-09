@@ -53,22 +53,20 @@ const InputArray = ({
       {fields.map((field, index) => (
         <div key={field.id} className={s.inputBlock}>
           {(preadd != true || index > 0) && (
-            <div className={s.additionInputs}>
-              <div className={s.flexLables}>
-                <lable for={name} className={s.formLables}>
-                  {label2}
-                </lable>
-                <lable for={name} className={s.formLables}>
-                  <div
-                    className={s.reduceIcon}
-                    onClick={() => {
-                      remove(index);
-                    }}
-                  >
-                    <Icon iconName={"reduceInputIcon"} />
-                  </div>
-                </lable>
-              </div>
+            <div className={s.flexLables}>
+              <lable for={name} className={s.formLables}>
+                {label2}
+              </lable>
+              <lable for={name} className={s.formLables}>
+                <div
+                  className={s.reduceIcon}
+                  onClick={() => {
+                    remove(index);
+                  }}
+                >
+                  <Icon iconName={"reduceInputIcon"} />
+                </div>
+              </lable>
             </div>
           )}
 

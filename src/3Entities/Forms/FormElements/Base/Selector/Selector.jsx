@@ -36,14 +36,15 @@ const MySelector = (
         id={name}
         ref={ref}
         style={style}
-        //value={value}
-        errors={errors}
       >
         <option hidden disabled selected value>
           {optionValue[0]?.label || ""}
         </option>
         {options}
       </select>
+      <div className={s.errors}>
+        <div className={s.errorsText}>{errors?.message}</div>
+      </div>
     </div>
   );
 };

@@ -8,31 +8,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "2Generics/Loader/Loader";
 import { registrationUserTC } from "0Redux/userReducer";
+import { registrationSchema } from "5Utilits/FormSchemas/GeneralShemas/registrationSchema";
 
 const Registration = () => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.loading);
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Введите верный формат почты. Почта должна содержать "@" и "."')
-      .required("Введите вашу почту"),
-    password: yup
-      .string()
-      .min(
-        5,
-        "Пароль должен содержать не менее 8 символов. В нём должны быть заглавные и строчные буквы, цифры, пробелы и специальные символы",
-      )
-      .required("Password is required please !"),
-    passwordRepeat: yup
-      .string()
-      .min(
-        5,
-        "Пароль должен содержать не менее 8 символов. В нём должны быть заглавные и строчные буквы, цифры, пробелы и специальные символы",
-      )
-      .required("Password is required please !"),
-  });
-
+  const schema = registrationSchema;
   const {
     register,
     handleSubmit,

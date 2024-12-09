@@ -4,11 +4,6 @@ import s from "./InputPhone.module.css";
 
 import Input from "3Entities/Forms/FormElements/Base/Input/Input";
 
-export const InputPhoneResolvers = {
-  phone: yup.string().required("Укажите Номер телефона"),
-  phoneDop: yup.string(),
-};
-
 const InputPhone = ({ prename = "", extra = false }) => {
   const { control } = useFormContext();
 

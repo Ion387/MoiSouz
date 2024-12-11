@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import s from './signin.module.scss';
 import { type ISignin } from '@/models/Signin';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { loginFn } from '@/services/login';
+import { signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 
 const Signin = () => {
   const router = useRouter();
@@ -15,14 +15,10 @@ const Signin = () => {
     mode: 'onChange',
   });
 
-  const { mutate } = useMutation({
-    mutationKey: ['login'],
-    mutationFn: loginFn,
-  });
-
   const onSubmit: SubmitHandler<ISignin> = async (data) => {
-    mutate(data);
+    signIn('credentials', { ...data, redirect: false });
   };
+
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
@@ -32,6 +28,7 @@ const Signin = () => {
           <TextField {...register('password')}></TextField>
           <Button type="submit">Отправить</Button>
         </form>
+        <Button onClick={() => signOut()}>Выйти</Button>
       </Paper>
     </Box>
   );

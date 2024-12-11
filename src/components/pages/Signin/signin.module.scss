@@ -1,0 +1,22 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(72, 128, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paper {
+  max-width: 630px;
+  width: 100%;
+  border-radius: 24px;
+  padding: 55px 55px 77px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 44px;
+  text-align: center;
+}

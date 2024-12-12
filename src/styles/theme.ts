@@ -12,10 +12,9 @@ export default createTheme(
         md: 980,
         lg: 1240,
         xl: 1620,
-      },
+      }, 
     },
     typography: {
-      fontFamily: ['"DMSans"', '"Arial"', '"sans-serif"'].join(','),
       h1: {
         fontSize: '70px',
         lineHeight: '84px',
@@ -157,24 +156,6 @@ export default createTheme(
           root: {},
         },
       },
-      // MuiFilledInput: {
-      //   styleOverrides: {
-      //     root: {
-      //       transition: 'ease .3s all',
-      //
-      //       '& svg': {},
-      //       '&:hover': {},
-      //       '&.Mui-error': {},
-      //       '&.Mui-focused': {},
-      //       '&::before, &::after': {
-      //         display: 'none',
-      //       },
-      //     },
-      //     input: {
-      //       '&::placeholder': {},
-      //     },
-      //   },
-      // },
       MuiTextField: {
         styleOverrides: {
           root: {
@@ -286,7 +267,26 @@ export default createTheme(
         },
       },
       MuiButton: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            variants: [
+              {props: {variant: 'contained'},
+                style: {
+                  borderRadius: '12px',
+                  backgroundColor: 'rgb(72, 128, 255)',
+                  padding: '7px 12px',
+                  fontFamily: ['Nunito Sans'],
+                  textTransform: 'none',
+                  fontWeight: '600',
+                  boxShadow: 'none'
+                }
+            },
+              {props: {variant: 'text'},
+                style:{}
+              },
+            ]
+          }
+        },
       },
       MuiDialog: {
         styleOverrides: {},

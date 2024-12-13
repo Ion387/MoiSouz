@@ -32,7 +32,7 @@ const Signin = () => {
     if (session?.user?.token) {
       router.push('/');
     }
-  }, [session]);
+  }, [session, router]);
 
   return (
     <Box className={s.container}>

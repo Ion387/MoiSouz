@@ -71,7 +71,7 @@ const Registration = () => {
               lineHeight: '27px',
             }}
           >
-            Войти
+            Регистрация
           </Button>
           <Typography variant="body1" className={s.bottomText}>
             Уже есть аккаунт?

@@ -13,7 +13,7 @@ const ScrollButton = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [window]);
+  }, []);
 
   const handleScroll = () => {
     if (window.scrollY > 300) {

@@ -164,14 +164,36 @@ export default createTheme(
         styleOverrides: {
           root: {
             width: '100%',
+            borderRadius: '8px',
+            border: '1px solid rgb(216, 216, 216)',
+            backgroundColor: 'rgb(241, 244, 249)',
+            padding: '16px',
+            fontSize: '18px',
+            lineHeight: '25px',
+            fontWeight: '600',
+            fontFamily: 'Nunito Sans',
+            marginBottom: '25px',
           },
         },
       },
       MuiInputLabel: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            fontSize: '18px',
+            fontWeight: '600',
+            lineHeight: '25px',
+            fontFamily: 'Nunito Sans',
+            marginBottom: '15px',
+            width: '100%',
+          },
+        },
       },
       MuiOutlinedInput: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            border: '0',
+          },
+        },
       },
       MuiFormHelperText: {
         styleOverrides: {

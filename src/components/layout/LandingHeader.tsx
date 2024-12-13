@@ -6,8 +6,16 @@ import s from './layout.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import useMobile from '@/hooks/UseMobile';
-import { BookIcon, CrossIcon, NavIcon, WomanIcon } from '@/styles/icons';
+import {
+  BookIcon,
+  CrossIcon,
+  LogoutIcon,
+  NavIcon,
+  WomanIcon,
+} from '@/styles/icons';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 const LandingHeader = () => {
   const mobile = useMobile();
@@ -17,6 +25,8 @@ const LandingHeader = () => {
     setOpen((prev) => !prev);
   };
 
+  const { data: session } = useSession();
+
   return (
     <>
       <Box
@@ -24,7 +34,7 @@ const LandingHeader = () => {
         className={clsx(s.landingHeader, !open && s.shadow)}
       >
         <Image width={93} height={15} alt="Logo image" src="/images/Logo.svg" />
-        {!mobile && (
+        {!mobile && !session?.user?.token && (
           <List className={s.nav}>
             <ListItem>
               <Link href="/signin">
@@ -38,12 +48,17 @@ const LandingHeader = () => {
             </ListItem>
           </List>
         )}
-        {mobile && (
+        {mobile && !session?.user?.token && (
           <>
             <IconButton onClick={handleChange} className={s.navBtn}>
               {!open ? <NavIcon /> : <CrossIcon />}
             </IconButton>
           </>
+        )}
+        {session?.user?.token && (
+          <IconButton onClick={() => signOut()}>
+            <LogoutIcon />
+          </IconButton>
         )}
       </Box>
       <Slide direction="down" className={s.slide} in={open}>

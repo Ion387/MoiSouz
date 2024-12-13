@@ -39,7 +39,7 @@ const CardItem: FC<ITarrif> = ({
           variant={main ? 'outlined' : 'contained'}
           sx={{
             color: main ? 'rgb(72, 128, 255)' : '#fff',
-            padding: '16px 17px',
+            padding: '14px 17px',
             width: '100%',
           }}
         >

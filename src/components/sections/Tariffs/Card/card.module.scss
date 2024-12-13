@@ -1,0 +1,64 @@
+.item,
+.mainItem {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 17px 40px;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.item {
+  border: 4px solid rgb(72, 128, 255);
+}
+
+.mainItem {
+  background-color: rgb(72, 128, 255);
+}
+
+.title,
+.mainTitle {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 24px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.mainTitle,
+.mainPrice,
+.mainDesc,
+.mainItem li {
+  color: #fff;
+}
+
+.price,
+.mainPrice {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.desc,
+.mainDesc {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  display: block;
+  margin-bottom: 40px;
+}
+
+.list {
+  width: 100%;
+}
+
+.desc2 {
+  position: absolute;
+  bottom: 88px;
+  font-size: 12px;
+  line-height: 14px;
+  display: block;
+  width: calc(100% - 34px);
+}

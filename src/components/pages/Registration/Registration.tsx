@@ -21,10 +21,14 @@ const Registration = () => {
     mode: 'onChange',
   });
 
+  const env = process.env.NODE_ENV;
+
   const { mutate, data: resData } = useMutation({
     mutationFn: (data: IReg) => {
       return axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/registration`,
+        `${
+          env == 'development' ? process.env.NEXT_PUBLIC_BACKEND_URL : ''
+        }/api/registration`,
         data,
       );
     },

@@ -3,7 +3,10 @@ import { createTheme } from '@mui/material/styles';
 
 export default createTheme(
   {
-    palette: {},
+    palette: {
+      primary: { main: 'rgb(72, 128, 255)' },
+      secondary: { main: 'rgb(243, 244, 248)' },
+    },
     spacing: 10,
     breakpoints: {
       values: {
@@ -12,68 +15,69 @@ export default createTheme(
         md: 980,
         lg: 1240,
         xl: 1620,
-      }, 
+      },
     },
     typography: {
+      fontFamily: ['Nunito Sans', 'sans-serif'].join(','),
       h1: {
-        fontSize: '70px',
-        lineHeight: '84px',
-        fontWeight: '700',
-        color: '#020227',
-        '@media (max-width: 980px)': {
-          fontSize: '35px',
-          lineHeight: '38.5px',
+        fontSize: '155px',
+        lineHeight: '178px',
+        fontWeight: '800',
+        color: 'rgb(32, 34, 36)',
+        '@media (max-width: 744px)': {
+          fontSize: '60px !important',
+          lineHeight: '72px !important',
         },
       },
       h2: {
-        fontSize: '50px',
-        lineHeight: '60px',
-        fontWeight: '700',
-        color: '#020227',
-        '@media(max-width: 980px)': {
-          fontSize: '30px',
-          lineHeight: '36px',
+        fontSize: '40px',
+        lineHeight: '52px',
+        fontWeight: '200',
+        textAlign: 'center',
+        color: 'rgb(32, 34, 36)',
+        '@media(max-width: 744px)': {
+          fontSize: '36px',
+          lineHeight: '48px',
         },
       },
       h3: {
-        fontSize: '30px',
-        lineHeight: '36px',
-        fontWeight: '700',
-        color: '#020227',
-        '@media(max-width: 980px)': {
-          fontSize: '20px',
+        fontSize: '22px',
+        lineHeight: '30px',
+        fontWeight: '800',
+        color: '#000',
+        '@media(max-width: 744px)': {
+          fontSize: '18px',
           lineHeight: '24px',
         },
       },
       h4: {
-        fontSize: '24px',
-        lineHeight: '28.8px',
-        fontWeight: '400',
-        color: '#020227',
-        '@media(max-width: 980px)': {
-          fontSize: '18px',
-          fontWeight: '500',
-          lineHeight: '25.2px',
+        fontSize: '16px',
+        lineHeight: '22px',
+        fontWeight: '300',
+        color: '#000',
+        '@media(max-width: 744px)': {
+          fontSize: '14.8px',
+          lineHeight: '20px',
         },
       },
       body1: {
-        fontSize: '20px',
-        lineHeight: '28px',
-        fontWeight: '400',
-        color: '#020227',
-        '@media(max-width: 980px)': {
+        fontSize: '16px',
+        lineHeight: '22px',
+        fontWeight: '300',
+        color: '#000',
+        '@media(max-width: 744px)': {
           fontSize: '14.8px',
           lineHeight: '20px',
         },
       },
       body2: {
-        fontSize: '16px',
-        lineHeight: '22.4px',
+        fontSize: '14px',
+        lineHeight: '19px',
         fontWeight: '400',
-        color: '#020227',
+        color: '#000',
         '@media(max-width: 980px)': {
-          fontSize: '14.8px',
-          lineHeight: '20px',
+          fontSize: '12.8px',
+          lineHeight: '16px',
         },
       },
     },
@@ -160,23 +164,52 @@ export default createTheme(
         styleOverrides: {
           root: {
             width: '100%',
+            marginBottom: '25px',
           },
         },
       },
       MuiInputLabel: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            fontSize: '18px',
+            fontWeight: '600',
+            lineHeight: '25px',
+            fontFamily: 'Nunito Sans',
+            marginBottom: '15px',
+            width: '100%',
+          },
+        },
       },
       MuiOutlinedInput: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            borderRadius: '8px',
+            backgroundColor: 'rgb(241, 244, 249)',
+            fontSize: '18px',
+            lineHeight: '25px',
+            fontWeight: '600',
+            fontFamily: 'Nunito Sans',
+            '&.Mui-error': {
+              borderColor: '#FF4949',
+            },
+          },
+        },
       },
       MuiFormHelperText: {
         styleOverrides: {
           root: {
+            margin: 0,
             position: 'absolute',
-            right: 0,
-            top: 'calc(100% + 2px)',
+            right: 'auto',
+            left: 0,
+            top: 'calc(100% - 2px)',
+            fontSize: '13px',
+            fontWeight: 600,
+            padding: '4px 16px',
             whiteSpace: 'nowrap',
-            '&.Mui-error': {},
+            '&.Mui-error': {
+              color: '#FF4949',
+            },
           },
         },
       },
@@ -212,6 +245,13 @@ export default createTheme(
       MuiList: {
         styleOverrides: {
           root: {},
+        },
+      },
+      MuiListItem: {
+        styleOverrides: {
+          root: {
+            padding: '8px 3px',
+          },
         },
       },
       MuiMenuItem: {
@@ -270,7 +310,8 @@ export default createTheme(
         styleOverrides: {
           root: {
             variants: [
-              {props: {variant: 'contained'},
+              {
+                props: { variant: 'contained' },
                 style: {
                   borderRadius: '12px',
                   backgroundColor: 'rgb(72, 128, 255)',
@@ -278,14 +319,36 @@ export default createTheme(
                   fontFamily: ['Nunito Sans'],
                   textTransform: 'none',
                   fontWeight: '600',
-                  boxShadow: 'none'
-                }
-            },
-              {props: {variant: 'text'},
-                style:{}
+                  boxShadow: 'none',
+                },
               },
-            ]
-          }
+              {
+                props: { variant: 'outlined' },
+                style: {
+                  borderRadius: '12px',
+                  backgroundColor: '#fff',
+                  padding: '16px 25px',
+                  fontFamily: ['Nunito Sans'],
+                  textTransform: 'none',
+                  fontWeight: '600',
+                  boxShadow: 'none',
+                  color: '#000',
+                },
+              },
+              {
+                props: { variant: 'text' },
+                style: {
+                  borderRadius: '12px',
+                  padding: '7px 12px',
+                  fontFamily: ['Nunito Sans'],
+                  textTransform: 'none',
+                  fontWeight: '600',
+                  boxShadow: 'none',
+                  color: '#000',
+                },
+              },
+            ],
+          },
         },
       },
       MuiDialog: {

@@ -230,7 +230,6 @@ export default createTheme(
           colorSecondary: {},
         },
       },
-
       MuiMenu: {
         styleOverrides: {
           paper: {

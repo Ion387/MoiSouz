@@ -52,7 +52,7 @@ const Tariffs = () => {
       </Box>
       <Grid2 container spacing={2.5}>
         {items.map((item) => (
-          <Grid2 key={item.title} size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid2 key={item.title} size={{ xs: 12, sm: 6, lg: 3 }}>
             <CardItem
               title={item.title}
               price={item.price}

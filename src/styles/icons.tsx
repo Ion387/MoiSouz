@@ -354,3 +354,113 @@ export const LogoutIcon = () => (
     <path d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z" />
   </svg>
 );
+
+export const RiEyeLine = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_5027_25593)">
+      <path
+        d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z"
+        stroke="#8E9CBE"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M22 12C19.333 16.667 16 19 12 19C8 19 4.667 16.667 2 12C4.667 7.333 8 5 12 5C16 5 19.333 7.333 22 12Z"
+        stroke="#8E9CBE"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_5027_25593">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const RiEyeCloseLine = () => (
+  <svg
+    width="25"
+    height="24"
+    viewBox="0 0 25 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_5027_24744)">
+      <path
+        d="M3.5 3L21.5 21"
+        stroke="#8E9CBE"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.084 10.5869C10.7087 10.9619 10.4977 11.4707 10.4976 12.0012C10.4974 12.5317 10.7079 13.0406 11.083 13.4159C11.458 13.7912 11.9667 14.0021 12.4973 14.0023C13.0278 14.0025 13.5367 13.7919 13.912 13.4169"
+        stroke="#8E9CBE"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.863 5.36506C10.7204 5.11978 11.6082 4.9969 12.5 5.00006C16.5 5.00006 19.833 7.33306 22.5 12.0001C21.722 13.3611 20.888 14.5241 19.997 15.4881M17.857 17.3491C16.226 18.4491 14.442 19.0001 12.5 19.0001C8.5 19.0001 5.167 16.6671 2.5 12.0001C3.869 9.60506 5.413 7.82506 7.132 6.65906"
+        stroke="#8E9CBE"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_5027_24744">
+        <rect width="24" height="24" fill="white" transform="translate(0.5)" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const ErrorFormIcon = () => (
+  <svg
+    width="50px"
+    height="50px"
+    viewBox="0 0 50 50"
+    role="img"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-labelledby="errorIconTitle"
+    stroke="#FF4949"
+    strokeWidth="1"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    fill="none"
+    color="#FF4949"
+  >
+    <title id="errorIconTitle">Error</title> <path d="M12 8L12 13" />
+    <line x1="12" y1="16" x2="12" y2="16" /> <circle cx="12" cy="12" r="10" />
+  </svg>
+);
+
+export const SuccessFormIcon = () => (
+  <svg
+    width="50px"
+    height="50px"
+    viewBox="0 0 50 50"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M905.92 237.76a32 32 0 0 0-52.48 36.48A416 416 0 1 1 96 512a418.56 418.56 0 0 1 297.28-398.72 32 32 0 1 0-18.24-61.44A480 480 0 1 0 992 512a477.12 477.12 0 0 0-86.08-274.24z"
+      fill="#4880FF"
+    />
+    <path
+      d="M630.72 113.28A413.76 413.76 0 0 1 768 185.28a32 32 0 0 0 39.68-50.24 476.8 476.8 0 0 0-160-83.2 32 32 0 0 0-18.24 61.44zM489.28 86.72a36.8 36.8 0 0 0 10.56 6.72 30.08 30.08 0 0 0 24.32 0 37.12 37.12 0 0 0 10.56-6.72A32 32 0 0 0 544 64a33.6 33.6 0 0 0-9.28-22.72A32 32 0 0 0 505.6 32a20.8 20.8 0 0 0-5.76 1.92 23.68 23.68 0 0 0-5.76 2.88l-4.8 3.84a32 32 0 0 0-6.72 10.56A32 32 0 0 0 480 64a32 32 0 0 0 2.56 12.16 37.12 37.12 0 0 0 6.72 10.56zM230.08 467.84a36.48 36.48 0 0 0 0 51.84L413.12 704a36.48 36.48 0 0 0 51.84 0l328.96-330.56A36.48 36.48 0 0 0 742.08 320l-303.36 303.36-156.8-155.52a36.8 36.8 0 0 0-51.84 0z"
+      fill="#4880FF"
+    />
+  </svg>
+);

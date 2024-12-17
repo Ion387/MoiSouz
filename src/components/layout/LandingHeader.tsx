@@ -56,7 +56,7 @@ const LandingHeader = () => {
           </>
         )}
         {session?.user?.token && (
-          <IconButton onClick={() => signOut()}>
+          <IconButton onClick={() => signOut({ redirect: false })}>
             <LogoutIcon />
           </IconButton>
         )}

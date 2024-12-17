@@ -14,38 +14,39 @@ const CardItem: FC<ITarrif> = ({
 }) => {
   return (
     <Box className={main ? s.mainItem : s.item}>
-      <Typography className={main ? s.mainTitle : s.title}>{title}</Typography>
-      <Typography className={main ? s.mainPrice : s.price}>{price}</Typography>
-      <Typography className={main ? s.mainDesc : s.desc}>
-        {priceDesc}
-      </Typography>
-      <List className={s.list}>
-        {list.map((item) => (
-          <ListItem key={item} className={main ? s.mainL : s.l}>
-            {item}
-          </ListItem>
-        ))}
-      </List>
-      {desc && <Typography className={s.desc2}>{desc}</Typography>}
-      <Link
-        href="/"
-        style={{
-          width: 'calc(100% - 34px)',
-          position: 'absolute',
-          bottom: '20px',
-        }}
-      >
-        <Button
-          variant={main ? 'outlined' : 'contained'}
-          sx={{
-            color: main ? 'rgb(72, 128, 255)' : '#fff',
-            padding: '14px 17px',
-            width: '100%',
-          }}
-        >
-          Оформить подписку
-        </Button>
-      </Link>
+      <Box className={s.cardHeader}>
+        <Typography className={main ? s.mainTitle : s.title}>
+          {title}
+        </Typography>
+        <Typography className={main ? s.mainPrice : s.price}>
+          {price}
+        </Typography>
+        <Typography className={main ? s.mainDesc : s.desc}>
+          {priceDesc}
+        </Typography>
+        <List className={s.list}>
+          {list.map((item) => (
+            <ListItem key={item} className={main ? s.mainL : s.l}>
+              {item}
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+      <Box className={s.cardFooter}>
+        {desc && <Typography className={s.desc2}>{desc}</Typography>}
+        <Link href="/" className={s.btn}>
+          <Button
+            variant={main ? 'outlined' : 'contained'}
+            sx={{
+              color: main ? 'rgb(72, 128, 255)' : '#fff',
+              padding: '14px 17px',
+              width: '100%',
+            }}
+          >
+            Оформить подписку
+          </Button>
+        </Link>
+      </Box>
     </Box>
   );
 };

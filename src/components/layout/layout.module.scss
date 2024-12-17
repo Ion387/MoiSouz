@@ -12,10 +12,6 @@
   background-color: #fff;
   z-index: 100;
   padding: 0 52px;
-  @media (max-width: 744px) {
-    padding: 0;
-    justify-content: center;
-  }
 }
 
 .shadow {

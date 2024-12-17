@@ -6,6 +6,7 @@
   align-items: center;
   height: 100%;
   position: relative;
+  justify-content: space-between;
 }
 
 .item {
@@ -54,11 +55,24 @@
   width: 100%;
 }
 
+.cardHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardFooter {
+  width: 100%;
+}
+
 .desc2 {
-  position: absolute;
-  bottom: 88px;
   font-size: 12px;
   line-height: 14px;
   display: block;
-  width: calc(100% - 34px);
+  margin-bottom: 12px;
+}
+
+.btn {
+  width: 100%;
 }

@@ -164,14 +164,6 @@ export default createTheme(
         styleOverrides: {
           root: {
             width: '100%',
-            borderRadius: '8px',
-            border: '1px solid rgb(216, 216, 216)',
-            backgroundColor: 'rgb(241, 244, 249)',
-            padding: '16px',
-            fontSize: '18px',
-            lineHeight: '25px',
-            fontWeight: '600',
-            fontFamily: 'Nunito Sans',
             marginBottom: '25px',
           },
         },
@@ -191,18 +183,33 @@ export default createTheme(
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            border: '0',
+            borderRadius: '8px',
+            backgroundColor: 'rgb(241, 244, 249)',
+            fontSize: '18px',
+            lineHeight: '25px',
+            fontWeight: '600',
+            fontFamily: 'Nunito Sans',
+            '&.Mui-error': {
+              borderColor: '#FF4949',
+            },
           },
         },
       },
       MuiFormHelperText: {
         styleOverrides: {
           root: {
+            margin: 0,
             position: 'absolute',
-            right: 0,
-            top: 'calc(100% + 2px)',
+            right: 'auto',
+            left: 0,
+            top: 'calc(100% - 2px)',
+            fontSize: '13px',
+            fontWeight: 600,
+            padding: '4px 16px',
             whiteSpace: 'nowrap',
-            '&.Mui-error': {},
+            '&.Mui-error': {
+              color: '#FF4949',
+            },
           },
         },
       },
@@ -223,6 +230,7 @@ export default createTheme(
           colorSecondary: {},
         },
       },
+
       MuiMenu: {
         styleOverrides: {
           paper: {

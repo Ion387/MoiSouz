@@ -1,12 +1,17 @@
 import { ruRU } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 
+export const globalTheme = createTheme({
+  palette: {
+    primary: { main: 'rgb(72, 128, 255)' },
+    secondary: { main: 'rgb(243, 244, 248)' },
+    red: { main: 'rgb(249, 60, 101)' },
+  },
+});
+
 export default createTheme(
   {
-    palette: {
-      primary: { main: 'rgb(72, 128, 255)' },
-      secondary: { main: 'rgb(243, 244, 248)' },
-    },
+    ...globalTheme,
     spacing: 10,
     breakpoints: {
       values: {
@@ -254,6 +259,49 @@ export default createTheme(
           },
         },
       },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            span: {
+              fontFamily: ['Nunito Sans'],
+              textTransform: 'none',
+              fontWeight: '600',
+              boxShadow: 'none',
+            },
+            svg: {
+              color: 'black',
+            },
+
+            '&.Mui-selected': {
+              borderRadius: '6px',
+              backgroundColor: globalTheme.palette.primary.main,
+
+              span: {
+                color: 'white',
+              },
+              svg: {
+                color: 'white',
+              },
+            },
+
+            '&:hover': {
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: -1,
+
+                borderRadius: '6px',
+                backgroundColor: globalTheme.palette.primary.main,
+                opacity: 0.2,
+              },
+            },
+          },
+        },
+      },
       MuiMenuItem: {
         styleOverrides: {
           root: {
@@ -314,7 +362,7 @@ export default createTheme(
                 props: { variant: 'contained' },
                 style: {
                   borderRadius: '12px',
-                  backgroundColor: 'rgb(72, 128, 255)',
+                  backgroundColor: globalTheme.palette.primary.main,
                   padding: '7px 12px',
                   fontFamily: ['Nunito Sans'],
                   textTransform: 'none',

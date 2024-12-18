@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { FC, ReactElement, useMemo, useState } from 'react';
@@ -62,6 +63,7 @@ const Item: FC<PropsItem> = ({
 
   const handleClick = () => {
     if (selected) setOpen(!open);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onClick && onClick();
   };
 

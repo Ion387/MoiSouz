@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Image from 'next/image';
 
 import { Icon } from '@/components/ui';

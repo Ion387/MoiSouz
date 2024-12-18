@@ -1,8 +1,6 @@
 'use client';
 
-import { Box, Button, Dialog, Typography } from '@mui/material';
-import styles from './Documents.module.scss';
-import Link from 'next/link';
+import { Box, Typography } from '@mui/material';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 

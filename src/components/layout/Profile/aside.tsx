@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button, Divider, List } from '@mui/material';
+import { Divider, List } from '@mui/material';
 
 import { ListItem } from '@/components/ui';
 

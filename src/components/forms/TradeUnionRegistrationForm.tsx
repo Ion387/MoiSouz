@@ -1,14 +1,6 @@
 import React, { useEffect } from 'react';
 import s from './forms.module.scss';
-import {
-  Button,
-  Grid2,
-  IconButton,
-  InputLabel,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Grid2, InputLabel, Paper, TextField } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -67,12 +59,7 @@ const TradeUnionRegistrationForm = () => {
 
   const router = useRouter();
 
-  const {
-    mutate,
-    data: resData,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
       const session = await getSession();
 

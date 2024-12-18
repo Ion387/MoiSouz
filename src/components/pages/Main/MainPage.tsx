@@ -2,7 +2,6 @@
 
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import s from './main.module.scss';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 

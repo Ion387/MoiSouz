@@ -1,9 +1,9 @@
 export interface IProfile {
   ROLES: string[];
   avatar: string;
-  address: any;
+  address: unknown;
   birthdate: string;
-  children: any;
+  children: unknown;
   education: string;
   email: string;
   firstName: string;

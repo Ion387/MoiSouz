@@ -1,22 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import s from './forms.module.scss';
-import {
-  Button,
-  Grid2,
-  IconButton,
-  InputLabel,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Grid2, InputLabel, Paper, TextField } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { getBackendUrl } from '@/constants/url';
-import axios from 'axios';
-import { ITradeUnion } from '@/models/TradeUnion';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ITradeUnionMember } from '@/models/TradeUnionMember';
 
@@ -61,7 +48,7 @@ const TradeUnionMemberForm = () => {
     },
   });*/
 
-  const onSubmit: SubmitHandler<ITradeUnionMember> = async (data) => {
+  const onSubmit: SubmitHandler<ITradeUnionMember> = async () => {
     router.push('/main');
   };
 

@@ -88,7 +88,7 @@ export const Icon: FC<
 > = ({ name, color = 'primary', className, style, sx }) => {
   if (ICONS[name] == null) return null;
   return (
-    <Typography sx={sx} color={color}>
+    <Typography sx={sx} color={color} lineHeight={0}>
       {ICONS[name]({ className, style })}
     </Typography>
   );

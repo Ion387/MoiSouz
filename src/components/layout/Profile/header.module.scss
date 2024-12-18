@@ -1,3 +1,10 @@
+.wrapper {
+  width: 100%;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+}
+
 .content {
   display: flex;
   flex-direction: row;
@@ -6,11 +13,8 @@
   padding: 16px 0 6px;
   min-height: 78px;
   width: 100%;
-  background-color: #fff;
   z-index: 100;
   padding: 0 52px;
-  position: sticky;
-  top: 0;
 }
 
 .shadow {

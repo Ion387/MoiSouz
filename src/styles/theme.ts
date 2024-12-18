@@ -6,6 +6,7 @@ export const globalTheme = createTheme({
     primary: { main: 'rgb(72, 128, 255)' },
     secondary: { main: 'rgb(243, 244, 248)' },
     red: { main: 'rgb(249, 60, 101)' },
+    gray: { main: 'rgb(194, 195, 195)' },
   },
 });
 
@@ -342,7 +343,38 @@ export default createTheme(
       },
       MuiIconButton: {
         styleOverrides: {
-          root: {},
+          root: {
+            variants: [
+              {
+                props: { variant: 'contained' },
+                style: {
+                  backgroundColor: globalTheme.palette.primary.main,
+                  transition: 'opacity 0.1s ease-out',
+                  width: 36,
+                  height: 36,
+
+                  '&:hover': {
+                    backgroundColor: globalTheme.palette.primary.main,
+                    opacity: 0.8,
+                  },
+                },
+              },
+              {
+                props: { variant: 'contained-gray' },
+                style: {
+                  backgroundColor: globalTheme.palette.gray.main,
+                  transition: 'opacity 0.1s ease-out',
+                  width: 36,
+                  height: 36,
+
+                  '&:hover': {
+                    backgroundColor: globalTheme.palette.gray.main,
+                    opacity: 0.8,
+                  },
+                },
+              },
+            ],
+          },
         },
       },
       MuiAccordionActions: {

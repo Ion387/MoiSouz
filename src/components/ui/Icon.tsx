@@ -28,6 +28,9 @@ import IconEyeOn from '@/assets/icons/eye-on.svg';
 import IconEyeOff from '@/assets/icons/eye-off.svg';
 import IconBell from '@/assets/icons/bell.svg';
 import IconArrowDropdown from '@/assets/icons/arrow-dropdown.svg';
+import IconPlus from '@/assets/icons/plus.svg';
+import IconMinus from '@/assets/icons/minus.svg';
+import IconFileAdd from '@/assets/icons/file-add.svg';
 
 const NAMES = [
   'document',
@@ -51,6 +54,9 @@ const NAMES = [
   'eye-off',
   'bell',
   'arrow-dropdown',
+  'plus',
+  'minus',
+  'file-add',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -76,6 +82,9 @@ const ICONS: { [key: string]: any } = {
   'eye-off': IconEyeOff,
   bell: IconBell,
   'arrow-dropdown': IconArrowDropdown,
+  plus: IconPlus,
+  minus: IconMinus,
+  'file-add': IconFileAdd,
 };
 
 interface Props {

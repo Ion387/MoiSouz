@@ -13,12 +13,12 @@ export const ProfileLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <>
+    <Box className={styles.wrapper} sx={{ backgroundColor: 'secondary.main' }}>
       <ProfileHeader />
       <Container className={styles.content}>
         <ProfileAside />
-        <Box sx={{ flex: 1 }}>{children}</Box>
+        <Box sx={{ flex: 1, p: 2 }}>{children}</Box>
       </Container>
-    </>
+    </Box>
   );
 };

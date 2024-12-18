@@ -169,7 +169,6 @@ export default createTheme(
         styleOverrides: {
           root: {
             width: '100%',
-            marginBottom: '25px',
           },
         },
       },
@@ -375,6 +374,7 @@ export default createTheme(
                 style: {
                   borderRadius: '12px',
                   backgroundColor: '#fff',
+                  borderColor: '#000',
                   padding: '16px 25px',
                   fontFamily: ['Nunito Sans'],
                   textTransform: 'none',

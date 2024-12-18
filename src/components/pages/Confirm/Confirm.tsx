@@ -8,17 +8,13 @@ import { useMutation } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import useMobile from '@/hooks/UseMobile';
+import { getBackendUrl } from '@/constants/url';
 
 const Confirm = () => {
   const guid = usePathname().split('email/')[1];
-  const env = process.env.NODE_ENV;
   const { mutate, data } = useMutation({
     mutationFn: (guid: string) => {
-      return axios.post(
-        `${
-          env == 'development' ? process.env.NEXT_PUBLIC_BACKEND_URL : ''
-        }/api/confirm/email/${guid}`,
-      );
+      return axios.post(`${getBackendUrl}/api/confirm/email/${guid}`);
     },
   });
 

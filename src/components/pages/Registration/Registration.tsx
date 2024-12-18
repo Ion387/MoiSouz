@@ -23,10 +23,9 @@ import axios from 'axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useMobile from '@/hooks/UseMobile';
-
+import { getBackendUrl } from '@/constants/url';
 import { Icon } from '@/components/ui';
 import { type IReg } from '@/models/Reg';
-
 import s from './reg.module.scss';
 
 const schema = yup
@@ -74,8 +73,6 @@ const Registration = () => {
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
-  const env = process.env.NODE_ENV;
-
   const {
     mutate,
     data: resData,
@@ -83,12 +80,7 @@ const Registration = () => {
     isSuccess,
   } = useMutation({
     mutationFn: (data: IReg) => {
-      return axios.post(
-        `${
-          env == 'development' ? process.env.NEXT_PUBLIC_BACKEND_URL : ''
-        }/api/registration`,
-        data,
-      );
+      return axios.post(`${getBackendUrl}/api/registration`, data);
     },
   });
 
@@ -109,6 +101,7 @@ const Registration = () => {
           <Typography className={s.title}>Регистрация</Typography>
           <InputLabel>Адрес электронной почты:</InputLabel>
           <TextField
+            sx={{ marginBottom: '20px' }}
             {...register('email')}
             placeholder="example@mail.ru"
             error={!!errors.email?.message}
@@ -149,6 +142,7 @@ const Registration = () => {
           />
           <InputLabel>Повторите пароль</InputLabel>
           <TextField
+            sx={{ marginBottom: '20px' }}
             {...register('passwordRepeat')}
             type={showPassword.passwordRepeat ? 'text' : 'password'}
             error={!!errors.passwordRepeat?.message}
@@ -216,6 +210,12 @@ const Registration = () => {
             <Link href={'/signin'} className={s.link}>
               Войти
             </Link>
+          </Typography>
+          <Typography variant="body1" className={s.bottomText}>
+            Регистрируясь в сервисе, вы принимаете условия
+            <span> лицензионного договора,</span> соглашаетесь на
+            <span> обработку персональных данных</span> и получение
+            информационных сообщений от группы компаний Мой Союз.
           </Typography>
         </form>
       </Paper>

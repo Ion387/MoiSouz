@@ -63,7 +63,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (session?.user?.token) {
-      router.push('/');
+      router.push('/main');
     }
   }, [session, router]);
 
@@ -83,12 +83,14 @@ const Signin = () => {
             placeholder="example@mail.ru"
             error={!!errors.email?.message}
             helperText={errors.email?.message || ''}
+            sx={{ marginBottom: '25px' }}
           />
           <InputLabel>Пароль</InputLabel>
           <TextField
             {...register('password')}
             type={showPassword ? 'text' : 'password'}
             error={!!errors.password?.message || signInError}
+            sx={{ marginBottom: '25px' }}
             helperText={
               signInError ? 'Неверный пароль' : errors.password?.message || ''
             }

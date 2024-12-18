@@ -1,8 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import s from './hero.module.scss';
-import { HeartIcon } from '@/styles/icons';
 import Link from 'next/link';
+
+import { Icon } from '@/components/ui';
+
+import s from './hero.module.scss';
 
 const Hero = () => {
   return (
@@ -16,7 +18,7 @@ const Hero = () => {
       </Typography>
       <Link href="/signin">
         <Button variant="contained" className={s.btn}>
-          <HeartIcon />
+          <Icon name="heart" color="secondary" />
           Попробовать бесплатно
         </Button>
       </Link>

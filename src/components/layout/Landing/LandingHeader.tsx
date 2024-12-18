@@ -2,20 +2,17 @@
 
 import { Box, Button, IconButton, List, ListItem, Slide } from '@mui/material';
 import React, { useState } from 'react';
-import s from './layout.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import useMobile from '@/hooks/UseMobile';
-import {
-  BookIcon,
-  CrossIcon,
-  LogoutIcon,
-  NavIcon,
-  WomanIcon,
-} from '@/styles/icons';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
+
+import { Icon } from '@/components/ui';
+
+import useMobile from '@/hooks/UseMobile';
+
+import s from './layout.module.scss';
 
 const LandingHeader = () => {
   const mobile = useMobile();
@@ -51,13 +48,13 @@ const LandingHeader = () => {
         {mobile && !session?.user?.token && (
           <>
             <IconButton onClick={handleChange} className={s.navBtn}>
-              {!open ? <NavIcon /> : <CrossIcon />}
+              {!open ? <Icon name="menu" /> : <Icon name="cross" />}
             </IconButton>
           </>
         )}
         {session?.user?.token && (
           <IconButton onClick={() => signOut({ redirect: false })}>
-            <LogoutIcon />
+            <Icon name="logout" />
           </IconButton>
         )}
       </Box>
@@ -65,15 +62,15 @@ const LandingHeader = () => {
         <List className={s.navMob}>
           <ListItem>
             <Link href="/signin">
-              <Button variant="text">
-                <WomanIcon /> Вход
+              <Button variant="text" sx={{ gap: 1 }}>
+                <Icon name="avatar-women" color="black" /> Вход
               </Button>
             </Link>
           </ListItem>
           <ListItem>
             <Link href="/registration">
-              <Button variant="text">
-                <BookIcon /> Регистрация
+              <Button variant="text" sx={{ gap: 1 }}>
+                <Icon name="book" color="black" /> Регистрация
               </Button>
             </Link>
           </ListItem>

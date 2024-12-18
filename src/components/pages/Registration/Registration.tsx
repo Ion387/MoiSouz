@@ -17,15 +17,17 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import s from './reg.module.scss';
 import Link from 'next/link';
-import { type IReg } from '@/models/Reg';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { CrossIcon, RiEyeCloseLine, RiEyeLine } from '@/styles/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useMobile from '@/hooks/UseMobile';
+
+import { Icon } from '@/components/ui';
+import { type IReg } from '@/models/Reg';
+
+import s from './reg.module.scss';
 
 const schema = yup
   .object({
@@ -100,7 +102,7 @@ const Registration = () => {
       <Paper className={s.paper}>
         <Link href={'/'} className={s.cross}>
           <IconButton>
-            <CrossIcon />
+            <Icon name="cross" />
           </IconButton>
         </Link>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,9 +136,9 @@ const Registration = () => {
                       edge="end"
                     >
                       {!showPassword.password ? (
-                        <RiEyeLine />
+                        <Icon name="eye-on" color="gray" />
                       ) : (
-                        <RiEyeCloseLine />
+                        <Icon name="eye-off" color="gray" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -166,9 +168,9 @@ const Registration = () => {
                       edge="end"
                     >
                       {!showPassword.passwordRepeat ? (
-                        <RiEyeLine />
+                        <Icon name="eye-on" color="gray" />
                       ) : (
-                        <RiEyeCloseLine />
+                        <Icon name="eye-off" color="gray" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -228,7 +230,7 @@ const Registration = () => {
           className={s.crossDialog}
           sx={{ alignSelf: 'end' }}
         >
-          <CrossIcon />
+          <Icon name="cross" />
         </IconButton>
         {/*resData?.data.status === 'error' ? (
           <ErrorFormIcon />

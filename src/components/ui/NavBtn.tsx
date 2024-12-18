@@ -1,8 +1,10 @@
 'use client';
 
-import { ArrowUpIcon } from '@/styles/icons';
-import { Fab } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import { Fab } from '@mui/material';
+
+import { Icon } from '@/components/ui/Icon';
+
 import s from './scrollbtn.module.scss';
 
 const ScrollButton = () => {
@@ -36,7 +38,7 @@ const ScrollButton = () => {
       }}
       className={s.btn}
     >
-      <ArrowUpIcon />
+      <Icon name="arrow-up" color="white" />
     </Fab>
   );
 };

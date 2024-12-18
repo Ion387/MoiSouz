@@ -13,14 +13,16 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import s from './signin.module.scss';
-import { type ISignin } from '@/models/Signin';
 import { signIn, useSession } from 'next-auth/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CrossIcon, RiEyeCloseLine, RiEyeLine } from '@/styles/icons';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
+import { Icon } from '@/components/ui';
+import { type ISignin } from '@/models/Signin';
+
+import s from './signin.module.scss';
 
 const schema = yup
   .object({
@@ -70,7 +72,7 @@ const Signin = () => {
       <Paper className={s.paper}>
         <Link href={'/'} className={s.cross}>
           <IconButton>
-            <CrossIcon />
+            <Icon name="cross" />
           </IconButton>
         </Link>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -101,7 +103,11 @@ const Signin = () => {
                       }
                       edge="end"
                     >
-                      {!showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}
+                      {!showPassword ? (
+                        <Icon name="eye-on" color="gray" />
+                      ) : (
+                        <Icon name="eye-off" color="gray" />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),

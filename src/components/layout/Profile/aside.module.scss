@@ -1,0 +1,16 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+.banner {
+  width: 100%;
+  aspect-ratio: 1;
+  white-space: break-spaces;
+  align-items: end;
+  text-align: left;
+  justify-content: start;
+  font-size: 22px;
+  line-height: 20px;
+}

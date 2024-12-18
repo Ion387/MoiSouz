@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import axios from 'axios';
+import useMobile from '@/hooks/UseMobile';
 
 const Confirm = () => {
   const guid = usePathname().split('email/')[1];
@@ -21,6 +22,8 @@ const Confirm = () => {
     },
   });
 
+  const mobile = useMobile();
+
   useEffect(() => {
     mutate(guid);
   }, [guid, mutate]);
@@ -28,7 +31,7 @@ const Confirm = () => {
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
-        <Typography variant="h2">
+        <Typography variant="h3" textAlign={'center'}>
           {data?.data.status === 'error'
             ? data?.data.description
             : 'Поздравляем, Вы зарегистрированы в сервисе МойСоюз!'}
@@ -44,7 +47,7 @@ const Confirm = () => {
               width: '100%',
             }}
           >
-            Перейти на стартовую страницу
+            {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
           </Button>
         </Link>
         <Link href="/signin">
@@ -58,7 +61,7 @@ const Confirm = () => {
               width: '100%',
             }}
           >
-            Войти в личный кабинет
+            {mobile ? 'Войти' : 'Войти в личный кабинет'}
           </Button>
         </Link>
       </Paper>

@@ -24,6 +24,7 @@ const LandingFooter = () => {
             >
               info@moisouz.ru
             </Typography>
+            <Typography variant="body2">profsouz24.ru</Typography>
           </Box>
           <Box>
             <Image
@@ -34,6 +35,11 @@ const LandingFooter = () => {
             />
           </Box>
           <Box className={s.footerList}>
+            <Link href={`/`}>
+              <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
+                Лицензионное соглашение
+              </Typography>
+            </Link>
             <Link href={`/`}>
               <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
                 Сотрудничество

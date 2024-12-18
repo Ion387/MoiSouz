@@ -11,6 +11,9 @@ import {
   InputAdornment,
   CircularProgress,
   Dialog,
+  Checkbox,
+  FormControl,
+  FormHelperText,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -22,6 +25,7 @@ import axios from 'axios';
 import { CrossIcon, RiEyeCloseLine, RiEyeLine } from '@/styles/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import useMobile from '@/hooks/UseMobile';
 
 const schema = yup
   .object({
@@ -43,9 +47,7 @@ const schema = yup
       .string()
       .oneOf([yup.ref('password'), ''], 'Пароли должны совпадать')
       .required('Введите пароль'),
-    name: yup.string().required('Обязательное поле'),
-    surname: yup.string().required('Обязательное поле'),
-    patronymic: yup.string().nullable(),
+    personalData: yup.boolean().isTrue('Необходимо согласие').required(),
   })
   .required();
 
@@ -64,6 +66,8 @@ const Registration = () => {
     passwordRepeat: false,
   });
   const [open, setOpen] = useState<boolean>(false);
+
+  const mobile = useMobile();
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
@@ -108,33 +112,13 @@ const Registration = () => {
             error={!!errors.email?.message}
             helperText={errors.email?.message || ''}
           />
-          <InputLabel>Имя</InputLabel>
-          <TextField
-            {...register('name')}
-            placeholder="Иван"
-            error={!!errors.name?.message}
-            helperText={errors.name?.message || ''}
-          />
-          <InputLabel>Фамилия</InputLabel>
-          <TextField
-            {...register('surname')}
-            placeholder="Иванов"
-            error={!!errors.surname?.message}
-            helperText={errors.surname?.message || ''}
-          />
-          <InputLabel>Отчество</InputLabel>
-          <TextField
-            {...register('patronymic')}
-            placeholder="Иванович"
-            error={!!errors.patronymic?.message}
-            helperText={errors.patronymic?.message || ''}
-          />
           <InputLabel>Придумайте пароль</InputLabel>
           <TextField
             {...register('password')}
             type={showPassword.password ? 'text' : 'password'}
             error={!!errors.password?.message}
             helperText={errors.password?.message || ''}
+            sx={{ marginBottom: !!errors.password?.message ? 4.4 : 2 }}
             slotProps={{
               input: {
                 endAdornment: (
@@ -158,6 +142,7 @@ const Registration = () => {
                   </InputAdornment>
                 ),
               },
+              formHelperText: { style: { whiteSpace: 'wrap' } },
             }}
           />
           <InputLabel>Повторите пароль</InputLabel>
@@ -191,6 +176,20 @@ const Registration = () => {
               },
             }}
           />
+          <Box alignSelf={'start'}>
+            <FormControl error={!!errors.personalData?.message}>
+              <Box display={'flex'} alignItems={'center'}>
+                <Checkbox {...register('personalData')} />
+                <Typography component={'span'} variant="body1" fontWeight={600}>
+                  Я соглашаюсь на обработку персональных данных
+                </Typography>
+              </Box>
+              <FormHelperText>
+                {errors.personalData?.message || ''}
+              </FormHelperText>
+            </FormControl>
+          </Box>
+          {!!errors.personalData?.message}
           <Button
             type="submit"
             variant="contained"
@@ -199,7 +198,9 @@ const Registration = () => {
               margin: '0 auto',
               fontSize: '20px',
               lineHeight: '27px',
-              minWidth: '271px',
+              maxWidth: '270px',
+              width: '100%',
+              marginTop: '24px',
             }}
           >
             {isPending && !isSuccess ? (
@@ -239,14 +240,15 @@ const Registration = () => {
           <Button
             variant="contained"
             sx={{
-              padding: '15px 75px',
+              padding: '15px 15px',
               margin: '20px auto 0',
               fontSize: '20px',
               lineHeight: '27px',
-              minWidth: '271px',
+              minWidth: mobile ? '0px' : '271px',
+              width: '100%',
             }}
           >
-            Перейти на стартовую страницу
+            {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
           </Button>
         </Link>
       </Dialog>

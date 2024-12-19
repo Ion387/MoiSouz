@@ -74,7 +74,7 @@ export const InputArray: FC<PropsWithSX & Props> = ({
       {fields.length > 1 && (
         <>
           {labelExtra && (
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', mt: 3 }}>
               <InputLabel>{labelExtra}</InputLabel>
               <IconButton variant="contained-gray" onClick={() => remove(1)}>
                 <Icon name="minus" color="white" />
@@ -83,7 +83,14 @@ export const InputArray: FC<PropsWithSX & Props> = ({
           )}
           {fields.map(({ id }, index) =>
             index == 0 ? null : (
-              <Box key={id} sx={{ display: 'flex', gap: 2 }}>
+              <Box
+                key={id}
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  mt: !labelExtra || index > 1 ? 2 : 0,
+                }}
+              >
                 {render(
                   name,
                   index,

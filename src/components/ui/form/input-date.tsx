@@ -24,7 +24,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
             sx={{ minWidth: 230 }}
-            value={value}
+            defaultValue={value}
             onChange={onChange}
             slotProps={{
               textField: {
@@ -34,8 +34,6 @@ export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                 helperText: error?.message,
               },
             }}
-
-            //defaultValue={new Date()}
           />
         )}
       />

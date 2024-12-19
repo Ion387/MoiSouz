@@ -5,9 +5,9 @@ import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
+import { FormProvider } from 'react-hook-form';
 
 import 'dayjs/locale/ru';
-import { FormProvider, Resolver, useForm } from 'react-hook-form';
 
 interface Props {
   title: string;
@@ -18,7 +18,7 @@ interface Props {
   onSubmit: (data: any | undefined) => void;
 
   /** for FormProvider */
-  methods: any;
+  methods: object;
 }
 
 export const Form: FC<PropsWithChildren & Props> = ({
@@ -54,7 +54,12 @@ export const Form: FC<PropsWithChildren & Props> = ({
                 borderRadius: 6,
               }}
             >
-              <fieldset style={{ border: 'none' }} disabled={loading}>
+              <fieldset
+                style={{
+                  border: 'none',
+                }}
+                disabled={loading}
+              >
                 {children}
               </fieldset>
 

@@ -8,6 +8,7 @@ import {
 } from 'react-hook-form';
 
 import { Icon } from '@/components/ui/Icon';
+import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
@@ -24,7 +25,8 @@ interface Props {
   preadd?: boolean;
 }
 
-export const InputArray: FC<Props> = ({
+export const InputArray: FC<PropsWithSX & Props> = ({
+  sx,
   name,
   label,
   labelExtra,
@@ -45,7 +47,7 @@ export const InputArray: FC<Props> = ({
   }, [append]);
 
   return (
-    <Box>
+    <Box sx={sx}>
       <Box sx={{ display: 'flex' }}>
         {label && <InputLabel>{label}</InputLabel>}
         <IconButton variant="contained" onClick={() => append(defaultValue)}>

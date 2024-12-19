@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { FC, ReactElement, useMemo, useState } from 'react';
@@ -22,6 +23,7 @@ interface Props {
   openAlways?: boolean;
   children?: ReactElement | ReactElement[];
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 interface PropsChildren {
@@ -55,11 +57,13 @@ const Item: FC<PropsItem> = ({
   openAlways = false,
   children,
   onClick,
+  disabled,
 }) => {
   const [open, setOpen] = useState(openDefault);
 
   const handleClick = () => {
-    setOpen(!open);
+    if (selected) setOpen(!open);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onClick && onClick();
   };
 
@@ -69,6 +73,7 @@ const Item: FC<PropsItem> = ({
         sx={{ pl: indent ? 4.6 * indent : undefined }}
         selected={selected}
         onClick={handleClick}
+        disabled={disabled}
       >
         {icon && (
           <ListItemIcon sx={{ minWidth: 30 }}>

@@ -122,7 +122,6 @@ const DocumentsPage = () => {
   });
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
@@ -137,7 +136,6 @@ const DocumentsPage = () => {
       setTimeout(resolve, 2000);
     });
   };
-
   return (
     <Form
       title="Анктета профиля"
@@ -156,7 +154,7 @@ const DocumentsPage = () => {
             helperText={errors.user?.fname?.message || ''}
           />
 
-          <InputLabel>Фамилия</InputLabel>
+          <InputLabel sx={{ mt: 3 }}>Фамилия</InputLabel>
           <TextField
             {...register('user.lname')}
             placeholder="Иванов"
@@ -168,7 +166,7 @@ const DocumentsPage = () => {
         <InputImage sx={{ mt: 4 }} name="user.avatar" label="Добавить фото" />
       </Box>
 
-      <InputLabel>Отчество</InputLabel>
+      <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
       <TextField
         {...register('user.mname')}
         placeholder="Иванович"
@@ -176,7 +174,7 @@ const DocumentsPage = () => {
         helperText={errors.user?.mname?.message || ''}
       />
 
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate name="user.bdate" label="Дата рождения" />
 
         <InputGender name="user.gender" label="Пол" defaultValue="female" />
@@ -191,6 +189,7 @@ const DocumentsPage = () => {
       </Box>
 
       <InputArray
+        sx={{ mt: 3 }}
         name="profession"
         label="Основная профессия"
         labelExtra="Дополнительная профессия"
@@ -207,6 +206,7 @@ const DocumentsPage = () => {
       />
 
       <InputArray
+        sx={{ mt: 3 }}
         name="position"
         label="Должность"
         labelExtra="Дополнительная должность"
@@ -222,14 +222,20 @@ const DocumentsPage = () => {
         preadd
       />
 
-      <InputAddress name="address" label="Адрес проживания" errors={errors} />
+      <InputAddress
+        sx={{ mt: 3 }}
+        name="address"
+        label="Адрес проживания"
+        errors={errors}
+      />
 
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputPhone sx={{ flex: 1 }} name="phone" label="Номер телефона" />
         <InputPhone sx={{ flex: 1 }} name="phoneExtra" label="Доп. номер" />
       </Box>
 
       <InputArray
+        sx={{ mt: 3 }}
         name="child"
         label="Дети"
         render={(name, index, register, errors) => (
@@ -251,6 +257,7 @@ const DocumentsPage = () => {
       />
 
       <InputManyModal
+        sx={{ mt: 3 }}
         name="hobbies"
         label="Увлечения"
         placeholder="Выберите из списка"

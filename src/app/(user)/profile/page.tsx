@@ -1,5 +1,5 @@
 import ProfilePage from '@/components/pages/Profile/Profile';
 
-export default () => {
+export default function Profile() {
   return <ProfilePage />;
-};
+}

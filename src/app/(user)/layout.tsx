@@ -4,10 +4,10 @@ import { ProfileLayout } from '@/components/layout/Profile';
 
 export const metadata: Metadata = {};
 
-export default ({
+export default function UserLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>) {
   return <ProfileLayout>{children}</ProfileLayout>;
-};
+}

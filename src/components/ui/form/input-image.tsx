@@ -82,7 +82,6 @@ export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
               gap: 1,
               width: 150,
               flex: 1,
-              mb: 2.5,
               backgroundColor: 'rgb(241, 244, 249)',
               borderColor: error ? '#d32f2f' : 'rgba(0, 0, 0, 0.23)',
               color: 'rgb(166, 166, 166)',

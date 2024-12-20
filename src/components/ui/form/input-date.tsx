@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormGroup, InputLabel } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 import { PropsWithSX } from '@/models/Props';
 
@@ -24,8 +25,10 @@ export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
             sx={{ minWidth: 230 }}
-            defaultValue={value}
-            onChange={onChange}
+            defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
+            onChange={(value: Date) =>
+              onChange(dayjs(value).format('DD.MM.YYYY'))
+            }
             slotProps={{
               textField: {
                 fullWidth: true,

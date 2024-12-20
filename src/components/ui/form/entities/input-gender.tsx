@@ -25,12 +25,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({
   label,
   defaultValue,
 }) => {
-  const { control, getValues, setValue } = useFormContext();
-
-  useEffect(() => {
-    if (getValues(name) != null) return;
-    setValue(name, defaultValue);
-  }, [defaultValue]);
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -49,6 +44,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({
             row
             name={name}
             defaultValue={defaultValue}
+            value={value}
             onChange={onChange}
           >
             <FormControlLabel

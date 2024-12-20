@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { PropsWithSX } from '@/models/Props';
+import { IOption, IOptionValue } from '@/models/Option';
 
 interface CardProps {
   label: string;
@@ -40,7 +41,7 @@ interface Props {
   name: string;
   label?: string;
   placeholder?: string;
-  options?: { label: string; value: string }[];
+  options?: IOption[];
 }
 
 export const InputManyModal: FC<PropsWithSX & Props> = ({
@@ -55,14 +56,16 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<IOptionValue[]>([]);
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     const value = getValues(name);
     if (value)
       setSelected(
-        options.filter((el) => value.includes(el.value)).map((el) => el.value),
+        options
+          .filter((el: IOption) => value.includes(el.id))
+          .map((el: IOption) => el.id),
       );
     else setSelected([]);
     setOpen(true);
@@ -72,7 +75,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
     setOpen(false);
   };
 
-  const handleCard = (value: string) => {
+  const handleCard = (value: IOptionValue) => {
     if (selected.includes(value))
       setSelected(selected.filter((el) => el != value));
     else setSelected([...selected, value]);
@@ -119,8 +122,8 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
             {value && value.length > 0 ? (
               <>
                 {options
-                  .filter((el) => value.includes(el.value))
-                  .map((el) => el.label)
+                  .filter((el) => value.includes(el.id))
+                  .map((el) => el.title)
                   .join(', ')}
               </>
             ) : (
@@ -167,10 +170,10 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
               >
                 {options.map((el) => (
                   <Card
-                    key={el.value}
-                    label={el.label}
-                    selected={selected.includes(el.value)}
-                    onClick={() => handleCard(el.value)}
+                    key={el.id}
+                    label={el.title}
+                    selected={selected.includes(el.id)}
+                    onClick={() => handleCard(el.id)}
                   />
                 ))}
               </Box>

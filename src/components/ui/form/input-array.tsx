@@ -43,7 +43,9 @@ export const InputArray: FC<PropsWithSX & Props> = ({
   const errors: any = formState.errors;
 
   useEffect(() => {
-    if (preadd) append(defaultValue);
+    if (!preadd) return;
+    if (fields.length != 0) return;
+    append(defaultValue);
   }, [append]);
 
   return (

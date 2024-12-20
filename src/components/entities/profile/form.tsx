@@ -5,7 +5,7 @@ import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, UseFormReturn } from 'react-hook-form';
 
 import 'dayjs/locale/ru';
 
@@ -18,7 +18,8 @@ interface Props {
   onSubmit: (data: any | undefined) => void;
 
   /** for FormProvider */
-  methods: object;
+  methods: UseFormReturn<any, any, undefined>;
+  defaultValues?: any;
 }
 
 export const Form: FC<PropsWithChildren & Props> = ({

@@ -12,18 +12,8 @@ interface Props {
   defaultValue?: boolean;
 }
 
-export const InputCheckbox: FC<PropsWithSX & Props> = ({
-  sx,
-  name,
-  label,
-  defaultValue,
-}) => {
-  const { control, getValues, setValue } = useFormContext();
-
-  useEffect(() => {
-    if (getValues(name) != null) return;
-    setValue(name, defaultValue);
-  }, [defaultValue]);
+export const InputCheckbox: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+  const { control } = useFormContext();
 
   return (
     <Box sx={{ display: 'flex', ...(sx || {}) }}>
@@ -36,7 +26,8 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
               <Checkbox
                 sx={{ color: error ? '#d32f2f' : null }}
                 size="large"
-                value={value}
+                value={value == true}
+                checked={value == true}
                 onChange={onChange}
               />
             }

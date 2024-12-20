@@ -6,6 +6,7 @@ import { Box, Button, FormHelperText } from '@mui/material';
 
 import { Icon } from '@/components/ui/Icon';
 
+import { getBackendUrl } from '@/constants/url';
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
@@ -35,7 +36,7 @@ export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         break;
 
       case 'string':
-        setPreview(`${process.env.REACT_APP_SERVER_PATH}${value}`);
+        setPreview(`${getBackendUrl}${value}`);
         break;
 
       default:

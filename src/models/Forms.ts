@@ -1,13 +1,11 @@
 export interface IFormProfile {
-  user: {
-    fname: string;
-    lname: string;
-    mname?: string;
-    bdate: Date;
-    gender: string;
-    education: string;
-    avatar: any;
-  };
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  birthdate: string;
+  gender: string;
+  education: string;
+  avatar: object;
   profession: string[];
   position: string[];
   address: {
@@ -20,12 +18,12 @@ export interface IFormProfile {
     flat?: string;
   };
   phone: string;
-  phoneExtra?: string;
-  child?: {
+  phoneDop?: string | null;
+  children?: {
     name: string;
     gender: string;
-    bdate: Date;
+    birthdate: string;
   }[];
-  hobbies: string[];
-  approval: boolean;
+  hobbies: number[];
+  isActive: boolean;
 }

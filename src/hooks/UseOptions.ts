@@ -4,18 +4,21 @@ import { getBackendUrl } from '@/constants/url';
 import { getSession } from 'next-auth/react';
 import { IOptionsResponse } from '@/models/Option';
 
-const getOptions = async () => {
+const NAMES = ['hobbies'] as const;
+export type OptionName = (typeof NAMES)[number];
+
+const getOptions = async ({ name }: { name: OptionName }) => {
   const session = await getSession();
 
-  return axios.get<IOptionsResponse>(`${getBackendUrl}/api/hobbies`, {
+  return axios.get<IOptionsResponse>(`${getBackendUrl}/api/${name}`, {
     headers: { Authorization: `Bearer ${session?.user?.token}` },
   });
 };
 
-export const useOptions = ({ name }: { name: string }) => {
+export const useOptions = ({ name }: { name: OptionName }) => {
   const { data } = useQuery({
     queryKey: [`options/${name}`],
-    queryFn: () => getOptions(),
+    queryFn: () => getOptions({ name }),
     select: (data) => data.data,
   });
 

@@ -1,4 +1,4 @@
-<svg
+export const Icon = () => (<svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -26,4 +26,4 @@
         <rect width="24" height="24" fill="white" />
       </clipPath>
     </defs>
-  </svg>
+  </svg>)

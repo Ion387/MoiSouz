@@ -1,4 +1,4 @@
-<svg
+export const Icon = () => (<svg
     width="50px"
     height="50px"
     viewBox="0 0 50 50"
@@ -14,4 +14,4 @@
   >
     <title id="errorIconTitle">Error</title> <path d="M12 8L12 13" />
     <line x1="12" y1="16" x2="12" y2="16" /> <circle cx="12" cy="12" r="10" />
-  </svg>
+  </svg>)

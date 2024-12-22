@@ -48,7 +48,7 @@ const schema = yup
       .typeError('Укажите дату рождения'),
     gender: yup.string().required('Укажите пол'),
     education: yup.string().required('Укажите образование'),
-    avatar: yup.mixed().required('Укажите фото').required('Укажите фото'),
+    avatar: yup.mixed().required('Укажите фото'),
     profession: yup
       .array(
         yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),

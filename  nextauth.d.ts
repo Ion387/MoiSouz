@@ -3,6 +3,29 @@ import { DefaultUser } from 'next-auth';
 //common interface for JWT and Session
 interface IUser extends DefaultUser {
   token?: string;
+  data?: IProfile;
+  ROLES?: string[];
+  avatar?: string;
+  address?: unknown;
+  birthdate?: string;
+  children?: unknown;
+  education?: string;
+  email?: string;
+  firstName?: string;
+  gender?: string;
+  guid?: string;
+  hasTradeunionOwner?: boolean;
+  hasUserProfile?: boolean;
+  hobbies?: string[];
+  id?: number;
+  isActive?: boolean;
+  lastName?: string;
+  middleName?: string;
+  name?: string;
+  phone?: string;
+  phoneDop?: string;
+  position?: string[];
+  profession?: string[];
 }
 declare module 'next-auth' {
   interface User extends IUser {}

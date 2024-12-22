@@ -1,47 +1,18 @@
 'use client';
 
-import { CircularProgress } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import React from 'react';
+import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 
-import ProfileForm from '@/components/forms/ProfileForm';
-
-import { useRouter } from 'next/navigation';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
-
-import { IFormProfile } from '@/models/Forms';
-import { saveFormProfile, saveFormProfileAvatar } from '@/hooks/UseFormProfile';
-
-const DocumentsPage = () => {
-  const router = useRouter();
-
-  const { profileInfo } = useGetProfileInfo();
-
-  const onCancel = () => {
-    router.push('/main');
-  };
-
-  const onSubmit: (data: IFormProfile) => Promise<void> = async (data) => {
-    await saveFormProfileAvatar(data.avatar);
-    await saveFormProfile(data);
-  };
-
-  if (!profileInfo) {
-    return (
-      <CircularProgress
-        sx={{ display: 'flex', mx: 'auto' }}
-        color="primary"
-        size={40}
-      />
-    );
-  }
-
+const DocumentPage = () => {
   return (
-    <ProfileForm
-      onCancel={onCancel}
-      onSubmit={onSubmit}
-      loading={!profileInfo}
-      defaultValues={profileInfo}
-    />
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h3" marginBottom={2}>
+        Документы
+      </Typography>
+      <NewProfileDialog open={true} />
+    </Box>
   );
 };
 
-export default DocumentsPage;
+export default DocumentPage;

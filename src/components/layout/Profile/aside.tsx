@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Divider, List } from '@mui/material';
+import { List } from '@mui/material';
 
 import { ListItem } from '@/components/ui';
 
@@ -25,8 +25,6 @@ export const ProfileAside = () => {
         </ListItem>
         <ListItem label="Мои организации" icon="square-2x2" disabled />
         <ListItem label="Коллеги" icon="peoples" disabled />
-
-        <Divider sx={{ my: 1.5 }} />
 
         <ListItem label="Деньги" icon="money" disabled />
         <ListItem label="Скидки, льготы" icon="gift" disabled />

@@ -59,7 +59,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({
             />
             <FormControlLabel
               value="male"
-              control={<Radio />}
+              control={<Radio color={'error'} />}
               label={
                 <Typography color={value == 'male' ? 'red' : undefined}>
                   Женский

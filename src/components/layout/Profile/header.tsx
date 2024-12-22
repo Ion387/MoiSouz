@@ -1,19 +1,39 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Box, Container, IconButton } from '@mui/material';
 import clsx from 'clsx';
 
 import { ButtonNotify, UserNav } from '@/components/entities/profile';
-
+import { useQuery } from '@tanstack/react-query';
 import styles from './header.module.scss';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { Icon } from '@/components/ui';
 import { signOut } from 'next-auth/react';
+import axios from 'axios';
+import { getBackendUrl } from '@/constants/url';
+import { getHeaders } from '@/utils/axios';
 
 export const ProfileHeader = () => {
   const { profileInfo } = useGetProfileInfo();
+
+  const [profileData, setProfileData] = useState(profileInfo);
+
+  const { data: info } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () =>
+      axios.get(`${getBackendUrl}/api/private/profile`, {
+        headers: {
+          ...(await getHeaders()),
+        },
+      }),
+    select: (data) => data.data,
+  });
+
+  useEffect(() => {
+    if (info) setProfileData(info);
+  }, [info]);
 
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>
@@ -24,12 +44,14 @@ export const ProfileHeader = () => {
           <ButtonNotify count={0} />
           <UserNav
             role={
-              profileInfo?.ROLES && profileInfo?.ROLES.length
-                ? profileInfo?.ROLES[0]
+              profileData?.ROLES && profileData?.ROLES.length
+                ? profileData?.ROLES[0].includes('USER')
+                  ? 'Пользователь'
+                  : 'Администратор'
                 : undefined
             }
-            name={profileInfo?.name}
-            avatar={profileInfo?.avatar}
+            name={profileData?.name || ''}
+            avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
           <IconButton onClick={() => signOut()}>

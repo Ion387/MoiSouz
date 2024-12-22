@@ -10,8 +10,8 @@ export const Icon = () => (
       id="Sign Up"
       d="M8.82e-5 2L8.82e-5 0L5.95 0L5.95 2L8.82e-5 2Z"
       fill="currentColor"
-      fill-opacity="1.000000"
-      fill-rule="evenodd"
+      fillOpacity="1.000000"
+      fillRule="evenodd"
     />
   </svg>
 );

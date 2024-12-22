@@ -11,7 +11,7 @@ export interface ITradeUnion {
     city: string;
     street: string;
     house: string;
-    flat: string;
+    flat?: string | null;
   };
   registrationDate: string;
   okato: string;
@@ -30,4 +30,6 @@ export interface ITradeUnion {
   ks: string;
   email: string;
   phone: string;
+  isActive: boolean;
+  avatar?: object | null;
 }

@@ -98,6 +98,9 @@ export const Form: FC<PropsWithChildren & Props> = ({
                       fontSize: '20px',
                       lineHeight: '27px',
                     }}
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                   >
                     {loading ? (
                       <CircularProgress color="secondary" size="27px" />

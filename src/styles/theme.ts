@@ -6,6 +6,7 @@ export const globalTheme = createTheme({
     primary: { main: 'rgb(72, 128, 255)' },
     secondary: { main: 'rgb(243, 244, 248)' },
     red: { main: 'rgb(249, 60, 101)' },
+    error: { main: 'rgb(249, 60, 101)' },
     gray: { main: 'rgb(194, 195, 195)' },
   },
 });
@@ -137,6 +138,7 @@ export default createTheme(
       MuiPaper: {
         styleOverrides: {
           root: {
+            borderRadius: '24px',
             '@media(max-width: 480px)': {
               '&.MuiDialog-paper': {
                 margin: '0',

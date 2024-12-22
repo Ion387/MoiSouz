@@ -24,7 +24,6 @@ export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         control={control}
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
-            sx={{ minWidth: 230 }}
             defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
             onChange={(value: Date) =>
               onChange(dayjs(value).format('DD.MM.YYYY'))

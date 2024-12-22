@@ -4,10 +4,11 @@ import { getBackendUrl } from '@/constants/url';
 import { getSession } from 'next-auth/react';
 import { IOptionsResponse } from '@/models/Option';
 
-const NAMES = ['hobbies'] as const;
-export type OptionName = (typeof NAMES)[number];
+enum NAMES {
+  hobbies = 'hobbies',
+}
 
-const getOptions = async ({ name }: { name: OptionName }) => {
+const getOptions = async ({ name }: { name: NAMES }) => {
   const session = await getSession();
 
   return axios.get<IOptionsResponse>(`${getBackendUrl}/api/${name}`, {
@@ -15,10 +16,10 @@ const getOptions = async ({ name }: { name: OptionName }) => {
   });
 };
 
-export const useOptions = ({ name }: { name: OptionName }) => {
+export const useOptions = ({ name }: { name: string }) => {
   const { data } = useQuery({
     queryKey: [`options/${name}`],
-    queryFn: () => getOptions({ name }),
+    queryFn: () => getOptions({ name: name as NAMES }),
     select: (data) => data.data,
   });
 

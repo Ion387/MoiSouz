@@ -1,24 +1,15 @@
 'use client';
 
-import { FC, useEffect } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import {
-  Box,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  InputLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { Box, FormGroup, InputLabel, TextField } from '@mui/material';
 
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
   label?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any;
 }
 

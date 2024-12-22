@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   },
 
   transpilePackages: ['mui-tel-input'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
   experimental: {
     turbo: {

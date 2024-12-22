@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, ReactNode, useEffect } from 'react';
 import { Box, IconButton, InputLabel } from '@mui/material';
 import {

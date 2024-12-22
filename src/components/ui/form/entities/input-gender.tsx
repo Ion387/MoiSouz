@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
   FormControlLabel,
@@ -59,10 +59,10 @@ export const InputGender: FC<PropsWithSX & Props> = ({
             />
             <FormControlLabel
               value="male"
-              control={<Radio color="red" />}
+              control={<Radio />}
               label={
                 <Typography color={value == 'male' ? 'red' : undefined}>
-                  Жеснский
+                  Женский
                 </Typography>
               }
               labelPlacement="end"

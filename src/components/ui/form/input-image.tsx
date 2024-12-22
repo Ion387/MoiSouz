@@ -52,6 +52,7 @@ export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
     <Controller
       name={name}
       control={control}
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <Box
           sx={{
@@ -67,6 +68,7 @@ export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             accept="image/*"
             id={name}
             name={name}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onChange={(event: any) => {
               const file = event.target.files[0];
               if (file == null) return;

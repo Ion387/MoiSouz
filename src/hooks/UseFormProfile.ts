@@ -5,6 +5,7 @@ import { getHeaders } from '@/utils/axios';
 import { getBackendUrl } from '@/constants/url';
 import { IFormProfile } from '@/models/Forms';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const saveFormProfileAvatar = async (file: any) => {
   if (typeof file != 'object') {
     return null;

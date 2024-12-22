@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 

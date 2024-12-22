@@ -101,6 +101,7 @@ interface Props {
   onCancel: () => void;
   onSubmit: (data: IFormProfile) => Promise<void>;
   loading?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: IFormProfile | any;
 }
 

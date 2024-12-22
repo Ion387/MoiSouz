@@ -54,7 +54,7 @@ export const ProfileHeader = () => {
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
-          <IconButton onClick={() => signOut()}>
+          <IconButton onClick={() => signOut({ redirect: false })}>
             <Icon color="primary" name="logout" />
           </IconButton>
         </Box>

@@ -32,11 +32,7 @@ export const UserNav: FC<Props & PropsWithSX> = ({
           }}
         >
           <Image
-            src={
-              getBackendUrl && avatar
-                ? getBackendUrl + avatar
-                : '/images/avatar-default.png'
-            }
+            src={avatar ? getBackendUrl + avatar : '/images/avatar-default.png'}
             width={50}
             height={50}
             alt="user-avatar"

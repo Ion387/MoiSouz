@@ -54,9 +54,7 @@ export const ProfileHeader = () => {
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
-          <IconButton
-            onClick={() => signOut({ redirectTo: `https://profsouz24.ru/` })}
-          >
+          <IconButton onClick={() => signOut({ redirectTo: '/signin' })}>
             <Icon color="primary" name="logout" />
           </IconButton>
         </Box>

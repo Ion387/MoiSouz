@@ -54,7 +54,9 @@ export const ProfileHeader = () => {
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
-          <IconButton onClick={() => signOut({ redirect: false })}>
+          <IconButton
+            onClick={() => signOut({ redirectTo: `${getBackendUrl}` })}
+          >
             <Icon color="primary" name="logout" />
           </IconButton>
         </Box>

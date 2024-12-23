@@ -55,7 +55,7 @@ export const ProfileHeader = () => {
             sx={{ ml: 1 }}
           />
           <IconButton
-            onClick={() => signOut({ redirectTo: `${getBackendUrl}` })}
+            onClick={() => signOut({ redirectTo: `https://profsouz24.ru/` })}
           >
             <Icon color="primary" name="logout" />
           </IconButton>

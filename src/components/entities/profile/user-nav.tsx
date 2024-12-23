@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Icon } from '@/components/ui';
 
 import { PropsWithSX } from '@/models/Props';
-import { getBackendUrl } from '@/constants/url';
 import Link from 'next/link';
 
 interface Props {
@@ -32,7 +31,11 @@ export const UserNav: FC<Props & PropsWithSX> = ({
           }}
         >
           <Image
-            src={avatar ? getBackendUrl + avatar : '/images/avatar-default.png'}
+            src={
+              avatar
+                ? process.env.NEXT_PUBLIC_BACKEND_URL + avatar
+                : '/images/avatar-default.png'
+            }
             width={50}
             height={50}
             alt="user-avatar"

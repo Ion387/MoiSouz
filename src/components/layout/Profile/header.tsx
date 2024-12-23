@@ -56,8 +56,8 @@ export const ProfileHeader = () => {
             sx={{ ml: 1 }}
           />
           <IconButton
-            onClick={() => {
-              signOut({ redirect: false });
+            onClick={async () => {
+              await signOut({ redirect: false });
               router.push('/signin');
             }}
           >

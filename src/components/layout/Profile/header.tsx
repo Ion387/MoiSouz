@@ -54,11 +54,7 @@ export const ProfileHeader = () => {
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
-          <IconButton
-            onClick={() =>
-              signOut({ redirectTo: `${process.env.NEXT_PUBLIC_URL}/signin` })
-            }
-          >
+          <IconButton onClick={() => signOut({ redirect: false })}>
             <Icon color="primary" name="logout" />
           </IconButton>
         </Box>

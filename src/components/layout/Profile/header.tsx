@@ -14,10 +14,11 @@ import { signOut } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { getHeaders } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export const ProfileHeader = () => {
   const { profileInfo } = useGetProfileInfo();
-
+  const router = useRouter();
   const [profileData, setProfileData] = useState(profileInfo);
 
   const { data: info } = useQuery({
@@ -54,7 +55,12 @@ export const ProfileHeader = () => {
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />
-          <IconButton onClick={() => signOut({ redirect: false })}>
+          <IconButton
+            onClick={() => {
+              signOut({ redirect: false });
+              router.push('/signin');
+            }}
+          >
             <Icon color="primary" name="logout" />
           </IconButton>
         </Box>

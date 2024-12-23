@@ -9,7 +9,7 @@ export interface IFormProfile {
   profession: string[];
   position: string[];
   address: {
-    index: string;
+    postcode: string;
     region: string;
     municipal: string;
     locality: string;

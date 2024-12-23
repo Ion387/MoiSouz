@@ -60,7 +60,7 @@ const schema = yup
       )
       .required(),
     address: yup.object({
-      index: yup.string().required('Укажите индекс'),
+      postcode: yup.string().required('Укажите индекс'),
       region: yup.string().required('Укажите регион'),
       municipal: yup.string().required('Укажите муниципальное образование'),
       locality: yup.string().required('Укажите населенный пункт'),

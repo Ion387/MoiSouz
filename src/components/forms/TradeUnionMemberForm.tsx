@@ -24,7 +24,12 @@ const schema = yup
   })
   .required();
 
-const TradeUnionMemberForm = () => {
+const TradeUnionMemberForm = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setSteps,
+}: {
+  setSteps: (step: number) => void;
+}) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -59,6 +64,7 @@ const TradeUnionMemberForm = () => {
 
   /*useEffect(() => {
     if (isSuccess) {
+      setSteps(3)
       router.push('/main');
     }
   }, [isSuccess]);*/
@@ -79,7 +85,7 @@ const TradeUnionMemberForm = () => {
                 <InputLabel>Номер документа</InputLabel>
                 <TextField
                   {...register('document')}
-                  placeholder="Профсоюз"
+                  placeholder="00213"
                   error={!!errors.document?.message}
                   helperText={errors.document?.message || ''}
                 />
@@ -101,7 +107,7 @@ const TradeUnionMemberForm = () => {
                 <InputLabel>Фамилия</InputLabel>
                 <TextField
                   {...register('lastName')}
-                  placeholder="Иван"
+                  placeholder="Иванов"
                   error={!!errors.lastName?.message}
                   helperText={errors.lastName?.message || ''}
                 />
@@ -110,7 +116,7 @@ const TradeUnionMemberForm = () => {
                 <InputLabel>Отчество</InputLabel>
                 <TextField
                   {...register('middleName')}
-                  placeholder="Иван"
+                  placeholder="Иванович"
                   error={!!errors.middleName?.message}
                   helperText={errors.middleName?.message || ''}
                 />
@@ -119,7 +125,7 @@ const TradeUnionMemberForm = () => {
                 <InputLabel>Должность</InputLabel>
                 <TextField
                   {...register('position')}
-                  placeholder="Иван"
+                  placeholder="Бухгалтер"
                   error={!!errors.position?.message}
                   helperText={errors.position?.message || ''}
                 />
@@ -151,6 +157,7 @@ const TradeUnionMemberForm = () => {
                   variant="contained"
                   sx={{ width: '100%', padding: '16px 25px' }}
                   type="submit"
+                  onClick={() => setSteps && setSteps(3)}
                 >
                   Сохранить
                 </Button>

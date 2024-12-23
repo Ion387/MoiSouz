@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import Link from 'next/link';
 
 const NewProfileDialog = ({ open }: { open: boolean }) => {
-  const [openDialog, setOpenDialog] = useState(open);
   return (
-    <Dialog open={openDialog} onClose={() => {}}>
+    <Dialog open={open} onClose={() => {}}>
       <Box
         sx={{
           p: 5,
@@ -23,19 +22,19 @@ const NewProfileDialog = ({ open }: { open: boolean }) => {
             Вступить в профсоюз
           </Button>
         </Link>
-        <Link href="/trade_union_registration" style={{ marginBottom: '20px' }}>
+        <Link href="/trade_union_registration">
           <Button variant="contained" sx={{ px: 2.6, py: 1.6, width: '228px' }}>
             Создать профсоюз
           </Button>
         </Link>
 
-        <Button
+        {/*<Button
           variant="contained"
           sx={{ px: 2.6, py: 1.6, width: '228px' }}
           onClick={() => setOpenDialog(false)}
         >
           Я уже в профсоюзе
-        </Button>
+        </Button>*/}
       </Box>
     </Dialog>
   );

@@ -139,6 +139,7 @@ export default createTheme(
         styleOverrides: {
           root: {
             borderRadius: '24px',
+            padding: '24px',
             '@media(max-width: 480px)': {
               '&.MuiDialog-paper': {
                 margin: '0',

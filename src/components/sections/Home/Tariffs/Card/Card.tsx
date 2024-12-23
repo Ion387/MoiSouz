@@ -11,10 +11,12 @@ const CardItem: FC<ITarrif> = ({
   list,
   desc,
   main,
+  setSteps,
 }) => {
   return (
     <Box className={main ? s.mainItem : s.item}>
       <Box className={s.cardHeader}>
+        <Typography className={main ? s.mainPrice : s.price}>Тариф</Typography>
         <Typography className={main ? s.mainTitle : s.title}>
           {title}
         </Typography>
@@ -34,18 +36,34 @@ const CardItem: FC<ITarrif> = ({
       </Box>
       <Box className={s.cardFooter}>
         {desc && <Typography className={s.desc2}>{desc}</Typography>}
-        <Link href="/" className={s.btn}>
+        {!setSteps ? (
+          <Link href="/" className={s.btn}>
+            <Button
+              variant={main ? 'outlined' : 'contained'}
+              sx={{
+                color: main ? 'rgb(72, 128, 255)' : '#fff',
+                padding: '14px 17px',
+                width: '100%',
+                border: '0px',
+              }}
+            >
+              Оформить подписку
+            </Button>
+          </Link>
+        ) : (
           <Button
+            onClick={() => setSteps && setSteps(4)}
             variant={main ? 'outlined' : 'contained'}
             sx={{
               color: main ? 'rgb(72, 128, 255)' : '#fff',
               padding: '14px 17px',
               width: '100%',
+              border: '0px',
             }}
           >
             Оформить подписку
           </Button>
-        </Link>
+        )}
       </Box>
     </Box>
   );

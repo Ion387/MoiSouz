@@ -67,7 +67,11 @@ const schema = yup
   })
   .required();
 
-const TradeUnionRegistrationForm = () => {
+const TradeUnionRegistrationForm = ({
+  setSteps,
+}: {
+  setSteps: (step: number) => void;
+}) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -94,6 +98,7 @@ const TradeUnionRegistrationForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      setSteps(3);
       router.push('/main');
     }
   }, [isSuccess]);

@@ -1,8 +1,8 @@
 'use client';
 
 import ProfileForm from '@/components/forms/ProfileForm';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { saveFormProfile, saveFormProfileAvatar } from '@/hooks/UseFormProfile';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { IFormProfile } from '@/models/Forms';
 import { CircularProgress } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ const ProfilePage = ({ setSteps }: { setSteps?: (step: number) => void }) => {
 
   const queryClient = useQueryClient();
 
-  const { profileInfo } = useGetProfileInfo();
+  const info = useFetchProfile();
 
   const onCancel = () => {
     router.push('/main');
@@ -34,7 +34,7 @@ const ProfilePage = ({ setSteps }: { setSteps?: (step: number) => void }) => {
     if (setSteps) setSteps(2);
   };
 
-  if (!profileInfo) {
+  if (!info) {
     return (
       <CircularProgress
         sx={{ display: 'flex', mx: 'auto', mt: '50px' }}
@@ -48,8 +48,8 @@ const ProfilePage = ({ setSteps }: { setSteps?: (step: number) => void }) => {
     <ProfileForm
       onCancel={onCancel}
       onSubmit={onSubmit}
-      loading={!profileInfo}
-      defaultValues={profileInfo}
+      loading={!info}
+      defaultValues={info}
     />
   );
 };

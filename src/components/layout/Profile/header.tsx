@@ -6,31 +6,20 @@ import { Box, Container, IconButton } from '@mui/material';
 import clsx from 'clsx';
 
 import { ButtonNotify, UserNav } from '@/components/entities/profile';
-import { useQuery } from '@tanstack/react-query';
 import styles from './header.module.scss';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { Icon } from '@/components/ui';
 import { signOut } from 'next-auth/react';
-import axios from 'axios';
-import { getBackendUrl } from '@/constants/url';
-import { getHeaders } from '@/utils/axios';
+
 import { useRouter } from 'next/navigation';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 export const ProfileHeader = () => {
   const { profileInfo } = useGetProfileInfo();
   const router = useRouter();
   const [profileData, setProfileData] = useState(profileInfo);
 
-  const { data: info } = useQuery({
-    queryKey: ['profile'],
-    queryFn: async () =>
-      axios.get(`${getBackendUrl}/api/private/profile`, {
-        headers: {
-          ...(await getHeaders()),
-        },
-      }),
-    select: (data) => data.data,
-  });
+  const info = useFetchProfile();
 
   useEffect(() => {
     if (info) setProfileData(info);

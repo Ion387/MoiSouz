@@ -32,7 +32,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <TextField
-            {...register(`${name}.index`)}
+            {...register(`${name}.postcode`)}
             sx={{ flex: 1 }}
             placeholder="Индекс"
             error={errors && !!errors[name]?.index?.message}

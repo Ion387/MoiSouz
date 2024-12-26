@@ -25,7 +25,7 @@ const TradeUnionRegistrationPage = () => {
     <Grid2 container sx={{ p: 2 }} spacing={1.2}>
       {steps === 1 ? (
         <Grid2 size={8}>
-          <ProfilePage setSteps={setSteps} />
+          <ProfilePage />
         </Grid2>
       ) : steps === 2 ? (
         <Grid2 size={8}>

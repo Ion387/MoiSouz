@@ -11,9 +11,15 @@ import { PropsWithSX } from '@/models/Props';
 interface Props {
   name: string;
   label?: string;
+  dis?: boolean;
 }
 
-export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+export const InputDate: FC<PropsWithSX & Props> = ({
+  sx,
+  name,
+  label,
+  dis,
+}) => {
   const { control } = useFormContext();
 
   return (
@@ -24,6 +30,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         control={control}
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
+            disabled={!!dis}
             defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
             onChange={(value: Date) =>
               onChange(dayjs(value).format('DD.MM.YYYY'))

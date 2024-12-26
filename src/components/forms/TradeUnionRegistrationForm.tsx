@@ -4,15 +4,20 @@ import s from './forms.module.scss';
 import {
   Autocomplete,
   Button,
+  FormControl,
+  FormControlLabel,
   Grid2,
   InputLabel,
   Paper,
+  Radio,
+  RadioGroup,
+  Select,
   TextField,
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { useRouter } from 'next/navigation';
 import { InputImage } from '../ui/form/input-image';
@@ -22,6 +27,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { registration, saveAvatar } from '@/hooks/UseFormTUReg';
 import { getAddress } from '@/services/getAddress';
+import { getInn } from '@/services/getInn';
+import { getApplications } from '@/services/getApplications';
 
 const schema = yup
   .object({
@@ -78,11 +85,7 @@ const schema = yup
   })
   .required();
 
-const TradeUnionRegistrationForm = ({
-  setSteps,
-}: {
-  setSteps?: (step: number) => void;
-}) => {
+const TradeUnionRegistrationForm = () => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -98,8 +101,12 @@ const TradeUnionRegistrationForm = ({
   const router = useRouter();
 
   const [addressString, setAddressString] = useState<string>('');
+  const [innString, setInnString] = useState<string>('');
   const [addressOptions, setAddressOptions] = useState<any[]>([]);
+  const [innOptions, setInnOptions] = useState<any[]>([]);
+  const [valueInn, setValueInn] = useState<any | null>(null);
   const [value, setValue] = useState<any | null>(null);
+  const [inn, setInn] = useState<boolean>(false);
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
@@ -117,6 +124,25 @@ const TradeUnionRegistrationForm = ({
     },
   });
 
+  const { mutate: mutateInn } = useMutation({
+    mutationFn: async (inn: string) => {
+      return await getInn(inn);
+    },
+    onSuccess: (data) => {
+      setInnOptions(data.data);
+    },
+  });
+
+  const { data: tradeUnions } = useQuery({
+    queryKey: ['tradeUnions'],
+    queryFn: getApplications,
+    select: (data) => data.data,
+  });
+
+  useEffect(() => {
+    console.log('tradeUnions', tradeUnions);
+  }, [tradeUnions]);
+
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
     mutate(data);
   };
@@ -125,10 +151,13 @@ const TradeUnionRegistrationForm = ({
     setAddressString(e.target.value);
   };
 
+  const handleChangeInn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInnString(e.target.value);
+  };
+
   useEffect(() => {
-    if (isSuccess && setSteps) {
-      setSteps(3);
-      router.push('/main');
+    if (isSuccess) {
+      router.push('/tariffs');
     }
   }, [isSuccess]);
 
@@ -143,8 +172,14 @@ const TradeUnionRegistrationForm = ({
   }, [addressString, mutateAddress]);
 
   useEffect(() => {
-    console.log('addressOptions', addressOptions);
-  }, [addressOptions]);
+    if (innString) {
+      const timer = setTimeout(() => {
+        mutateInn(innString);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [innString, mutateInn]);
 
   useEffect(() => {
     if (value) {
@@ -155,6 +190,26 @@ const TradeUnionRegistrationForm = ({
       setFormValue('address.street', value?.street);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (valueInn) {
+      setFormValue('inn', valueInn?.inn);
+      setFormValue('kpp', valueInn?.kpp);
+      setFormValue('ogrn', valueInn?.ogrn);
+      setFormValue('okato', valueInn?.okato);
+      setFormValue('oktmo', valueInn?.oktmo);
+      setFormValue('title', valueInn?.name?.full);
+      setFormValue('address.area', valueInn?.address?.area);
+      setFormValue('address.city', valueInn?.address?.settlement);
+      setFormValue('address.region', valueInn?.address?.region);
+      setFormValue('address.postcode', valueInn?.address?.postalCode);
+      setFormValue('address.street', valueInn?.address?.street);
+    }
+  }, [valueInn]);
+
+  useEffect(() => {
+    console.log('inn', inn);
+  }, [inn]);
 
   return (
     <Paper className={s.paper}>
@@ -168,16 +223,23 @@ const TradeUnionRegistrationForm = ({
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
+              <Grid2 size={12}>
+                <FormControl>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group"
+                    value={inn}
+                    onClick={() => setInn((prev) => !prev)}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Организация без ИНН"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid2>
               <Grid2 size={9} container>
-                <Grid2 size={12}>
-                  <InputLabel>ИНН</InputLabel>
-                  <TextField
-                    {...register('inn')}
-                    placeholder="11211231313131"
-                    error={!!errors.inn?.message}
-                    helperText={errors.inn?.message || ''}
-                  />
-                </Grid2>
                 <Grid2 size={12}>
                   <InputLabel>Наименование</InputLabel>
                   <TextField
@@ -187,35 +249,70 @@ const TradeUnionRegistrationForm = ({
                     helperText={errors.title?.message || ''}
                   />
                 </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel>Дата образования</InputLabel>
+                  <InputDate name="creationDate" />
+                </Grid2>
               </Grid2>
               <Grid2 size={3}>
                 <InputImage
                   sx={{ width: '100%', height: 'calc(100% - 40px)', mt: 4 }}
                   name="avatar"
-                  label="Добавить фото"
+                  label="Добавить логотип"
                 />
               </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>Дата образования</InputLabel>
-                <InputDate name="creationDate" />
-              </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>ОГРН</InputLabel>
-                <TextField
-                  {...register('ogrn')}
-                  placeholder="11211231313131"
-                  error={!!errors.ogrn?.message}
-                  helperText={errors.ogrn?.message || ''}
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ИНН
+                </InputLabel>
+                <Autocomplete
+                  options={innOptions}
+                  getOptionLabel={(option) => option.inn}
+                  value={valueInn}
+                  disabled={inn}
+                  onChange={(event: any, newValue: any) => {
+                    setValueInn(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      {...register('inn')}
+                      placeholder="11211231313131"
+                      onChange={handleChangeInn}
+                      error={!!errors.inn?.message}
+                      helperText={errors.inn?.message || ''}
+                    />
+                  )}
                 />
               </Grid2>
-
-              <Grid2 size={12}>
-                <InputLabel>КПП</InputLabel>
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  КПП
+                </InputLabel>
                 <TextField
                   {...register('kpp')}
                   placeholder="11211231313131"
                   error={!!errors.kpp?.message}
                   helperText={errors.kpp?.message || ''}
+                  disabled={inn}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ОГРН
+                </InputLabel>
+                <TextField
+                  {...register('ogrn')}
+                  placeholder="11211231313131"
+                  error={!!errors.ogrn?.message}
+                  helperText={errors.ogrn?.message || ''}
+                  disabled={inn}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -231,6 +328,7 @@ const TradeUnionRegistrationForm = ({
                   }}
                   renderInput={(params) => (
                     <TextField
+                      placeholder="Начните вводить адрес"
                       {...params}
                       value={addressString}
                       onChange={handleChange}
@@ -289,22 +387,36 @@ const TradeUnionRegistrationForm = ({
               </Grid2>
 
               <Grid2 size={4}>
-                <InputLabel>Дата пост. на учет</InputLabel>
-                <InputDate name="registrationDate" />
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  Дата пост. на учет
+                </InputLabel>
+                <InputDate dis={inn} name="registrationDate" />
               </Grid2>
               <Grid2 size={4}>
-                <InputLabel>ОКАТО</InputLabel>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ОКАТО
+                </InputLabel>
                 <TextField
                   {...register('okato')}
                   placeholder="11211231313131"
+                  disabled={inn}
                   error={!!errors.okato?.message}
                   helperText={errors.okato?.message || ''}
                 />
               </Grid2>
               <Grid2 size={4}>
-                <InputLabel>ОКТМО</InputLabel>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ОКТМО
+                </InputLabel>
                 <TextField
                   {...register('oktmo')}
+                  disabled={inn}
                   placeholder="11211231313131"
                   error={!!errors.oktmo?.message}
                   helperText={errors.oktmo?.message || ''}
@@ -364,7 +476,12 @@ const TradeUnionRegistrationForm = ({
                 />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel sx={{ marginBottom: 0 }}>
+                <InputLabel
+                  sx={{
+                    marginBottom: 0,
+                    color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000',
+                  }}
+                >
                   Банковские реквизиты
                 </InputLabel>
               </Grid2>
@@ -372,6 +489,7 @@ const TradeUnionRegistrationForm = ({
                 <TextField
                   {...register('bank.bank')}
                   placeholder="Банк"
+                  disabled={inn}
                   error={!!errors.bank?.bank?.message}
                   helperText={errors.bank?.bank?.message || ''}
                 />
@@ -380,6 +498,7 @@ const TradeUnionRegistrationForm = ({
                 <TextField
                   {...register('bank.rs')}
                   placeholder="Р/с"
+                  disabled={inn}
                   error={!!errors.bank?.rs?.message}
                   helperText={errors.bank?.rs?.message || ''}
                 />
@@ -388,6 +507,7 @@ const TradeUnionRegistrationForm = ({
                 <TextField
                   {...register('bank.bik')}
                   placeholder="БИК"
+                  disabled={inn}
                   error={!!errors.bank?.bik?.message}
                   helperText={errors.bank?.bik?.message || ''}
                 />
@@ -396,6 +516,7 @@ const TradeUnionRegistrationForm = ({
                 <TextField
                   {...register('bank.ks')}
                   placeholder="к/с"
+                  disabled={inn}
                   error={!!errors.bank?.ks?.message}
                   helperText={errors.bank?.ks?.message || ''}
                 />
@@ -417,6 +538,10 @@ const TradeUnionRegistrationForm = ({
                   error={!!errors.email?.message}
                   helperText={errors.email?.message || ''}
                 />
+              </Grid2>
+              <Grid2 size={12}>
+                <InputLabel>Вышестоящая организация</InputLabel>
+                <Select fullWidth sx={{ padding: 1.6 }}></Select>
               </Grid2>
               <Grid2 size={12}>
                 <InputCheckbox

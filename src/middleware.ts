@@ -9,6 +9,7 @@ export async function middleware(req: NextRequest) {
     '/documents',
     '/trade_union_member',
     '/trade_union_registration',
+    '/tariffs',
   ];
 
   const isPathProtected = protectedPaths?.some((path) => pathname == path);

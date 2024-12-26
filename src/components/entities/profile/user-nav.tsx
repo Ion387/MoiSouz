@@ -34,7 +34,7 @@ export const UserNav: FC<Props & PropsWithSX> = ({
             src={
               avatar
                 ? process.env.NEXT_PUBLIC_BACKEND_URL + avatar
-                : '/images/avatar-default.png'
+                : '/images/avatar.svg'
             }
             width={50}
             height={50}

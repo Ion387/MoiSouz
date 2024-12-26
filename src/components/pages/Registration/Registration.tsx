@@ -34,7 +34,7 @@ const Registration = () => {
   const [tabs, setTabs] = useState<number>(0);
   const schema = yup
     .object({
-      inn: !!tabs ? yup.string().required('Обязательное поле') : yup.string(),
+      isTradeunion: yup.boolean(),
       email: yup
         .string()
         .required('Обязательное поле')
@@ -94,12 +94,7 @@ const Registration = () => {
   });
 
   const onSubmit: SubmitHandler<IReg> = async (data) => {
-    if (tabs) mutate(data);
-    else {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const withoutInnData = (({ inn, ...data }) => data)(data);
-      mutate(withoutInnData);
-    }
+    mutate({ ...data, isTradeunion: !!tabs });
     handleOpen();
   };
 
@@ -118,18 +113,6 @@ const Registration = () => {
             <Tab value={0} label={'Частное лицо'} />
             <Tab value={1} label={'Юридическое лицо'} />
           </Tabs>
-          {!!tabs && (
-            <>
-              <InputLabel>ИНН</InputLabel>
-              <TextField
-                sx={{ marginBottom: '20px' }}
-                {...register('inn')}
-                placeholder="ИНН"
-                error={!!errors.inn?.message}
-                helperText={errors.inn?.message || ''}
-              />
-            </>
-          )}
           <InputLabel>Адрес электронной почты:</InputLabel>
           <TextField
             sx={{ marginBottom: '20px' }}

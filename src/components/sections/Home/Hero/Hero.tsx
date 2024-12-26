@@ -16,7 +16,7 @@ const Hero = () => {
         комплексное решение для <span>автоматизации</span> деятельности
         <span> профсоюзов</span>
       </Typography>
-      <Link href="/signin">
+      <Link href="/registration">
         <Button variant="contained" className={s.btn}>
           <Icon name="heart" color="secondary" />
           Попробовать бесплатно

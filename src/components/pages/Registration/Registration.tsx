@@ -14,6 +14,8 @@ import {
   Checkbox,
   FormControl,
   FormHelperText,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -28,31 +30,35 @@ import { Icon } from '@/components/ui';
 import { type IReg } from '@/models/Reg';
 import s from './reg.module.scss';
 
-const schema = yup
-  .object({
-    email: yup
-      .string()
-      .required('Обязательное поле')
-      .matches(
-        /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
-        'Некорректный адрес электронной почты',
-      ),
-    password: yup
-      .string()
-      .required('Введите пароль')
-      .matches(/[A-Z]/, 'Пароль должен содержать хотя бы одну заглавную букву')
-      .matches(/[a-z]/, 'Пароль должен содержать хотя бы одну строчную букву')
-      .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру')
-      .min(8, 'Пароль должен содержать как минимум 8 символов'),
-    passwordRepeat: yup
-      .string()
-      .oneOf([yup.ref('password'), ''], 'Пароли должны совпадать')
-      .required('Введите пароль'),
-    personalData: yup.boolean().isTrue('Необходимо согласие').required(),
-  })
-  .required();
-
 const Registration = () => {
+  const [tabs, setTabs] = useState<number>(0);
+  const schema = yup
+    .object({
+      inn: !!tabs ? yup.string().required('Обязательное поле') : yup.string(),
+      email: yup
+        .string()
+        .required('Обязательное поле')
+        .matches(
+          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+          'Некорректный адрес электронной почты',
+        ),
+      password: yup
+        .string()
+        .required('Введите пароль')
+        .matches(
+          /[A-Z]/,
+          'Пароль должен содержать хотя бы одну заглавную букву',
+        )
+        .matches(/[a-z]/, 'Пароль должен содержать хотя бы одну строчную букву')
+        .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру')
+        .min(8, 'Пароль должен содержать как минимум 8 символов'),
+      passwordRepeat: yup
+        .string()
+        .oneOf([yup.ref('password'), ''], 'Пароли должны совпадать')
+        .required('Введите пароль'),
+      personalData: yup.boolean().isTrue('Необходимо согласие').required(),
+    })
+    .required();
   const {
     register,
     handleSubmit,
@@ -70,6 +76,9 @@ const Registration = () => {
 
   const mobile = useMobile();
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabs(newValue);
+  };
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
@@ -85,7 +94,12 @@ const Registration = () => {
   });
 
   const onSubmit: SubmitHandler<IReg> = async (data) => {
-    mutate(data);
+    if (tabs) mutate(data);
+    else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const withoutInnData = (({ inn, ...data }) => data)(data);
+      mutate(withoutInnData);
+    }
     handleOpen();
   };
 
@@ -97,8 +111,25 @@ const Registration = () => {
             <Icon name="cross" />
           </IconButton>
         </Link>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <Typography className={s.title}>Регистрация</Typography>
+          <Tabs value={tabs} onChange={handleChange} sx={{ mb: 1.2 }}>
+            <Tab value={0} label={'Частное лицо'} />
+            <Tab value={1} label={'Юридическое лицо'} />
+          </Tabs>
+          {!!tabs && (
+            <>
+              <InputLabel>ИНН</InputLabel>
+              <TextField
+                sx={{ marginBottom: '20px' }}
+                {...register('inn')}
+                placeholder="ИНН"
+                error={!!errors.inn?.message}
+                helperText={errors.inn?.message || ''}
+              />
+            </>
+          )}
           <InputLabel>Адрес электронной почты:</InputLabel>
           <TextField
             sx={{ marginBottom: '20px' }}

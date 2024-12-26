@@ -37,7 +37,7 @@ const Circle = () => {
           <br />
           момент времени
         </Typography>
-        <Link href="/signin">
+        <Link href="/registration">
           <Button className={s.circleBtn} variant="outlined">
             Начать пользоваться
           </Button>

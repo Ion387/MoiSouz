@@ -51,7 +51,7 @@ const Tariffs = ({
           <Typography>- Реклама от партнеров</Typography>
         </List>
         {!setSteps ? (
-          <Link href={'/signin'}>
+          <Link href={'/registration'}>
             <Button variant="contained" sx={{ padding: '12px 17px' }}>
               Подключить
             </Button>

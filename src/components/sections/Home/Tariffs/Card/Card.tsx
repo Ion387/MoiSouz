@@ -37,7 +37,7 @@ const CardItem: FC<ITarrif> = ({
       <Box className={s.cardFooter}>
         {desc && <Typography className={s.desc2}>{desc}</Typography>}
         {!setSteps ? (
-          <Link href="/" className={s.btn}>
+          <Link href="/registration" className={s.btn}>
             <Button
               variant={main ? 'outlined' : 'contained'}
               sx={{

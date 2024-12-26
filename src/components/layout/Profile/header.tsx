@@ -35,9 +35,9 @@ export const ProfileHeader = () => {
           <UserNav
             role={
               profileData?.ROLES && profileData?.ROLES.length
-                ? profileData?.ROLES[0].includes('USER')
-                  ? 'Пользователь'
-                  : 'Администратор'
+                ? profileData?.ROLES.includes('ROLE_TRADEUNION')
+                  ? 'Владелец профсоюза'
+                  : 'Пользователь'
                 : undefined
             }
             name={profileData?.name || ''}

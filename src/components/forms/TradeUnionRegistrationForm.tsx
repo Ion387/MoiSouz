@@ -1,6 +1,14 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
-import { Button, Grid2, InputLabel, Paper, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Grid2,
+  InputLabel,
+  Paper,
+  TextField,
+} from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -13,6 +21,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { registration, saveAvatar } from '@/hooks/UseFormTUReg';
+import { getAddress } from '@/services/getAddress';
 
 const schema = yup
   .object({
@@ -49,10 +58,12 @@ const schema = yup
         'Некорректный адрес электронной почты',
       ),
     chairmanPhone: yup.string().required('Обязательное поле'),
-    bank: yup.string().required('Обязательное поле'),
-    rs: yup.string().required('Обязательное поле'),
-    bik: yup.string().required('Обязательное поле'),
-    ks: yup.string().required('Обязательное поле'),
+    bank: yup.object({
+      bank: yup.string().required('Обязательное поле'),
+      rs: yup.string().required('Обязательное поле'),
+      bik: yup.string().required('Обязательное поле'),
+      ks: yup.string().required('Обязательное поле'),
+    }),
     chairman: yup.object({
       firstName: yup.string().required('Обязательное поле'),
       lastName: yup.string().required('Обязательное поле'),
@@ -70,7 +81,7 @@ const schema = yup
 const TradeUnionRegistrationForm = ({
   setSteps,
 }: {
-  setSteps: (step: number) => void;
+  setSteps?: (step: number) => void;
 }) => {
   const methods = useForm({
     mode: 'onChange',
@@ -81,9 +92,14 @@ const TradeUnionRegistrationForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    setValue: setFormValue,
   } = methods;
 
   const router = useRouter();
+
+  const [addressString, setAddressString] = useState<string>('');
+  const [addressOptions, setAddressOptions] = useState<any[]>([]);
+  const [value, setValue] = useState<any | null>(null);
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
@@ -92,16 +108,53 @@ const TradeUnionRegistrationForm = ({
     },
   });
 
+  const { mutate: mutateAddress } = useMutation({
+    mutationFn: async (address: string) => {
+      return await getAddress(address);
+    },
+    onSuccess: (data) => {
+      setAddressOptions(data.data);
+    },
+  });
+
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
     mutate(data);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressString(e.target.value);
+  };
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && setSteps) {
       setSteps(3);
       router.push('/main');
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (addressString) {
+      const timer = setTimeout(() => {
+        mutateAddress(addressString);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [addressString, mutateAddress]);
+
+  useEffect(() => {
+    console.log('addressOptions', addressOptions);
+  }, [addressOptions]);
+
+  useEffect(() => {
+    if (value) {
+      setFormValue('address.area', value?.area);
+      setFormValue('address.city', value?.settlement);
+      setFormValue('address.region', value?.region);
+      setFormValue('address.postcode', value?.postalCode);
+      setFormValue('address.street', value?.street);
+    }
+  }, [value]);
 
   return (
     <Paper className={s.paper}>
@@ -117,25 +170,21 @@ const TradeUnionRegistrationForm = ({
             <Grid2 container spacing={2}>
               <Grid2 size={9} container>
                 <Grid2 size={12}>
+                  <InputLabel>ИНН</InputLabel>
+                  <TextField
+                    {...register('inn')}
+                    placeholder="11211231313131"
+                    error={!!errors.inn?.message}
+                    helperText={errors.inn?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
                   <InputLabel>Наименование</InputLabel>
                   <TextField
                     {...register('title')}
                     placeholder="Профсоюз"
                     error={!!errors.title?.message}
                     helperText={errors.title?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={6}>
-                  <InputLabel>Дата образования</InputLabel>
-                  <InputDate name="creationDate" />
-                </Grid2>
-                <Grid2 size={6}>
-                  <InputLabel>ОГРН</InputLabel>
-                  <TextField
-                    {...register('ogrn')}
-                    placeholder="11211231313131"
-                    error={!!errors.ogrn?.message}
-                    helperText={errors.ogrn?.message || ''}
                   />
                 </Grid2>
               </Grid2>
@@ -147,15 +196,20 @@ const TradeUnionRegistrationForm = ({
                 />
               </Grid2>
               <Grid2 size={6}>
-                <InputLabel>ИНН</InputLabel>
-                <TextField
-                  {...register('inn')}
-                  placeholder="11211231313131"
-                  error={!!errors.inn?.message}
-                  helperText={errors.inn?.message || ''}
-                />
+                <InputLabel>Дата образования</InputLabel>
+                <InputDate name="creationDate" />
               </Grid2>
               <Grid2 size={6}>
+                <InputLabel>ОГРН</InputLabel>
+                <TextField
+                  {...register('ogrn')}
+                  placeholder="11211231313131"
+                  error={!!errors.ogrn?.message}
+                  helperText={errors.ogrn?.message || ''}
+                />
+              </Grid2>
+
+              <Grid2 size={12}>
                 <InputLabel>КПП</InputLabel>
                 <TextField
                   {...register('kpp')}
@@ -166,6 +220,23 @@ const TradeUnionRegistrationForm = ({
               </Grid2>
               <Grid2 size={12}>
                 <InputLabel sx={{ marginBottom: 0 }}>Адрес</InputLabel>
+              </Grid2>
+              <Grid2 size={12}>
+                <Autocomplete
+                  options={addressOptions}
+                  getOptionLabel={(option) => option.value}
+                  value={value}
+                  onChange={(event: any, newValue: any) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      value={addressString}
+                      onChange={handleChange}
+                    />
+                  )}
+                />
               </Grid2>
               <Grid2 size={4}>
                 <TextField
@@ -299,34 +370,34 @@ const TradeUnionRegistrationForm = ({
               </Grid2>
               <Grid2 size={6}>
                 <TextField
-                  {...register('bank')}
+                  {...register('bank.bank')}
                   placeholder="Банк"
-                  error={!!errors.bank?.message}
-                  helperText={errors.bank?.message || ''}
+                  error={!!errors.bank?.bank?.message}
+                  helperText={errors.bank?.bank?.message || ''}
                 />
               </Grid2>
               <Grid2 size={6}>
                 <TextField
-                  {...register('rs')}
+                  {...register('bank.rs')}
                   placeholder="Р/с"
-                  error={!!errors.rs?.message}
-                  helperText={errors.rs?.message || ''}
+                  error={!!errors.bank?.rs?.message}
+                  helperText={errors.bank?.rs?.message || ''}
                 />
               </Grid2>
               <Grid2 size={6}>
                 <TextField
-                  {...register('bik')}
+                  {...register('bank.bik')}
                   placeholder="БИК"
-                  error={!!errors.bik?.message}
-                  helperText={errors.bik?.message || ''}
+                  error={!!errors.bank?.bik?.message}
+                  helperText={errors.bank?.bik?.message || ''}
                 />
               </Grid2>
               <Grid2 size={6}>
                 <TextField
-                  {...register('ks')}
+                  {...register('bank.ks')}
                   placeholder="к/с"
-                  error={!!errors.ks?.message}
-                  helperText={errors.ks?.message || ''}
+                  error={!!errors.bank?.ks?.message}
+                  helperText={errors.bank?.ks?.message || ''}
                 />
               </Grid2>
               <Grid2 size={6}>

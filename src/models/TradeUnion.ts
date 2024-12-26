@@ -24,10 +24,12 @@ export interface ITradeUnion {
   };
   chairmanEmail: string;
   chairmanPhone: string;
-  bank: string;
-  rs: string;
-  bik: string;
-  ks: string;
+  bank: {
+    bank: string;
+    rs: string;
+    bik: string;
+    ks: string;
+  };
   email: string;
   phone: string;
   isActive: boolean;

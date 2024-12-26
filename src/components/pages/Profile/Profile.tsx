@@ -1,38 +1,15 @@
 'use client';
 
 import ProfileForm from '@/components/forms/ProfileForm';
+import TradeUnionRegistrationForm from '@/components/forms/TradeUnionRegistrationForm';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { saveFormProfile, saveFormProfileAvatar } from '@/hooks/UseFormProfile';
-import { IFormProfile } from '@/models/Forms';
-import { CircularProgress } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useForm } from '@/hooks/UseFormProfile';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
-const ProfilePage = ({ setSteps }: { setSteps?: (step: number) => void }) => {
-  const router = useRouter();
-
-  const queryClient = useQueryClient();
-
+const ProfilePage = () => {
   const info = useFetchProfile();
 
-  const onCancel = () => {
-    router.push('/main');
-  };
-
-  const { mutate } = useMutation({
-    mutationFn: async (data: IFormProfile) => {
-      saveFormProfileAvatar(data.avatar);
-      saveFormProfile(data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-    },
-  });
-
-  const onSubmit: (data: IFormProfile) => Promise<void> = async (data) => {
-    mutate(data);
-    if (setSteps) setSteps(2);
-  };
+  const { onCancel, onSubmit } = useForm();
 
   if (!info) {
     return (
@@ -44,13 +21,20 @@ const ProfilePage = ({ setSteps }: { setSteps?: (step: number) => void }) => {
     );
   }
 
-  return (
+  return !info?.ROLES?.includes('ROLE_TRADEUNION') ? (
     <ProfileForm
       onCancel={onCancel}
       onSubmit={onSubmit}
       loading={!info}
       defaultValues={info}
     />
+  ) : (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h3" marginBottom={2}>
+        Анкета профсоюза
+      </Typography>
+      <TradeUnionRegistrationForm />
+    </Box>
   );
 };
 

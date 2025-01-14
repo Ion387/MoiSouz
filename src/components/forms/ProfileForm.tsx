@@ -126,7 +126,7 @@ const ProfileForm: FC<Props> = ({
 
   return (
     <Form
-      title="Анктета профиля"
+      title="Анкета профиля"
       loading={loading || isSubmitting}
       onCancel={onCancel}
       onSubmit={handleSubmit(onSubmit)}

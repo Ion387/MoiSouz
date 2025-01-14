@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const globalTheme = createTheme({
   palette: {
+    mode: 'light',
     primary: { main: 'rgb(72, 128, 255)' },
     secondary: { main: 'rgb(243, 244, 248)' },
     red: { main: 'rgb(249, 60, 101)' },

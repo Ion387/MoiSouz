@@ -32,6 +32,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
           <DatePicker
             disabled={!!dis}
             defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
+            value={value ? dayjs(value, 'DD.MM.YYYY') : dayjs(null)}
             onChange={(value: Date) =>
               onChange(dayjs(value).format('DD.MM.YYYY'))
             }

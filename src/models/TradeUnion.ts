@@ -4,6 +4,7 @@ export interface ITradeUnion {
   ogrn: string;
   inn: string;
   kpp: string;
+  id?: number;
   address?: {
     postcode: string;
     region: string;
@@ -34,4 +35,5 @@ export interface ITradeUnion {
   phone: string;
   isActive: boolean;
   avatar?: object | null;
+  percents?: number;
 }

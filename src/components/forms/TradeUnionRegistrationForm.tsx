@@ -4,14 +4,16 @@ import s from './forms.module.scss';
 import {
   Autocomplete,
   Button,
+  Checkbox,
   FormControl,
   FormControlLabel,
   Grid2,
   InputLabel,
+  MenuItem,
   Paper,
-  Radio,
   RadioGroup,
   Select,
+  SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import * as yup from 'yup';
@@ -29,6 +31,7 @@ import { registration, saveAvatar } from '@/hooks/UseFormTUReg';
 import { getAddress } from '@/services/getAddress';
 import { getInn } from '@/services/getInn';
 import { getApplications } from '@/services/getApplications';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 const schema = yup
   .object({
@@ -77,6 +80,11 @@ const schema = yup
       middleName: yup.string().required('Обязательное поле'),
       inn: yup.string().required('Обязательное поле'),
     }),
+    percents: yup
+      .number()
+      .min(0, 'Взнос должен быть больше 0')
+      .max(100, 'Взнос должен быть не больше 100')
+      .required('Обязательное поле'),
     isActive: yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
@@ -94,6 +102,7 @@ const TradeUnionRegistrationForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     setValue: setFormValue,
   } = methods;
@@ -107,6 +116,7 @@ const TradeUnionRegistrationForm = () => {
   const [valueInn, setValueInn] = useState<any | null>(null);
   const [value, setValue] = useState<any | null>(null);
   const [inn, setInn] = useState<boolean>(false);
+  const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
@@ -136,11 +146,16 @@ const TradeUnionRegistrationForm = () => {
   const { data: tradeUnions } = useQuery({
     queryKey: ['tradeUnions'],
     queryFn: getApplications,
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 
+  const info = useFetchProfile();
+
   useEffect(() => {
-    console.log('tradeUnions', tradeUnions);
+    const union = tradeUnions
+      ? tradeUnions.find((el: ITradeUnion) => el.email === info?.email)
+      : null;
+    if (union) reset(union);
   }, [tradeUnions]);
 
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
@@ -153,6 +168,13 @@ const TradeUnionRegistrationForm = () => {
 
   const handleChangeInn = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInnString(e.target.value);
+  };
+
+  const handleOrgChange = (e: SelectChangeEvent) => {
+    const union = tradeUnions.find(
+      (el: ITradeUnion) => el.inn === e.target.value,
+    );
+    setChoosenUnion(union);
   };
 
   useEffect(() => {
@@ -188,6 +210,7 @@ const TradeUnionRegistrationForm = () => {
       setFormValue('address.region', value?.region);
       setFormValue('address.postcode', value?.postalCode);
       setFormValue('address.street', value?.street);
+      setFormValue('address.house', value?.house);
     }
   }, [value]);
 
@@ -200,16 +223,29 @@ const TradeUnionRegistrationForm = () => {
       setFormValue('oktmo', valueInn?.oktmo);
       setFormValue('title', valueInn?.name?.full);
       setFormValue('address.area', valueInn?.address?.area);
-      setFormValue('address.city', valueInn?.address?.settlement);
+      setFormValue('address.city', valueInn?.address?.city);
       setFormValue('address.region', valueInn?.address?.region);
       setFormValue('address.postcode', valueInn?.address?.postalCode);
       setFormValue('address.street', valueInn?.address?.street);
+      setFormValue('address.house', valueInn?.address?.house);
     }
   }, [valueInn]);
 
   useEffect(() => {
-    console.log('inn', inn);
-  }, [inn]);
+    if (chosenUnion) {
+      setFormValue('inn', chosenUnion?.inn);
+      setValueInn(chosenUnion);
+      setFormValue('kpp', chosenUnion?.kpp);
+      setFormValue('ogrn', chosenUnion?.ogrn);
+      setFormValue('registrationDate', chosenUnion?.registrationDate);
+      setFormValue('okato', chosenUnion?.okato);
+      setFormValue('oktmo', chosenUnion?.oktmo);
+      setFormValue('bank.bank', chosenUnion?.bank?.bank);
+      setFormValue('bank.rs', chosenUnion?.bank?.rs);
+      setFormValue('bank.bik', chosenUnion?.bank?.bik);
+      setFormValue('bank.ks', chosenUnion?.bank?.ks);
+    }
+  }, [chosenUnion]);
 
   return (
     <Paper className={s.paper}>
@@ -233,12 +269,30 @@ const TradeUnionRegistrationForm = () => {
                   >
                     <FormControlLabel
                       value={true}
-                      control={<Radio />}
+                      control={<Checkbox />}
                       label="Организация без ИНН"
                     />
                   </RadioGroup>
                 </FormControl>
               </Grid2>
+              {inn && (
+                <Grid2 size={12}>
+                  <InputLabel>Вышестоящая организация</InputLabel>
+                  <Select
+                    fullWidth
+                    sx={{ padding: 1.6 }}
+                    onChange={handleOrgChange}
+                    value={chosenUnion?.inn || ''}
+                  >
+                    {tradeUnions &&
+                      tradeUnions.map((el: ITradeUnion) => (
+                        <MenuItem key={el.inn} value={el.inn}>
+                          {el.inn + ' - ' + el.title}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </Grid2>
+              )}
               <Grid2 size={9} container>
                 <Grid2 size={12}>
                   <InputLabel>Наименование</InputLabel>
@@ -269,7 +323,11 @@ const TradeUnionRegistrationForm = () => {
                 </InputLabel>
                 <Autocomplete
                   options={innOptions}
-                  getOptionLabel={(option) => option.inn}
+                  getOptionLabel={(option) =>
+                    option.value
+                      ? option.inn + ' - ' + option.value
+                      : option.inn + ' - ' + option.title
+                  }
                   value={valueInn}
                   disabled={inn}
                   onChange={(event: any, newValue: any) => {
@@ -283,6 +341,7 @@ const TradeUnionRegistrationForm = () => {
                       onChange={handleChangeInn}
                       error={!!errors.inn?.message}
                       helperText={errors.inn?.message || ''}
+                      fullWidth
                     />
                   )}
                 />
@@ -392,7 +451,16 @@ const TradeUnionRegistrationForm = () => {
                 >
                   Дата пост. на учет
                 </InputLabel>
-                <InputDate dis={inn} name="registrationDate" />
+                {!inn ? (
+                  <InputDate name="registrationDate" />
+                ) : (
+                  <TextField
+                    {...register('registrationDate')}
+                    disabled
+                    error={!!errors.registrationDate?.message}
+                    helperText={errors.registrationDate?.message || ''}
+                  />
+                )}
               </Grid2>
               <Grid2 size={4}>
                 <InputLabel
@@ -540,8 +608,14 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel>Вышестоящая организация</InputLabel>
-                <Select fullWidth sx={{ padding: 1.6 }}></Select>
+                <InputLabel>
+                  Минимальный размер взносов в профсоюз (%)
+                </InputLabel>
+                <TextField
+                  {...register('percents')}
+                  error={!!errors.percents?.message}
+                  helperText={errors.percents?.message || ''}
+                />
               </Grid2>
               <Grid2 size={12}>
                 <InputCheckbox

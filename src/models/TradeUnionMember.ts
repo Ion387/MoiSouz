@@ -1,10 +1,14 @@
 export interface ITradeUnionMember {
-  title: string;
-  creationDate: string;
-  document: string;
-  lastName: string;
-  firstName: string;
-  middleName?: string | null;
-  date: string;
-  position: string;
+  documentDate?: string;
+  documentNumber?: string;
+  data: {
+    lastName: string;
+    firstName: string;
+    middleName?: string | null;
+    inviteDate: string;
+    position: string;
+    isActive?: boolean;
+    percents?: number;
+  };
+  tradeunion: number;
 }

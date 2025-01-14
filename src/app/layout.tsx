@@ -20,7 +20,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <meta name="color-scheme" content="only"></meta>
       <body className={nunitoSans.className}>
         <Providers>{children}</Providers>
       </body>

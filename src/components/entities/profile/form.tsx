@@ -2,13 +2,21 @@
 'use client';
 
 import { FC, PropsWithChildren } from 'react';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid2,
+  Typography,
+} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 
 import 'dayjs/locale/ru';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   title: string;
@@ -33,6 +41,8 @@ export const Form: FC<PropsWithChildren & Props> = ({
   onSubmit,
   methods,
 }) => {
+  const path = usePathname();
+
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
@@ -44,7 +54,18 @@ export const Form: FC<PropsWithChildren & Props> = ({
       <Box sx={{ pt: 3 }}>
         <FormProvider {...methods}>
           <form onSubmit={onSubmit}>
-            <Typography variant="h3">{title}</Typography>
+            <Grid2 container>
+              <Grid2 size={9}>
+                <Typography variant="h3">{title}</Typography>
+              </Grid2>
+              {!path.includes('trade_union_member') && (
+                <Grid2 size={3} container justifyContent={'flex-end'}>
+                  <Link href={'/trade_union_member'}>
+                    <Button variant="contained">Вступить в профсоюз</Button>
+                  </Link>
+                </Grid2>
+              )}
+            </Grid2>
 
             <Box
               sx={{

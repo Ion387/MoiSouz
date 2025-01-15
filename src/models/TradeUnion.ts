@@ -36,4 +36,5 @@ export interface ITradeUnion {
   isActive: boolean;
   avatar?: object | null;
   percents?: number;
+  tradeunionOwner?: { guid: string };
 }

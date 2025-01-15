@@ -135,20 +135,20 @@ const ProfileForm: FC<Props> = ({
     >
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>Имя</InputLabel>
-          <TextField
-            {...register('firstName')}
-            placeholder="Иван"
-            error={!!errors.firstName?.message}
-            helperText={errors.firstName?.message || ''}
-          />
-
-          <InputLabel sx={{ mt: 3 }}>Фамилия</InputLabel>
+          <InputLabel>Фамилия</InputLabel>
           <TextField
             {...register('lastName')}
             placeholder="Иванов"
             error={!!errors.lastName?.message}
             helperText={errors.lastName?.message || ''}
+          />
+
+          <InputLabel sx={{ mt: 3 }}>Имя</InputLabel>
+          <TextField
+            {...register('firstName')}
+            placeholder="Иван"
+            error={!!errors.firstName?.message}
+            helperText={errors.firstName?.message || ''}
           />
         </Box>
 
@@ -166,10 +166,10 @@ const ProfileForm: FC<Props> = ({
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate name="birthdate" label="Дата рождения" />
 
-        <InputGender name="gender" label="Пол" defaultValue="female" />
+        <InputGender name="gender" label="Пол" />
 
         <InputAutocomplete
-          sx={{ width: '100%' }}
+          sx={{ width: '80%' }}
           name="education"
           label="Образование"
           placeholder="Высшее"
@@ -180,7 +180,7 @@ const ProfileForm: FC<Props> = ({
       <InputArray
         sx={{ mt: 3 }}
         name="profession"
-        label="Основная профессия"
+        label="Специальность по образованию"
         labelExtra="Дополнительная профессия"
         render={(name, index, register, errors) => (
           <TextField
@@ -256,7 +256,8 @@ const ProfileForm: FC<Props> = ({
       <InputCheckbox
         sx={{ justifyContent: 'center' }}
         name="isActive"
-        label={`Я соглашаюсь на обработку персональных данных \r\nСогласие с политикой обработки персональных данных`}
+        link={'/Политика_в_отношении_обработки_персональных_данных.pdf'}
+        label={`Я соглашаюсь с политикой обработки персональных данных `}
       />
     </Form>
   );

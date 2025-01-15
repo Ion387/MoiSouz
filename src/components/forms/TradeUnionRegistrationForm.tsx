@@ -42,11 +42,20 @@ const schema = yup
         /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
         'Некорректный адрес электронной почты',
       ),
-    phone: yup.string().required('Обязательное поле'),
+    phone: yup
+      .string()
+      .required('Обязательное поле')
+      .matches(
+        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+        'Некорректный номер телефона',
+      ),
     title: yup.string().required('Обязательное поле'),
     creationDate: yup.string().required('Обязательное поле'),
     ogrn: yup.string().required('Обязательное поле'),
-    inn: yup.string().required('Обязательное поле'),
+    inn: yup
+      .string()
+      .required('Обязательное поле')
+      .max(12, 'Число символов не должно превышать 12'),
     kpp: yup.string().required('Обязательное поле'),
     registrationDate: yup.string().required('Обязательное поле'),
     okato: yup.string().required('Обязательное поле'),
@@ -67,7 +76,13 @@ const schema = yup
         /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
         'Некорректный адрес электронной почты',
       ),
-    chairmanPhone: yup.string().required('Обязательное поле'),
+    chairmanPhone: yup
+      .string()
+      .required('Обязательное поле')
+      .matches(
+        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+        'Некорректный номер телефона',
+      ),
     bank: yup.object({
       bank: yup.string().required('Обязательное поле'),
       rs: yup.string().required('Обязательное поле'),
@@ -78,10 +93,14 @@ const schema = yup
       firstName: yup.string().required('Обязательное поле'),
       lastName: yup.string().required('Обязательное поле'),
       middleName: yup.string().required('Обязательное поле'),
-      inn: yup.string().required('Обязательное поле'),
+      inn: yup
+        .string()
+        .required('Обязательное поле')
+        .max(12, 'Число символов не должно превышать 12'),
     }),
     percents: yup
       .number()
+      .transform((value) => (Number.isNaN(value) ? 0 : value))
       .min(0, 'Взнос должен быть больше 0')
       .max(100, 'Взнос должен быть не больше 100')
       .required('Обязательное поле'),
@@ -89,7 +108,7 @@ const schema = yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
       .required('Необходимо принять согласие'),
-    avatar: yup.mixed(),
+    avatar: yup.mixed().nullable(),
   })
   .required();
 
@@ -105,6 +124,7 @@ const TradeUnionRegistrationForm = () => {
     reset,
     formState: { errors },
     setValue: setFormValue,
+    setError,
   } = methods;
 
   const router = useRouter();
@@ -153,7 +173,9 @@ const TradeUnionRegistrationForm = () => {
 
   useEffect(() => {
     const union = tradeUnions
-      ? tradeUnions.find((el: ITradeUnion) => el.email === info?.email)
+      ? tradeUnions.find(
+          (el: ITradeUnion) => el.tradeunionOwner?.guid === info?.guid,
+        )
       : null;
     if (union) reset(union);
   }, [tradeUnions]);
@@ -167,6 +189,9 @@ const TradeUnionRegistrationForm = () => {
   };
 
   const handleChangeInn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 12)
+      setError('inn', { message: 'Число символов не должно превышать 12' });
+    else setError('inn', {});
     setInnString(e.target.value);
   };
 
@@ -337,7 +362,7 @@ const TradeUnionRegistrationForm = () => {
                     <TextField
                       {...params}
                       {...register('inn')}
-                      placeholder="11211231313131"
+                      placeholder="211231313131"
                       onChange={handleChangeInn}
                       error={!!errors.inn?.message}
                       helperText={errors.inn?.message || ''}
@@ -621,7 +646,10 @@ const TradeUnionRegistrationForm = () => {
                 <InputCheckbox
                   sx={{ justifyContent: 'center' }}
                   name="isActive"
-                  label={`Я соглашаюсь на обработку персональных данных \r\nСогласие с политикой обработки персональных данных`}
+                  link={
+                    '/Политика_в_отношении_обработки_персональных_данных.pdf'
+                  }
+                  label={`Я соглашаюсь с политикой обработки персональных данных `}
                 />
               </Grid2>
               <Grid2 size={6}>

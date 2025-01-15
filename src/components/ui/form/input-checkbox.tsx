@@ -10,9 +10,15 @@ interface Props {
   name: string;
   label?: ReactNode;
   defaultValue?: boolean;
+  link?: string;
 }
 
-export const InputCheckbox: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+export const InputCheckbox: FC<PropsWithSX & Props> = ({
+  sx,
+  name,
+  label,
+  link,
+}) => {
   const { control } = useFormContext();
 
   return (
@@ -33,7 +39,15 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             }
             label={
               <Typography whiteSpace="break-spaces" fontSize={14}>
-                {label}
+                <a
+                  href={link}
+                  download={
+                    'Политика_в_отношении_обработки_персональных_данных.pdf'
+                  }
+                  target="_blank"
+                >
+                  {label}
+                </a>
               </Typography>
             }
           />

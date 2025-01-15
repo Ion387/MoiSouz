@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormGroup, InputLabel } from '@mui/material';
 import { MuiTelInput } from 'mui-tel-input';
-
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
@@ -33,15 +32,15 @@ export const InputPhone: FC<PropsWithSX & Props> = ({
               error
                 ? {
                     '&>.MuiFormHelperText-root': {
-                      color: '#d32f2f',
+                      color: '#FF4949',
                     },
                     '&>.Mui-focused': {
                       '&>fieldset': {
-                        borderColor: '#d32f2f !important',
+                        borderColor: '#FF4949 !important',
                       },
                     },
                     fieldset: {
-                      borderColor: '#d32f2f',
+                      borderColor: '#FF4949',
                     },
                   }
                 : {}

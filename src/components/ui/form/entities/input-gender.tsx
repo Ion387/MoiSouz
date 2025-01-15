@@ -19,12 +19,7 @@ interface Props {
   defaultValue?: 'female' | 'male';
 }
 
-export const InputGender: FC<PropsWithSX & Props> = ({
-  sx,
-  name,
-  label,
-  defaultValue,
-}) => {
+export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
   const { control } = useFormContext();
 
   return (
@@ -43,7 +38,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({
             sx={{ gap: 2, mx: 'auto', mt: 1 }}
             row
             name={name}
-            defaultValue={defaultValue}
+            defaultValue={undefined}
             value={value}
             onChange={onChange}
           >

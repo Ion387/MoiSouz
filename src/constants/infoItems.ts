@@ -3,7 +3,7 @@ export const items = [
     cover: '/images/deadline--work-deadline.svg',
     title:
       'Ускоряет процессы внутри организации и минимизирует бумажный документооборот',
-    text: 'Ускоряет работу и повышает гибкость и оперативность действий.',
+    text: 'Ускоряет работу и повышает гибкость и оперативность действий',
   },
   {
     cover: '/images/Time-Out-For-Work--Streamline-Lagos.svg',

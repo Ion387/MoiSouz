@@ -2,6 +2,9 @@ import { ruRU } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 
 export const globalTheme = createTheme({
+  colorSchemes: {
+    dark: false,
+  },
   palette: {
     mode: 'light',
     primary: { main: 'rgb(72, 128, 255)' },

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Box, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,6 +24,7 @@ import {
 import { IFormProfile } from '@/models/Forms';
 import { IOption } from '@/models/Option';
 import { useOptions } from '@/hooks/UseOptions';
+import { useRouter } from 'next/navigation';
 
 const OPTIONS_EDUCATION: IOption[] = [
   { title: 'Среднее общее', id: 'Среднее общее' },
@@ -119,10 +120,17 @@ const ProfileForm: FC<Props> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = methods;
 
   const { data: hobbies } = useOptions({ name: 'hobbies' });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      router.push('/documents');
+    }
+  }, [isSubmitSuccessful]);
 
   return (
     <Form

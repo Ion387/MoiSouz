@@ -14,6 +14,7 @@ export interface IExpandedSession extends Session {
   gender: string;
   guid: string;
   hasTradeunionOwner: boolean;
+  hasTradeunionMember: boolean;
   hasUserProfile: boolean;
   hobbies: string[];
   id: number;

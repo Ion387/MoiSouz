@@ -74,7 +74,6 @@ const TradeUnionMemberForm = ({
     reset,
     formState: { errors },
     setValue: setFormValue,
-    getValues,
   } = methods;
 
   const { mutate, isSuccess } = useMutation({
@@ -275,9 +274,6 @@ const TradeUnionMemberForm = ({
                   variant="contained"
                   sx={{ width: '100%', padding: '16px 25px' }}
                   type="submit"
-                  onClick={() => {
-                    console.log(getValues());
-                  }}
                 >
                   Сохранить
                 </Button>

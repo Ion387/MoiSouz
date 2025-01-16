@@ -7,7 +7,7 @@ const NewProfileDialog = ({ open }: { open: boolean }) => {
     <Dialog open={open} onClose={() => {}}>
       <Box
         sx={{
-          p: 5,
+          p: 2.4,
           maxWidth: '387px',
           display: 'flex',
           flexDirection: 'column',
@@ -15,26 +15,13 @@ const NewProfileDialog = ({ open }: { open: boolean }) => {
         }}
       >
         <Typography variant="h3" marginBottom={2} textAlign={'center'}>
-          Для просмотра раздела выберите действие
+          Для просмотра раздела необходимо стать участником профсоюза
         </Typography>
-        <Link href="/trade_union_member" style={{ marginBottom: '20px' }}>
+        <Link href="/trade_union_member">
           <Button variant="contained" sx={{ px: 2.6, py: 1.6, width: '228px' }}>
             Вступить в профсоюз
           </Button>
         </Link>
-        <Link href="/trade_union_registration">
-          <Button variant="contained" sx={{ px: 2.6, py: 1.6, width: '228px' }}>
-            Создать профсоюз
-          </Button>
-        </Link>
-
-        {/*<Button
-          variant="contained"
-          sx={{ px: 2.6, py: 1.6, width: '228px' }}
-          onClick={() => setOpenDialog(false)}
-        >
-          Я уже в профсоюзе
-        </Button>*/}
       </Box>
     </Dialog>
   );

@@ -36,6 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               gender: user.data.gender,
               guid: user.data.guid,
               hasTradeunionOwner: user.data.hasTradeunionOwner,
+              hasTradeunionMember: user.data.hasTradeunionMember,
               hasUserProfile: user.data.hasUserProfile,
               hobbies: user.data.hobbies,
               id: user.data.id,
@@ -73,6 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.gender = user.data.gender;
         token.guid = user.data.guid;
         token.hasTradeunionOwner = user.data.hasTradeunionOwner;
+        token.hasTradeunionMember = user.data.hasTradeunionMember;
         token.hasUserProfile = user.data.hasUserProfile;
         token.hobbies = user.data.hobbies;
         token.id = user.data.id;
@@ -101,6 +103,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.gender = token.gender;
       session.user.guid = token.guid;
       session.user.hasTradeunionOwner = token.hasTradeunionOwner;
+      session.user.hasTradeunionMember = token.hasTradeunionMember;
       session.user.hasUserProfile = token.hasUserProfile;
       session.user.hobbies = token.hobbies;
       session.user.id = token.id;

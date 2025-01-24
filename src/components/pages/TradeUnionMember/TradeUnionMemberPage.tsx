@@ -1,6 +1,6 @@
 'use client';
 import TradeUnionMemberForm from '@/components/forms/TradeUnionMemberForm';
-import { Button, Grid2, Link, Paper, Typography } from '@mui/material';
+import { Grid2, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ProfilePage from '../Profile/Profile';
 import ProgressBar from '@/components/ui/progressBar';
@@ -19,51 +19,18 @@ const TradeUnionMemberPage = () => {
     <Grid2 container sx={{ p: 2 }} spacing={1.2}>
       {steps === 1 ? (
         <Grid2 size={8}>
-          <ProfilePage setSteps={setSteps} />
-        </Grid2>
-      ) : steps === 2 ? (
-        <Grid2 size={8}>
-          <Typography variant="h3" marginBottom={2} pt={3}>
-            Форма заявления на вступление в профсоюз
-          </Typography>
-          <TradeUnionMemberForm setSteps={setSteps} />
+          <ProfilePage />
         </Grid2>
       ) : (
         <Grid2 size={8}>
           <Typography variant="h3" marginBottom={2} pt={3}>
-            Регистрация на рассмотрении
+            Форма заявления на вступление в профсоюз
           </Typography>
-          <Paper sx={{ mt: 2 }}>
-            <Grid2 container sx={{ p: 2 }} spacing={1.2}>
-              <Grid2 size={12}>
-                <Typography variant="body1" textAlign={'center'}>
-                  Вы направили заявление на вступление в профсоюз, дождитесь
-                  результата рассмотрения заявления чтобы воспользоваться всеми
-                  функциями системы
-                </Typography>
-              </Grid2>
-              <Grid2 size={12} display={'flex'} justifyContent={'center'}>
-                <Link href="/main">
-                  <Button
-                    variant={'contained'}
-                    sx={{
-                      minWidth: '228px',
-                      color: '#fff',
-                      padding: '14px 17px',
-                      width: '100%',
-                      border: '0px',
-                    }}
-                  >
-                    Закрыть
-                  </Button>
-                </Link>
-              </Grid2>
-            </Grid2>
-          </Paper>
+          <TradeUnionMemberForm />
         </Grid2>
       )}
       <Grid2 size={4}>
-        <ProgressBar steps={steps} maxSteps={3} />
+        <ProgressBar steps={0} />
       </Grid2>
     </Grid2>
   );

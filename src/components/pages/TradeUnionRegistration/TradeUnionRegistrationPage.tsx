@@ -4,7 +4,6 @@ import TradeUnionRegistrationForm from '@/components/forms/TradeUnionRegistratio
 import { Button, Grid2, Link, Paper, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ProfilePage from '../Profile/Profile';
-import ProgressBar from '@/components/ui/progressBar';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import Tariffs from '@/components/sections/Home/Tariffs/Tariffs';
 
@@ -32,7 +31,7 @@ const TradeUnionRegistrationPage = () => {
           <Typography variant="h3" marginBottom={2} pt={3}>
             Форма регистрации
           </Typography>
-          <TradeUnionRegistrationForm setSteps={setSteps} />
+          <TradeUnionRegistrationForm />
         </Grid2>
       ) : steps === 3 ? (
         <Grid2 size={12}>
@@ -72,11 +71,6 @@ const TradeUnionRegistrationPage = () => {
               </Grid2>
             </Grid2>
           </Paper>
-        </Grid2>
-      )}
-      {steps !== 3 && (
-        <Grid2 size={4}>
-          <ProgressBar steps={steps} maxSteps={4} />
         </Grid2>
       )}
     </Grid2>

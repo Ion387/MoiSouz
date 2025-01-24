@@ -1,0 +1,45 @@
+.list {
+  position: relative;
+  &:before {
+    content: url('/images/line2.svg');
+    display: block;
+    position: absolute;
+    left: 9px;
+    z-index: 1;
+    top: 32px;
+    scale: 1.15;
+  }
+}
+
+.listItem {
+  position: relative;
+  z-index: 2;
+  &:before {
+    content: '';
+    display: block;
+    min-width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    margin-right: 6px;
+    position: relative;
+    background-color: #fff;
+    z-index: 2;
+  }
+}
+
+.listItemActive {
+  position: relative;
+  &:before {
+    content: '';
+    display: block;
+    min-width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgb(121, 216, 191);
+    margin-right: 6px;
+    background-color: rgb(121, 216, 191);
+    position: relative;
+    z-index: 2;
+  }
+}

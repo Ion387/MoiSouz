@@ -41,3 +41,12 @@ a {
   text-decoration: none;
   display: inline-block;
 }
+
+.react-pdf__Page__textContent,
+#pdf-controls {
+  display: none;
+}
+
+canvas {
+  border: 1px dotted rgb(234, 235, 235);
+}

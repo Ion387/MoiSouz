@@ -1,24 +1,31 @@
 'use client';
 
 import React from 'react';
-import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
-import { getDocs } from '@/services/getDocs';
+
 import { Box, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 
 const Main = () => {
-  const { data: docs } = useQuery({
-    queryKey: ['docs'],
-    queryFn: getDocs,
-    select: (data) => data.data,
-  });
-
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h3" marginBottom={2}>
-        Этот раздел пока пуст
+    <Box
+      sx={{
+        height: '100%',
+        background: 'rgba(255, 255, 255, 0.8)',
+      }}
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      flexDirection={'column'}
+    >
+      <Image
+        width={185}
+        height={150}
+        alt="indevImage"
+        src={'/images/indev.svg'}
+      />
+      <Typography variant="h3" marginTop={2}>
+        Раздел находится в разработке и скоро появится
       </Typography>
-      <NewProfileDialog open={docs && !docs.length}></NewProfileDialog>
     </Box>
   );
 };

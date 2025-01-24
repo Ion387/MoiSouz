@@ -29,9 +29,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { registration, saveAvatar } from '@/hooks/UseFormTUReg';
 import { getAddress } from '@/services/getAddress';
-import { getInn } from '@/services/getInn';
 import { getApplications } from '@/services/getApplications';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
+import {
+  ValidateKsOrRs,
+  ValidateOktmo,
+  validateBik,
+  validateInn,
+  validateKpp,
+  validateOgrn,
+} from '@/utils/validateDocs';
+import { InputFile } from '../ui/form/input-file';
 
 const schema = yup
   .object({
@@ -51,15 +59,40 @@ const schema = yup
       ),
     title: yup.string().required('Обязательное поле'),
     creationDate: yup.string().required('Обязательное поле'),
-    ogrn: yup.string().required('Обязательное поле'),
+    ogrn: yup
+      .string()
+      .required('Обязательное поле')
+      .test(
+        'ogrn',
+        (params) => validateOgrn(params.value),
+        (value) => !validateOgrn(String(value)),
+      ),
     inn: yup
       .string()
       .required('Обязательное поле')
-      .max(12, 'Число символов не должно превышать 12'),
-    kpp: yup.string().required('Обязательное поле'),
+      .test(
+        'inn',
+        (params) => validateInn(params.value),
+        (value) => !validateInn(String(value)),
+      ),
+    kpp: yup
+      .string()
+      .required('Обязательное поле')
+      .test(
+        'kpp',
+        (params) => validateKpp(params.value),
+        (value) => !validateKpp(String(value)),
+      ),
     registrationDate: yup.string().required('Обязательное поле'),
     okato: yup.string().required('Обязательное поле'),
-    oktmo: yup.string().required('Обязательное поле'),
+    oktmo: yup
+      .string()
+      .required('Обязательное поле')
+      .test(
+        'oktmo',
+        (params) => ValidateOktmo(params.value),
+        (value) => !ValidateOktmo(String(value)),
+      ),
     address: yup.object({
       postcode: yup.string().required('Укажите индекс'),
       region: yup.string().required('Укажите регион'),
@@ -85,9 +118,30 @@ const schema = yup
       ),
     bank: yup.object({
       bank: yup.string().required('Обязательное поле'),
-      rs: yup.string().required('Обязательное поле'),
-      bik: yup.string().required('Обязательное поле'),
-      ks: yup.string().required('Обязательное поле'),
+      rs: yup
+        .string()
+        .required('Обязательное поле')
+        .test(
+          'rs',
+          (params) => ValidateKsOrRs(params.value),
+          (value) => !ValidateKsOrRs(String(value)),
+        ),
+      bik: yup
+        .string()
+        .required('Обязательное поле')
+        .test(
+          'bik',
+          (params) => validateBik(params.value),
+          (value) => !validateBik(String(value)),
+        ),
+      ks: yup
+        .string()
+        .required('Обязательное поле')
+        .test(
+          'ks',
+          (params) => ValidateKsOrRs(params.value),
+          (value) => !ValidateKsOrRs(String(value)),
+        ),
     }),
     chairman: yup.object({
       firstName: yup.string().required('Обязательное поле'),
@@ -124,16 +178,12 @@ const TradeUnionRegistrationForm = () => {
     reset,
     formState: { errors },
     setValue: setFormValue,
-    setError,
   } = methods;
 
   const router = useRouter();
 
   const [addressString, setAddressString] = useState<string>('');
-  const [innString, setInnString] = useState<string>('');
   const [addressOptions, setAddressOptions] = useState<any[]>([]);
-  const [innOptions, setInnOptions] = useState<any[]>([]);
-  const [valueInn, setValueInn] = useState<any | null>(null);
   const [value, setValue] = useState<any | null>(null);
   const [inn, setInn] = useState<boolean>(false);
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
@@ -154,15 +204,6 @@ const TradeUnionRegistrationForm = () => {
     },
   });
 
-  const { mutate: mutateInn } = useMutation({
-    mutationFn: async (inn: string) => {
-      return await getInn(inn);
-    },
-    onSuccess: (data) => {
-      setInnOptions(data.data);
-    },
-  });
-
   const { data: tradeUnions } = useQuery({
     queryKey: ['tradeUnions'],
     queryFn: getApplications,
@@ -177,7 +218,9 @@ const TradeUnionRegistrationForm = () => {
           (el: ITradeUnion) => el.tradeunionOwner?.guid === info?.guid,
         )
       : null;
-    if (union) reset(union);
+    if (union) {
+      reset(union);
+    }
   }, [tradeUnions]);
 
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
@@ -186,13 +229,6 @@ const TradeUnionRegistrationForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressString(e.target.value);
-  };
-
-  const handleChangeInn = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 12)
-      setError('inn', { message: 'Число символов не должно превышать 12' });
-    else setError('inn', {});
-    setInnString(e.target.value);
   };
 
   const handleOrgChange = (e: SelectChangeEvent) => {
@@ -219,16 +255,6 @@ const TradeUnionRegistrationForm = () => {
   }, [addressString, mutateAddress]);
 
   useEffect(() => {
-    if (innString) {
-      const timer = setTimeout(() => {
-        mutateInn(innString);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [innString, mutateInn]);
-
-  useEffect(() => {
     if (value) {
       setFormValue('address.area', value?.area);
       setFormValue('address.city', value?.settlement);
@@ -240,26 +266,8 @@ const TradeUnionRegistrationForm = () => {
   }, [value]);
 
   useEffect(() => {
-    if (valueInn) {
-      setFormValue('inn', valueInn?.inn);
-      setFormValue('kpp', valueInn?.kpp);
-      setFormValue('ogrn', valueInn?.ogrn);
-      setFormValue('okato', valueInn?.okato);
-      setFormValue('oktmo', valueInn?.oktmo);
-      setFormValue('title', valueInn?.name?.full);
-      setFormValue('address.area', valueInn?.address?.area);
-      setFormValue('address.city', valueInn?.address?.city);
-      setFormValue('address.region', valueInn?.address?.region);
-      setFormValue('address.postcode', valueInn?.address?.postalCode);
-      setFormValue('address.street', valueInn?.address?.street);
-      setFormValue('address.house', valueInn?.address?.house);
-    }
-  }, [valueInn]);
-
-  useEffect(() => {
     if (chosenUnion) {
       setFormValue('inn', chosenUnion?.inn);
-      setValueInn(chosenUnion);
       setFormValue('kpp', chosenUnion?.kpp);
       setFormValue('ogrn', chosenUnion?.ogrn);
       setFormValue('registrationDate', chosenUnion?.registrationDate);
@@ -346,29 +354,12 @@ const TradeUnionRegistrationForm = () => {
                 >
                   ИНН
                 </InputLabel>
-                <Autocomplete
-                  options={innOptions}
-                  getOptionLabel={(option) =>
-                    option.value
-                      ? option.inn + ' - ' + option.value
-                      : option.inn + ' - ' + option.title
-                  }
-                  value={valueInn}
-                  disabled={inn}
-                  onChange={(event: any, newValue: any) => {
-                    setValueInn(newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...register('inn')}
-                      placeholder="211231313131"
-                      onChange={handleChangeInn}
-                      error={!!errors.inn?.message}
-                      helperText={errors.inn?.message || ''}
-                      fullWidth
-                    />
-                  )}
+                <TextField
+                  {...register('inn')}
+                  placeholder="211231313131"
+                  error={!!errors.inn?.message}
+                  helperText={errors.inn?.message || ''}
+                  fullWidth
                 />
               </Grid2>
               <Grid2 size={4}>
@@ -641,6 +632,9 @@ const TradeUnionRegistrationForm = () => {
                   error={!!errors.percents?.message}
                   helperText={errors.percents?.message || ''}
                 />
+              </Grid2>
+              <Grid2 size={12}>
+                <InputFile name="file" label="Прикрепить скан с подписью" />
               </Grid2>
               <Grid2 size={12}>
                 <InputCheckbox

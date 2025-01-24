@@ -53,12 +53,7 @@ const schema = yup
   })
   .required();
 
-const TradeUnionMemberForm = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setSteps,
-}: {
-  setSteps: (step: number) => void;
-}) => {
+const TradeUnionMemberForm = () => {
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
   const [percents, setPercents] = useState<number>();
   const methods = useForm({
@@ -76,7 +71,7 @@ const TradeUnionMemberForm = ({
     setValue: setFormValue,
   } = methods;
 
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
       const session = await getSession();
 
@@ -116,9 +111,9 @@ const TradeUnionMemberForm = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setSteps(3);
+      router.push(`/documents/${data.data.description.split(' ')[1].slice(1)}`);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   const handleOrgChange = (e: SelectChangeEvent) => {
     const union = tradeUnions.find(
@@ -149,24 +144,6 @@ const TradeUnionMemberForm = ({
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
-              <Grid2 size={8}>
-                <InputLabel>Номер документа</InputLabel>
-                <TextField
-                  {...register('documentNumber')}
-                  disabled
-                  error={!!errors.documentNumber?.message}
-                  helperText={errors.documentNumber?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel>Дата документа</InputLabel>
-                <TextField
-                  {...register('documentDate')}
-                  disabled
-                  error={!!errors.documentDate?.message}
-                  helperText={errors.documentDate?.message || ''}
-                />
-              </Grid2>
               <Grid2 size={12}>
                 <InputLabel>Имя</InputLabel>
                 <TextField
@@ -203,11 +180,8 @@ const TradeUnionMemberForm = ({
                   helperText={errors.data?.position?.message || ''}
                 />
               </Grid2>
-              <Grid2 size={4}>
-                <InputLabel>Дата вступления</InputLabel>
-                <InputDate name="data.inviteDate" />
-              </Grid2>
-              <Grid2 size={8}>
+
+              <Grid2 size={12}>
                 <InputLabel>Наименования профсоюза</InputLabel>
                 <Select
                   fullWidth
@@ -223,33 +197,36 @@ const TradeUnionMemberForm = ({
                     ))}
                 </Select>
               </Grid2>
-              {chosenUnion && (
-                <Grid2 size={12}>
-                  <InputLabel>
-                    Минимальный размер взносов в профсоюз (%)
-                  </InputLabel>
-                  <TextField
-                    {...register('data.percents')}
-                    error={!!errors.data?.percents?.message}
-                    helperText={errors.data?.percents?.message || ''}
-                    onChange={(e) => {
-                      if (!/^\d+$/.test(e.target.value))
-                        setPercents(chosenUnion?.percents || 0);
-                      else
-                        setPercents(
-                          Math.min(
-                            100,
-                            Math.max(
-                              chosenUnion?.percents || 0,
-                              Number(e.target.value),
-                            ),
+              <Grid2 size={4}>
+                <InputLabel>Дата вступления</InputLabel>
+                <InputDate name="data.inviteDate" />
+              </Grid2>
+              <Grid2 size={8}>
+                <InputLabel>
+                  Минимальный размер взносов в профсоюз (%)
+                </InputLabel>
+                <TextField
+                  {...register('data.percents')}
+                  error={!!errors.data?.percents?.message}
+                  helperText={errors.data?.percents?.message || ''}
+                  onChange={(e) => {
+                    if (!/^\d+$/.test(e.target.value))
+                      setPercents(chosenUnion?.percents || 0);
+                    else
+                      setPercents(
+                        Math.min(
+                          100,
+                          Math.max(
+                            chosenUnion?.percents || 0,
+                            Number(e.target.value),
                           ),
-                        );
-                    }}
-                    value={percents}
-                  />
-                </Grid2>
-              )}
+                        ),
+                      );
+                  }}
+                  value={percents}
+                />
+              </Grid2>
+
               <Grid2 size={12}>
                 <InputCheckbox
                   sx={{ justifyContent: 'center' }}
@@ -257,7 +234,7 @@ const TradeUnionMemberForm = ({
                   link={
                     '/Политика_в_отношении_обработки_персональных_данных.pdf'
                   }
-                  label={`Я соглашаюсь с политикой обработки персональных данных `}
+                  label={`С уставом профсоюзной организации ознакомлен/на`}
                 />
               </Grid2>
               <Grid2 size={6}>

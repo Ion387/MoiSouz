@@ -33,6 +33,8 @@ import { Icon as IconArrowDropdown } from '@/assets/icons/arrow-dropdown';
 import { Icon as IconPlus } from '@/assets/icons/plus';
 import { Icon as IconMinus } from '@/assets/icons/minus';
 import { Icon as IconFileAdd } from '@/assets/icons/file-add';
+import { Icon as IconFileCloud } from '@/assets/icons/cloud';
+import { Icon as IconFilePDF } from '@/assets/icons/pdf';
 
 const NAMES = [
   'document',
@@ -59,6 +61,8 @@ const NAMES = [
   'plus',
   'minus',
   'file-add',
+  'cloud',
+  'pdf',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -87,6 +91,8 @@ const ICONS: { [key: string]: JSX.Element } = {
   plus: <IconPlus />,
   minus: <IconMinus />,
   'file-add': <IconFileAdd />,
+  cloud: <IconFileCloud />,
+  pdf: <IconFilePDF />,
 };
 
 interface Props {

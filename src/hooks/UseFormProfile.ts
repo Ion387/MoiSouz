@@ -62,3 +62,15 @@ export const saveFormProfile = async (data: IFormProfile) => {
     },
   );
 };
+
+export const saveFormProfileName = async (data: string) => {
+  return axios.post<string>(
+    `${getBackendUrl}/api/private/profile`,
+    { data: { name: data } },
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
+};

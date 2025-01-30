@@ -1,18 +1,30 @@
-import React, { FC } from 'react';
+'use client';
+
+import React, { FC, useEffect } from 'react';
 import s from './card.module.scss';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ITarrif } from '@/models/Tarrif';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const CardItem: FC<ITarrif> = ({
   title,
   price,
   priceDesc,
+  price1,
+  priceDesc1,
   list,
   desc,
   main,
-  setSteps,
+  isActive,
+  id,
+  handleSubmit,
+  isSuccess,
 }) => {
+  const router = useRouter();
+  useEffect(() => {
+    if (isSuccess) router.push('/documents');
+  }, [isSuccess]);
   return (
     <Box className={main ? s.mainItem : s.item}>
       <Box className={s.cardHeader}>
@@ -23,8 +35,20 @@ const CardItem: FC<ITarrif> = ({
         <Typography className={main ? s.mainPrice : s.price}>
           {price}
         </Typography>
-        <Typography className={main ? s.mainDesc : s.desc}>
+        <Typography
+          className={main ? s.mainDesc : s.desc}
+          sx={{
+            marginBottom:
+              title === '«ВОЗДУХ»' ? '42px !important' : '8px !important',
+          }}
+        >
           {priceDesc}
+        </Typography>
+        <Typography className={main ? s.mainPrice : s.price}>
+          {price1}
+        </Typography>
+        <Typography className={main ? s.mainDesc : s.desc}>
+          {priceDesc1}
         </Typography>
         <List className={s.list}>
           {list.map((item) => (
@@ -35,8 +59,12 @@ const CardItem: FC<ITarrif> = ({
         </List>
       </Box>
       <Box className={s.cardFooter}>
-        {desc && <Typography className={s.desc2}>{desc}</Typography>}
-        {!setSteps ? (
+        {desc && (
+          <Typography className={main ? s.mainDesc2 : s.desc2}>
+            {desc}
+          </Typography>
+        )}
+        {!isActive ? (
           <Link href="/registration" className={s.btn}>
             <Button
               variant={main ? 'outlined' : 'contained'}
@@ -52,7 +80,7 @@ const CardItem: FC<ITarrif> = ({
           </Link>
         ) : (
           <Button
-            onClick={() => setSteps && setSteps(4)}
+            onClick={() => handleSubmit && handleSubmit(id)}
             variant={main ? 'outlined' : 'contained'}
             sx={{
               color: main ? 'rgb(72, 128, 255)' : '#fff',

@@ -5,13 +5,10 @@ import {
   Autocomplete,
   Button,
   Checkbox,
-  FormControl,
-  FormControlLabel,
   Grid2,
   InputLabel,
   MenuItem,
   Paper,
-  RadioGroup,
   Select,
   SelectChangeEvent,
   TextField,
@@ -27,10 +24,9 @@ import { InputCheckbox, InputDate } from '../ui/form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
-import { registration, saveAvatar } from '@/hooks/UseFormTUReg';
+import { registration } from '@/hooks/UseFormTUReg';
 import { getAddress } from '@/services/getAddress';
 import { getApplications } from '@/services/getApplications';
-import { useFetchProfile } from '@/hooks/useFetchProfile';
 import {
   ValidateKsOrRs,
   ValidateOktmo,
@@ -40,6 +36,9 @@ import {
   validateOgrn,
 } from '@/utils/validateDocs';
 import { InputFile } from '../ui/form/input-file';
+import { TextFieldCustom } from '../ui/form/entities/input-textfield';
+import { saveFormTULogo, saveFormTUScan } from '@/services/postLogoandFile';
+import { getMyTU } from '@/services/getMyTU';
 
 const schema = yup
   .object({
@@ -84,7 +83,10 @@ const schema = yup
         (value) => !validateKpp(String(value)),
       ),
     registrationDate: yup.string().required('Обязательное поле'),
-    okato: yup.string().required('Обязательное поле'),
+    okato: yup
+      .string()
+      .required('Обязательное поле')
+      .max(11, 'ОКАТО состоит макс. из 11 цифр'),
     oktmo: yup
       .string()
       .required('Обязательное поле')
@@ -162,7 +164,8 @@ const schema = yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
       .required('Необходимо принять согласие'),
-    avatar: yup.mixed().nullable(),
+    logo: yup.mixed().nullable(),
+    scan: yup.mixed().required('Обязательное поле'),
   })
   .required();
 
@@ -178,6 +181,7 @@ const TradeUnionRegistrationForm = () => {
     reset,
     formState: { errors },
     setValue: setFormValue,
+    setError,
   } = methods;
 
   const router = useRouter();
@@ -186,12 +190,14 @@ const TradeUnionRegistrationForm = () => {
   const [addressOptions, setAddressOptions] = useState<any[]>([]);
   const [value, setValue] = useState<any | null>(null);
   const [inn, setInn] = useState<boolean>(false);
+  const [percents, setPercents] = useState<number>();
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
       registration(data);
-      saveAvatar(data.avatar);
+      saveFormTULogo(data.logo);
+      saveFormTUScan(data.scan);
     },
   });
 
@@ -210,20 +216,20 @@ const TradeUnionRegistrationForm = () => {
     select: (data) => data.data.data,
   });
 
-  const info = useFetchProfile();
+  const { data: myTradeUnion } = useQuery({
+    queryKey: ['myTradeUnion'],
+    queryFn: getMyTU,
+    select: (data) => data.data,
+  });
 
   useEffect(() => {
-    const union = tradeUnions
-      ? tradeUnions.find(
-          (el: ITradeUnion) => el.tradeunionOwner?.guid === info?.guid,
-        )
-      : null;
-    if (union) {
-      reset(union);
+    if (myTradeUnion) {
+      reset(myTradeUnion);
     }
-  }, [tradeUnions]);
+  }, [myTradeUnion]);
 
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
+    data.percents = Number(data.percents);
     mutate(data);
   };
 
@@ -277,6 +283,15 @@ const TradeUnionRegistrationForm = () => {
       setFormValue('bank.rs', chosenUnion?.bank?.rs);
       setFormValue('bank.bik', chosenUnion?.bank?.bik);
       setFormValue('bank.ks', chosenUnion?.bank?.ks);
+      setError('inn', {});
+      setError('kpp', {});
+      setError('ogrn', {});
+      setError('okato', {});
+      setError('oktmo', {});
+      setError('bank.rs', {});
+      setError('bank.ks', {});
+      setError('bank.bik', {});
+      setError('registrationDate', {});
     }
   }, [chosenUnion]);
 
@@ -293,20 +308,8 @@ const TradeUnionRegistrationForm = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
               <Grid2 size={12}>
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    name="radio-buttons-group"
-                    value={inn}
-                    onClick={() => setInn((prev) => !prev)}
-                  >
-                    <FormControlLabel
-                      value={true}
-                      control={<Checkbox />}
-                      label="Организация без ИНН"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                <Checkbox value={inn} onClick={() => setInn((prev) => !prev)} />
+                <span> Организация без ИНН</span>
               </Grid2>
               {inn && (
                 <Grid2 size={12}>
@@ -319,7 +322,7 @@ const TradeUnionRegistrationForm = () => {
                   >
                     {tradeUnions &&
                       tradeUnions.map((el: ITradeUnion) => (
-                        <MenuItem key={el.inn} value={el.inn}>
+                        <MenuItem key={el.title + el.inn} value={el.inn}>
                           {el.inn + ' - ' + el.title}
                         </MenuItem>
                       ))}
@@ -344,7 +347,7 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={3}>
                 <InputImage
                   sx={{ width: '100%', height: 'calc(100% - 40px)', mt: 4 }}
-                  name="avatar"
+                  name="logo"
                   label="Добавить логотип"
                 />
               </Grid2>
@@ -354,12 +357,12 @@ const TradeUnionRegistrationForm = () => {
                 >
                   ИНН
                 </InputLabel>
-                <TextField
-                  {...register('inn')}
-                  placeholder="211231313131"
-                  error={!!errors.inn?.message}
-                  helperText={errors.inn?.message || ''}
-                  fullWidth
+                <TextFieldCustom
+                  register={register('inn')}
+                  placeholder="111111111111"
+                  error={errors.inn?.message}
+                  disabled={inn}
+                  maxL={12}
                 />
               </Grid2>
               <Grid2 size={4}>
@@ -368,12 +371,12 @@ const TradeUnionRegistrationForm = () => {
                 >
                   КПП
                 </InputLabel>
-                <TextField
-                  {...register('kpp')}
-                  placeholder="11211231313131"
-                  error={!!errors.kpp?.message}
-                  helperText={errors.kpp?.message || ''}
+                <TextFieldCustom
+                  register={register('kpp')}
+                  placeholder="111111111"
+                  error={errors.kpp?.message}
                   disabled={inn}
+                  maxL={9}
                 />
               </Grid2>
               <Grid2 size={4}>
@@ -382,12 +385,12 @@ const TradeUnionRegistrationForm = () => {
                 >
                   ОГРН
                 </InputLabel>
-                <TextField
-                  {...register('ogrn')}
-                  placeholder="11211231313131"
-                  error={!!errors.ogrn?.message}
-                  helperText={errors.ogrn?.message || ''}
+                <TextFieldCustom
+                  register={register('ogrn')}
+                  placeholder="1111111111111"
+                  error={errors.ogrn?.message}
                   disabled={inn}
+                  maxL={13}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -412,11 +415,10 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={4}>
-                <TextField
-                  {...register('address.postcode')}
+                <TextFieldCustom
+                  register={register('address.postcode')}
                   placeholder="Индекс"
-                  error={!!errors.address?.postcode?.message}
-                  helperText={errors.address?.postcode?.message || ''}
+                  error={errors.address?.postcode?.message}
                 />
               </Grid2>
               <Grid2 size={8}>
@@ -484,12 +486,12 @@ const TradeUnionRegistrationForm = () => {
                 >
                   ОКАТО
                 </InputLabel>
-                <TextField
-                  {...register('okato')}
-                  placeholder="11211231313131"
+                <TextFieldCustom
+                  register={register('okato')}
+                  placeholder="11111111111"
                   disabled={inn}
-                  error={!!errors.okato?.message}
-                  helperText={errors.okato?.message || ''}
+                  error={errors.okato?.message}
+                  maxL={11}
                 />
               </Grid2>
               <Grid2 size={4}>
@@ -498,12 +500,13 @@ const TradeUnionRegistrationForm = () => {
                 >
                   ОКТМО
                 </InputLabel>
-                <TextField
-                  {...register('oktmo')}
+
+                <TextFieldCustom
+                  register={register('oktmo')}
                   disabled={inn}
-                  placeholder="11211231313131"
-                  error={!!errors.oktmo?.message}
-                  helperText={errors.oktmo?.message || ''}
+                  placeholder="11111111111"
+                  error={errors.oktmo?.message}
+                  maxL={11}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -534,11 +537,11 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={6}>
-                <TextField
-                  {...register('chairman.inn')}
+                <TextFieldCustom
+                  register={register('chairman.inn')}
                   placeholder="ИНН"
-                  error={!!errors.chairman?.inn?.message}
-                  helperText={errors.chairman?.inn?.message || ''}
+                  error={errors.chairman?.inn?.message}
+                  maxL={12}
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -552,11 +555,11 @@ const TradeUnionRegistrationForm = () => {
               </Grid2>
               <Grid2 size={6}>
                 <InputLabel>Телефон</InputLabel>
-                <TextField
-                  {...register('chairmanPhone')}
-                  placeholder="+78887777766"
-                  error={!!errors.chairmanPhone?.message}
-                  helperText={errors.chairmanPhone?.message || ''}
+                <TextFieldCustom
+                  register={register('chairmanPhone')}
+                  placeholder="+79999999999"
+                  error={errors.chairmanPhone?.message}
+                  maxL={12}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -579,39 +582,39 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={6}>
-                <TextField
-                  {...register('bank.rs')}
+                <TextFieldCustom
+                  register={register('bank.rs')}
                   placeholder="Р/с"
                   disabled={inn}
-                  error={!!errors.bank?.rs?.message}
-                  helperText={errors.bank?.rs?.message || ''}
+                  error={errors.bank?.rs?.message}
+                  maxL={20}
                 />
               </Grid2>
               <Grid2 size={6}>
-                <TextField
-                  {...register('bank.bik')}
+                <TextFieldCustom
+                  register={register('bank.bik')}
                   placeholder="БИК"
                   disabled={inn}
-                  error={!!errors.bank?.bik?.message}
-                  helperText={errors.bank?.bik?.message || ''}
+                  error={errors.bank?.bik?.message}
+                  maxL={9}
                 />
               </Grid2>
               <Grid2 size={6}>
-                <TextField
-                  {...register('bank.ks')}
-                  placeholder="к/с"
+                <TextFieldCustom
+                  register={register('bank.ks')}
+                  placeholder="К/с"
                   disabled={inn}
-                  error={!!errors.bank?.ks?.message}
-                  helperText={errors.bank?.ks?.message || ''}
+                  error={errors.bank?.ks?.message}
+                  maxL={20}
                 />
               </Grid2>
               <Grid2 size={6}>
                 <InputLabel>Телефон организации</InputLabel>
-                <TextField
-                  {...register('phone')}
-                  placeholder="+78887777766"
-                  error={!!errors.phone?.message}
-                  helperText={errors.phone?.message || ''}
+                <TextFieldCustom
+                  register={register('phone')}
+                  placeholder="+79999999999"
+                  error={errors.phone?.message}
+                  maxL={12}
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -624,17 +627,33 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel>
-                  Минимальный размер взносов в профсоюз (%)
-                </InputLabel>
+                <InputLabel>Размер взносов (%)</InputLabel>
                 <TextField
                   {...register('percents')}
                   error={!!errors.percents?.message}
                   helperText={errors.percents?.message || ''}
+                  onChange={(e) => {
+                    if (!/^\d+$/.test(e.target.value))
+                      setPercents(chosenUnion?.percents || 0);
+                    else
+                      setPercents(
+                        Math.min(
+                          100,
+                          Math.max(
+                            chosenUnion?.percents || 0,
+                            Number(e.target.value),
+                          ),
+                        ),
+                      );
+                  }}
+                  value={percents}
                 />
               </Grid2>
               <Grid2 size={12}>
-                <InputFile name="file" label="Прикрепить скан с подписью" />
+                <InputFile
+                  name="scan"
+                  label="Прикрепить Устав профсоюзной организации (документ в формате pdf)"
+                />
               </Grid2>
               <Grid2 size={12}>
                 <InputCheckbox

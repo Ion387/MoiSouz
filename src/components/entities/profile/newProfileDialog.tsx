@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import Link from 'next/link';
 
-const NewProfileDialog = ({ open }: { open: boolean }) => {
+interface IDialogProps {
+  open: boolean;
+  title: string;
+  link: string;
+  btn?: string;
+  onClose?: () => void;
+}
+
+const NewProfileDialog: FC<IDialogProps> = ({
+  btn,
+  open,
+  title,
+  link,
+  onClose,
+}) => {
   return (
-    <Dialog open={open} onClose={() => {}}>
+    <Dialog open={open} onClose={onClose}>
       <Box
         sx={{
           p: 2.4,
@@ -15,11 +29,11 @@ const NewProfileDialog = ({ open }: { open: boolean }) => {
         }}
       >
         <Typography variant="h3" marginBottom={2} textAlign={'center'}>
-          Для просмотра раздела необходимо стать участником профсоюза
+          {title}
         </Typography>
-        <Link href="/trade_union_member">
+        <Link href={link}>
           <Button variant="contained" sx={{ px: 2.6, py: 1.6, width: '228px' }}>
-            Вступить в профсоюз
+            {btn}
           </Button>
         </Link>
       </Box>

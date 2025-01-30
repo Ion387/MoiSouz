@@ -9,4 +9,6 @@ export interface IDoc {
   documentDate: string;
   documentType: string;
   documentNumber: string;
+  file: string;
+  step: string;
 }

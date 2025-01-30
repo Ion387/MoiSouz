@@ -29,14 +29,13 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <FormGroup
           sx={{
-            minWidth: 260,
+            minWidth: 120,
             ...(sx || {}),
           }}
         >
           {label && <InputLabel error={error != null}>{label}</InputLabel>}
           <RadioGroup
-            sx={{ gap: 2, mx: 'auto', mt: 1 }}
-            row
+            sx={{ mr: 'auto' }}
             name={name}
             defaultValue={undefined}
             value={value}
@@ -44,7 +43,12 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
           >
             <FormControlLabel
               value="female"
-              control={<Radio color="primary" />}
+              control={
+                <Radio
+                  color="primary"
+                  style={{ height: '29px', width: '29px' }}
+                />
+              }
               label={
                 <Typography color={value == 'female' ? 'primary' : undefined}>
                   Мужской
@@ -54,13 +58,18 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             />
             <FormControlLabel
               value="male"
-              control={<Radio color={'error'} />}
+              control={
+                <Radio
+                  color={'error'}
+                  style={{ height: '29px', width: '29px' }}
+                />
+              }
               label={
                 <Typography color={value == 'male' ? 'red' : undefined}>
                   Женский
                 </Typography>
               }
-              labelPlacement="end"
+              labelPlacement="start"
             />
           </RadioGroup>
         </FormGroup>

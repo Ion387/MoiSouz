@@ -20,7 +20,7 @@ export const ProfileAside = () => {
           to="/documents" /*openAlways*/
         >
           <ListItem label="Входящие" disabled />
-          <ListItem label="Исходящие" disabled />
+          <ListItem label="Исходящие" to="/documents" />
           <ListItem label="Черновики" disabled />
         </ListItem>
         <ListItem label="Мои организации" icon="square-2x2" disabled />

@@ -34,7 +34,8 @@ export interface ITradeUnion {
   email: string;
   phone: string;
   isActive: boolean;
-  avatar?: object | null;
+  logo?: object | null | string;
   percents?: number;
   tradeunionOwner?: { guid: string };
+  scan: object | null | string;
 }

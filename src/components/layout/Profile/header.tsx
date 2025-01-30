@@ -40,7 +40,11 @@ export const ProfileHeader = () => {
                   : 'Пользователь'
                 : undefined
             }
-            name={profileData?.name || ''}
+            name={
+              profileData?.name && profileData?.name !== ' .'
+                ? profileData?.name
+                : profileData?.email?.split('@')[0] || ''
+            }
             avatar={profileData?.avatar}
             sx={{ ml: 1 }}
           />

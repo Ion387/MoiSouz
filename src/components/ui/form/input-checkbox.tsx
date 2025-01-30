@@ -39,13 +39,7 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
             }
             label={
               <Typography whiteSpace="break-spaces" fontSize={14}>
-                <a
-                  href={link}
-                  download={
-                    'Политика_в_отношении_обработки_персональных_данных.pdf'
-                  }
-                  target="_blank"
-                >
+                <a href={link} target="_blank">
                   {label}
                 </a>
               </Typography>

@@ -15,6 +15,7 @@
 
 .mainItem {
   background-color: rgb(72, 128, 255);
+  padding-bottom: 45px;
 }
 
 .title,
@@ -64,6 +65,10 @@
 
 .cardFooter {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .desc2 {
@@ -73,6 +78,15 @@
   margin-bottom: 12px;
 }
 
+.mainDesc2 {
+  font-size: 12px;
+  line-height: 14px;
+  display: block;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
 .btn {
   width: 100%;
+  max-width: 180px;
 }

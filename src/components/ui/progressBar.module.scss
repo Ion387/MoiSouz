@@ -1,13 +1,15 @@
 .list {
   position: relative;
   &:before {
-    content: url('/images/line2.svg');
+    content: '';
     display: block;
+    background: url('/images/line2.svg');
     position: absolute;
     left: 9px;
     z-index: 1;
     top: 32px;
-    scale: 1.15;
+    height: calc(100% - 50px);
+    width: 1px;
   }
 }
 

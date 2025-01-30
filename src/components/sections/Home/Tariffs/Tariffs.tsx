@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Button, Grid2, List, Typography } from '@mui/material';
 import React from 'react';
 import s from './tarrifs.module.scss';
@@ -5,14 +7,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { items } from '@/constants/tarrifs';
 import CardItem from './Card/Card';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getTariffs, sendTariffs } from '@/services/getTariffs';
+import { ITarrif } from '@/models/Tarrif';
 
 const Tariffs = ({
   noTitle,
-  setSteps,
+  isActive,
 }: {
   noTitle?: boolean;
-  setSteps?: (step: number) => void;
+  isActive?: boolean;
 }) => {
+  const { data } = useQuery({
+    queryKey: ['tariffs'],
+    queryFn: getTariffs,
+    select: (data) => data.data.data,
+  });
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isSuccess } = useMutation({
+    mutationFn: (id: number | undefined) => sendTariffs(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+
+  const handleSubmit = (id: number | undefined) => mutate(id);
+
   return (
     <Box component={'section'} className={s.wrapper}>
       {!noTitle && (
@@ -33,8 +55,15 @@ const Tariffs = ({
             <Typography variant="h3" textTransform="uppercase">
               «Элементарный»
             </Typography>
+            <Typography className={s.price}>9,9 рублей</Typography>
+            <Typography
+              className={s.desc}
+              sx={{ marginBottom: '8px !important' }}
+            >
+              за пользователя в месяц *
+            </Typography>
             <Typography className={s.price}>4,9 рублей</Typography>
-            <Typography className={s.desc}>за пользователя в месяц</Typography>
+            <Typography className={s.desc}>при оплате за год</Typography>
           </Box>
         </Box>
         <List>
@@ -50,9 +79,12 @@ const Tariffs = ({
           <Typography>- Защита персональных данных</Typography>
           <Typography>- Реклама от партнеров</Typography>
         </List>
-        {!setSteps ? (
+        {!isActive ? (
           <Link href={'/registration'}>
-            <Button variant="contained" sx={{ padding: '12px 17px' }}>
+            <Button
+              variant="contained"
+              sx={{ padding: '12px 17px', width: '180px' }}
+            >
               Подключить
             </Button>
           </Link>
@@ -60,7 +92,15 @@ const Tariffs = ({
           <Button
             variant="contained"
             sx={{ padding: '12px 17px' }}
-            onClick={() => setSteps && setSteps(4)}
+            onClick={() =>
+              handleSubmit(
+                data
+                  ? data.find(
+                      (el: ITarrif) => el.title === 'Тариф «Элементарный»',
+                    ).id
+                  : undefined,
+              )
+            }
           >
             Подключить
           </Button>
@@ -70,13 +110,24 @@ const Tariffs = ({
         {items.map((item) => (
           <Grid2 key={item.title} size={{ xs: 12, sm: 6, lg: 3 }}>
             <CardItem
+              id={
+                data
+                  ? data.find(
+                      (el: ITarrif) => el.title.split(' ')[2] === item.title,
+                    ).id
+                  : undefined
+              }
+              isActive={isActive}
               title={item.title}
               price={item.price}
               priceDesc={item.priceDesc}
+              price1={item.price1}
+              priceDesc1={item.priceDesc1}
               list={item.list}
               desc={item.desc}
               main={item.main}
-              setSteps={setSteps}
+              handleSubmit={handleSubmit}
+              isSuccess={isSuccess}
             />
           </Grid2>
         ))}

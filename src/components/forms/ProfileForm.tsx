@@ -15,11 +15,7 @@ import {
   InputImage,
   InputManyModal,
 } from '@/components/ui/form';
-import {
-  InputAddress,
-  InputGender,
-  InputPhone,
-} from '@/components/ui/form/entities';
+import { InputAddress, InputGender } from '@/components/ui/form/entities';
 
 import { IFormProfile } from '@/models/Forms';
 import { IOption } from '@/models/Option';
@@ -180,7 +176,7 @@ const ProfileForm: FC<Props> = ({
           sx={{ width: '80%' }}
           name="education"
           label="Образование"
-          placeholder="Высшее"
+          placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
         />
       </Box>
@@ -227,8 +223,26 @@ const ProfileForm: FC<Props> = ({
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <InputPhone sx={{ flex: 1 }} name="phone" label="Номер телефона" />
-        <InputPhone sx={{ flex: 1 }} name="phoneExtra" label="Доп. номер" />
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>Номер телефона</InputLabel>
+          <TextField
+            {...register('phone')}
+            placeholder="+79999999999"
+            error={!!errors.phone?.message}
+            helperText={errors.phone?.message || ''}
+            slotProps={{ htmlInput: { maxLength: 12 } }}
+          />
+        </Box>
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>Доп. номер</InputLabel>
+          <TextField
+            {...register('phoneDop')}
+            placeholder="+79999999999"
+            error={!!errors.phoneDop?.message}
+            helperText={errors.phoneDop?.message || ''}
+            slotProps={{ htmlInput: { maxLength: 12 } }}
+          />
+        </Box>
       </Box>
 
       <InputArray

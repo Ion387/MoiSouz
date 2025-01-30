@@ -83,9 +83,9 @@ export const ValidateKsOrRs = (ks: string): string => {
   if (!ks.length) {
     message = 'Обязательное поле';
   } else if (/[^0-9]/.test(ks)) {
-    message = 'К/C состоит из цифр';
+    message = 'Счет состоит из цифр';
   } else if (ks.length !== 20) {
-    message = 'К/C состоит из 20 цифр';
+    message = 'Счет состоит из 20 цифр';
   }
   return message;
 };

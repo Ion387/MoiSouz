@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { FC, ReactElement, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import {
   List,
   ListItemText,
@@ -66,6 +66,10 @@ const Item: FC<PropsItem> = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onClick && onClick();
   };
+
+  useEffect(() => {
+    if (selected) setOpen(!open);
+  }, [selected]);
 
   return (
     <>

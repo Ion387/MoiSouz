@@ -8,10 +8,10 @@ const TariffsPage = () => {
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h3" marginBottom={2}>
-        Тарифы
+        Выберите тариф
       </Typography>
       <Paper>
-        <Tariffs />
+        <Tariffs isActive />
       </Paper>
     </Box>
   );

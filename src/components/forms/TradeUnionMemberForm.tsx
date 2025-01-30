@@ -28,6 +28,7 @@ import { InputCheckbox } from '../ui/form/input-checkbox';
 import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
+import { IDoc } from '@/models/Doc';
 
 const schema = yup
   .object({
@@ -53,7 +54,7 @@ const schema = yup
   })
   .required();
 
-const TradeUnionMemberForm = () => {
+const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
   const [percents, setPercents] = useState<number>();
   const methods = useForm({
@@ -115,9 +116,17 @@ const TradeUnionMemberForm = () => {
     }
   }, [isSuccess, data]);
 
+  useEffect(() => {
+    if (doc) {
+      setFormValue('documentNumber', doc.documentNumber);
+      setFormValue('documentDate', doc.documentDate);
+      setChoosenUnion(doc.tradeunion);
+    }
+  }, [doc]);
+
   const handleOrgChange = (e: SelectChangeEvent) => {
     const union = tradeUnions.find(
-      (el: ITradeUnion) => el.inn === e.target.value,
+      (el: ITradeUnion) => Number(el.id) === Number(e.target.value),
     );
     reset({ data: { percents: union.percents || 0 } });
     setPercents(union.percents || 0);
@@ -144,6 +153,23 @@ const TradeUnionMemberForm = () => {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
+              {doc && (
+                <>
+                  <Grid2 size={6}>
+                    <InputLabel>Номер документа</InputLabel>
+                    <TextField
+                      {...register('documentNumber')}
+                      disabled
+                      error={!!errors.data?.firstName?.message}
+                      helperText={errors.data?.firstName?.message || ''}
+                    />
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <InputLabel>Дата документа</InputLabel>
+                    <InputDate name="documentDate" dis />
+                  </Grid2>
+                </>
+              )}
               <Grid2 size={12}>
                 <InputLabel>Имя</InputLabel>
                 <TextField
@@ -187,11 +213,11 @@ const TradeUnionMemberForm = () => {
                   fullWidth
                   sx={{ padding: 1.6 }}
                   onChange={handleOrgChange}
-                  value={chosenUnion?.inn || ''}
+                  value={String(chosenUnion?.id) || ''}
                 >
                   {tradeUnions &&
                     tradeUnions.map((el: ITradeUnion) => (
-                      <MenuItem key={el.inn} value={el.inn}>
+                      <MenuItem key={el.inn} value={el.id}>
                         {el.title}
                       </MenuItem>
                     ))}
@@ -199,12 +225,10 @@ const TradeUnionMemberForm = () => {
               </Grid2>
               <Grid2 size={4}>
                 <InputLabel>Дата вступления</InputLabel>
-                <InputDate name="data.inviteDate" />
+                <InputDate name="data.inviteDate" isFutureAccess />
               </Grid2>
               <Grid2 size={8}>
-                <InputLabel>
-                  Минимальный размер взносов в профсоюз (%)
-                </InputLabel>
+                <InputLabel>Размер взносов (%)</InputLabel>
                 <TextField
                   {...register('data.percents')}
                   error={!!errors.data?.percents?.message}

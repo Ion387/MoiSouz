@@ -6,6 +6,7 @@ import { Box, Button, FormHelperText } from '@mui/material';
 
 import { Icon } from '@/components/ui/Icon';
 import { PropsWithSX } from '@/models/Props';
+import { getBackendUrl } from '@/constants/url';
 
 interface Props {
   name: string;
@@ -34,7 +35,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
         break;
 
       case 'string':
-        setPreview(value);
+        setPreview(`${getBackendUrl}${value}`);
         break;
 
       default:
@@ -104,6 +105,14 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
               <Box display={'flex'} alignItems={'center'} gap={'12px'}>
                 <Icon name="pdf" />
                 {preview}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPreview(null);
+                  }}
+                >
+                  <Icon name="cross" color="#000" sx={{ scale: '0.75' }} />
+                </span>
               </Box>
             )}
             <FormHelperText id={`${name}-helper`} error={true}>

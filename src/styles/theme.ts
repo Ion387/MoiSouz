@@ -439,7 +439,12 @@ export default createTheme(
         },
       },
       MuiDialog: {
-        styleOverrides: {},
+        styleOverrides: {
+          root: {
+            width: 470,
+            margin: '0 auto',
+          },
+        },
       },
       MuiBackdrop: {
         styleOverrides: {

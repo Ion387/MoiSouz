@@ -43,8 +43,9 @@ a {
 }
 
 .react-pdf__Page__textContent,
-#pdf-controls {
-  display: none;
+#pdf-controls,
+.react-pdf__Page__annotations {
+  display: none !important;
 }
 
 canvas {

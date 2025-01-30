@@ -12,6 +12,7 @@ interface Props {
   name: string;
   label?: string;
   dis?: boolean;
+  isFutureAccess?: boolean;
 }
 
 export const InputDate: FC<PropsWithSX & Props> = ({
@@ -19,6 +20,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
   name,
   label,
   dis,
+  isFutureAccess,
 }) => {
   const { control } = useFormContext();
 
@@ -33,6 +35,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
             disabled={!!dis}
             defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
             value={value ? dayjs(value, 'DD.MM.YYYY') : dayjs(null)}
+            maxDate={!isFutureAccess ? dayjs() : null}
             onChange={(value: Date) =>
               onChange(dayjs(value).format('DD.MM.YYYY'))
             }

@@ -2,8 +2,13 @@ export interface ITarrif {
   title: string;
   price: string;
   priceDesc: string;
+  price1: string;
+  priceDesc1: string;
   list: string[];
   desc?: string | null;
   main?: boolean;
-  setSteps?: (s: number) => void;
+  isActive?: boolean;
+  id?: number;
+  handleSubmit?: (id: number | undefined) => void;
+  isSuccess?: boolean;
 }

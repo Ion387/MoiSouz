@@ -115,7 +115,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               fontWeight={600}
                               textAlign={'center'}
                             >
-                              {doc.status}
+                              {doc.step}
                             </Typography>
                           </Grid2>
                         </Grid2>

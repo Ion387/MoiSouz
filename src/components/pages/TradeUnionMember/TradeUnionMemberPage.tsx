@@ -6,9 +6,9 @@ import ProfilePage from '../Profile/Profile';
 import ProgressBar from '@/components/ui/progressBar';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { usePathname } from 'next/navigation';
-import { IDoc } from '@/models/Doc';
+
 import { useQuery } from '@tanstack/react-query';
-import { getDocs } from '@/services/getDocs';
+import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
 
 const TradeUnionMemberPage = () => {
@@ -16,18 +16,12 @@ const TradeUnionMemberPage = () => {
   const info = useFetchProfile();
   const path = usePathname();
   const number = path.split('/')[3];
-  const [doc, setDoc] = useState<IDoc | null>();
-  const { data: docs } = useQuery({
-    queryKey: ['docs'],
-    queryFn: getDocs,
+
+  const { data: doc } = useQuery({
+    queryKey: ['doc'],
+    queryFn: () => getDoc(number),
     select: (data) => data.data,
   });
-
-  useEffect(() => {
-    if (docs) {
-      setDoc(docs.find((el: IDoc) => el.documentNumber === number));
-    }
-  }, [docs, number]);
 
   useEffect(() => {
     if (!!info?.phone) {
@@ -45,7 +39,7 @@ const TradeUnionMemberPage = () => {
           <Typography variant="h3" marginBottom={2} pt={3}>
             Форма заявления на вступление в профсоюз
           </Typography>
-          <TradeUnionMemberForm doc={doc} />
+          {doc && <TradeUnionMemberForm doc={doc} />}
         </Grid2>
       )}
       <Grid2 size={4}>

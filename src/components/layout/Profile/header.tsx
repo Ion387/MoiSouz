@@ -13,11 +13,19 @@ import { signOut } from 'next-auth/react';
 
 import { useRouter } from 'next/navigation';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
+import { getMyTU } from '@/services/getMyTU';
+import { useQuery } from '@tanstack/react-query';
 
 export const ProfileHeader = () => {
   const { profileInfo } = useGetProfileInfo();
   const router = useRouter();
   const [profileData, setProfileData] = useState(profileInfo);
+
+  const { data: myTradeUnion } = useQuery({
+    queryKey: ['myTradeUnion'],
+    queryFn: getMyTU,
+    select: (data) => data.data,
+  });
 
   const info = useFetchProfile();
 
@@ -43,9 +51,15 @@ export const ProfileHeader = () => {
             name={
               profileData?.name && profileData?.name !== ' .'
                 ? profileData?.name
-                : profileData?.email?.split('@')[0] || ''
+                : myTradeUnion?.title || ''
             }
-            avatar={profileData?.avatar}
+            avatar={
+              profileData?.ROLES && profileData?.ROLES.length
+                ? profileData?.ROLES.includes('ROLE_TRADEUNION')
+                  ? myTradeUnion?.logo
+                  : profileData?.avatar
+                : undefined
+            }
             sx={{ ml: 1 }}
           />
           <IconButton

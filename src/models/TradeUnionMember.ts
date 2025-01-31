@@ -11,4 +11,5 @@ export interface ITradeUnionMember {
     percents?: number;
   };
   tradeunion: number;
+  id?: number | null;
 }

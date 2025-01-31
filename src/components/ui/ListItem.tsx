@@ -10,7 +10,7 @@ import {
   Collapse,
 } from '@mui/material';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Icon, IconName } from '@/components/ui';
 
@@ -24,6 +24,7 @@ interface Props {
   children?: ReactElement | ReactElement[];
   onClick?: () => void;
   disabled?: boolean;
+  child?: boolean;
 }
 
 interface PropsChildren {
@@ -33,6 +34,7 @@ interface PropsChildren {
 
 interface PropsItem extends Props {
   selected?: boolean;
+  selectedChild?: boolean;
 }
 const Children = ({ indent = 0, children }: PropsChildren) => {
   return useMemo(() => {
@@ -52,6 +54,8 @@ const Item: FC<PropsItem> = ({
   label,
   icon,
   selected,
+  selectedChild,
+  child,
   indent = 0,
   openDefault = false,
   openAlways = false,
@@ -68,14 +72,15 @@ const Item: FC<PropsItem> = ({
   };
 
   useEffect(() => {
-    if (selected) setOpen(!open);
+    if (selected) setOpen(true);
+    else setOpen(false);
   }, [selected]);
 
   return (
     <>
       <ListItemButton
-        sx={{ pl: indent ? 4.6 * indent : undefined }}
-        selected={selected}
+        sx={{ pl: indent ? 4.6 * indent : undefined, borderRadius: '6px' }}
+        selected={!child ? selected && !selectedChild : selectedChild}
         onClick={handleClick}
         disabled={disabled}
       >
@@ -101,11 +106,16 @@ const Item: FC<PropsItem> = ({
 
 export const ListItem: FC<Props> = ({ to, ...props }) => {
   const pathname = usePathname();
+  const params = useSearchParams();
 
-  if (to && to != pathname) {
+  if (to) {
     return (
-      <Link href={to}>
-        <Item {...props} selected={to == pathname} />
+      <Link href={to} style={{ width: '100%' }}>
+        <Item
+          {...props}
+          selected={to == pathname}
+          selectedChild={params.has('outgoing')}
+        />
       </Link>
     );
   }

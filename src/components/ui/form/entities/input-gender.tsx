@@ -42,7 +42,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             onChange={onChange}
           >
             <FormControlLabel
-              value="female"
+              value="male"
               control={
                 <Radio
                   color="primary"
@@ -50,14 +50,14 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                 />
               }
               label={
-                <Typography color={value == 'female' ? 'primary' : undefined}>
+                <Typography color={value == 'male' ? 'primary' : undefined}>
                   Мужской
                 </Typography>
               }
               labelPlacement="start"
             />
             <FormControlLabel
-              value="male"
+              value="female"
               control={
                 <Radio
                   color={'error'}
@@ -65,7 +65,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                 />
               }
               label={
-                <Typography color={value == 'male' ? 'red' : undefined}>
+                <Typography color={value == 'female' ? 'red' : undefined}>
                   Женский
                 </Typography>
               }

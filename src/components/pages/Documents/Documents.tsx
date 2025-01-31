@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const DocumentsPage = () => {
-  const { data: docs } = useQuery({
+  const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
     select: (data) => data.data,
@@ -37,7 +37,12 @@ const DocumentsPage = () => {
       </Typography>
       <Table docs={Array.isArray(docs) ? docs : []} />
       <NewProfileDialog
-        open={!info?.ROLES?.includes('ROLE_TRADEUNION') && docs && !docs.length}
+        open={
+          !info?.ROLES?.includes('ROLE_TRADEUNION') &&
+          docs &&
+          !docs.length &&
+          !isLoading
+        }
         btn="Вступить в профсоюз"
         link="/trade_union_member"
         title="Для просмотра раздела необходимо стать участником профсоюза"

@@ -51,6 +51,7 @@ const schema = yup
         .required('Необходимо принять согласие'),
     }),
     tradeunion: yup.number().required('Обязательное поле'),
+    id: yup.number().nullable(),
   })
   .required();
 
@@ -82,9 +83,24 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     },
   });
 
+  const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
+    mutationFn: async (data: ITradeUnionMember) => {
+      const session = await getSession();
+      if (doc)
+        return axios.post(
+          `${getBackendUrl}/api/private/document`,
+          { ...data, guid: doc.guid },
+          {
+            headers: { Authorization: `Bearer ${session?.user?.token}` },
+          },
+        );
+    },
+  });
+
   const onSubmit: SubmitHandler<ITradeUnionMember> = async (data) => {
     data.data.percents = Number(data.data.percents);
-    mutate(data);
+    if (!doc) mutate(data);
+    else mutateByGuid(data);
   };
 
   const info = useFetchProfile();
@@ -112,14 +128,22 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/documents/${data.data.description.split(' ')[1].slice(1)}`);
+      router.push(`/documents/${data.data.guid}`);
     }
-  }, [isSuccess, data]);
+    if (isSuccessByGuid && doc) {
+      router.push(`/documents/${doc.guid}`);
+    }
+  }, [isSuccess, data, doc, isSuccessByGuid]);
 
   useEffect(() => {
     if (doc) {
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
+      setFormValue('data.percents', doc.data.percents);
+      setFormValue('data.position', doc.data.position);
+      setFormValue('data.inviteDate', doc.data.inviteDate);
+      setFormValue('data.isActive', doc.data.isActive);
+      setFormValue('id', doc.id ? doc.id : null);
       setChoosenUnion(doc.tradeunion);
     }
   }, [doc]);
@@ -233,6 +257,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   {...register('data.percents')}
                   error={!!errors.data?.percents?.message}
                   helperText={errors.data?.percents?.message || ''}
+                  disabled
                   onChange={(e) => {
                     if (!/^\d+$/.test(e.target.value))
                       setPercents(chosenUnion?.percents || 0);

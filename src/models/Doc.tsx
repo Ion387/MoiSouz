@@ -9,6 +9,14 @@ export interface IDoc {
   documentDate: string;
   documentType: string;
   documentNumber: string;
+  id?: number;
   file: string;
   step: string;
+  guid: string;
+  data: {
+    isActive: boolean;
+    inviteDate: string;
+    percents: number;
+    position: string;
+  };
 }

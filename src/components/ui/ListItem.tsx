@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, {
+  FC,
+  ReactElement,
+  Suspense,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   List,
   ListItemText,
@@ -11,7 +18,6 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-
 import { Icon, IconName } from '@/components/ui';
 
 interface Props {
@@ -104,7 +110,7 @@ const Item: FC<PropsItem> = ({
   );
 };
 
-export const ListItem: FC<Props> = ({ to, ...props }) => {
+const ListItemSP: FC<Props> = ({ to, ...props }) => {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -121,4 +127,12 @@ export const ListItem: FC<Props> = ({ to, ...props }) => {
   }
 
   return <Item {...props} selected={to == pathname} />;
+};
+
+export const ListItem: FC<Props> = ({ ...props }) => {
+  return (
+    <Suspense>
+      <ListItemSP {...props} />
+    </Suspense>
+  );
 };

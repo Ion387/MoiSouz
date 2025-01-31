@@ -33,3 +33,20 @@ export const saveFormTUScan = async (file: any) => {
     },
   });
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const saveFormTU2Scan = async (file: any, guid: string) => {
+  if (typeof file != 'object') {
+    return null;
+  }
+
+  const formData = new FormData();
+  formData.append('upload', file);
+  formData.append('guid', guid);
+
+  return axios.post(`${getBackendUrl}/api/private/document-upload`, formData, {
+    headers: {
+      ...(await getHeaders()),
+    },
+  });
+};

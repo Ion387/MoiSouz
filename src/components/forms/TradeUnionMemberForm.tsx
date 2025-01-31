@@ -155,8 +155,15 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     reset({ data: { percents: union.percents || 0 } });
     setPercents(union.percents || 0);
     setChoosenUnion(union);
-    setFormValue('documentNumber', 'AMXXXXX');
-    setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
+    setFormValue('documentNumber', doc?.documentNumber || 'AMXXXXX');
+    setFormValue(
+      'documentDate',
+      doc?.documentDate || dayjs().format('DD.MM.YYYY'),
+    );
+    setFormValue(
+      'data.inviteDate',
+      doc?.data.inviteDate || dayjs().format('DD.MM.YYYY'),
+    );
   };
 
   useEffect(() => {
@@ -241,7 +248,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 >
                   {tradeUnions &&
                     tradeUnions.map((el: ITradeUnion) => (
-                      <MenuItem key={el.inn} value={el.id}>
+                      <MenuItem key={el.id} value={el.id}>
                         {el.title}
                       </MenuItem>
                     ))}

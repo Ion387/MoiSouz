@@ -78,9 +78,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
                 {el &&
                   el.docs &&
                   el.docs.map((doc, id, array) => (
-                    <Box key={doc.documentNumber}>
+                    <Box key={doc.guid}>
                       <Link
-                        href={`/documents/${doc.documentNumber}`}
+                        href={`/documents/${doc.guid}`}
                         style={{ width: '100%' }}
                       >
                         <Grid2 container sx={{ py: 2.4 }}>

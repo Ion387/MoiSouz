@@ -21,6 +21,7 @@ import * as yup from 'yup';
 
 import { Icon } from '@/components/ui';
 import { type ISignin } from '@/models/Signin';
+import { ButtonHelp } from '@/components/entities/profile';
 
 import s from './signin.module.scss';
 
@@ -70,6 +71,7 @@ const Signin = () => {
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
+        <ButtonHelp className={s.help} />
         <Link href={'/'} className={s.cross}>
           <IconButton>
             <Icon name="cross" />

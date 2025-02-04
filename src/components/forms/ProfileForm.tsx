@@ -130,6 +130,7 @@ const ProfileForm: FC<Props> = ({
 
   return (
     <Form
+      sx={{ pt: 3 }}
       title="Анкета профиля"
       loading={loading || isSubmitting}
       onCancel={onCancel}

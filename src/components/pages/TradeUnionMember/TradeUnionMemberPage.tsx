@@ -20,7 +20,7 @@ const TradeUnionMemberPage = () => {
   const { data: doc } = useQuery({
     queryKey: ['doc'],
     queryFn: () => getDoc(number),
-    select: (data) => data.data,
+    select: (data) => data?.data,
   });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const TradeUnionMemberPage = () => {
           <Typography variant="h3" marginBottom={2} pt={3}>
             Форма заявления на вступление в профсоюз
           </Typography>
-          {doc && <TradeUnionMemberForm doc={doc} />}
+          <TradeUnionMemberForm doc={doc} />
         </Grid2>
       )}
       <Grid2 size={4}>

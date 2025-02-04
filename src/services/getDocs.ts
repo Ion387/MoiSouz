@@ -10,13 +10,14 @@ export const getDocs = async () => {
   return response;
 };
 
-export const getDoc = async (guid: string) => {
-  const response = await axios.get(
-    `${getBackendUrl}/api/private/document/${guid}`,
-    {
-      headers: { ...(await getHeaders()) },
-    },
-  );
-
-  return response;
+export const getDoc = async (guid: string | undefined) => {
+  if (guid) {
+    const response = await axios.get(
+      `${getBackendUrl}/api/private/document/${guid}`,
+      {
+        headers: { ...(await getHeaders()) },
+      },
+    );
+    return response;
+  }
 };

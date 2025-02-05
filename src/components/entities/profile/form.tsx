@@ -17,10 +17,12 @@ import { FormProvider, UseFormReturn } from 'react-hook-form';
 import 'dayjs/locale/ru';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { PropsWithClassName, PropsWithSX } from '@/models/Props';
+import { globalTheme } from '@/styles/theme';
 
 interface Props {
-  title: string;
-  buttonCancel?: string;
+  title?: string;
+  buttonCancel?: string | null;
   buttonSubmit?: string;
   loading?: boolean;
   onCancel?: () => void;
@@ -29,10 +31,17 @@ interface Props {
   /** for FormProvider */
   methods: UseFormReturn<any, any, undefined>;
   defaultValues?: any;
+
+  /**  */
+  checkTradeUnionMember?: boolean;
 }
 
-export const Form: FC<PropsWithChildren & Props> = ({
+export const Form: FC<
+  PropsWithChildren & PropsWithClassName & PropsWithSX & Props
+> = ({
   children,
+  className,
+  sx,
   title,
   loading,
   buttonCancel = 'Отмена',
@@ -40,6 +49,7 @@ export const Form: FC<PropsWithChildren & Props> = ({
   onCancel,
   onSubmit,
   methods,
+  checkTradeUnionMember = true,
 }) => {
   const path = usePathname();
 
@@ -51,27 +61,36 @@ export const Form: FC<PropsWithChildren & Props> = ({
         ruRU.components.MuiLocalizationProvider.defaultProps.localeText
       }
     >
-      <Box sx={{ pt: 3 }}>
+      <Box
+        className={className}
+        sx={{
+          width: '100%',
+          ...(sx || {}),
+        }}
+      >
         <FormProvider {...methods}>
           <form onSubmit={onSubmit}>
             <Grid2 container>
-              <Grid2 size={9}>
-                <Typography variant="h3">{title}</Typography>
-              </Grid2>
-              {!path.includes('trade_union_member') && (
-                <Grid2 size={3} container justifyContent={'flex-end'}>
-                  <Link href={'/trade_union_member'}>
-                    <Button variant="contained">Вступить в профсоюз</Button>
-                  </Link>
+              {title && (
+                <Grid2 size={9}>
+                  <Typography variant="h3">{title}</Typography>
                 </Grid2>
               )}
+              {checkTradeUnionMember &&
+                !path.includes('trade_union_member') && (
+                  <Grid2 size={3} container justifyContent={'flex-end'}>
+                    <Link href={'/trade_union_member'}>
+                      <Button variant="contained">Вступить в профсоюз</Button>
+                    </Link>
+                  </Grid2>
+                )}
             </Grid2>
 
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                mt: 3,
+                mt: title ? 3 : 0,
                 p: 2,
                 backgroundColor: 'white',
                 borderRadius: 6,
@@ -118,7 +137,12 @@ export const Form: FC<PropsWithChildren & Props> = ({
                       padding: '15px 100px',
                       fontSize: '20px',
                       lineHeight: '27px',
+                      '&.Mui-disabled': {
+                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                        color: 'white !important',
+                      },
                     }}
+                    disabled={loading}
                   >
                     {loading ? (
                       <CircularProgress color="secondary" size="27px" />

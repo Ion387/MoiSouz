@@ -27,3 +27,8 @@ export interface IFormProfile {
   hobbies: number[];
   isActive: boolean;
 }
+
+export interface IFeedbackForm {
+  question: string;
+  description?: string;
+}

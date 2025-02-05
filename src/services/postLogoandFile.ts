@@ -43,6 +43,7 @@ export const saveFormTU2Scan = async (file: any, guid: string) => {
   const formData = new FormData();
   formData.append('upload', file);
   formData.append('guid', guid);
+  console.log('guid', guid);
 
   return axios.post(`${getBackendUrl}/api/private/document-upload`, formData, {
     headers: {

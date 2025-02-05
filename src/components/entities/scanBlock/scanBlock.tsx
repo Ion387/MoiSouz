@@ -35,7 +35,7 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/documents/}`);
+      router.push(`/documents`);
     }
   }, [isSuccess]);
 

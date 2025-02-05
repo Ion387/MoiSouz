@@ -14,10 +14,11 @@ import ScanBlock from '@/components/entities/scanBlock/scanBlock';
 const DocumentItem = () => {
   const path = usePathname();
   const number = path.split('/')[2];
+  console.log('path', path);
   const { data: doc } = useQuery({
     queryKey: ['doc'],
     queryFn: () => getDoc(number),
-    select: (data) => data.data,
+    select: (data) => data?.data,
   });
 
   return (

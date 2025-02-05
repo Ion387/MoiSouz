@@ -26,7 +26,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
       setPreview(null);
       return;
     }
-    console.log('value', value);
+
     switch (typeof value) {
       case 'object':
         const formData = new FormData();

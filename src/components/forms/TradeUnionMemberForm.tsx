@@ -9,6 +9,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -75,7 +76,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     getValues,
   } = methods;
 
-  const { mutate, data } = useMutation({
+  const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
       const session = await getSession();
 
@@ -85,7 +86,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     },
   });
 
-  const { mutate: mutateByGuid } = useMutation({
+  const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
       const session = await getSession();
       if (doc)
@@ -112,6 +113,15 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     queryFn: getApplications,
     select: (data) => data.data.data,
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push(`/documents/${data?.data.guid}`);
+    }
+    if (isSuccessByGuid && doc) {
+      router.push(`/documents/${doc.guid}`);
+    }
+  }, [isSuccess, data, doc, isSuccessByGuid]);
 
   useEffect(() => {
     if (info) {
@@ -231,13 +241,14 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 />
               </Grid2>
 
-              <Grid2 size={12}>
+              <Grid2 size={12} sx={{ position: 'relative' }}>
                 <InputLabel>Наименования профсоюза</InputLabel>
                 <Select
                   fullWidth
                   sx={{ padding: 1.6 }}
                   onChange={handleOrgChange}
                   value={String(chosenUnion?.id) || ''}
+                  error={!!errors.tradeunion?.message}
                 >
                   {tradeUnions &&
                     tradeUnions.map((el: ITradeUnion) => (
@@ -246,6 +257,11 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                       </MenuItem>
                     ))}
                 </Select>
+                {!!errors.tradeunion?.message && (
+                  <Typography className={s.errorText}>
+                    {errors.tradeunion?.message}
+                  </Typography>
+                )}
               </Grid2>
               <Grid2 size={4}>
                 <InputLabel>Дата вступления</InputLabel>
@@ -311,14 +327,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', padding: '16px 25px' }}
-                  onClick={async () => {
-                    await onSubmit(getValues());
-                    if (!doc) {
-                      router.push(`/documents/${data?.data?.guid}`);
-                    } else {
-                      router.push(`/documents/${doc.guid}`);
-                    }
-                  }}
+                  type="submit"
                 >
                   Далее
                 </Button>

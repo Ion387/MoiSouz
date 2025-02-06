@@ -4,3 +4,16 @@
   padding: 55px 55px 77px;
   position: relative;
 }
+
+.errorText {
+  color: #ff4949;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 16px;
+  white-space: nowrap;
+  margin: 0;
+  position: absolute;
+  right: auto;
+  left: -16px;
+  top: calc(100% - 2px);
+}

@@ -3,18 +3,30 @@
 import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 import Table from '@/components/sections/Docs/Table';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
+import { IDoc } from '@/models/Doc';
 import { getDocs } from '@/services/getDocs';
 import { Box, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
-const DocumentsPage = () => {
+const DocumentsWrapper = () => {
   const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
     select: (data) => data.data,
   });
+  const params = useSearchParams();
+  const param = !!params.entries().toArray().length
+    ? params.entries().toArray()[0][0]
+    : null;
+
+  const filtredDocs =
+    Array.isArray(docs) && param
+      ? docs.filter((el: IDoc) => el.folder === param)
+      : Array.isArray(docs)
+        ? docs
+        : [];
 
   const info = useFetchProfile();
   const [open, setOpen] = useState(
@@ -35,7 +47,7 @@ const DocumentsPage = () => {
       <Typography variant="h3" marginBottom={2}>
         Документы
       </Typography>
-      <Table docs={Array.isArray(docs) ? docs : []} />
+      <Table docs={filtredDocs} />
       <NewProfileDialog
         open={
           !info?.ROLES?.includes('ROLE_TRADEUNION') &&
@@ -56,6 +68,14 @@ const DocumentsPage = () => {
         onClose={path.includes('profile') ? () => setOpen(false) : () => {}}
       />
     </Box>
+  );
+};
+
+const DocumentsPage = () => {
+  return (
+    <Suspense>
+      <DocumentsWrapper />
+    </Suspense>
   );
 };
 

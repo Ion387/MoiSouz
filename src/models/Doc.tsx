@@ -9,6 +9,7 @@ export interface IDoc {
   documentDate: string;
   documentType: string;
   documentNumber: string;
+  folder: string;
   id?: number;
   file: string;
   step: string;

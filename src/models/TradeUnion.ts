@@ -5,6 +5,7 @@ export interface ITradeUnion {
   inn: string;
   kpp: string;
   id?: number;
+  guid?: string;
   address?: {
     postcode: string;
     region: string;
@@ -38,8 +39,5 @@ export interface ITradeUnion {
   percents?: number;
   tradeunionOwner?: { guid: string };
   scan: object | null | string;
-  parent?: {
-    inn?: string;
-    title?: string;
-  } | null;
+  parent?: string | null;
 }

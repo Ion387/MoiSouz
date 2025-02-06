@@ -167,12 +167,7 @@ const schema = yup
       .required('Необходимо принять согласие'),
     logo: yup.mixed().nullable(),
     scan: yup.mixed().required('Обязательное поле'),
-    parent: yup
-      .object({
-        title: yup.string(),
-        inn: yup.string(),
-      })
-      .nullable(),
+    parent: yup.string().nullable(),
   })
   .required();
 
@@ -189,7 +184,6 @@ const TradeUnionRegistrationForm = () => {
     formState: { errors },
     setValue: setFormValue,
     setError,
-    getValues,
   } = methods;
 
   const router = useRouter();
@@ -236,9 +230,7 @@ const TradeUnionRegistrationForm = () => {
       if (myTradeUnion.parent) {
         setChoosenUnion(
           tradeUnions.find(
-            (el: ITradeUnion) =>
-              el.title === myTradeUnion.parent.title &&
-              el.inn === myTradeUnion.parent.inn,
+            (el: ITradeUnion) => el.guid === myTradeUnion?.parent,
           ),
         );
         setInn(true);
@@ -278,7 +270,6 @@ const TradeUnionRegistrationForm = () => {
       setChoosenUnion(undefined);
       setFormValue('parent', null);
     }
-    console.log("getFieldState('parent')", getValues('parent'));
   }, [inn]);
 
   useEffect(() => {
@@ -314,8 +305,7 @@ const TradeUnionRegistrationForm = () => {
       setFormValue('bank.rs', chosenUnion?.bank?.rs);
       setFormValue('bank.bik', chosenUnion?.bank?.bik);
       setFormValue('bank.ks', chosenUnion?.bank?.ks);
-      setFormValue('parent.title', chosenUnion?.title);
-      setFormValue('parent.inn', chosenUnion?.inn);
+      setFormValue('parent', chosenUnion?.guid);
       setError('inn', {});
       setError('kpp', {});
       setError('ogrn', {});
@@ -366,7 +356,7 @@ const TradeUnionRegistrationForm = () => {
                   >
                     {tradeUnions &&
                       tradeUnions.map((el: ITradeUnion) => {
-                        if (el.title !== myTradeUnion.title)
+                        if (el.title !== myTradeUnion?.title)
                           return (
                             <MenuItem
                               key={el.title + el.inn}

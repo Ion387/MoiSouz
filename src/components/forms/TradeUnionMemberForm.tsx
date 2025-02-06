@@ -42,6 +42,7 @@ const schema = yup
       position: yup.string().required('Обязательное поле'),
       percents: yup
         .number()
+        .typeError('Обязательное поле')
         .min(0, 'Взнос должен быть больше 0')
         .max(100, 'Взнос должен быть не больше 100')
         .required('Обязательное поле'),
@@ -71,9 +72,10 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     reset,
     formState: { errors },
     setValue: setFormValue,
+    getValues,
   } = methods;
 
-  const { mutate, isSuccess, data } = useMutation({
+  const { mutate, data } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
       const session = await getSession();
 
@@ -83,7 +85,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     },
   });
 
-  const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
+  const { mutate: mutateByGuid } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
       const session = await getSession();
       if (doc)
@@ -125,15 +127,6 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
       setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     }
   }, [info]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      router.push(`/documents/${data.data.guid}`);
-    }
-    if (isSuccessByGuid && doc) {
-      router.push(`/documents/${doc.guid}`);
-    }
-  }, [isSuccess, data, doc, isSuccessByGuid]);
 
   useEffect(() => {
     if (doc) {
@@ -306,7 +299,10 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 <Button
                   variant="contained"
                   sx={{ width: '100%', padding: '16px 25px' }}
-                  type="submit"
+                  onClick={async () => {
+                    await onSubmit(getValues());
+                    router.push('/documents?drafts');
+                  }}
                 >
                   В черновик
                 </Button>
@@ -315,7 +311,14 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', padding: '16px 25px' }}
-                  type="submit"
+                  onClick={async () => {
+                    await onSubmit(getValues());
+                    if (!doc) {
+                      router.push(`/documents/${data?.data?.guid}`);
+                    } else {
+                      router.push(`/documents/${doc.guid}`);
+                    }
+                  }}
                 >
                   Далее
                 </Button>

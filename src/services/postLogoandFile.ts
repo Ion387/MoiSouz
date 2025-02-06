@@ -50,3 +50,19 @@ export const saveFormTU2Scan = async (file: any, guid: string) => {
     },
   });
 };
+
+export const postDoc = async (
+  data: { step: string },
+  guid: string | undefined,
+) => {
+  if (guid) {
+    const response = await axios.post(
+      `${getBackendUrl}/api/private/document/${guid}`,
+      { step: data.step },
+      {
+        headers: { ...(await getHeaders()) },
+      },
+    );
+    return response;
+  } else return null;
+};

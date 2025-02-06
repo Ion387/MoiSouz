@@ -167,10 +167,12 @@ const schema = yup
       .required('Необходимо принять согласие'),
     logo: yup.mixed().nullable(),
     scan: yup.mixed().required('Обязательное поле'),
-    parent: yup.object({
-      title: yup.string(),
-      inn: yup.string(),
-    }),
+    parent: yup
+      .object({
+        title: yup.string(),
+        inn: yup.string(),
+      })
+      .nullable(),
   })
   .required();
 
@@ -187,6 +189,7 @@ const TradeUnionRegistrationForm = () => {
     formState: { errors },
     setValue: setFormValue,
     setError,
+    getValues,
   } = methods;
 
   const router = useRouter();
@@ -230,6 +233,16 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (myTradeUnion) {
       reset(myTradeUnion);
+      if (myTradeUnion.parent) {
+        setChoosenUnion(
+          tradeUnions.find(
+            (el: ITradeUnion) =>
+              el.title === myTradeUnion.parent.title &&
+              el.inn === myTradeUnion.parent.inn,
+          ),
+        );
+        setInn(true);
+      }
     }
   }, [myTradeUnion]);
 
@@ -263,7 +276,9 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (!inn) {
       setChoosenUnion(undefined);
+      setFormValue('parent', null);
     }
+    console.log("getFieldState('parent')", getValues('parent'));
   }, [inn]);
 
   useEffect(() => {

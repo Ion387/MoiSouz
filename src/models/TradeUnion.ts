@@ -41,5 +41,5 @@ export interface ITradeUnion {
   parent?: {
     inn?: string;
     title?: string;
-  };
+  } | null;
 }

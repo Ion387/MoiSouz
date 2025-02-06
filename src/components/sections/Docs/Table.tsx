@@ -80,7 +80,11 @@ const Table: FC<ITableProps> = ({ docs }) => {
                   el.docs.map((doc, id, array) => (
                     <Box key={doc.guid} className={s.hover}>
                       <Link
-                        href={`/documents/${doc.guid}`}
+                        href={
+                          doc.folder === 'drafts'
+                            ? `/documents/drafts/${doc.guid}`
+                            : `/documents/${doc.guid}`
+                        }
                         style={{ width: '100%' }}
                       >
                         <Grid2 container sx={{ py: 2.4 }}>

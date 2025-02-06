@@ -441,7 +441,8 @@ export default createTheme(
       MuiDialog: {
         styleOverrides: {
           root: {
-            width: 470,
+            maxWidth: 742,
+            width: '100%',
             margin: '0 auto',
           },
         },

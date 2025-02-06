@@ -64,7 +64,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (session?.user?.token) {
-      router.push('/profile');
+      router.push('/documents');
     }
   }, [session, router]);
 
@@ -74,7 +74,7 @@ const Signin = () => {
         <ButtonHelp className={s.help} />
         <Link href={'/'} className={s.cross}>
           <IconButton>
-            <Icon name="cross" />
+            <Icon name="close" />
           </IconButton>
         </Link>
         <form onSubmit={handleSubmit(onSubmit)}>

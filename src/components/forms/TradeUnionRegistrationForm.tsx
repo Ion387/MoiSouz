@@ -12,6 +12,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -166,6 +167,10 @@ const schema = yup
       .required('Необходимо принять согласие'),
     logo: yup.mixed().nullable(),
     scan: yup.mixed().required('Обязательное поле'),
+    parent: yup.object({
+      title: yup.string(),
+      inn: yup.string(),
+    }),
   })
   .required();
 
@@ -238,17 +243,28 @@ const TradeUnionRegistrationForm = () => {
   };
 
   const handleOrgChange = (e: SelectChangeEvent) => {
+    const elem = e.target.value.split('/');
+
     const union = tradeUnions.find(
-      (el: ITradeUnion) => el.inn === e.target.value,
+      (el: ITradeUnion) => el.inn === elem[0] && el.title === elem[1],
     );
+
     setChoosenUnion(union);
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !myTradeUnion?.tariff?.id) {
       router.push('/tariffs');
+    } else if (isSuccess) {
+      router.push('/main');
     }
-  }, [isSuccess]);
+  }, [isSuccess, myTradeUnion]);
+
+  useEffect(() => {
+    if (!inn) {
+      setChoosenUnion(undefined);
+    }
+  }, [inn]);
 
   useEffect(() => {
     if (addressString) {
@@ -283,6 +299,8 @@ const TradeUnionRegistrationForm = () => {
       setFormValue('bank.rs', chosenUnion?.bank?.rs);
       setFormValue('bank.bik', chosenUnion?.bank?.bik);
       setFormValue('bank.ks', chosenUnion?.bank?.ks);
+      setFormValue('parent.title', chosenUnion?.title);
+      setFormValue('parent.inn', chosenUnion?.inn);
       setError('inn', {});
       setError('kpp', {});
       setError('ogrn', {});
@@ -309,7 +327,14 @@ const TradeUnionRegistrationForm = () => {
             <Grid2 container spacing={2}>
               <Grid2 size={12}>
                 <Checkbox value={inn} onClick={() => setInn((prev) => !prev)} />
-                <span> Организация без ИНН</span>
+                <Typography
+                  component={'span'}
+                  variant="body1"
+                  fontWeight={600}
+                  pt={0.2}
+                >
+                  Организация без ИНН
+                </Typography>
               </Grid2>
               {inn && (
                 <Grid2 size={12}>
@@ -318,14 +343,24 @@ const TradeUnionRegistrationForm = () => {
                     fullWidth
                     sx={{ padding: 1.6 }}
                     onChange={handleOrgChange}
-                    value={chosenUnion?.inn || ''}
+                    value={
+                      chosenUnion
+                        ? chosenUnion?.inn + '/' + chosenUnion?.title
+                        : ''
+                    }
                   >
                     {tradeUnions &&
-                      tradeUnions.map((el: ITradeUnion) => (
-                        <MenuItem key={el.title + el.inn} value={el.inn}>
-                          {el.inn + ' - ' + el.title}
-                        </MenuItem>
-                      ))}
+                      tradeUnions.map((el: ITradeUnion) => {
+                        if (el.title !== myTradeUnion.title)
+                          return (
+                            <MenuItem
+                              key={el.title + el.inn}
+                              value={el.inn + '/' + el.title}
+                            >
+                              {el.inn + ' - ' + el.title}
+                            </MenuItem>
+                          );
+                      })}
                   </Select>
                 </Grid2>
               )}
@@ -391,6 +426,52 @@ const TradeUnionRegistrationForm = () => {
                   error={errors.ogrn?.message}
                   disabled={inn}
                   maxL={13}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  Дата пост. на учет
+                </InputLabel>
+                {!inn ? (
+                  <InputDate name="registrationDate" />
+                ) : (
+                  <TextField
+                    {...register('registrationDate')}
+                    disabled
+                    error={!!errors.registrationDate?.message}
+                    helperText={errors.registrationDate?.message || ''}
+                  />
+                )}
+              </Grid2>
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ОКАТО
+                </InputLabel>
+                <TextFieldCustom
+                  register={register('okato')}
+                  placeholder="11111111111"
+                  disabled={inn}
+                  error={errors.okato?.message}
+                  maxL={11}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <InputLabel
+                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                >
+                  ОКТМО
+                </InputLabel>
+
+                <TextFieldCustom
+                  register={register('oktmo')}
+                  disabled={inn}
+                  placeholder="11111111111"
+                  error={errors.oktmo?.message}
+                  maxL={11}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -461,53 +542,6 @@ const TradeUnionRegistrationForm = () => {
               </Grid2>
               <Grid2 size={3}>
                 <TextField {...register('address.flat')} placeholder="Пом." />
-              </Grid2>
-
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  Дата пост. на учет
-                </InputLabel>
-                {!inn ? (
-                  <InputDate name="registrationDate" />
-                ) : (
-                  <TextField
-                    {...register('registrationDate')}
-                    disabled
-                    error={!!errors.registrationDate?.message}
-                    helperText={errors.registrationDate?.message || ''}
-                  />
-                )}
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ОКАТО
-                </InputLabel>
-                <TextFieldCustom
-                  register={register('okato')}
-                  placeholder="11111111111"
-                  disabled={inn}
-                  error={errors.okato?.message}
-                  maxL={11}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ОКТМО
-                </InputLabel>
-
-                <TextFieldCustom
-                  register={register('oktmo')}
-                  disabled={inn}
-                  placeholder="11111111111"
-                  error={errors.oktmo?.message}
-                  maxL={11}
-                />
               </Grid2>
               <Grid2 size={12}>
                 <InputLabel sx={{ marginBottom: 0 }}>Председатель</InputLabel>
@@ -652,7 +686,12 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={12}>
                 <InputFile
                   name="scan"
-                  label="Прикрепить Устав профсоюзной организации (документ в формате pdf)"
+                  label={
+                    <span>
+                      Прикрепить Устав профсоюзной организации <br />
+                      (документ в формате pdf)
+                    </span>
+                  }
                 />
               </Grid2>
               <Grid2 size={12}>

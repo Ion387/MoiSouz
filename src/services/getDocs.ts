@@ -19,5 +19,5 @@ export const getDoc = async (guid: string | undefined) => {
       },
     );
     return response;
-  }
+  } else return null;
 };

@@ -80,18 +80,21 @@ const Tariffs = ({
           <Typography>- Реклама от партнеров</Typography>
         </List>
         {!isActive ? (
-          <Link href={'/registration'}>
+          <Link
+            href={'/registration'}
+            style={{ maxWidth: '180px', width: '100%' }}
+          >
             <Button
               variant="contained"
-              sx={{ padding: '12px 17px', width: '180px' }}
+              sx={{ padding: '12px 17px', minWidth: '20%' }}
             >
-              Подключить
+              Оформить подписку
             </Button>
           </Link>
         ) : (
           <Button
             variant="contained"
-            sx={{ padding: '12px 17px' }}
+            sx={{ padding: '12px 17px', minWidth: '20%' }}
             onClick={() =>
               handleSubmit(
                 data
@@ -102,7 +105,7 @@ const Tariffs = ({
               )
             }
           >
-            Подключить
+            Оформить подписку
           </Button>
         )}
       </Box>

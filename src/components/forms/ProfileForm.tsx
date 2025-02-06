@@ -155,18 +155,21 @@ const ProfileForm: FC<Props> = ({
             error={!!errors.firstName?.message}
             helperText={errors.firstName?.message || ''}
           />
+          <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
+          <TextField
+            {...register('middleName')}
+            placeholder="Иванович"
+            error={!!errors.middleName?.message}
+            helperText={errors.middleName?.message || ''}
+          />
         </Box>
 
-        <InputImage sx={{ mt: 4 }} name="avatar" label="Добавить фото" />
+        <InputImage
+          sx={{ mt: 4, minWidth: '250px' }}
+          name="avatar"
+          label="Добавить фото"
+        />
       </Box>
-
-      <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
-      <TextField
-        {...register('middleName')}
-        placeholder="Иванович"
-        error={!!errors.middleName?.message}
-        helperText={errors.middleName?.message || ''}
-      />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate name="birthdate" label="Дата рождения" />

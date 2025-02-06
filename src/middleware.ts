@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest) {
   }
   if (pathname === '/') {
     if (token) {
-      const url = new URL(`/profile`, req.url);
+      const url = new URL(`/documents`, req.url);
       url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }

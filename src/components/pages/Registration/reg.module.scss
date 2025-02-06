@@ -27,6 +27,12 @@
   right: 25px;
 }
 
+.help {
+  position: absolute;
+  top: 30px;
+  left: 25px;
+}
+
 .title {
   font-weight: 700;
   font-size: 32px;
@@ -39,6 +45,7 @@
   font-weight: 600;
   color: rgb(32, 34, 36);
   margin-top: 25px;
+  text-align: center;
   span {
     color: rgb(90, 140, 255);
   }

@@ -31,7 +31,7 @@ const ProfilePage = () => {
   ) : (
     <Box sx={{ p: 2 }}>
       <Typography variant="h3" marginBottom={2}>
-        Анкета профсоюза
+        Профиль профсоюза
       </Typography>
       <TradeUnionRegistrationForm />
     </Box>

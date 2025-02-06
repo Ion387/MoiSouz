@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import ProfilePage from '../Profile/Profile';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import Tariffs from '@/components/sections/Home/Tariffs/Tariffs';
+import { globalTheme } from '@/styles/theme';
 
 const TradeUnionRegistrationPage = () => {
   const [steps, setSteps] = useState<number>(1);
@@ -36,7 +37,7 @@ const TradeUnionRegistrationPage = () => {
       ) : steps === 3 ? (
         <Grid2 size={12}>
           <Paper>
-            <Tariffs noTitle setSteps={setSteps} />
+            <Tariffs noTitle />
           </Paper>
         </Grid2>
       ) : (
@@ -58,11 +59,13 @@ const TradeUnionRegistrationPage = () => {
                   <Button
                     variant={'contained'}
                     sx={{
-                      minWidth: '228px',
-                      color: '#fff',
-                      padding: '14px 17px',
-                      width: '100%',
-                      border: '0px',
+                      padding: '15px 100px',
+                      fontSize: '20px',
+                      lineHeight: '27px',
+                      '&.Mui-disabled': {
+                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                        color: 'white !important',
+                      },
                     }}
                   >
                     Закрыть

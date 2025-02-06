@@ -72,15 +72,30 @@ export const Form: FC<
           <form onSubmit={onSubmit}>
             <Grid2 container>
               {title && (
-                <Grid2 size={9}>
-                  <Typography variant="h3">{title}</Typography>
+                <Grid2 size={8}>
+                  <Typography variant="h3" lineHeight={'57px'}>
+                    {title}
+                  </Typography>
                 </Grid2>
               )}
               {checkTradeUnionMember &&
                 !path.includes('trade_union_member') && (
-                  <Grid2 size={3} container justifyContent={'flex-end'}>
+                  <Grid2 size={4} container justifyContent={'flex-end'}>
                     <Link href={'/trade_union_member'}>
-                      <Button variant="contained">Вступить в профсоюз</Button>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          padding: '15px 15px',
+                          fontSize: '16px',
+                          lineHeight: '27px',
+                          '&.Mui-disabled': {
+                            backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                            color: 'white !important',
+                          },
+                        }}
+                      >
+                        Вступить в профсоюз
+                      </Button>
                     </Link>
                   </Grid2>
                 )}

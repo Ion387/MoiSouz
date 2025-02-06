@@ -38,4 +38,8 @@ export interface ITradeUnion {
   percents?: number;
   tradeunionOwner?: { guid: string };
   scan: object | null | string;
+  parent?: {
+    inn?: string;
+    title?: string;
+  };
 }

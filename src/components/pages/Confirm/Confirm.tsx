@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import axios from 'axios';
 import useMobile from '@/hooks/UseMobile';
 import { getBackendUrl } from '@/constants/url';
+import { globalTheme } from '@/styles/theme';
 
 const Confirm = () => {
   const guid = usePathname().split('email/')[1];
@@ -36,11 +37,13 @@ const Confirm = () => {
           <Button
             variant="contained"
             sx={{
-              padding: '15px 75px',
-              margin: '20px auto 0',
+              padding: '15px 100px',
               fontSize: '20px',
               lineHeight: '27px',
-              width: '100%',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
             }}
           >
             {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
@@ -50,11 +53,13 @@ const Confirm = () => {
           <Button
             variant="contained"
             sx={{
-              padding: '15px 75px',
-              margin: '20px auto 0',
+              padding: '15px 100px',
               fontSize: '20px',
               lineHeight: '27px',
-              width: '100%',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
             }}
           >
             {mobile ? 'Войти' : 'Войти в личный кабинет'}

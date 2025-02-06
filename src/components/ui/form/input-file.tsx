@@ -11,9 +11,10 @@ import { getBackendUrl } from '@/constants/url';
 interface Props {
   name: string;
   label?: ReactNode;
+  mw?: string;
 }
 
-export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label, mw }) => {
   const { control, getValues } = useFormContext();
   const ref = createRef<HTMLInputElement>();
 
@@ -84,7 +85,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
               flexDirection: 'column',
               gap: 1,
               width: '50%',
-              minWidth: 320,
+              minWidth: mw || 320,
               flex: 1,
               border: '1px dotted rgb(226, 226, 226)',
               margin: '0 auto',
@@ -97,7 +98,13 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             onClick={handleOpen}
           >
             {preview == null ? (
-              <Box display={'flex'} alignItems={'center'} gap={'12px'}>
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                gap={'12px'}
+                justifyContent={'space-around'}
+                width={'100%'}
+              >
                 <Icon name="cloud" color="rgb(166, 166, 166)" />
                 {label}
               </Box>
@@ -111,7 +118,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                     setPreview(null);
                   }}
                 >
-                  <Icon name="cross" color="#000" sx={{ scale: '0.75' }} />
+                  <Icon name="close" color="#000" />
                 </span>
               </Box>
             )}

@@ -29,6 +29,8 @@ import { getBackendUrl } from '@/constants/url';
 import { Icon } from '@/components/ui';
 import { type IReg } from '@/models/Reg';
 import s from './reg.module.scss';
+import { ButtonHelp } from '@/components/entities/profile';
+import { globalTheme } from '@/styles/theme';
 
 const Registration = () => {
   const [tabs, setTabs] = useState<number>(0);
@@ -101,9 +103,10 @@ const Registration = () => {
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
+        <ButtonHelp className={s.help} />
         <Link href={'/'} className={s.cross}>
           <IconButton>
-            <Icon name="cross" />
+            <Icon name="close" />
           </IconButton>
         </Link>
 
@@ -211,13 +214,14 @@ const Registration = () => {
             type="submit"
             variant="contained"
             sx={{
-              padding: '15px 75px',
-              margin: '0 auto',
+              padding: '15px 100px',
               fontSize: '20px',
               lineHeight: '27px',
-              maxWidth: '270px',
-              width: '100%',
               marginTop: '24px',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
             }}
           >
             {isPending && !isSuccess ? (
@@ -241,7 +245,7 @@ const Registration = () => {
                 target="_blank"
               >
                 политикой обработки персональных данных,
-              </a>
+              </a>{' '}
             </span>
             и на получение информационных сообщений от группы компаний Мой Союз.
           </Typography>
@@ -253,32 +257,48 @@ const Registration = () => {
         className={s.dialog}
         fullWidth
       >
-        <IconButton
-          onClick={handleClose}
-          className={s.crossDialog}
-          sx={{ alignSelf: 'end' }}
-        >
-          <Icon name="cross" />
-        </IconButton>
         {/*resData?.data.status === 'error' ? (
           <ErrorFormIcon />
         ) : (
           <SuccessFormIcon />
         )*/}
         <Typography variant="h3">{resData?.data.description}</Typography>
-        <Link href="/">
+        <Link href="/" style={{ width: '100%' }}>
           <Button
             variant="contained"
             sx={{
-              padding: '15px 15px',
-              margin: '20px auto 0',
+              padding: '15px 100px',
               fontSize: '20px',
               lineHeight: '27px',
-              minWidth: mobile ? '0px' : '271px',
+              minWidth: mobile ? '106px' : '338px',
+              marginTop: '24px',
               width: '100%',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
             }}
           >
             {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
+          </Button>
+        </Link>
+        <Link href="/signin" style={{ width: '100%' }}>
+          <Button
+            variant="contained"
+            sx={{
+              padding: '15px 100px',
+              fontSize: '20px',
+              lineHeight: '27px',
+              minWidth: mobile ? '106px' : '338px',
+              marginTop: '24px',
+              width: '100%',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
+            }}
+          >
+            {mobile ? 'Войти' : 'Войти в личный кабинет'}
           </Button>
         </Link>
       </Dialog>

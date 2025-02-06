@@ -19,9 +19,9 @@ export const ProfileAside = () => {
           icon="document"
           to="/documents" /*openAlways*/
         >
-          <ListItem label="Входящие" disabled child />
-          <ListItem label="Исходящие" to="/documents?outgoing" child />
-          <ListItem label="Черновики" disabled child />
+          <ListItem label="Входящие" to="/documents?incoming" />
+          <ListItem label="Исходящие" to="/documents?outgoing" />
+          <ListItem label="Черновики" to="/documents?drafts" />
         </ListItem>
         <ListItem label="Мои организации" icon="square-2x2" disabled />
         <ListItem label="Коллеги" icon="peoples" disabled />

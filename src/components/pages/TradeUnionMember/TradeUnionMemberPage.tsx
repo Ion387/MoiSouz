@@ -31,11 +31,11 @@ const TradeUnionMemberPage = () => {
   return (
     <Grid2 container sx={{ p: 2 }} spacing={1.2}>
       {steps === 1 ? (
-        <Grid2 size={8}>
+        <Grid2 size={doc?.step ? 8 : 12}>
           <ProfilePage />
         </Grid2>
       ) : (
-        <Grid2 size={8}>
+        <Grid2 size={doc?.step ? 8 : 12}>
           <Typography variant="h3" marginBottom={2} pt={3}>
             Форма заявления на вступление в профсоюз
           </Typography>
@@ -43,7 +43,9 @@ const TradeUnionMemberPage = () => {
         </Grid2>
       )}
       <Grid2 size={4}>
-        <ProgressBar steps={stepTransformation(String(doc?.step))} />
+        {doc?.step && (
+          <ProgressBar steps={stepTransformation(String(doc?.step))} />
+        )}
       </Grid2>
     </Grid2>
   );

@@ -20,6 +20,17 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
   link,
 }) => {
   const { control } = useFormContext();
+  let fhalf = '';
+  let shalf = '';
+  let symb = '';
+  if (typeof label === 'string') {
+    if (label.includes('с ')) {
+      symb = 'с ';
+    }
+    const arr = label.split(symb);
+    fhalf = arr[0];
+    shalf = arr[1] || '';
+  }
 
   return (
     <Box sx={{ display: 'flex', ...(sx || {}) }}>
@@ -31,16 +42,34 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
             control={
               <Checkbox
                 sx={{ color: error ? '#d32f2f' : null }}
-                size="large"
                 value={value == true}
                 checked={value == true}
                 onChange={onChange}
               />
             }
             label={
-              <Typography whiteSpace="break-spaces" fontSize={14}>
+              <Typography
+                whiteSpace="break-spaces"
+                component={'span'}
+                variant="body1"
+                fontWeight={600}
+              >
                 <a href={link} target="_blank">
-                  {label}
+                  {fhalf && shalf ? (
+                    <span>
+                      {fhalf}c{' '}
+                      <span
+                        style={{
+                          color: 'rgb(72, 128, 255)',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        {shalf}
+                      </span>
+                    </span>
+                  ) : (
+                    label
+                  )}
                 </a>
               </Typography>
             }

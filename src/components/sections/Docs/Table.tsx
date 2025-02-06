@@ -74,11 +74,11 @@ const Table: FC<ITableProps> = ({ docs }) => {
                   {el.tradeunion}
                 </Typography>
               </Grid2>
-              <Grid2 size={9} className={s.hover}>
+              <Grid2 size={9}>
                 {el &&
                   el.docs &&
                   el.docs.map((doc, id, array) => (
-                    <Box key={doc.guid}>
+                    <Box key={doc.guid} className={s.hover}>
                       <Link
                         href={`/documents/${doc.guid}`}
                         style={{ width: '100%' }}

@@ -5,11 +5,7 @@ import Image from 'next/image';
 import { Box, Container, IconButton } from '@mui/material';
 import clsx from 'clsx';
 
-import {
-  ButtonHelp,
-  ButtonNotify,
-  UserNav,
-} from '@/components/entities/profile';
+import { ButtonHelp, UserNav } from '@/components/entities/profile';
 import styles from './header.module.scss';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { Icon } from '@/components/ui';
@@ -44,7 +40,7 @@ export const ProfileHeader = () => {
 
         <Box>
           <ButtonHelp sx={{ mr: 0.5 }} />
-          <ButtonNotify count={0} />
+          {/*<ButtonNotify count={0} />*/}
           <UserNav
             role={
               profileData?.ROLES && profileData?.ROLES.length

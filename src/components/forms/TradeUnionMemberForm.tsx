@@ -290,10 +290,10 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   link={
                     '/Политика_в_отношении_обработки_персональных_данных.pdf'
                   }
-                  label={`С уставом профсоюзной организации ознакомлен/на`}
+                  label={`Ознакомлен/на с уставом профсоюзной организации `}
                 />
               </Grid2>
-              <Grid2 size={6}>
+              <Grid2 size={4}>
                 <Button
                   variant="outlined"
                   sx={{ width: '100%' }}
@@ -302,13 +302,22 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   Отменить
                 </Button>
               </Grid2>
-              <Grid2 size={6}>
+              <Grid2 size={4}>
                 <Button
                   variant="contained"
                   sx={{ width: '100%', padding: '16px 25px' }}
                   type="submit"
                 >
-                  Сохранить
+                  В черновик
+                </Button>
+              </Grid2>
+              <Grid2 size={4}>
+                <Button
+                  variant="outlined"
+                  sx={{ width: '100%', padding: '16px 25px' }}
+                  type="submit"
+                >
+                  Далее
                 </Button>
               </Grid2>
             </Grid2>

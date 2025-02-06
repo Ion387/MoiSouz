@@ -30,7 +30,6 @@ interface Props {
   children?: ReactElement | ReactElement[];
   onClick?: () => void;
   disabled?: boolean;
-  child?: boolean;
 }
 
 interface PropsChildren {
@@ -40,7 +39,7 @@ interface PropsChildren {
 
 interface PropsItem extends Props {
   selected?: boolean;
-  selectedChild?: boolean;
+  opened?: boolean;
 }
 const Children = ({ indent = 0, children }: PropsChildren) => {
   return useMemo(() => {
@@ -60,8 +59,7 @@ const Item: FC<PropsItem> = ({
   label,
   icon,
   selected,
-  selectedChild,
-  child,
+  opened,
   indent = 0,
   openDefault = false,
   openAlways = false,
@@ -78,15 +76,15 @@ const Item: FC<PropsItem> = ({
   };
 
   useEffect(() => {
-    if (selected) setOpen(true);
+    if (opened) setOpen(true);
     else setOpen(false);
-  }, [selected]);
+  }, [opened]);
 
   return (
     <>
       <ListItemButton
         sx={{ pl: indent ? 4.6 * indent : undefined, borderRadius: '6px' }}
-        selected={!child ? selected && !selectedChild : selectedChild}
+        selected={selected}
         onClick={handleClick}
         disabled={disabled}
       >
@@ -113,20 +111,28 @@ const Item: FC<PropsItem> = ({
 const ListItemSP: FC<Props> = ({ to, ...props }) => {
   const pathname = usePathname();
   const params = useSearchParams();
+  const param = !!params.entries().toArray().length
+    ? params.entries().toArray()[0][0]
+    : null;
 
   if (to) {
     return (
       <Link href={to} style={{ width: '100%' }}>
         <Item
           {...props}
-          selected={to == pathname}
-          selectedChild={params.has('outgoing')}
+          selected={!param ? to == pathname : to == pathname + '?' + param}
+          opened={to.includes(pathname)}
         />
       </Link>
     );
   }
 
-  return <Item {...props} selected={to == pathname} />;
+  return (
+    <Item
+      {...props}
+      selected={!param ? to == pathname : to == pathname + '?' + param}
+    />
+  );
 };
 
 export const ListItem: FC<Props> = ({ ...props }) => {

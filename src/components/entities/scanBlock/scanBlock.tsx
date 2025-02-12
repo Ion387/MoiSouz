@@ -25,7 +25,6 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
-import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
 
 const schema = yup
@@ -52,6 +51,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
       info?.ROLES?.includes('ROLE_TRADEUNION') ? schema : schemaForUsers,
     ),
   });
+  const { setValue, getValues } = methods;
   const { handleSubmit } = methods;
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -79,17 +79,25 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (file.files) {
+      const personal = file.files.find((el) => el.type === 'AM_personal');
+      const amount = file.files.find((el) => el.type === 'AM_amount');
+      const scan = file.files.find((el) => el.type === 'AM_scan');
+      setValue('personal', personal);
+      setValue('amount', amount);
+      setValue('upload', scan);
+    }
+    console.log(getValues());
+  }, [file]);
+
   const onSubmit: SubmitHandler<object> = async (data) => {
     mutate(data);
   };
   return (
     <Paper>
       <Box pb={2.4}>
-        <a
-          href={getBackendUrl ? getBackendUrl + file : ''}
-          target="_blank"
-          style={{ width: '100%' }}
-        >
+        <a href={file.file} target="_blank" style={{ width: '100%' }}>
           <ListItemButton
             sx={{
               borderRadius: '6px',
@@ -114,11 +122,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
             to={`/trade_union_member`}
           />
         )}
-        <a
-          download
-          href={getBackendUrl ? getBackendUrl + file : ''}
-          style={{ width: '100%' }}
-        >
+        <a download href={file.file} style={{ width: '100%' }}>
           <ListItemButton
             sx={{
               borderRadius: '6px',
@@ -159,23 +163,6 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
             </Grid2>
 
             <Grid2 size={12}>
-              <Button
-                variant="contained"
-                sx={{
-                  padding: '15px 15px',
-                  fontSize: '16px',
-                  lineHeight: '27px',
-                  width: '100%',
-                  '&.Mui-disabled': {
-                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                    color: 'white !important',
-                  },
-                }}
-                type="submit"
-              >
-                Отправить в профсоюз
-              </Button>
-
               {info?.ROLES?.includes('ROLE_TRADEUNION') && (
                 <Button
                   variant="contained"
@@ -184,7 +171,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
                     fontSize: '16px',
                     lineHeight: '27px',
                     width: '100%',
-                    mt: '24px',
+
                     '&.Mui-disabled': {
                       backgroundColor: `${globalTheme.palette.primary.main} !important`,
                       color: 'white !important',
@@ -197,6 +184,25 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
                   На проверке Профсоюзом
                 </Button>
               )}
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 15px',
+                  fontSize: '16px',
+                  lineHeight: '27px',
+                  width: '100%',
+                  mt: '24px',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+                type="submit"
+              >
+                {!info?.ROLES?.includes('ROLE_TRADEUNION')
+                  ? 'Отправить в профсоюз'
+                  : 'Принять в профсоюз'}
+              </Button>
             </Grid2>
           </Grid2>
         </form>

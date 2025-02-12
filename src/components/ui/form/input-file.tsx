@@ -21,6 +21,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label, mw }) => {
   const [input, setInput] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const value = getValues(name) || input;
+  console.log('value', value);
 
   useEffect(() => {
     if (value == null) {
@@ -32,7 +33,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label, mw }) => {
       case 'object':
         const formData = new FormData();
         formData.append('file', value);
-        setPreview(value.name);
+        setPreview(value.name || value.originalName);
         break;
 
       case 'string':

@@ -40,6 +40,7 @@ const Confirm = () => {
               padding: '15px 100px',
               fontSize: '20px',
               lineHeight: '27px',
+              width: '100%',
               '&.Mui-disabled': {
                 backgroundColor: `${globalTheme.palette.primary.main} !important`,
                 color: 'white !important',
@@ -56,6 +57,7 @@ const Confirm = () => {
               padding: '15px 100px',
               fontSize: '20px',
               mt: '24px',
+              width: '100%',
               lineHeight: '27px',
               '&.Mui-disabled': {
                 backgroundColor: `${globalTheme.palette.primary.main} !important`,

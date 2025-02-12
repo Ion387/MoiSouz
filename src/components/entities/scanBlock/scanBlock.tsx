@@ -19,13 +19,13 @@ import {
   ListItemText,
   Paper,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
-import { IDoc } from '@/models/Doc';
+import { getDoc } from '@/services/getDocs';
 
 const schema = yup
   .object({
@@ -43,7 +43,7 @@ const schemaForUsers = yup
   })
   .required();
 
-const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
+const ScanBlock = ({ number }: { number: string }) => {
   const { profileInfo: info } = useGetProfileInfo();
   const methods = useForm({
     mode: 'onChange',
@@ -51,8 +51,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
       info?.ROLES?.includes('ROLE_TRADEUNION') ? schema : schemaForUsers,
     ),
   });
-  const { setValue, getValues } = methods;
-  const { handleSubmit } = methods;
+  const { handleSubmit, setValue } = methods;
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate, isSuccess } = useMutation({
@@ -73,6 +72,12 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
     },
   });
 
+  const { data: file } = useQuery({
+    queryKey: ['doc'],
+    queryFn: () => getDoc(number),
+    select: (data) => data?.data,
+  });
+
   useEffect(() => {
     if (isSuccess) {
       router.push(`/documents`);
@@ -80,15 +85,14 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (file.files) {
-      const personal = file.files.find((el) => el.type === 'AM_personal');
-      const amount = file.files.find((el) => el.type === 'AM_amount');
-      const scan = file.files.find((el) => el.type === 'AM_scan');
+    if (file && file.files) {
+      const personal = file?.files.find((el) => el.type === 'AM_personal');
+      const amount = file?.files.find((el) => el.type === 'AM_amount');
+      const scan = file?.files.find((el) => el.type === 'AM_scan');
       setValue('personal', personal);
       setValue('amount', amount);
       setValue('upload', scan);
     }
-    console.log(getValues());
   }, [file]);
 
   const onSubmit: SubmitHandler<object> = async (data) => {
@@ -97,7 +101,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
   return (
     <Paper>
       <Box pb={2.4}>
-        <a href={file.file} target="_blank" style={{ width: '100%' }}>
+        <a href={file?.file} target="_blank" style={{ width: '100%' }}>
           <ListItemButton
             sx={{
               borderRadius: '6px',
@@ -122,7 +126,7 @@ const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
             to={`/trade_union_member`}
           />
         )}
-        <a download href={file.file} style={{ width: '100%' }}>
+        <a download href={file?.file} style={{ width: '100%' }}>
           <ListItemButton
             sx={{
               borderRadius: '6px',

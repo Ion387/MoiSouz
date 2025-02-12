@@ -6,9 +6,9 @@ import ProgressBar from '@/components/ui/progressBar';
 import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getDoc } from '@/services/getDocs';
-
 import { stepTransformation } from '@/utils/stepTransformation';
 import ScanBlock from '@/components/entities/scanBlock/scanBlock';
+import { getBackendUrl } from '@/constants/url';
 
 const DocumentItem = () => {
   const path = usePathname();
@@ -34,7 +34,7 @@ const DocumentItem = () => {
           <Paper sx={{ maxHeight: 1100, overflow: 'hidden' }}>
             {doc?.file && (
               <iframe
-                src={doc.file + `#toolbar=0&zoom=95`}
+                src={getBackendUrl + doc.file + `#toolbar=0&zoom=95`}
                 width={'100%'}
                 style={{ aspectRatio: '210 / 269' }}
               ></iframe>
@@ -51,7 +51,7 @@ const DocumentItem = () => {
         <Grid2 size={4}>
           <ProgressBar steps={doc?.step ? stepTransformation(doc.step) : 0} />
           <Box paddingTop={2.4}>
-            <ScanBlock number={number} file={doc} />
+            <ScanBlock number={number} />
           </Box>
         </Grid2>
       )}

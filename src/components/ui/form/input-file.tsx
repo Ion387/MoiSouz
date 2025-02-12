@@ -2,7 +2,7 @@
 
 import { createRef, FC, ReactNode, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Box, Button, FormHelperText } from '@mui/material';
+import { Box, Button, FormHelperText, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui/Icon';
 import { PropsWithSX } from '@/models/Props';
@@ -109,9 +109,23 @@ export const InputFile: FC<PropsWithSX & Props> = ({ sx, name, label, mw }) => {
                 {label}
               </Box>
             ) : (
-              <Box display={'flex'} alignItems={'center'} gap={'12px'}>
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                gap={'12px'}
+                maxWidth={'100%'}
+              >
                 <Icon name="pdf" />
-                {preview}
+                <Typography
+                  sx={{
+                    maxWidth: 'calc(100% - 120px)',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {preview}
+                </Typography>
                 <span
                   onClick={(e) => {
                     e.stopPropagation();

@@ -296,9 +296,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 <InputCheckbox
                   sx={{ justifyContent: 'center' }}
                   name="data.isActive"
-                  link={
-                    '/Политика_в_отношении_обработки_персональных_данных.pdf'
-                  }
+                  link={'/politics.pdf'}
                   label={`Ознакомлен/на с уставом профсоюзной организации `}
                 />
               </Grid2>

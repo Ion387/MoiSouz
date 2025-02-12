@@ -36,12 +36,35 @@ export const saveFormTUScan = async (file: any) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const saveFormTU2Scan = async (file: any, guid: string) => {
-  if (typeof file != 'object') {
-    return null;
-  }
-
   const formData = new FormData();
-  formData.append('upload', file);
+  if (file) formData.append('upload', file);
+  formData.append('type', 'scan');
+  formData.append('guid', guid);
+
+  return axios.post(`${getBackendUrl}/api/private/document-upload`, formData, {
+    headers: {
+      ...(await getHeaders()),
+    },
+  });
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const saveFormTUAmount = async (file: any, guid: string) => {
+  const formData = new FormData();
+  if (file) formData.append('upload', file);
+  formData.append('type', 'amount');
+  formData.append('guid', guid);
+
+  return axios.post(`${getBackendUrl}/api/private/document-upload`, formData, {
+    headers: {
+      ...(await getHeaders()),
+    },
+  });
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const saveFormTUPersonal = async (file: any, guid: string) => {
+  const formData = new FormData();
+  if (file) formData.append('upload', file);
+  formData.append('type', 'personal');
   formData.append('guid', guid);
 
   return axios.post(`${getBackendUrl}/api/private/document-upload`, formData, {

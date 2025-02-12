@@ -194,12 +194,7 @@ const Registration = () => {
               <Box display={'flex'} alignItems={'center'}>
                 <Checkbox {...register('personalData')} />
                 <Typography component={'span'} variant="body1" fontWeight={600}>
-                  <a
-                    href={
-                      '/Политика_в_отношении_обработки_персональных_данных.pdf'
-                    }
-                    target="_blank"
-                  >
+                  <a href={'/politics.pdf'} target="_blank">
                     Я соглашаюсь с политикой обработки персональных данных
                   </a>
                 </Typography>
@@ -218,6 +213,7 @@ const Registration = () => {
               fontSize: '20px',
               lineHeight: '27px',
               marginTop: '24px',
+              width: '320px',
               '&.Mui-disabled': {
                 backgroundColor: `${globalTheme.palette.primary.main} !important`,
                 color: 'white !important',
@@ -237,17 +233,14 @@ const Registration = () => {
             </Link>
           </Typography>
           <Typography variant="body1" className={s.bottomText}>
-            Регистрируясь в сервисе, Вы Соглашаетесь с
+            Регистрируясь в сервисе, Вы соглашаетесь с
             <span>
               {' '}
-              <a
-                href={'/Политика_в_отношении_обработки_персональных_данных.pdf'}
-                target="_blank"
-              >
+              <a href={'/politics.pdf'} target="_blank">
                 политикой обработки персональных данных,
               </a>{' '}
             </span>
-            и на получение информационных сообщений от группы компаний Мой Союз.
+            и на получение информационных сообщений от группы компаний Мой Союз
           </Typography>
         </form>
       </Paper>
@@ -262,7 +255,11 @@ const Registration = () => {
         ) : (
           <SuccessFormIcon />
         )*/}
-        <Typography variant="h3">{resData?.data.description}</Typography>
+        <Typography variant="h3">
+          {
+            'Спасибо за регистрацию! Мы выслали Вам письмо с подтверждением электронной почты'
+          }
+        </Typography>
         <Link href="/" style={{ width: '100%' }}>
           <Button
             variant="contained"

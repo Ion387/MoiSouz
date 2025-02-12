@@ -6,7 +6,7 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { useForm } from '@/hooks/UseFormProfile';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-const ProfilePage = () => {
+const ProfilePage = ({ setSteps }: { setSteps?: (arg0: number) => void }) => {
   const info = useFetchProfile();
 
   const { onCancel, onSubmit } = useForm();
@@ -23,6 +23,7 @@ const ProfilePage = () => {
 
   return !info?.ROLES?.includes('ROLE_TRADEUNION') ? (
     <ProfileForm
+      setSteps={setSteps}
       onCancel={onCancel}
       onSubmit={onSubmit}
       loading={!info}

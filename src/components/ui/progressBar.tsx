@@ -8,7 +8,7 @@ interface IProps {
 
 const ProgressBar: FC<IProps> = ({ steps }) => {
   return (
-    <Paper sx={{ p: 2.4, mt: 8 }}>
+    <Paper sx={{ p: 2.4 }}>
       <Typography variant="h3" marginBottom={1.2}>
         Статус документа
       </Typography>
@@ -37,11 +37,6 @@ const ProgressBar: FC<IProps> = ({ steps }) => {
         </ListItem>
         <ListItem
           className={steps >= 5 ? style.listItemActive : style.listItem}
-        >
-          <Typography variant="body2">Ожидает отправки</Typography>
-        </ListItem>
-        <ListItem
-          className={steps >= 6 ? style.listItemActive : style.listItem}
         >
           <Typography variant="body2">Оригинал получен</Typography>
         </ListItem>

@@ -45,6 +45,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
                 variant: 'outlined',
                 error: !!error,
                 helperText: error?.message,
+                inputProps: { readOnly: true },
               },
             }}
           />

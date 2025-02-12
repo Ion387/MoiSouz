@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, Grid2, List, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './tarrifs.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +10,8 @@ import CardItem from './Card/Card';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getTariffs, sendTariffs } from '@/services/getTariffs';
 import { ITarrif } from '@/models/Tarrif';
+import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
+import { useRouter } from 'next/navigation';
 
 const Tariffs = ({
   noTitle,
@@ -25,7 +27,7 @@ const Tariffs = ({
   });
 
   const queryClient = useQueryClient();
-
+  const [open, setOpen] = useState<boolean>(false);
   const { mutate, isSuccess } = useMutation({
     mutationFn: (id: number | undefined) => sendTariffs(id),
     onSuccess: () => {
@@ -34,6 +36,14 @@ const Tariffs = ({
   });
 
   const handleSubmit = (id: number | undefined) => mutate(id);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(true);
+    }
+  }, [isSuccess]);
+
+  const router = useRouter();
 
   return (
     <Box component={'section'} className={s.wrapper}>
@@ -135,6 +145,17 @@ const Tariffs = ({
           </Grid2>
         ))}
       </Grid2>
+      <NewProfileDialog
+        open={open}
+        title={
+          'Спасибо за выбор тарифа! Наш менеджер свяжется с Вами для уточнения деталей активации. В период оформления выбранного тарифа Вам бесплатно подключен тариф "Элементарный" на 14 дней'
+        }
+        link={'/documents'}
+        btn={'Закрыть'}
+        onClose={() => {
+          router.push('/documents');
+        }}
+      ></NewProfileDialog>
     </Box>
   );
 };

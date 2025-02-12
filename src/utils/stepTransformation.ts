@@ -13,12 +13,9 @@ export const stepTransformation = (str: string) => {
     case 'Решение положительное, ожидает передачи оригинала в Профсоюз':
       step = 4;
       break;
-    case 'Ожидает отправки ':
-      step = 5;
 
-      break;
     case 'Оригинал получен':
-      step = 6;
+      step = 5;
 
       break;
 

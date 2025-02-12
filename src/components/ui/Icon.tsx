@@ -38,6 +38,8 @@ import { Icon as IconFilePDF } from '@/assets/icons/pdf';
 import { Icon as IconFileEdit } from '@/assets/icons/edit';
 import { Icon as IconHelp } from '@/assets/icons/help';
 import { Icon as IconClose } from '@/assets/icons/close';
+import { Icon as IconPrint } from '@/assets/icons/print';
+import { Icon as IconRepo } from '@/assets/icons/repo';
 
 const NAMES = [
   'document',
@@ -66,9 +68,11 @@ const NAMES = [
   'file-add',
   'cloud',
   'pdf',
+  'print',
   'edit',
   'help',
   'close',
+  'repo',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -102,6 +106,8 @@ const ICONS: { [key: string]: JSX.Element } = {
   edit: <IconFileEdit />,
   help: <IconHelp />,
   close: <IconClose />,
+  print: <IconPrint />,
+  repo: <IconRepo />,
 };
 
 interface Props {

@@ -1,30 +1,56 @@
 'use client';
 
-import { ListItem } from '@/components/ui';
+import { Icon, ListItem } from '@/components/ui';
 import { InputFile } from '@/components/ui/form/input-file';
-import { postDoc, saveFormTU2Scan } from '@/services/postLogoandFile';
+import {
+  postDoc,
+  saveFormTU2Scan,
+  saveFormTUAmount,
+  saveFormTUPersonal,
+} from '@/services/postLogoandFile';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Box, Button, Grid2, Paper } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid2,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+} from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
+import { getBackendUrl } from '@/constants/url';
+import { IDoc } from '@/models/Doc';
 
 const schema = yup
   .object({
-    upload: yup
-      .mixed()
-      .required('Для отправки прикрепите скан документа с подписью'),
+    upload: yup.mixed().required('Для отправки прикрепите файл'),
+    amount: yup.mixed().required('Для отправки прикрепите файл'),
+    personal: yup.mixed().required('Для отправки прикрепите файл'),
   })
   .required();
 
-const ScanBlock = ({ number }: { number: string }) => {
+const schemaForUsers = yup
+  .object({
+    upload: yup.mixed(),
+    amount: yup.mixed(),
+    personal: yup.mixed(),
+  })
+  .required();
+
+const ScanBlock = ({ number, file }: { number: string; file: IDoc }) => {
+  const { profileInfo: info } = useGetProfileInfo();
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      info?.ROLES?.includes('ROLE_TRADEUNION') ? schema : schemaForUsers,
+    ),
   });
   const { handleSubmit } = methods;
   const router = useRouter();
@@ -33,6 +59,8 @@ const ScanBlock = ({ number }: { number: string }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: async (data: any) => {
       saveFormTU2Scan(data.upload, number);
+      saveFormTUAmount(data.amount, number);
+      saveFormTUPersonal(data.personal, number);
     },
   });
 
@@ -44,7 +72,6 @@ const ScanBlock = ({ number }: { number: string }) => {
       queryClient.invalidateQueries({ queryKey: ['doc'] });
     },
   });
-  const { profileInfo: info } = useGetProfileInfo();
 
   useEffect(() => {
     if (isSuccess) {
@@ -57,16 +84,55 @@ const ScanBlock = ({ number }: { number: string }) => {
   };
   return (
     <Paper>
-      {!info?.ROLES?.includes('ROLE_TRADEUNION') && (
-        <Box pb={2.4}>
+      <Box pb={2.4}>
+        <a
+          href={getBackendUrl ? getBackendUrl + file : ''}
+          target="_blank"
+          style={{ width: '100%' }}
+        >
+          <ListItemButton
+            sx={{
+              borderRadius: '6px',
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 30 }}>
+              <Icon name={'print'} />
+            </ListItemIcon>
+
+            <ListItemText primary={'Распечатать'} />
+          </ListItemButton>
+        </a>
+        <ListItem
+          label="Редактировать"
+          to={`/documents/drafts/${number}`}
+          icon="edit"
+        />
+        {!info?.ROLES?.includes('ROLE_TRADEUNION') && (
           <ListItem
-            label="Редактировать"
-            to={`/documents/drafts/${number}`}
-            icon="edit"
+            label="Создать такой же"
+            icon="plus"
+            to={`/trade_union_member`}
           />
-          <ListItem label="Создать такой же" icon="plus" to={`/documents/`} />
-        </Box>
-      )}
+        )}
+        <a
+          download
+          href={getBackendUrl ? getBackendUrl + file : ''}
+          style={{ width: '100%' }}
+        >
+          <ListItemButton
+            sx={{
+              borderRadius: '6px',
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 30 }}>
+              <Icon name={'repo'} />
+            </ListItemIcon>
+
+            <ListItemText primary={'Скачать заявление'} />
+          </ListItemButton>
+        </a>
+      </Box>
+
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2.4}>
@@ -74,7 +140,21 @@ const ScanBlock = ({ number }: { number: string }) => {
               <InputFile
                 mw={'100%'}
                 name="upload"
-                label="Прикрепить скан (pdf)"
+                label="Заявление на вступление в профсоюзную организацию (pdf)"
+              />
+            </Grid2>
+            <Grid2 size={12}>
+              <InputFile
+                mw={'100%'}
+                name="amount"
+                label="Заявление на перечисление суммы взносов (pdf)"
+              />
+            </Grid2>
+            <Grid2 size={12}>
+              <InputFile
+                mw={'100%'}
+                name="personal"
+                label="Согласие на обработку персональных данных (pdf)"
               />
             </Grid2>
 

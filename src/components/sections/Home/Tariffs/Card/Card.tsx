@@ -1,11 +1,10 @@
 'use client';
 
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import s from './card.module.scss';
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ITarrif } from '@/models/Tarrif';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 const CardItem: FC<ITarrif> = ({
   title,
@@ -19,12 +18,7 @@ const CardItem: FC<ITarrif> = ({
   isActive,
   id,
   handleSubmit,
-  isSuccess,
 }) => {
-  const router = useRouter();
-  useEffect(() => {
-    if (isSuccess) router.push('/documents');
-  }, [isSuccess]);
   return (
     <Box className={main ? s.mainItem : s.item}>
       <Box className={s.cardHeader}>

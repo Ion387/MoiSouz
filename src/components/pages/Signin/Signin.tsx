@@ -126,6 +126,7 @@ const Signin = () => {
               margin: '12px auto 0',
               fontSize: '20px',
               lineHeight: '27px',
+              width: '260px',
             }}
           >
             {isSubmitting ? (

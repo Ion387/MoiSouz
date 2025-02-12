@@ -17,8 +17,8 @@ export const useForm = () => {
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: IFormProfile) => {
-      saveFormProfileAvatar(data.avatar);
       saveFormProfile(data);
+      saveFormProfileAvatar(data.avatar);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });

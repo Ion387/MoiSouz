@@ -17,7 +17,7 @@ import {
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { useRouter } from 'next/navigation';
 import { InputImage } from '../ui/form/input-image';
@@ -195,11 +195,16 @@ const TradeUnionRegistrationForm = () => {
   const [percents, setPercents] = useState<number>();
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
       registration(data);
       saveFormTULogo(data.logo);
       saveFormTUScan(data.scan);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
     },
   });
 
@@ -285,11 +290,16 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (value) {
       setFormValue('address.area', value?.area);
-      setFormValue('address.city', value?.settlement);
+      setFormValue('address.city', value?.city || value?.settlement);
       setFormValue('address.region', value?.region);
       setFormValue('address.postcode', value?.postalCode);
       setFormValue('address.street', value?.street);
-      setFormValue('address.house', value?.house);
+      setFormValue(
+        'address.house',
+        `${value?.houseType || ''} ${value?.house || ''} ${
+          value?.blockType || ''
+        } ${value?.block || ''}`,
+      );
     }
   }, [value]);
 
@@ -676,13 +686,7 @@ const TradeUnionRegistrationForm = () => {
                       setPercents(chosenUnion?.percents || 0);
                     else
                       setPercents(
-                        Math.min(
-                          100,
-                          Math.max(
-                            chosenUnion?.percents || 0,
-                            Number(e.target.value),
-                          ),
-                        ),
+                        Math.min(100, Math.max(0, Number(e.target.value))),
                       );
                   }}
                   value={percents}
@@ -703,9 +707,7 @@ const TradeUnionRegistrationForm = () => {
                 <InputCheckbox
                   sx={{ justifyContent: 'center' }}
                   name="isActive"
-                  link={
-                    '/Политика_в_отношении_обработки_персональных_данных.pdf'
-                  }
+                  link={'/politics.pdf'}
                   label={`Я соглашаюсь с политикой обработки персональных данных `}
                 />
               </Grid2>

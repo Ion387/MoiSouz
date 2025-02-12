@@ -4,22 +4,19 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Box, Container, IconButton } from '@mui/material';
 import clsx from 'clsx';
-
 import { ButtonHelp, UserNav } from '@/components/entities/profile';
 import styles from './header.module.scss';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { Icon } from '@/components/ui';
 import { signOut } from 'next-auth/react';
-
 import { useRouter } from 'next/navigation';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { getMyTU } from '@/services/getMyTU';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const ProfileHeader = () => {
-  const { profileInfo } = useGetProfileInfo();
+  const info = useFetchProfile();
   const router = useRouter();
-  const [profileData, setProfileData] = useState(profileInfo);
+  const [profileData, setProfileData] = useState(info);
 
   const { data: myTradeUnion } = useQuery({
     queryKey: ['myTradeUnion'],
@@ -27,11 +24,15 @@ export const ProfileHeader = () => {
     select: (data) => data.data,
   });
 
-  const info = useFetchProfile();
-
   useEffect(() => {
     if (info) setProfileData(info);
   }, [info]);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
+  }, []);
 
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>

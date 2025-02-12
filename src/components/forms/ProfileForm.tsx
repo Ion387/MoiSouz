@@ -20,7 +20,7 @@ import { InputAddress, InputGender } from '@/components/ui/form/entities';
 import { IFormProfile } from '@/models/Forms';
 import { IOption } from '@/models/Option';
 import { useOptions } from '@/hooks/UseOptions';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const OPTIONS_EDUCATION: IOption[] = [
   { title: 'Среднее общее', id: 'Среднее общее' },
@@ -67,12 +67,12 @@ const schema = yup
     }),
     phone: yup
       .string()
-      .matches(/^\+[0-9]{11}$/, 'Укажите корректный телефон')
+      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон')
       .required('Укажите телефон'),
     phoneDop: yup
       .string()
       .nullable()
-      .matches(/^\+[0-9]{11}$/, 'Укажите корректный телефон'),
+      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон'),
     children: yup.array(
       yup.object({
         name: yup.string().min(2, 'Укажите имя').required('Укажите имя'),
@@ -100,6 +100,7 @@ interface Props {
   loading?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: IFormProfile | any;
+  setSteps?: (arg0: number) => void;
 }
 
 const ProfileForm: FC<Props> = ({
@@ -107,6 +108,7 @@ const ProfileForm: FC<Props> = ({
   onSubmit,
   loading,
   defaultValues,
+  setSteps,
 }) => {
   const methods = useForm<IFormProfile>({
     mode: 'onChange',
@@ -120,13 +122,15 @@ const ProfileForm: FC<Props> = ({
   } = methods;
 
   const { data: hobbies } = useOptions({ name: 'hobbies' });
+  const path = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      router.push('/documents');
+      if (path.includes('/trade') && setSteps) setSteps(2);
+      else router.push('/documents');
     }
-  }, [isSubmitSuccessful]);
+  }, [isSubmitSuccessful, path]);
 
   return (
     <Form
@@ -282,7 +286,7 @@ const ProfileForm: FC<Props> = ({
       <InputCheckbox
         sx={{ justifyContent: 'center' }}
         name="isActive"
-        link={'/Политика_в_отношении_обработки_персональных_данных.pdf'}
+        link={'/politics.pdf'}
         label={`Я соглашаюсь с политикой обработки персональных данных `}
       />
     </Form>

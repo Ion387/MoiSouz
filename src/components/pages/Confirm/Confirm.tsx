@@ -33,7 +33,7 @@ const Confirm = () => {
             ? data?.data.description
             : 'Поздравляем, Вы зарегистрированы в сервисе МойСоюз!'}
         </Typography>
-        <Link href="/">
+        <Link href="/" style={{ width: '100%' }}>
           <Button
             variant="contained"
             sx={{
@@ -49,12 +49,13 @@ const Confirm = () => {
             {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
           </Button>
         </Link>
-        <Link href="/signin">
+        <Link href="/signin" style={{ width: '100%' }}>
           <Button
             variant="contained"
             sx={{
               padding: '15px 100px',
               fontSize: '20px',
+              mt: '24px',
               lineHeight: '27px',
               '&.Mui-disabled': {
                 backgroundColor: `${globalTheme.palette.primary.main} !important`,

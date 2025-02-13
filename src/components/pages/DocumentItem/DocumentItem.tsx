@@ -12,12 +12,11 @@ import { getBackendUrl } from '@/constants/url';
 import { Viewer } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import { GlobalWorkerOptions } from 'pdfjs-dist';
-import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
-
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
-GlobalWorkerOptions.workerSrc = pdfjsWorker.toString();
+GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
 const DocumentItem = () => {
   const path = usePathname();
@@ -44,7 +43,9 @@ const DocumentItem = () => {
       )}
       {doc ? (
         <Grid2 size={7}>
-          <Paper sx={{ height: '100%', overflow: 'hidden' }}>
+          <Paper
+            sx={{ height: '100%', maxHeight: '850px', overflow: 'hidden' }}
+          >
             {doc?.file && (
               <Viewer
                 fileUrl={getBackendUrl + doc.file}

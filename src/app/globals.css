@@ -56,7 +56,7 @@ a {
   border: 0px !important;
 }
 .rpv-core__page-layer:after {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 .rpv-core__inner-page {
   background-color: transparent !important;

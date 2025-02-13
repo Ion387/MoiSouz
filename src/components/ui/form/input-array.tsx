@@ -24,6 +24,7 @@ interface Props {
   ) => ReactNode;
   defaultValue: any;
   preadd?: boolean;
+  desc?: string;
 }
 
 export const InputArray: FC<PropsWithSX & Props> = ({
@@ -34,6 +35,7 @@ export const InputArray: FC<PropsWithSX & Props> = ({
   render,
   defaultValue,
   preadd,
+  desc,
 }) => {
   const { control, register, formState } = useFormContext();
   const { fields, append, remove } = useFieldArray<FieldValues>({
@@ -53,6 +55,16 @@ export const InputArray: FC<PropsWithSX & Props> = ({
     <Box sx={sx}>
       <Box sx={{ display: 'flex' }}>
         {label && <InputLabel>{label}</InputLabel>}
+        <InputLabel
+          sx={{
+            maxWidth: 'fit-content',
+            pr: '12px',
+            mb: 0,
+            lineHeight: '32px',
+          }}
+        >
+          {desc}
+        </InputLabel>
         <IconButton variant="contained" onClick={() => append(defaultValue)}>
           <Icon name="plus" color="white" />
         </IconButton>

@@ -21,6 +21,7 @@ import { IFormProfile } from '@/models/Forms';
 import { IOption } from '@/models/Option';
 import { useOptions } from '@/hooks/UseOptions';
 import { usePathname, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 const OPTIONS_EDUCATION: IOption[] = [
   { title: 'Среднее общее', id: 'Среднее общее' },
@@ -124,12 +125,14 @@ const ProfileForm: FC<Props> = ({
   const { data: hobbies } = useOptions({ name: 'hobbies' });
   const path = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isSubmitSuccessful) {
       if (path.includes('/trade') && setSteps) setSteps(2);
       else router.push('/documents');
     }
+    queryClient.invalidateQueries({ queryKey: ['profile'] });
   }, [isSubmitSuccessful, path]);
 
   return (
@@ -194,6 +197,7 @@ const ProfileForm: FC<Props> = ({
         name="profession"
         label="Специальность по образованию"
         labelExtra="Дополнительная профессия"
+        desc="Добавить специальность"
         render={(name, index, register, errors) => (
           <TextField
             {...register(`${name}.${index}`)}
@@ -211,6 +215,7 @@ const ProfileForm: FC<Props> = ({
         name="position"
         label="Должность"
         labelExtra="Дополнительная должность"
+        desc="Добавить должность"
         render={(name, index, register, errors) => (
           <TextField
             {...register(`${name}.${index}`)}

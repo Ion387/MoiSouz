@@ -203,9 +203,6 @@ const TradeUnionRegistrationForm = () => {
       saveFormTULogo(data.logo);
       saveFormTUScan(data.scan);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
-    },
   });
 
   const { mutate: mutateAddress } = useMutation({
@@ -268,6 +265,7 @@ const TradeUnionRegistrationForm = () => {
     } else if (isSuccess) {
       router.push('/main');
     }
+    queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
   }, [isSuccess, myTradeUnion]);
 
   useEffect(() => {

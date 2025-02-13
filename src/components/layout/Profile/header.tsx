@@ -11,7 +11,7 @@ import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { getMyTU } from '@/services/getMyTU';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const ProfileHeader = () => {
   const info = useFetchProfile();
@@ -27,12 +27,6 @@ export const ProfileHeader = () => {
   useEffect(() => {
     if (info) setProfileData(info);
   }, [info]);
-
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
-  }, []);
 
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>

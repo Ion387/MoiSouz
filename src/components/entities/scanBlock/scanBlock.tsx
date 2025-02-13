@@ -205,7 +205,7 @@ const ScanBlock = ({ number }: { number: string }) => {
               >
                 {!info?.ROLES?.includes('ROLE_TRADEUNION')
                   ? 'Отправить в профсоюз'
-                  : 'Принять в профсоюз'}
+                  : '???'}
               </Button>
             </Grid2>
           </Grid2>

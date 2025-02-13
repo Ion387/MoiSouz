@@ -9,9 +9,22 @@ import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
 import ScanBlock from '@/components/entities/scanBlock/scanBlock';
 import { getBackendUrl } from '@/constants/url';
+import { Viewer } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { GlobalWorkerOptions } from 'pdfjs-dist';
+import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
+
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
+GlobalWorkerOptions.workerSrc = pdfjsWorker.toString();
 
 const DocumentItem = () => {
   const path = usePathname();
+  const defaultLayoutPluginInstance = defaultLayoutPlugin({
+    renderToolbar: () => <></>,
+    sidebarTabs: () => [],
+  });
   const number = path.split('/')[2];
   const { data: doc } = useQuery({
     queryKey: ['doc'],
@@ -30,25 +43,24 @@ const DocumentItem = () => {
         </Grid2>
       )}
       {doc ? (
-        <Grid2 size={8}>
-          <Paper sx={{ maxHeight: 1100, overflow: 'hidden' }}>
+        <Grid2 size={7}>
+          <Paper sx={{ height: '100%', overflow: 'hidden' }}>
             {doc?.file && (
-              <iframe
-                src={getBackendUrl + doc.file + `#toolbar=0&zoom=95`}
-                width={'100%'}
-                style={{ aspectRatio: '210 / 269' }}
-              ></iframe>
+              <Viewer
+                fileUrl={getBackendUrl + doc.file}
+                plugins={[defaultLayoutPluginInstance]}
+              />
             )}
           </Paper>
         </Grid2>
       ) : (
-        <Grid2 size={8}>
+        <Grid2 size={7}>
           <CircularProgress />
         </Grid2>
       )}
 
       {doc && (
-        <Grid2 size={4}>
+        <Grid2 size={5}>
           <ProgressBar steps={doc?.step ? stepTransformation(doc.step) : 0} />
           <Box paddingTop={2.4}>
             <ScanBlock number={number} />

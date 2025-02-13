@@ -42,10 +42,12 @@ a {
   display: inline-block;
 }
 
-.react-pdf__Page__textContent,
-#pdf-controls,
-.react-pdf__Page__annotations {
-  display: none !important;
+.rpv-default-layout__body {
+  padding-top: 0 !important;
+}
+
+.rpv-default-layout__toolbar {
+  height: 0 !important;
 }
 
 canvas {

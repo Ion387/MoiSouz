@@ -8,7 +8,7 @@ import { ButtonHelp, UserNav } from '@/components/entities/profile';
 import styles from './header.module.scss';
 import { Icon } from '@/components/ui';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { getMyTU } from '@/services/getMyTU';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -30,10 +30,11 @@ export const ProfileHeader = () => {
   }, [info]);
 
   const queryClient = useQueryClient();
+  const path = usePathname();
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['profile', 'myTradeUnion'] });
-  }, []);
+  }, [path]);
 
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>

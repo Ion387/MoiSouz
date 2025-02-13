@@ -2,12 +2,7 @@
 
 import { Icon, ListItem } from '@/components/ui';
 import { InputFile } from '@/components/ui/form/input-file';
-import {
-  postDoc,
-  saveFormTU2Scan,
-  saveFormTUAmount,
-  saveFormTUPersonal,
-} from '@/services/postLogoandFile';
+import { postDoc, saveFormTU2Scan } from '@/services/postLogoandFile';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
@@ -26,20 +21,28 @@ import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { getDoc } from '@/services/getDocs';
+import { type Filetype } from '@/models/File';
 
 const schema = yup
   .object({
-    upload: yup.mixed().required('Для отправки прикрепите файл'),
-    amount: yup.mixed().required('Для отправки прикрепите файл'),
-    personal: yup.mixed().required('Для отправки прикрепите файл'),
+    upload: yup
+      .mixed<Filetype>()
+      .required('Для отправки прикрепите файл')
+      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+        if (!value) return true;
+        return value.size <= 1048576;
+      }),
   })
   .required();
 
 const schemaForUsers = yup
   .object({
-    upload: yup.mixed(),
-    amount: yup.mixed(),
-    personal: yup.mixed(),
+    upload: yup
+      .mixed<Filetype>()
+      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+        if (!value) return true;
+        return value.size <= 1048576;
+      }),
   })
   .required();
 
@@ -58,8 +61,6 @@ const ScanBlock = ({ number }: { number: string }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutationFn: async (data: any) => {
       saveFormTU2Scan(data.upload, number);
-      saveFormTUAmount(data.amount, number);
-      saveFormTUPersonal(data.personal, number);
     },
   });
 
@@ -80,17 +81,13 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/documents`);
+      router.push(`/documents?incoming`);
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (file && file.files) {
-      const personal = file?.files.find((el) => el.type === 'AM_personal');
-      const amount = file?.files.find((el) => el.type === 'AM_amount');
       const scan = file?.files.find((el) => el.type === 'AM_scan');
-      setValue('personal', personal);
-      setValue('amount', amount);
       setValue('upload', scan);
     }
   }, [file]);
@@ -144,29 +141,39 @@ const ScanBlock = ({ number }: { number: string }) => {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2.4}>
-            <Grid2 size={12}>
-              <InputFile
-                mw={'100%'}
-                name="upload"
-                label="Заявление на вступление в профсоюзную организацию (pdf)"
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <InputFile
-                mw={'100%'}
-                name="amount"
-                label="Заявление на перечисление суммы взносов (pdf)"
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <InputFile
-                mw={'100%'}
-                name="personal"
-                label="Согласие на обработку персональных данных (pdf)"
-              />
-            </Grid2>
+            {info?.ROLES?.includes('ROLE_TRADEUNION') && (
+              <>
+                {' '}
+                <Grid2 size={12}>
+                  <InputFile
+                    mw={'100%'}
+                    name="upload"
+                    label="Заявление на вступление в профсоюзную организацию (pdf)"
+                  />
+                </Grid2>
+              </>
+            )}
 
             <Grid2 size={12}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 15px',
+                  fontSize: '16px',
+                  lineHeight: '27px',
+                  width: '100%',
+
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+                type="submit"
+              >
+                {!info?.ROLES?.includes('ROLE_TRADEUNION')
+                  ? 'Отправить в профсоюз'
+                  : 'Загрузить документы'}
+              </Button>
               {info?.ROLES?.includes('ROLE_TRADEUNION') && (
                 <Button
                   variant="contained"
@@ -175,7 +182,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                     fontSize: '16px',
                     lineHeight: '27px',
                     width: '100%',
-
+                    mt: '24px',
                     '&.Mui-disabled': {
                       backgroundColor: `${globalTheme.palette.primary.main} !important`,
                       color: 'white !important',
@@ -188,25 +195,6 @@ const ScanBlock = ({ number }: { number: string }) => {
                   На проверке Профсоюзом
                 </Button>
               )}
-              <Button
-                variant="contained"
-                sx={{
-                  padding: '15px 15px',
-                  fontSize: '16px',
-                  lineHeight: '27px',
-                  width: '100%',
-                  mt: '24px',
-                  '&.Mui-disabled': {
-                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                    color: 'white !important',
-                  },
-                }}
-                type="submit"
-              >
-                {!info?.ROLES?.includes('ROLE_TRADEUNION')
-                  ? 'Отправить в профсоюз'
-                  : '???'}
-              </Button>
             </Grid2>
           </Grid2>
         </form>

@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, {
-  FC,
-  ReactElement,
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FC, ReactElement, Suspense, useMemo, useState } from 'react';
 import {
   List,
   ListItemText,
@@ -59,7 +52,6 @@ const Item: FC<PropsItem> = ({
   label,
   icon,
   selected,
-  opened,
   indent = 0,
   openDefault = false,
   openAlways = false,
@@ -70,21 +62,16 @@ const Item: FC<PropsItem> = ({
   const [open, setOpen] = useState(openDefault);
 
   const handleClick = () => {
-    if (selected) setOpen(!open);
+    setOpen(!open);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onClick && onClick();
   };
-
-  useEffect(() => {
-    if (opened) setOpen(true);
-    else setOpen(false);
-  }, [opened]);
 
   return (
     <>
       <ListItemButton
         sx={{ pl: indent ? 4.6 * indent : undefined, borderRadius: '6px' }}
-        selected={selected}
+        selected={selected && label !== 'Документы'}
         onClick={handleClick}
         disabled={disabled}
       >

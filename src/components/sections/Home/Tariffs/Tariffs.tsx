@@ -150,10 +150,10 @@ const Tariffs = ({
         title={
           'Спасибо за выбор тарифа! Наш менеджер свяжется с Вами для уточнения деталей активации. В период оформления выбранного тарифа Вам бесплатно подключен тариф "Элементарный" на 14 дней'
         }
-        link={'/documents'}
+        link={'/documents?incoming'}
         btn={'Закрыть'}
         onClose={() => {
-          router.push('/documents');
+          router.push('/documents?incoming');
         }}
       ></NewProfileDialog>
     </Box>

@@ -165,8 +165,22 @@ const schema = yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
       .required('Необходимо принять согласие'),
-    logo: yup.mixed().nullable(),
-    scan: yup.mixed().required('Обязательное поле'),
+    logo: yup
+      .mixed()
+      .nullable()
+      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+        if (!value) return true;
+        //@ts-expect-error none
+        return value.size <= 1048576;
+      }),
+    scan: yup
+      .mixed()
+      .required('Обязательное поле')
+      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+        if (!value) return true;
+        //@ts-expect-error none
+        return value.size <= 1048576;
+      }),
     parent: yup.string().nullable(),
   })
   .required();

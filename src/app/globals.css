@@ -50,6 +50,18 @@ a {
   height: 0 !important;
 }
 
+.rpv-core__page-layer--single,
+.rpv-default-layout__container,
+.rpv-default-layout__toolbar {
+  border: 0px !important;
+}
+.rpv-core__page-layer:after {
+  box-shadow: none;
+}
+.rpv-core__inner-page {
+  background-color: transparent !important;
+}
+
 canvas {
   border: 1px dotted rgb(234, 235, 235);
 }

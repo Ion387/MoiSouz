@@ -17,6 +17,7 @@ export const ProfileHeader = () => {
   const info = useFetchProfile();
   const router = useRouter();
   const [profileData, setProfileData] = useState(info);
+  const [avatar, setAvatar] = useState();
 
   const { data: myTradeUnion } = useQuery({
     queryKey: ['myTradeUnion'],
@@ -33,8 +34,19 @@ export const ProfileHeader = () => {
   const path = usePathname();
 
   useEffect(() => {
+    console.log(path);
     queryClient.invalidateQueries({ queryKey: ['profile', 'myTradeUnion'] });
   }, [path]);
+
+  useEffect(() => {
+    setAvatar(
+      profileData?.ROLES && profileData?.ROLES.length
+        ? profileData?.ROLES.includes('ROLE_TRADEUNION')
+          ? myTradeUnion?.logo
+          : profileData?.avatar
+        : undefined,
+    );
+  }, [profileData, myTradeUnion]);
 
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>
@@ -57,13 +69,7 @@ export const ProfileHeader = () => {
                 ? profileData?.name
                 : myTradeUnion?.title || ''
             }
-            avatar={
-              profileData?.ROLES && profileData?.ROLES.length
-                ? profileData?.ROLES.includes('ROLE_TRADEUNION')
-                  ? myTradeUnion?.logo
-                  : profileData?.avatar
-                : undefined
-            }
+            avatar={avatar}
             sx={{ ml: 1 }}
           />
           <IconButton

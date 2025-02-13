@@ -6,7 +6,12 @@ export interface IDoc {
   user: IProfile;
   status: string;
   title: string;
-  files: { type: string; source: string; originalName: string }[];
+  files: {
+    type: string;
+    source: string;
+    originalName: string;
+    size: number;
+  }[];
   documentDate: string;
   documentType: string;
   documentNumber: string;

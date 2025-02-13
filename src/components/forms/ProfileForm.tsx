@@ -46,7 +46,14 @@ const schema = yup
       .typeError('Укажите дату рождения'),
     gender: yup.string().required('Укажите пол'),
     education: yup.string().required('Укажите образование'),
-    avatar: yup.mixed().required('Укажите фото'),
+    avatar: yup
+      .mixed()
+      .required('Укажите фото')
+      .test('fileSize', 'Максимальный размер - 1 МБ.', (value) => {
+        if (!value) return true;
+        //@ts-expect-error none
+        return value.size <= 1048576;
+      }),
     profession: yup
       .array(
         yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
@@ -130,7 +137,7 @@ const ProfileForm: FC<Props> = ({
   useEffect(() => {
     if (isSubmitSuccessful) {
       if (path.includes('/trade') && setSteps) setSteps(2);
-      else router.push('/documents');
+      else router.push('/documents?incoming');
     }
     queryClient.invalidateQueries({ queryKey: ['profile'] });
   }, [isSubmitSuccessful, path]);

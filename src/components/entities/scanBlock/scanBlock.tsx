@@ -22,6 +22,7 @@ import { globalTheme } from '@/styles/theme';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { getDoc } from '@/services/getDocs';
 import { type Filetype } from '@/models/File';
+import { convertSizeToBites } from '@/utils/convertStringToB';
 
 const schema = yup
   .object({
@@ -29,8 +30,9 @@ const schema = yup
       .mixed<Filetype>()
       .required('Для отправки прикрепите файл')
       .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
-        if (!value) return true;
-        return value.size <= 1048576;
+        console.log('value', value);
+        if (!value || typeof value === 'string') return true;
+        return convertSizeToBites(value.size) <= 1048576;
       }),
   })
   .required();
@@ -40,8 +42,8 @@ const schemaForUsers = yup
     upload: yup
       .mixed<Filetype>()
       .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
-        if (!value) return true;
-        return value.size <= 1048576;
+        if (!value || typeof value === 'string') return true;
+        return convertSizeToBites(value.size) <= 1048576;
       }),
   })
   .required();
@@ -64,7 +66,7 @@ const ScanBlock = ({ number }: { number: string }) => {
     },
   });
 
-  const { mutate: mutate2 } = useMutation({
+  const { mutate: mutate2, isSuccess: isSuccess2 } = useMutation({
     mutationFn: async (data: { step: string }) => {
       postDoc(data, number);
     },
@@ -83,7 +85,11 @@ const ScanBlock = ({ number }: { number: string }) => {
     if (isSuccess) {
       router.push(`/documents?incoming`);
     }
-  }, [isSuccess]);
+    if (isSuccess2 && !info?.ROLES?.includes('ROLE_TRADEUNION'))
+      router.push(`/documents?outgoing`);
+    if (isSuccess2 && info?.ROLES?.includes('ROLE_TRADEUNION'))
+      router.push(`/documents?incoming`);
+  }, [isSuccess, isSuccess2]);
 
   useEffect(() => {
     if (file && file.files) {
@@ -168,7 +174,13 @@ const ScanBlock = ({ number }: { number: string }) => {
                     color: 'white !important',
                   },
                 }}
-                type="submit"
+                type={
+                  info?.ROLES?.includes('ROLE_TRADEUNION') ? 'submit' : 'button'
+                }
+                onClick={() => {
+                  if (!info?.ROLES?.includes('ROLE_TRADEUNION'))
+                    mutate2({ step: 'Отправлено в профсоюз' });
+                }}
               >
                 {!info?.ROLES?.includes('ROLE_TRADEUNION')
                   ? 'Отправить в профсоюз'

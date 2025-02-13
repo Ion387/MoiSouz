@@ -22,6 +22,7 @@ import { IOption } from '@/models/Option';
 import { useOptions } from '@/hooks/UseOptions';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
+import { convertSizeToBites } from '@/utils/convertStringToB';
 
 const OPTIONS_EDUCATION: IOption[] = [
   { title: 'Среднее общее', id: 'Среднее общее' },
@@ -50,9 +51,9 @@ const schema = yup
       .mixed()
       .required('Укажите фото')
       .test('fileSize', 'Максимальный размер - 1 МБ.', (value) => {
-        if (!value) return true;
+        if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return value.size <= 1048576;
+        return convertSizeToBites(value.size) <= 1048576;
       }),
     profession: yup
       .array(

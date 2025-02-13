@@ -14,7 +14,7 @@ export const useFetchProfile = () => {
         },
       }),
     select: (data) => data.data,
-    refetchOnMount: true,
+    refetchOnMount: 'always',
   });
   return info;
 };

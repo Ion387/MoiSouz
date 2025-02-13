@@ -23,7 +23,7 @@ export const ProfileHeader = () => {
     queryKey: ['myTradeUnion'],
     queryFn: getMyTU,
     select: (data) => data.data,
-    refetchOnMount: true,
+    refetchOnMount: 'always',
   });
 
   useEffect(() => {

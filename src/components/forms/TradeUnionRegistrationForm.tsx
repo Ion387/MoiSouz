@@ -40,6 +40,7 @@ import { InputFile } from '../ui/form/input-file';
 import { TextFieldCustom } from '../ui/form/entities/input-textfield';
 import { saveFormTULogo, saveFormTUScan } from '@/services/postLogoandFile';
 import { getMyTU } from '@/services/getMyTU';
+import { convertSizeToBites } from '@/utils/convertStringToB';
 
 const schema = yup
   .object({
@@ -169,17 +170,17 @@ const schema = yup
       .mixed()
       .nullable()
       .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
-        if (!value) return true;
+        if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return value.size <= 1048576;
+        return convertSizeToBites(value.size) <= 1048576;
       }),
     scan: yup
       .mixed()
       .required('Обязательное поле')
       .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
-        if (!value) return true;
+        if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return value.size <= 1048576;
+        return convertSizeToBites(value.size) <= 1048576;
       }),
     parent: yup.string().nullable(),
   })

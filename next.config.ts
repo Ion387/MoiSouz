@@ -12,7 +12,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.node/,
+      use: 'raw-loader',
+    });
 
+    return config;
+  },
   transpilePackages: ['mui-tel-input'],
   typescript: {
     ignoreBuildErrors: true,

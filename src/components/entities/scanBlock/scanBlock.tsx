@@ -93,7 +93,9 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   useEffect(() => {
     if (file && file.files) {
-      const scan = file?.files.find((el) => el.type === 'AM_scan');
+      const scan = file?.files.findLast(
+        (el) => el.type === 'AM_scan' || el.type === 'AM_signed',
+      );
       setValue('upload', scan);
     }
   }, [file]);

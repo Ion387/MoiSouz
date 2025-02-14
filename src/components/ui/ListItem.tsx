@@ -84,13 +84,13 @@ const Item: FC<PropsItem> = ({
         {/* Icon expand */}
         {/*children && (open ? <ExpandLess /> : <ExpandMore />)*/}
       </ListItemButton>
-      <Collapse in={openAlways || open} timeout="auto" unmountOnExit>
-        {children && (
+      {children && (
+        <Collapse in={openAlways || open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {<Children indent={indent}>{children}</Children>}
           </List>
-        )}
-      </Collapse>
+        </Collapse>
+      )}
     </>
   );
 };

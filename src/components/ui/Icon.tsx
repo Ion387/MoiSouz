@@ -40,6 +40,7 @@ import { Icon as IconHelp } from '@/assets/icons/help';
 import { Icon as IconClose } from '@/assets/icons/close';
 import { Icon as IconPrint } from '@/assets/icons/print';
 import { Icon as IconRepo } from '@/assets/icons/repo';
+import { Icon as IconUpload } from '@/assets/icons/upload';
 
 const NAMES = [
   'document',
@@ -73,6 +74,7 @@ const NAMES = [
   'help',
   'close',
   'repo',
+  'upload',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -108,6 +110,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   close: <IconClose />,
   print: <IconPrint />,
   repo: <IconRepo />,
+  upload: <IconUpload />,
 };
 
 interface Props {

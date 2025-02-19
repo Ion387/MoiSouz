@@ -714,6 +714,9 @@ const TradeUnionRegistrationForm = () => {
                       (документ в формате pdf)
                     </span>
                   }
+                  accept=".pdf"
+                  imageSelect="pdf"
+                  type="secondary"
                 />
               </Grid2>
               <Grid2 size={12}>

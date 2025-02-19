@@ -30,6 +30,7 @@ import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
+import { InputFile } from '@/components/ui/form/input-file';
 
 const schema = yup
   .object({
@@ -289,6 +290,16 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                       );
                   }}
                   value={percents}
+                />
+              </Grid2>
+
+              <Grid2 size={12}>
+                <InputFile
+                  name="fileUsers"
+                  label="Загрузить участников"
+                  accept=".xls,.xlsx"
+                  imageInit="upload"
+                  type="primary"
                 />
               </Grid2>
 

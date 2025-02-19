@@ -20,7 +20,7 @@ export const ProfileAside = () => {
           <ListItem label="Черновики" to="/documents?drafts" />
         </ListItem>
         <ListItem label="Мои организации" icon="square-2x2" disabled />
-        <ListItem label="Коллеги" icon="peoples" disabled />
+        <ListItem label="Коллеги" icon="peoples" to="/colleagues" />
 
         <ListItem label="Деньги" icon="money" disabled />
         <ListItem label="Скидки, льготы" icon="gift" disabled />

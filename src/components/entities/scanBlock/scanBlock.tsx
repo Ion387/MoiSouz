@@ -157,6 +157,9 @@ const ScanBlock = ({ number }: { number: string }) => {
                     mw={'100%'}
                     name="upload"
                     label="Заявление на вступление в профсоюзную организацию (pdf)"
+                    accept=".pdf"
+                    imageSelect="pdf"
+                    type="secondary"
                   />
                 </Grid2>
               </>

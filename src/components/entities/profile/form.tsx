@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, RefObject } from 'react';
 import {
   Box,
   Button,
   CircularProgress,
   Grid2,
+  SxProps,
   Typography,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -19,11 +20,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PropsWithClassName, PropsWithSX } from '@/models/Props';
 import { globalTheme } from '@/styles/theme';
+import { Icon, IconName } from '@/components/ui';
+import { Theme } from '@mui/system';
 
 interface Props {
+  reference?: RefObject<HTMLFormElement | null>;
   title?: string;
   buttonCancel?: string | null;
   buttonSubmit?: string;
+  buttonSubmitIcon?: IconName | null;
+  buttonSubmitSx?: SxProps<Theme> | null;
   loading?: boolean;
   onCancel?: () => void;
   onSubmit: (data: any | undefined) => void;
@@ -39,6 +45,7 @@ interface Props {
 export const Form: FC<
   PropsWithChildren & PropsWithClassName & PropsWithSX & Props
 > = ({
+  reference,
   children,
   className,
   sx,
@@ -46,6 +53,8 @@ export const Form: FC<
   loading,
   buttonCancel = 'Отмена',
   buttonSubmit = 'Сохранить',
+  buttonSubmitIcon,
+  buttonSubmitSx,
   onCancel,
   onSubmit,
   methods,
@@ -69,7 +78,7 @@ export const Form: FC<
         }}
       >
         <FormProvider {...methods}>
-          <form onSubmit={onSubmit}>
+          <form ref={reference} onSubmit={onSubmit}>
             <Grid2 container>
               {title && (
                 <Grid2 size={8}>
@@ -156,13 +165,23 @@ export const Form: FC<
                         backgroundColor: `${globalTheme.palette.primary.main} !important`,
                         color: 'white !important',
                       },
+                      gap: 1,
+                      ...(buttonSubmitSx || {}),
                     }}
                     disabled={loading}
                   >
                     {loading ? (
                       <CircularProgress color="secondary" size="27px" />
                     ) : (
-                      buttonSubmit
+                      <>
+                        {buttonSubmitIcon && (
+                          <Icon
+                            name={buttonSubmitIcon}
+                            color="secondary.main"
+                          />
+                        )}
+                        {buttonSubmit}
+                      </>
                     )}
                   </Button>
                 )}

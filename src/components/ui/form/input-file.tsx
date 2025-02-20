@@ -169,7 +169,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({
                 />
                 <Typography
                   sx={{
-                    maxWidth: 'calc(100% - 120px)',
+                    maxWidth: 'calc(100%)',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',

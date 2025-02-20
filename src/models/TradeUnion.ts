@@ -39,5 +39,6 @@ export interface ITradeUnion {
   percents?: number;
   tradeunionOwner?: { guid: string };
   scan: object | null | string;
+  participants?: object | null | string;
   parent?: string | null;
 }

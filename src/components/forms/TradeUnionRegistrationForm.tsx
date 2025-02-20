@@ -720,6 +720,15 @@ const TradeUnionRegistrationForm = () => {
                 />
               </Grid2>
               <Grid2 size={12}>
+                <InputFile
+                  name="participants"
+                  label="Загрузить участников"
+                  accept=".xls,.xlsx"
+                  imageInit="upload"
+                  type="primary"
+                />
+              </Grid2>
+              <Grid2 size={12}>
                 <InputCheckbox
                   sx={{ justifyContent: 'center' }}
                   name="isActive"

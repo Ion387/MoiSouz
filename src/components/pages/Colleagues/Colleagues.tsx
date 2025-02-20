@@ -6,11 +6,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Box, Button, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui';
-import Table from '@/components/sections/Colleagues/Table';
+import {
+  OrganizationCard,
+  Table,
+  UploadUsersDialog,
+} from '@/components/sections/Colleagues';
 
 import { IColleague, IOrganization } from '@/models/Colleagues';
-import OrganizationCard from '@/components/sections/Colleagues/OrganizationCard';
-import { UploadUsersDialog } from '@/components/sections/Colleagues/UploadUsersDialog';
 
 // temp
 const ORGANIZATIONS: IOrganization[] = [
@@ -154,9 +156,15 @@ const ColleaguesWrapper = () => {
     [USERS, organization],
   );
 
-  const handleClickOrganization = (organization: IOrganization) => {
+  const handleClickOrganization = (data: IOrganization) => {
+    // unselect !?
+    if (data.id == organization?.id) {
+      router.push(`${window.location.pathname}`);
+      return;
+    }
+
     router.push(
-      `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${organization.id}`,
+      `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${data.id}`,
     );
   };
 

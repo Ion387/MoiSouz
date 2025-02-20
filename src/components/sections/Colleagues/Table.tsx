@@ -6,7 +6,7 @@ interface ITableProps {
   data: IColleague[] | undefined;
 }
 
-const Table: FC<ITableProps> = ({ data }) => {
+export const Table: FC<ITableProps> = ({ data }) => {
   const groupedData = data;
 
   return (
@@ -92,5 +92,3 @@ const Table: FC<ITableProps> = ({ data }) => {
     </Paper>
   );
 };
-
-export default Table;

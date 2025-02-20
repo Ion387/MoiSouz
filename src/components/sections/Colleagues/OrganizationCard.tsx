@@ -13,16 +13,16 @@ interface IProps {
   active?: boolean;
 }
 
-const OrganizationCard: FC<IProps> = ({ data, onClick, active }) => {
+export const OrganizationCard: FC<IProps> = ({ data, onClick, active }) => {
   return (
     <ButtonBase
       sx={{
         width: 'fit-content',
         borderRadius: '14px',
         overflow: 'hidden',
-        outlineWidth: 2,
-        outlineStyle: 'solid',
-        outlineColor: active ? 'primary.main' : 'transparent',
+        borderWidth: 2,
+        borderStyle: 'solid',
+        borderColor: active ? 'primary.main' : 'transparent',
       }}
       onClick={() => onClick && onClick(data)}
     >
@@ -61,5 +61,3 @@ const OrganizationCard: FC<IProps> = ({ data, onClick, active }) => {
     </ButtonBase>
   );
 };
-
-export default OrganizationCard;

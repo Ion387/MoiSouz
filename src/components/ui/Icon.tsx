@@ -41,6 +41,9 @@ import { Icon as IconClose } from '@/assets/icons/close';
 import { Icon as IconPrint } from '@/assets/icons/print';
 import { Icon as IconRepo } from '@/assets/icons/repo';
 import { Icon as IconUpload } from '@/assets/icons/upload';
+import { Icon as IconBenefitsCoin } from '@/assets/icons/benefits-coin';
+import { Icon as IconBenefitsGift } from '@/assets/icons/benefits-gift';
+import { Icon as IconBenefitsChart } from '@/assets/icons/benefits-chart';
 
 const NAMES = [
   'document',
@@ -75,6 +78,9 @@ const NAMES = [
   'close',
   'repo',
   'upload',
+  'benefits-coin',
+  'benefits-gift',
+  'benefits-chart',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -111,6 +117,9 @@ const ICONS: { [key: string]: JSX.Element } = {
   print: <IconPrint />,
   repo: <IconRepo />,
   upload: <IconUpload />,
+  'benefits-coin': <IconBenefitsCoin />,
+  'benefits-gift': <IconBenefitsGift />,
+  'benefits-chart': <IconBenefitsChart />,
 };
 
 interface Props {

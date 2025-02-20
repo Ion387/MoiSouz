@@ -23,7 +23,7 @@ export const ProfileAside = () => {
         <ListItem label="Коллеги" icon="peoples" to="/colleagues" />
 
         <ListItem label="Деньги" icon="money" disabled />
-        <ListItem label="Скидки, льготы" icon="gift" disabled />
+        <ListItem label="Скидки, льготы" icon="gift" to="/benefits" />
         <ListItem label="Магазин" icon="square-3x3" disabled />
         <ListItem label="Информация" icon="info" disabled />
       </List>

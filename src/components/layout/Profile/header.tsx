@@ -34,7 +34,6 @@ export const ProfileHeader = () => {
   const path = usePathname();
 
   useEffect(() => {
-    console.log(path);
     queryClient.invalidateQueries({ queryKey: ['profile', 'myTradeUnion'] });
   }, [path]);
 

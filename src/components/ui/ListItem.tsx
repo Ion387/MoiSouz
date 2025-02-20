@@ -107,7 +107,9 @@ const ListItemSP: FC<Props> = ({ to, ...props }) => {
       <Link href={to} style={{ width: '100%' }}>
         <Item
           {...props}
-          selected={!param ? to == pathname : to == pathname + '?' + param}
+          selected={
+            !param ? to == pathname : (pathname + '?' + param).startsWith(to)
+          }
           opened={to.includes(pathname)}
         />
       </Link>

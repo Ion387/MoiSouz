@@ -42,7 +42,7 @@ const DocumentItem = () => {
         </Grid2>
       )}
       {doc ? (
-        <Grid2 size={7}>
+        <Grid2 size={7} height={900}>
           <Paper
             sx={{ height: '100%', maxHeight: '850px', overflow: 'hidden' }}
           >
@@ -61,9 +61,9 @@ const DocumentItem = () => {
       )}
 
       {doc && (
-        <Grid2 size={5}>
+        <Grid2 size={5} display={'flex'} flexDirection={'column'}>
           <ProgressBar steps={doc?.step ? stepTransformation(doc.step) : 0} />
-          <Box paddingTop={2.4}>
+          <Box paddingTop={2.4} sx={{ flex: '1 1 100%' }}>
             <ScanBlock number={number} />
           </Box>
         </Grid2>

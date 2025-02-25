@@ -10,7 +10,6 @@ import {
   IconButton,
   InputAdornment,
   CircularProgress,
-  Dialog,
   Checkbox,
   FormControl,
   FormHelperText,
@@ -81,7 +80,6 @@ const Registration = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabs(newValue);
   };
-  const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
   const {
@@ -110,195 +108,191 @@ const Registration = () => {
           </IconButton>
         </Link>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography className={s.title}>Регистрация</Typography>
-          <Tabs value={tabs} onChange={handleChange} sx={{ mb: 1.2 }}>
-            <Tab value={0} label={'Частное лицо'} />
-            <Tab value={1} label={'Юридическое лицо'} />
-          </Tabs>
-          <InputLabel>Адрес электронной почты:</InputLabel>
-          <TextField
-            sx={{ marginBottom: '20px' }}
-            {...register('email')}
-            placeholder="example@mail.ru"
-            error={!!errors.email?.message}
-            helperText={errors.email?.message || ''}
-          />
-          <InputLabel>Придумайте пароль</InputLabel>
-          <TextField
-            {...register('password')}
-            type={showPassword.password ? 'text' : 'password'}
-            error={!!errors.password?.message}
-            helperText={errors.password?.message || ''}
-            sx={{ marginBottom: !!errors.password?.message ? 4.4 : 2 }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() =>
-                        setShowPassword((prev) => ({
-                          ...prev,
-                          password: !prev.password,
-                        }))
-                      }
-                      edge="end"
-                    >
-                      {!showPassword.password ? (
-                        <Icon name="eye-on" color="gray" />
-                      ) : (
-                        <Icon name="eye-off" color="gray" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-              formHelperText: { style: { whiteSpace: 'wrap' } },
-            }}
-          />
-          <InputLabel>Повторите пароль</InputLabel>
-          <TextField
-            sx={{ marginBottom: '20px' }}
-            {...register('passwordRepeat')}
-            type={showPassword.passwordRepeat ? 'text' : 'password'}
-            error={!!errors.passwordRepeat?.message}
-            helperText={errors.passwordRepeat?.message || ''}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={() =>
-                        setShowPassword((prev) => ({
-                          ...prev,
-                          passwordRepeat: !prev.passwordRepeat,
-                        }))
-                      }
-                      edge="end"
-                    >
-                      {!showPassword.passwordRepeat ? (
-                        <Icon name="eye-on" color="gray" />
-                      ) : (
-                        <Icon name="eye-off" color="gray" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <Box alignSelf={'start'}>
-            <FormControl error={!!errors.personalData?.message}>
-              <Box display={'flex'} alignItems={'center'}>
-                <Checkbox {...register('personalData')} />
-                <Typography component={'span'} variant="body1" fontWeight={600}>
-                  <a href={'/politics.pdf'} target="_blank">
-                    Я соглашаюсь с политикой обработки персональных данных
-                  </a>
-                </Typography>
-              </Box>
-              <FormHelperText>
-                {errors.personalData?.message || ''}
-              </FormHelperText>
-            </FormControl>
-          </Box>
-          {!!errors.personalData?.message}
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              padding: '15px 100px',
-              fontSize: '20px',
-              lineHeight: '27px',
-              marginTop: '24px',
-              width: '320px',
-              '&.Mui-disabled': {
-                backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                color: 'white !important',
-              },
-            }}
-          >
-            {isPending && !isSuccess ? (
-              <CircularProgress color="secondary" size="27px" />
-            ) : (
-              'Регистрация'
-            )}
-          </Button>
-          <Typography variant="body1" className={s.bottomText}>
-            Уже есть аккаунт?
-            <Link href={'/signin'} className={s.link}>
-              Войти
+        {open && !!resData?.data.description ? (
+          <>
+            <Typography variant="h3" textAlign={'center'} marginTop={'24px'}>
+              {'Поздравляем, Вы зарегистрированы в сервисе МойСоюз!'}
+            </Typography>
+            <Link href="/" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
+              </Button>
             </Link>
-          </Typography>
-          <Typography variant="body1" className={s.bottomText}>
-            Регистрируясь в сервисе, Вы соглашаетесь с
-            <span>
-              {' '}
-              <a href={'/politics.pdf'} target="_blank">
-                политикой обработки персональных данных,
-              </a>{' '}
-            </span>
-            и на получение информационных сообщений от группы компаний Мой Союз
-          </Typography>
-        </form>
-      </Paper>
-      <Dialog
-        open={open && !!resData?.data.description}
-        onClose={handleClose}
-        className={s.dialog}
-        fullWidth
-      >
-        {/*resData?.data.status === 'error' ? (
-          <ErrorFormIcon />
+            <Link href="/signin" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Войти' : 'Войти в личный кабинет'}
+              </Button>
+            </Link>
+          </>
         ) : (
-          <SuccessFormIcon />
-        )*/}
-        <Typography variant="h3">
-          {
-            'Спасибо за регистрацию! Мы выслали Вам письмо с подтверждением электронной почты'
-          }
-        </Typography>
-        <Link href="/" style={{ width: '100%' }}>
-          <Button
-            variant="contained"
-            sx={{
-              padding: '15px 100px',
-              fontSize: '20px',
-              lineHeight: '27px',
-              minWidth: mobile ? '106px' : '338px',
-              marginTop: '24px',
-              width: '100%',
-              '&.Mui-disabled': {
-                backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                color: 'white !important',
-              },
-            }}
-          >
-            {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
-          </Button>
-        </Link>
-        <Link href="/signin" style={{ width: '100%' }}>
-          <Button
-            variant="contained"
-            sx={{
-              padding: '15px 100px',
-              fontSize: '20px',
-              lineHeight: '27px',
-              minWidth: mobile ? '106px' : '338px',
-              marginTop: '24px',
-              width: '100%',
-              '&.Mui-disabled': {
-                backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                color: 'white !important',
-              },
-            }}
-          >
-            {mobile ? 'Войти' : 'Войти в личный кабинет'}
-          </Button>
-        </Link>
-      </Dialog>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Typography className={s.title}>Регистрация</Typography>
+            <Tabs value={tabs} onChange={handleChange} sx={{ mb: 1.2 }}>
+              <Tab value={0} label={'Частное лицо'} />
+              <Tab value={1} label={'Юридическое лицо'} />
+            </Tabs>
+            <InputLabel>Адрес электронной почты:</InputLabel>
+            <TextField
+              sx={{ marginBottom: '20px' }}
+              {...register('email')}
+              placeholder="example@mail.ru"
+              error={!!errors.email?.message}
+              helperText={errors.email?.message || ''}
+            />
+            <InputLabel>Придумайте пароль</InputLabel>
+            <TextField
+              {...register('password')}
+              type={showPassword.password ? 'text' : 'password'}
+              error={!!errors.password?.message}
+              helperText={errors.password?.message || ''}
+              sx={{ marginBottom: !!errors.password?.message ? 4.4 : 2 }}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setShowPassword((prev) => ({
+                            ...prev,
+                            password: !prev.password,
+                          }))
+                        }
+                        edge="end"
+                      >
+                        {!showPassword.password ? (
+                          <Icon name="eye-on" color="gray" />
+                        ) : (
+                          <Icon name="eye-off" color="gray" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+                formHelperText: { style: { whiteSpace: 'wrap' } },
+              }}
+            />
+            <InputLabel>Повторите пароль</InputLabel>
+            <TextField
+              sx={{ marginBottom: '20px' }}
+              {...register('passwordRepeat')}
+              type={showPassword.passwordRepeat ? 'text' : 'password'}
+              error={!!errors.passwordRepeat?.message}
+              helperText={errors.passwordRepeat?.message || ''}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setShowPassword((prev) => ({
+                            ...prev,
+                            passwordRepeat: !prev.passwordRepeat,
+                          }))
+                        }
+                        edge="end"
+                      >
+                        {!showPassword.passwordRepeat ? (
+                          <Icon name="eye-on" color="gray" />
+                        ) : (
+                          <Icon name="eye-off" color="gray" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+            <Box alignSelf={'start'}>
+              <FormControl error={!!errors.personalData?.message}>
+                <Box display={'flex'} alignItems={'center'}>
+                  <Checkbox {...register('personalData')} />
+                  <Typography
+                    component={'span'}
+                    variant="body1"
+                    fontWeight={600}
+                  >
+                    <a href={'/politics.pdf'} target="_blank">
+                      Я соглашаюсь с политикой обработки персональных данных
+                    </a>
+                  </Typography>
+                </Box>
+                <FormHelperText>
+                  {errors.personalData?.message || ''}
+                </FormHelperText>
+              </FormControl>
+            </Box>
+            {!!errors.personalData?.message}
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                padding: '15px 100px',
+                fontSize: '20px',
+                lineHeight: '27px',
+                marginTop: '24px',
+                width: '320px',
+                '&.Mui-disabled': {
+                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                  color: 'white !important',
+                },
+              }}
+            >
+              {isPending && !isSuccess ? (
+                <CircularProgress color="secondary" size="27px" />
+              ) : (
+                'Регистрация'
+              )}
+            </Button>
+            <Typography variant="body1" className={s.bottomText}>
+              Уже есть аккаунт?
+              <Link href={'/signin'} className={s.link}>
+                Войти
+              </Link>
+            </Typography>
+            <Typography variant="body1" className={s.bottomText}>
+              Регистрируясь в сервисе, Вы соглашаетесь с
+              <span>
+                {' '}
+                <a href={'/politics.pdf'} target="_blank">
+                  политикой обработки персональных данных,
+                </a>{' '}
+              </span>
+              и на получение информационных сообщений от группы компаний Мой
+              Союз
+            </Typography>
+          </form>
+        )}
+      </Paper>
     </Box>
   );
 };

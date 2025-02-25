@@ -141,6 +141,8 @@ export const InputFile: FC<PropsWithSX & Props> = ({
               flex: 1,
               margin: '0 auto',
               ...((type && STYLES.button[type]) || {}),
+              fontSize: '20px',
+              lineHeight: '27px',
             }}
             variant="outlined"
             onClick={handleOpen}
@@ -150,7 +152,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({
                 display={'flex'}
                 alignItems={'center'}
                 gap={'12px'}
-                justifyContent={'space-around'}
+                justifyContent={'center'}
                 width={'100%'}
               >
                 <Icon name={imageInit} color={STYLES.icon[type]?.color} />

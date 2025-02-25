@@ -87,8 +87,8 @@ const ScanBlock = ({ number }: { number: string }) => {
     }
     if (isSuccess2 && !info?.ROLES?.includes('ROLE_TRADEUNION'))
       router.push(`/documents?outgoing`);
-    if (isSuccess2 && info?.ROLES?.includes('ROLE_TRADEUNION'))
-      router.push(`/documents?incoming`);
+    /*if (isSuccess2 && info?.ROLES?.includes('ROLE_TRADEUNION'))
+      router.push(`/documents?incoming`);*/
   }, [isSuccess, isSuccess2]);
 
   useEffect(() => {
@@ -100,11 +100,17 @@ const ScanBlock = ({ number }: { number: string }) => {
     }
   }, [file]);
 
+  useEffect(() => {
+    if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
+      mutate2({ step: 'На проверке профсоюзом' });
+    }
+  }, []);
+
   const onSubmit: SubmitHandler<object> = async (data) => {
     mutate(data);
   };
   return (
-    <Paper>
+    <Paper sx={{ height: '100%' }}>
       <Box pb={2.4}>
         <a href={file?.file} target="_blank" style={{ width: '100%' }}>
           <ListItemButton
@@ -147,11 +153,13 @@ const ScanBlock = ({ number }: { number: string }) => {
       </Box>
 
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid2 container spacing={2.4}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ height: 'calc(100% - 162px)' }}
+        >
+          <Grid2 container position={'relative'} height={'100%'}>
             {info?.ROLES?.includes('ROLE_TRADEUNION') && (
               <>
-                {' '}
                 <Grid2 size={12}>
                   <InputFile
                     mw={'100%'}
@@ -165,7 +173,7 @@ const ScanBlock = ({ number }: { number: string }) => {
               </>
             )}
 
-            <Grid2 size={12}>
+            <Grid2 size={12} sx={{ position: 'absolute', bottom: '0' }}>
               <Button
                 variant="contained"
                 sx={{
@@ -191,7 +199,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                   ? 'Отправить в профсоюз'
                   : 'Загрузить документы'}
               </Button>
-              {info?.ROLES?.includes('ROLE_TRADEUNION') && (
+              {/*info?.ROLES?.includes('ROLE_TRADEUNION') && (
                 <Button
                   variant="contained"
                   sx={{
@@ -211,7 +219,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                 >
                   На проверке Профсоюзом
                 </Button>
-              )}
+              )*/}
             </Grid2>
           </Grid2>
         </form>

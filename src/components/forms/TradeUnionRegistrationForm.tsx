@@ -739,7 +739,7 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={6}>
                 <Button
                   variant="outlined"
-                  sx={{ width: '100%' }}
+                  sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
                   onClick={() => router.push('/main')}
                 >
                   Отменить
@@ -748,7 +748,12 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={6}>
                 <Button
                   variant="contained"
-                  sx={{ width: '100%', padding: '16px 25px' }}
+                  sx={{
+                    width: '100%',
+                    padding: '16px 25px',
+                    fontSize: '20px',
+                    lineHeight: '27px',
+                  }}
                   type="submit"
                 >
                   Сохранить

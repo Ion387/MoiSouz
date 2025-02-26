@@ -98,6 +98,7 @@ const Item: FC<PropsItem> = ({
 const ListItemSP: FC<Props> = ({ to, ...props }) => {
   const pathname = usePathname();
   const params = useSearchParams();
+
   const param = !!params.entries().toArray().length
     ? params.entries().toArray()[0][0]
     : null;

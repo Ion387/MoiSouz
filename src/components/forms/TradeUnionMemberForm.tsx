@@ -107,6 +107,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
   };
 
   const info = useFetchProfile();
+  const [show, setShow] = useState<boolean>(false);
 
   const { data: tradeUnions } = useQuery({
     queryKey: ['tradeUnions'],
@@ -167,8 +168,8 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
       'data.inviteDate',
       doc?.data.inviteDate || dayjs().format('DD.MM.YYYY'),
     );
+    setShow(true);
   };
-
   useEffect(() => {
     if (chosenUnion && chosenUnion.id) {
       setFormValue('tradeunion', chosenUnion.id);
@@ -292,14 +293,16 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 />
               </Grid2>
 
-              <Grid2 size={12}>
-                <InputCheckbox
-                  sx={{ justifyContent: 'center' }}
-                  name="data.isActive"
-                  link={'/politics.pdf'}
-                  label={`Ознакомлен/на с уставом профсоюзной организации `}
-                />
-              </Grid2>
+              {show && (
+                <Grid2 size={12}>
+                  <InputCheckbox
+                    sx={{ justifyContent: 'center' }}
+                    name="data.isActive"
+                    link={getBackendUrl + String(chosenUnion?.scan) || ''}
+                    label={`Ознакомлен/на с уставом профсоюзной организации `}
+                  />
+                </Grid2>
+              )}
               <Grid2 size={4}>
                 <Button
                   variant="outlined"

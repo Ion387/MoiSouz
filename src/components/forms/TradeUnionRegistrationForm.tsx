@@ -244,16 +244,16 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (myTradeUnion) {
       reset(myTradeUnion);
-      if (myTradeUnion.parent) {
+      if (myTradeUnion.parent.guid && tradeUnions) {
         setChoosenUnion(
           tradeUnions.find(
-            (el: ITradeUnion) => el.guid === myTradeUnion?.parent,
+            (el: ITradeUnion) => el.guid === myTradeUnion?.parent.guid,
           ),
         );
         setInn(true);
       }
     }
-  }, [myTradeUnion]);
+  }, [myTradeUnion, tradeUnions]);
 
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
     data.percents = Number(data.percents);
@@ -354,7 +354,11 @@ const TradeUnionRegistrationForm = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
               <Grid2 size={12}>
-                <Checkbox value={inn} onClick={() => setInn((prev) => !prev)} />
+                <Checkbox
+                  checked={inn}
+                  value={inn}
+                  onClick={() => setInn((prev) => !prev)}
+                />
                 <Typography
                   component={'span'}
                   variant="body1"

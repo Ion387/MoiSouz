@@ -42,7 +42,7 @@ const DocumentItem = () => {
         </Grid2>
       )}
       {doc ? (
-        <Grid2 size={7} height={900}>
+        <Grid2 size={7}>
           <Paper
             sx={{ height: '100%', maxHeight: '850px', overflow: 'hidden' }}
           >

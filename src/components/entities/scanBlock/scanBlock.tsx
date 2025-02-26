@@ -173,12 +173,12 @@ const ScanBlock = ({ number }: { number: string }) => {
               </>
             )}
 
-            <Grid2 size={12} sx={{ position: 'absolute', bottom: '0' }}>
+            <Grid2 size={12} mt={2.4}>
               <Button
                 variant="contained"
                 sx={{
                   padding: '15px 15px',
-                  fontSize: '16px',
+                  fontSize: '20px',
                   lineHeight: '27px',
                   width: '100%',
 

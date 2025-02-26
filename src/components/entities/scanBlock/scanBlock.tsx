@@ -155,7 +155,7 @@ const ScanBlock = ({ number }: { number: string }) => {
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          style={{ height: 'calc(100% - 162px)' }}
+          style={{ height: 'calc(100% - 208px)' }}
         >
           <Grid2 container position={'relative'} height={'100%'}>
             {info?.ROLES?.includes('ROLE_TRADEUNION') && (
@@ -181,7 +181,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                   fontSize: '20px',
                   lineHeight: '27px',
                   width: '100%',
-
+                  marginTop: '24px',
                   '&.Mui-disabled': {
                     backgroundColor: `${globalTheme.palette.primary.main} !important`,
                     color: 'white !important',

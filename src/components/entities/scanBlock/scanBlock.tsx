@@ -173,7 +173,7 @@ const ScanBlock = ({ number }: { number: string }) => {
               </>
             )}
 
-            <Grid2 size={12} mt={2.4}>
+            <Grid2 size={12} display={'flex'} alignItems={'end'}>
               <Button
                 variant="contained"
                 sx={{

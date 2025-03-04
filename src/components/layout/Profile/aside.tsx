@@ -14,7 +14,12 @@ export const ProfileAside = () => {
         <ListItem label="Главная" icon="time" to="/main" />
         <ListItem label="Уведомления" icon="notify" disabled />
         <ListItem label="Задачи" icon="tasks" disabled />
-        <ListItem label="Документы" icon="document" to="/documents?incoming">
+        <ListItem
+          label="Документы"
+          icon="document"
+          to="/documents?incoming"
+          openAlways
+        >
           <ListItem label="Входящие" to="/documents?incoming" />
           <ListItem label="Исходящие" to="/documents?outgoing" />
           <ListItem label="Черновики" to="/documents?drafts" />

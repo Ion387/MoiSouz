@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <meta name="color-scheme" content="only light"></meta>
       <body className={nunitoSans.className}>
         <Providers>{children}</Providers>

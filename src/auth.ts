@@ -55,6 +55,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  session: {
+    jwt: true,
+    maxAge: 24 * 60 * 60,
+  },
   callbacks: {
     jwt: async ({ token, user, trigger, session }) => {
       if (trigger === 'update') {

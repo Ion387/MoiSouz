@@ -1,9 +1,5 @@
 import React, { FC } from 'react';
-
 import { Box, ButtonBase, Typography } from '@mui/material';
-
-import { Icon } from '@/components/ui';
-
 import { IBenefitsCategory } from '@/models/Benefits';
 import { PropsWithSX } from '@/models/Props';
 
@@ -44,7 +40,6 @@ export const BenefitsCategory: FC<PropsWithSX & IProps> = ({
         width="100%"
         height="auto"
       >
-        <Icon sx={{ scale: 1.5 }} name="info" color="primary.main" />
         <Typography fontSize={16} fontWeight={600} whiteSpace="nowrap">
           {data.name}
         </Typography>

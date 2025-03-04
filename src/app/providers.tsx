@@ -7,6 +7,7 @@ import theme from '@/styles/theme';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { SessionProvider } from 'next-auth/react';
+import { YMaps } from '@pbe/react-yandex-maps';
 
 const Providers = ({ children }: PropsWithChildren) => {
   const { setMode } = useColorScheme();
@@ -27,7 +28,9 @@ const Providers = ({ children }: PropsWithChildren) => {
     <QueryClientProvider client={queryClient}>
       <CacheProvider value={cache}>
         <ThemeProvider theme={theme}>
-          <SessionProvider>{children}</SessionProvider>
+          <YMaps>
+            <SessionProvider>{children}</SessionProvider>
+          </YMaps>
         </ThemeProvider>
       </CacheProvider>
     </QueryClientProvider>

@@ -2,24 +2,20 @@
 
 import React, { createRef, Suspense, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-//import { useQuery } from '@tanstack/react-query';
-
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import {
   BenefitsCategory,
   BenefitsProduct,
   BenefitsStat,
 } from '@/components/sections/Benefits';
-
-//import { getBenefitsCategories } from '@/services/benefits';
 import { IBenefitsCategory, IBenefitsProduct } from '@/models/Benefits';
-import {
-  BENEFITS_CATEGORIES,
-  BENEFITS_PRODUCTS,
-} from '@/components/sections/Benefits/temp';
 import useMobile from '@/hooks/UseMobile';
 import Link from 'next/link';
-import { BENEFITS_URL } from '@/services/benefits';
+import {
+  getBenefitsCategories,
+  getBenefitsProducts,
+} from '@/services/benefits';
+import { useQuery } from '@tanstack/react-query';
 
 const KEY_PARAM_CATEGORY = 'category';
 
@@ -29,13 +25,17 @@ const BenefitsWrapper = () => {
   const refCategories = createRef<HTMLDivElement>();
   const mobile = useMobile();
 
-  /*
-  const data = useQuery({
+  const { data, isFetching } = useQuery({
+    queryKey: ['benefits-products'],
+    queryFn: getBenefitsProducts,
+    select: (data) => data.data.data,
+  });
+
+  const { data: BENEFITS_CATEGORIES } = useQuery({
     queryKey: ['benefits-categories'],
     queryFn: getBenefitsCategories,
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
-  */
 
   useEffect(() => {
     if (refCategories.current == null) return;
@@ -49,26 +49,28 @@ const BenefitsWrapper = () => {
       { signal: abort.signal },
     );
     return () => abort.abort();
-  }, [refCategories.current]);
+  }, [refCategories.current, data]);
 
-  const category: IBenefitsCategory | null = useMemo(
-    () =>
-      BENEFITS_CATEGORIES.find(
-        (el) => el.id == (params?.get(KEY_PARAM_CATEGORY) ?? -1),
-      ) ?? null,
-    [BENEFITS_CATEGORIES, params],
-  );
+  const category: IBenefitsCategory | null = useMemo(() => {
+    if (BENEFITS_CATEGORIES)
+      return (
+        BENEFITS_CATEGORIES.find(
+          (el: IBenefitsCategory) =>
+            el.id == (params?.get(KEY_PARAM_CATEGORY) ?? -1),
+        ) ?? null
+      );
+  }, [BENEFITS_CATEGORIES, params]);
 
-  const products: IBenefitsProduct[] = useMemo(
-    () =>
-      category == null
-        ? BENEFITS_PRODUCTS
-        : BENEFITS_PRODUCTS.filter(
-            (el) => el.main_category?.id == category.id,
+  const products: IBenefitsProduct[] = useMemo(() => {
+    if (!isFetching) {
+      return category == null
+        ? data
+        : data.filter(
+            (el: IBenefitsProduct) => el.main_category?.id == category.id,
             //el.categories.some((el2) => el2.id == category.id),
-          ),
-    [BENEFITS_PRODUCTS, category],
-  );
+          );
+    } else return [];
+  }, [data, category, isFetching]);
 
   const handleClickCategory = (data: IBenefitsCategory) => {
     // unselect !?
@@ -80,14 +82,16 @@ const BenefitsWrapper = () => {
     router.push(`${window.location.pathname}?${KEY_PARAM_CATEGORY}=${data.id}`);
   };
 
+  useEffect(() => {
+    console.log('products', products);
+  }, [products]);
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>
         <Typography variant="h3" marginBottom={2}>
           Скидки и льготы
         </Typography>
-
-        <Box display="flex" flexWrap="wrap" gap={1.5}>
+        <Box display="none" flexWrap="wrap" gap={1.5}>
           <BenefitsStat
             name="Скидок получено"
             sx={{
@@ -140,31 +144,42 @@ const BenefitsWrapper = () => {
               scrollbarWidth: 'none',
             }}
           >
-            {BENEFITS_CATEGORIES.map((el) => (
-              <BenefitsCategory
-                key={el.id}
-                data={el}
-                active={el.id == category?.id}
-                onClick={handleClickCategory}
-              />
-            ))}
+            {BENEFITS_CATEGORIES ? (
+              BENEFITS_CATEGORIES.map((el: IBenefitsCategory) => (
+                <BenefitsCategory
+                  key={el.id}
+                  data={el}
+                  active={el.id == category?.id}
+                  onClick={handleClickCategory}
+                />
+              ))
+            ) : (
+              <Box display={'flex'} justifyContent={'center'} width={'100%'}>
+                <CircularProgress />
+              </Box>
+            )}
           </Box>
 
-          {products.map((el) => (
-            <Link
-              key={el.id}
-              href={`${BENEFITS_URL}/product/${el.id}`}
-              target="_blank"
-              style={{
-                display: 'flex',
-                flex: mobile ? '100%' : '40%',
-                maxWidth: mobile ? '100%' : 'calc(50% - 8px)',
-                width: '100%',
-              }}
-            >
-              <BenefitsProduct data={el} active={el.id == category?.id} />
-            </Link>
-          ))}
+          {isFetching ? (
+            <Box display={'flex'} justifyContent={'center'} width={'100%'}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            products.map((el) => (
+              <Link
+                key={el.id}
+                href={`/benefits/product/${el.id}`}
+                style={{
+                  display: 'flex',
+                  flex: mobile ? '100%' : '40%',
+                  maxWidth: mobile ? '100%' : 'calc(50% - 8px)',
+                  width: '100%',
+                }}
+              >
+                <BenefitsProduct data={el} active={el.id == category?.id} />
+              </Link>
+            ))
+          )}
         </Box>
       </Box>
     </>

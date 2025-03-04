@@ -2,6 +2,7 @@ export interface IBenefitsCategory {
   id: number;
   order: number;
   name: string;
+  iconName: string;
   subcategory: {
     id: number;
     order: number;

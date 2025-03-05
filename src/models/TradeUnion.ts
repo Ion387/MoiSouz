@@ -42,3 +42,7 @@ export interface ITradeUnion {
   participants?: object | null | string;
   parent?: string | null;
 }
+
+export interface ITradeUnionUploadUsersForm {
+  tradeunion: number;
+}

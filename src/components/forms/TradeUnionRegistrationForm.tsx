@@ -41,6 +41,7 @@ import { TextFieldCustom } from '../ui/form/entities/input-textfield';
 import { saveFormTULogo, saveFormTUScan } from '@/services/postLogoandFile';
 import { getMyTU } from '@/services/getMyTU';
 import { convertSizeToBites } from '@/utils/convertStringToB';
+import { saveFormTUUsers } from '@/hooks/useTU';
 
 const schema = yup
   .object({
@@ -217,6 +218,7 @@ const TradeUnionRegistrationForm = () => {
       registration(data);
       saveFormTULogo(data.logo);
       saveFormTUScan(data.scan);
+      saveFormTUUsers(data.participants);
     },
   });
 

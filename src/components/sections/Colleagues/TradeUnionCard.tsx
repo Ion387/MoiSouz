@@ -4,16 +4,22 @@ import { Box, ButtonBase, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui';
 
-import { IOrganization } from '@/models/Colleagues';
+import { ITradeUnion } from '@/models/TradeUnion';
 import { numberToStringEnd } from '@/utils/string';
 
 interface IProps {
-  data: IOrganization;
-  onClick?: (data: IOrganization) => void;
+  data: ITradeUnion;
+  count?: number;
+  onClick?: (data: ITradeUnion) => void;
   active?: boolean;
 }
 
-export const OrganizationCard: FC<IProps> = ({ data, onClick, active }) => {
+export const TradeUnionCard: FC<IProps> = ({
+  data,
+  count,
+  onClick,
+  active,
+}) => {
   return (
     <ButtonBase
       sx={{
@@ -36,15 +42,18 @@ export const OrganizationCard: FC<IProps> = ({ data, onClick, active }) => {
         height={110}
       >
         <Box display="flex" flexDirection="column" gap={2}>
-          <Typography fontSize={16}>{data.name}</Typography>
-          <Box display="flex" gap={0.5}>
-            <Typography fontSize={25} fontWeight="bold">
-              {data.count}
-            </Typography>
-            <Typography fontSize={16} marginTop={0.25}>
-              {numberToStringEnd(data.count, 'человек', 'человека', 'человек')}
-            </Typography>
-          </Box>
+          <Typography fontSize={16}>{data.title}</Typography>
+
+          {count != null && (
+            <Box display="flex" gap={0.5}>
+              <Typography fontSize={25} fontWeight="bold">
+                {count}
+              </Typography>
+              <Typography fontSize={16} marginTop={0.25}>
+                {numberToStringEnd(count, 'человек', 'человека', 'человек')}
+              </Typography>
+            </Box>
+          )}
         </Box>
         <Box
           display="flex"

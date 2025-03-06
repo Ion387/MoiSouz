@@ -1,127 +1,21 @@
 'use client';
 
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui';
 import {
-  OrganizationCard,
+  TradeUnionCard,
   Table,
   UploadUsersDialog,
 } from '@/components/sections/Colleagues';
 
-import { IColleague, IOrganization } from '@/models/Colleagues';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
-// temp
-const ORGANIZATIONS: IOrganization[] = [
-  {
-    id: 1,
-    name: 'Организация 1',
-    count: 0,
-  },
-  {
-    id: 2,
-    name: 'Организация 2',
-    count: 0,
-  },
-];
-
-// temp
-const USERS: IColleague[] = [
-  {
-    id: 1,
-    fio: 'ФИО 1',
-    organization: {
-      id: 1,
-      name: 'Организация 1',
-    },
-    position: 'Должность 1',
-    contact: 'Контакты 1',
-  },
-  {
-    id: 2,
-    fio: 'ФИО 2',
-    organization: {
-      id: 1,
-      name: 'Организация 1',
-    },
-    position: 'Должность 2',
-    contact: 'Контакты 2',
-  },
-  {
-    id: 3,
-    fio: 'ФИО 3',
-    organization: {
-      id: 1,
-      name: 'Организация 1',
-    },
-    position: 'Должность 3',
-    contact: 'Контакты 3',
-  },
-
-  {
-    id: 4,
-    fio: 'ФИО 4',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 4',
-    contact: 'Контакты 4',
-  },
-  {
-    id: 5,
-    fio: 'ФИО 5',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 5',
-    contact: 'Контакты 5',
-  },
-  {
-    id: 6,
-    fio: 'ФИО 6',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 6',
-    contact: 'Контакты 6',
-  },
-  {
-    id: 7,
-    fio: 'ФИО 7',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 7',
-    contact: 'Контакты 7',
-  },
-  {
-    id: 8,
-    fio: 'ФИО 8',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 8',
-    contact: 'Контакты 8',
-  },
-  {
-    id: 9,
-    fio: 'ФИО 9',
-    organization: {
-      id: 2,
-      name: 'Организация 2',
-    },
-    position: 'Должность 9',
-    contact: 'Контакты 9',
-  },
-];
+import { useFetchTUOwner, useFetchTUUsers } from '@/hooks/useTU';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -129,43 +23,49 @@ const ColleaguesWrapper = () => {
   const params = useSearchParams();
   const router = useRouter();
 
+  const info = useFetchProfile();
+  //const tuList = useFetchTUs();
+  const tuOwner = useFetchTUOwner();
+  const {
+    data: tuUsers,
+    loading: loadingTUUsers,
+    refetch: refetchTUUsers,
+  } = useFetchTUUsers();
+
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
-  const organizations: IOrganization[] = useMemo(
-    () =>
-      ORGANIZATIONS.map((el) => ({
-        ...el,
-        count: USERS.filter((user) => user.organization.id == el.id).length,
-      })),
-    [ORGANIZATIONS, USERS],
+  const tuList: { data: ITradeUnion[] } | null = useMemo(
+    () => (tuOwner && tuUsers ? { data: [tuOwner] } : null),
+    [tuOwner, tuUsers],
   );
 
-  const organization: IOrganization | null = useMemo(
+  const tuActive: ITradeUnion | null = useMemo(
     () =>
-      ORGANIZATIONS.find(
+      tuList?.data.find(
         (el) => el.id == (params?.get(KEY_PARAM_ORGANIZATION) ?? -1),
       ) ?? null,
-    [ORGANIZATIONS, params],
+    [tuList, params],
   );
 
-  const users: IColleague[] = useMemo(
-    () =>
-      organization == null
-        ? USERS
-        : USERS.filter((el) => el.organization.id == organization.id),
-    [USERS, organization],
-  );
+  useEffect(() => {
+    if (tuActive != null) return;
+    if (tuList == null) return;
+    if (tuList.data.length == 0) return;
+    handleClickTradeunion(tuList.data[0]);
+  }, [tuList]);
 
-  const handleClickOrganization = (data: IOrganization) => {
+  const handleClickTradeunion = (data: ITradeUnion) => {
     // unselect !?
-    if (data.id == organization?.id) {
+    if (data.id == tuActive?.id) {
       router.push(`${window.location.pathname}`);
+      refetchTUUsers();
       return;
     }
 
     router.push(
       `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${data.id}`,
     );
+    refetchTUUsers();
   };
 
   const handleClickUpload = () => {
@@ -173,8 +73,7 @@ const ColleaguesWrapper = () => {
   };
 
   const handleSuccessUpload = () => {
-    // reload organizations list !?
-    console.log('success upload');
+    refetchTUUsers();
   };
 
   return (
@@ -184,40 +83,59 @@ const ColleaguesWrapper = () => {
           Коллеги
         </Typography>
 
-        <Box display="flex" justifyContent="space-between" gap={1.5}>
-          <Box display="flex" flexWrap="wrap" gap={1.5}>
-            {organizations.map((el) => (
-              <OrganizationCard
-                key={el.id}
-                data={el}
-                onClick={handleClickOrganization}
-                active={organization?.id == el.id}
-              />
-            ))}
-          </Box>
-          <Button
-            variant="contained"
-            sx={{
-              gap: 1,
-              height: 'fit-content',
-              minWidth: 'fit-content',
-              marginTop: 'auto',
-            }}
-            onClick={handleClickUpload}
-          >
-            <Icon name="upload" color="secondary.main" />
-            Загрузить участников
-          </Button>
-        </Box>
+        {tuList ? (
+          <Box display="flex" justifyContent="space-between" gap={1.5}>
+            <Box display="flex" flexWrap="wrap" gap={1.5}>
+              {tuList?.data.map((el) => (
+                <TradeUnionCard
+                  key={el.id}
+                  data={el}
+                  count={tuUsers?.length}
+                  onClick={handleClickTradeunion}
+                  active={tuActive?.id == el.id}
+                />
+              ))}
+            </Box>
 
-        <Table data={users} />
+            {tuActive && info?.hasTradeunionOwner && (
+              <Button
+                variant="contained"
+                sx={{
+                  gap: 1,
+                  height: 'fit-content',
+                  minWidth: 'fit-content',
+                  marginTop: 'auto',
+                }}
+                onClick={handleClickUpload}
+              >
+                <Icon name="upload" color="secondary.main" />
+                Загрузить участников
+              </Button>
+            )}
+          </Box>
+        ) : (
+          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {!loadingTUUsers && tuUsers ? (
+          <Table users={(tuActive && tuUsers) || []} tradeunion={tuActive} />
+        ) : (
+          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
+            <CircularProgress />
+          </Box>
+        )}
       </Box>
 
-      <UploadUsersDialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        onSuccess={handleSuccessUpload}
-      />
+      {info?.hasTradeunionOwner && (
+        <UploadUsersDialog
+          open={openDialog}
+          defaultTradeUnion={tuActive}
+          onClose={() => setOpenDialog(false)}
+          onSuccess={handleSuccessUpload}
+        />
+      )}
     </>
   );
 };

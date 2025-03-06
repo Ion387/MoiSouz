@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Dialog, IconButton, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,41 +7,48 @@ import * as yup from 'yup';
 import { Icon } from '@/components/ui';
 import { Form } from '@/components/entities/profile/form';
 import { InputAutocomplete } from '@/components/ui/form';
-
-import { IOrganizationUploadUsersForm } from '@/models/Colleagues';
-import { IOption } from '@/models/Option';
 import FilePickerDialog from '@/components/ui/dialog/FilePickerDialog';
 
-const OPTIONS_ORGANIZATION: IOption[] = [
-  { title: 'Организация 1', id: 1 },
-  { title: 'Организация 2', id: 2 },
-  { title: 'Организация 3', id: 3 },
-];
+//import { useQuery } from '@tanstack/react-query';
+import { saveFormTUUsers, useFetchTUOwner } from '@/hooks/useTU';
+
+import { ITradeUnionUploadUsersForm } from '@/models/TradeUnion';
+import { IOption } from '@/models/Option';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 const schema = yup
   .object({
-    organization: yup.number().required('Укажите организацию'),
+    tradeunion: yup.number().required('Укажите организацию'),
   })
   .required();
 
 interface IDialogProps {
   open: boolean;
+  defaultTradeUnion?: ITradeUnion | null;
   onClose?: () => void;
   onSuccess?: () => void;
 }
 
 export const UploadUsersDialog: FC<IDialogProps> = ({
   open,
+  defaultTradeUnion,
   onClose,
   onSuccess,
 }) => {
+  const tuOwner = useFetchTUOwner();
+
+  const tuList: IOption[] = useMemo(
+    () => (tuOwner ? [{ id: tuOwner.id || 0, title: tuOwner.title }] : []),
+    [tuOwner],
+  );
+
   const [reseted, setReseted] = useState<boolean>(true);
   const [success, setSuccess] = useState<boolean>(false);
 
   const [openFilePicker, setOpenFilePicker] = useState<boolean>(false);
   const [filePicked, setFilePicked] = useState<File | null>(null);
 
-  const methods = useForm<IOrganizationUploadUsersForm>({
+  const methods = useForm<ITradeUnionUploadUsersForm>({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
@@ -58,12 +65,16 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
       return;
     }
 
-    if (open == true && reseted == false) {
-      methods.reset();
-      setFilePicked(null);
-      setReseted(true);
+    if (open == true) {
+      if (reseted == false) {
+        methods.reset();
+        setFilePicked(null);
+        setReseted(true);
+      }
+      if (defaultTradeUnion?.id != null)
+        methods.setValue('tradeunion', defaultTradeUnion.id);
     }
-  }, [methods, open]);
+  }, [methods, open, defaultTradeUnion]);
 
   useEffect(() => {
     if (filePicked == null) return;
@@ -71,7 +82,7 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
   }, [filePicked]);
 
   // send
-  const onSubmit = async (data: IOrganizationUploadUsersForm) => {
+  const onSubmit = async (/*data: ITradeUnionUploadUsersForm*/) => {
     if (filePicked == null) {
       setOpenFilePicker(false);
       setTimeout(() => setOpenFilePicker(true));
@@ -79,9 +90,7 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
     }
 
     // temp (upload !?)
-    console.log(data, filePicked);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert(JSON.stringify(data) + '\r\n' + JSON.stringify(filePicked.name));
+    await saveFormTUUsers(filePicked);
     setFilePicked(null);
 
     // success
@@ -140,10 +149,10 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
           </Typography>
 
           <InputAutocomplete
-            name="organization"
+            name="tradeunion"
             label="Организация"
             placeholder="Выберите организацию"
-            options={OPTIONS_ORGANIZATION}
+            options={tuList}
           />
         </Form>
       </Dialog>

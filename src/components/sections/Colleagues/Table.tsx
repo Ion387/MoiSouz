@@ -1,13 +1,15 @@
-import { IColleague } from '@/models/Colleagues';
+import { IProfile } from '@/models/Profile';
+import { ITradeUnion } from '@/models/TradeUnion';
 import { Box, Divider, Grid2, Paper, Typography } from '@mui/material';
 import { FC } from 'react';
 
 interface ITableProps {
-  data: IColleague[] | undefined;
+  users: IProfile[] | undefined;
+  tradeunion?: ITradeUnion | null;
 }
 
-export const Table: FC<ITableProps> = ({ data }) => {
-  const groupedData = data;
+export const Table: FC<ITableProps> = ({ users, tradeunion }) => {
+  const groupedData = users;
 
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
@@ -56,22 +58,22 @@ export const Table: FC<ITableProps> = ({ data }) => {
             <Grid2 container sx={{ p: 1.6 }}>
               <Grid2 size={2.5}>
                 <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.fio}
+                  {el.name}
                 </Typography>
               </Grid2>
               <Grid2 size={2.5}>
                 <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.organization.name}
+                  {tradeunion?.title}
                 </Typography>
               </Grid2>
               <Grid2 size={2.5}>
                 <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.position}
+                  {el.position && el.position[0]}
                 </Typography>
               </Grid2>
               <Grid2 size={4.5}>
                 <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.contact}
+                  {el.phone || el.email}
                 </Typography>
               </Grid2>
             </Grid2>

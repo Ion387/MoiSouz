@@ -45,6 +45,18 @@ import { Icon as IconBenefitsCoin } from '@/assets/icons/benefits-coin';
 import { Icon as IconBenefitsGift } from '@/assets/icons/benefits-gift';
 import { Icon as IconBenefitsChart } from '@/assets/icons/benefits-chart';
 import { Icon as IconNewDoc } from '@/assets/icons/new-doc';
+import { Icon as IconBBPercents } from '@/assets/icons/bb-percents';
+import { Icon as IconBBNew } from '@/assets/icons/bb-new';
+import { Icon as IconBBHd } from '@/assets/icons/bb-hd';
+import { Icon as IconBBShop } from '@/assets/icons/bb-shop';
+import { Icon as IconBBFood } from '@/assets/icons/bb-food';
+import { Icon as IconBBEduc } from '@/assets/icons/bb-educ';
+import { Icon as IconBBRelax } from '@/assets/icons/bb-relax';
+import { Icon as IconBBSport } from '@/assets/icons/bb-sport';
+import { Icon as IconBBHealth } from '@/assets/icons/bb-health';
+import { Icon as IconBBChild } from '@/assets/icons/bb-child';
+import { Icon as IconBBEnjoy } from '@/assets/icons/bb-enjoy';
+import { Icon as IconBBDeals } from '@/assets/icons/bb-deals';
 
 const NAMES = [
   'document',
@@ -83,6 +95,18 @@ const NAMES = [
   'benefits-gift',
   'benefits-chart',
   'newDoc',
+  'bb-percents',
+  'bb-new',
+  'bb-hd',
+  'bb-shop',
+  'bb-food',
+  'bb-educ',
+  'bb-relax',
+  'bb-sport',
+  'bb-health',
+  'bb-child',
+  'bb-enjoy',
+  'bb-deals',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -123,6 +147,18 @@ const ICONS: { [key: string]: JSX.Element } = {
   'benefits-gift': <IconBenefitsGift />,
   'benefits-chart': <IconBenefitsChart />,
   newDoc: <IconNewDoc />,
+  'bb-percents': <IconBBPercents />,
+  'bb-new': <IconBBNew />,
+  'bb-hd': <IconBBHd />,
+  'bb-shop': <IconBBShop />,
+  'bb-food': <IconBBFood />,
+  'bb-educ': <IconBBEduc />,
+  'bb-relax': <IconBBRelax />,
+  'bb-sport': <IconBBSport />,
+  'bb-health': <IconBBHealth />,
+  'bb-child': <IconBBChild />,
+  'bb-enjoy': <IconBBEnjoy />,
+  'bb-deals': <IconBBDeals />,
 };
 
 interface Props {

@@ -69,7 +69,7 @@ const BenefitsProductPage = () => {
               <img
                 style={{
                   width: '100%',
-                  aspectRatio: '8 / 5',
+                  aspectRatio: '17 / 9',
                   borderRadius: '10px',
                   marginBottom: '12px',
                 }}

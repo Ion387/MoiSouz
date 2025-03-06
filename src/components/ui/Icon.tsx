@@ -29,6 +29,7 @@ import { Icon as IconLogout } from '@/assets/icons/logout';
 import { Icon as IconEyeOn } from '@/assets/icons/eye-on';
 import { Icon as IconEyeOff } from '@/assets/icons/eye-off';
 import { Icon as IconBell } from '@/assets/icons/bell';
+import { Icon as IconArrowBack } from '@/assets/icons/arrow-back';
 import { Icon as IconArrowDropdown } from '@/assets/icons/arrow-dropdown';
 import { Icon as IconPlus } from '@/assets/icons/plus';
 import { Icon as IconMinus } from '@/assets/icons/minus';
@@ -44,6 +45,7 @@ import { Icon as IconUpload } from '@/assets/icons/upload';
 import { Icon as IconBenefitsCoin } from '@/assets/icons/benefits-coin';
 import { Icon as IconBenefitsGift } from '@/assets/icons/benefits-gift';
 import { Icon as IconBenefitsChart } from '@/assets/icons/benefits-chart';
+import { Icon as IconMail } from '@/assets/icons/mail';
 
 const NAMES = [
   'document',
@@ -66,6 +68,7 @@ const NAMES = [
   'eye-on',
   'eye-off',
   'bell',
+  'arrow-back',
   'arrow-dropdown',
   'plus',
   'minus',
@@ -81,6 +84,7 @@ const NAMES = [
   'benefits-coin',
   'benefits-gift',
   'benefits-chart',
+  'mail',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -105,6 +109,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   'eye-on': <IconEyeOn />,
   'eye-off': <IconEyeOff />,
   bell: <IconBell />,
+  'arrow-back': <IconArrowBack />,
   'arrow-dropdown': <IconArrowDropdown />,
   plus: <IconPlus />,
   minus: <IconMinus />,
@@ -120,6 +125,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   'benefits-coin': <IconBenefitsCoin />,
   'benefits-gift': <IconBenefitsGift />,
   'benefits-chart': <IconBenefitsChart />,
+  mail: <IconMail />,
 };
 
 interface Props {

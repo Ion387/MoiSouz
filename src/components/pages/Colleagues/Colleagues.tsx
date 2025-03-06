@@ -120,7 +120,11 @@ const ColleaguesWrapper = () => {
         )}
 
         {!loadingTUUsers && tuUsers ? (
-          <Table users={(tuActive && tuUsers) || []} tradeunion={tuActive} />
+          <Table
+            users={(tuActive && tuUsers) || []}
+            tradeunion={tuActive}
+            owner={info?.hasTradeunionOwner}
+          />
         ) : (
           <Box display={'flex'} justifyContent={'center'} width={'100%'}>
             <CircularProgress />

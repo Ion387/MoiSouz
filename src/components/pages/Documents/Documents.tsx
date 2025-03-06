@@ -2,11 +2,13 @@
 
 import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 import Table from '@/components/sections/Docs/Table';
+import { Icon } from '@/components/ui';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { IDoc } from '@/models/Doc';
 import { getDocs } from '@/services/getDocs';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -44,9 +46,27 @@ const DocumentsWrapper = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h3" marginBottom={2}>
-        Документы
-      </Typography>
+      <Box
+        display={'flex'}
+        flexDirection={'row'}
+        justifyContent={'space-between'}
+      >
+        <Typography variant="h3" marginBottom={2}>
+          Документы
+        </Typography>
+        {info?.ROLES?.includes('ROLE_TRADEUNION') && (
+          <Link href={'/new_document'}>
+            <Button variant="contained">
+              <Icon
+                name={'newDoc'}
+                color="#ffffff"
+                sx={{ marginRight: '6px' }}
+              ></Icon>
+              Создать документ
+            </Button>
+          </Link>
+        )}
+      </Box>
       <Table docs={filtredDocs} />
       <NewProfileDialog
         open={

@@ -1,14 +1,41 @@
 import { IProfile } from '@/models/Profile';
 import { ITradeUnion } from '@/models/TradeUnion';
-import { Box, Divider, Grid2, Paper, Typography } from '@mui/material';
-import { FC } from 'react';
+import {
+  Box,
+  ButtonBase,
+  Divider,
+  Grid2,
+  Paper,
+  Typography,
+} from '@mui/material';
+import Link from 'next/link';
+import { FC, PropsWithChildren } from 'react';
+
+interface IRowProps {
+  user: IProfile;
+  owner?: boolean;
+}
+
+const Row: FC<PropsWithChildren & IRowProps> = ({ children, user, owner }) => {
+  if (owner) {
+    return (
+      <Link href={`/colleagues/${user.id}`} style={{ width: '100%' }}>
+        <ButtonBase style={{ width: '100%' }} disabled={!owner}>
+          {children}
+        </ButtonBase>
+      </Link>
+    );
+  }
+  return children;
+};
 
 interface ITableProps {
   users: IProfile[] | undefined;
   tradeunion?: ITradeUnion | null;
+  owner?: boolean;
 }
 
-export const Table: FC<ITableProps> = ({ users, tradeunion }) => {
+export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
   const groupedData = users;
 
   return (
@@ -32,7 +59,7 @@ export const Table: FC<ITableProps> = ({ users, tradeunion }) => {
             Организация
           </Typography>
         </Grid2>
-        <Grid2 size={2.5}>
+        <Grid2 size={3.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -41,7 +68,7 @@ export const Table: FC<ITableProps> = ({ users, tradeunion }) => {
             Должность
           </Typography>
         </Grid2>
-        <Grid2 size={4.5}>
+        <Grid2 size={3.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -55,28 +82,38 @@ export const Table: FC<ITableProps> = ({ users, tradeunion }) => {
       {groupedData && !!groupedData.length ? (
         groupedData.map((el, index, arr) => (
           <Box key={el.id}>
-            <Grid2 container sx={{ p: 1.6 }}>
-              <Grid2 size={2.5}>
-                <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.name}
-                </Typography>
+            <Row user={el} owner={owner}>
+              <Grid2
+                container
+                sx={{
+                  p: 1.6,
+                  width: '100%',
+                  textAlign: 'left',
+                  userSelect: owner ? 'none' : 'all',
+                }}
+              >
+                <Grid2 size={2.5}>
+                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                    {el.name}
+                  </Typography>
+                </Grid2>
+                <Grid2 size={2.5}>
+                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                    {tradeunion?.title}
+                  </Typography>
+                </Grid2>
+                <Grid2 size={3.5}>
+                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                    {el.position && el.position[0]}
+                  </Typography>
+                </Grid2>
+                <Grid2 size={3.5}>
+                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                    {el.phone || el.email}
+                  </Typography>
+                </Grid2>
               </Grid2>
-              <Grid2 size={2.5}>
-                <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {tradeunion?.title}
-                </Typography>
-              </Grid2>
-              <Grid2 size={2.5}>
-                <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.position && el.position[0]}
-                </Typography>
-              </Grid2>
-              <Grid2 size={4.5}>
-                <Typography variant="body2" fontWeight={600} pt={2.4}>
-                  {el.phone || el.email}
-                </Typography>
-              </Grid2>
-            </Grid2>
+            </Row>
             {index !== arr.length - 1 && <Divider></Divider>}
           </Box>
         ))

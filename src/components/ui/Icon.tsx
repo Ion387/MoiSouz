@@ -29,6 +29,7 @@ import { Icon as IconLogout } from '@/assets/icons/logout';
 import { Icon as IconEyeOn } from '@/assets/icons/eye-on';
 import { Icon as IconEyeOff } from '@/assets/icons/eye-off';
 import { Icon as IconBell } from '@/assets/icons/bell';
+import { Icon as IconArrowBack } from '@/assets/icons/arrow-back';
 import { Icon as IconArrowDropdown } from '@/assets/icons/arrow-dropdown';
 import { Icon as IconPlus } from '@/assets/icons/plus';
 import { Icon as IconMinus } from '@/assets/icons/minus';
@@ -57,6 +58,7 @@ import { Icon as IconBBHealth } from '@/assets/icons/bb-health';
 import { Icon as IconBBChild } from '@/assets/icons/bb-child';
 import { Icon as IconBBEnjoy } from '@/assets/icons/bb-enjoy';
 import { Icon as IconBBDeals } from '@/assets/icons/bb-deals';
+import { Icon as IconMail } from '@/assets/icons/mail';
 
 const NAMES = [
   'document',
@@ -79,6 +81,7 @@ const NAMES = [
   'eye-on',
   'eye-off',
   'bell',
+  'arrow-back',
   'arrow-dropdown',
   'plus',
   'minus',
@@ -107,6 +110,7 @@ const NAMES = [
   'bb-child',
   'bb-enjoy',
   'bb-deals',
+  'mail',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -131,6 +135,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   'eye-on': <IconEyeOn />,
   'eye-off': <IconEyeOff />,
   bell: <IconBell />,
+  'arrow-back': <IconArrowBack />,
   'arrow-dropdown': <IconArrowDropdown />,
   plus: <IconPlus />,
   minus: <IconMinus />,
@@ -159,6 +164,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   'bb-child': <IconBBChild />,
   'bb-enjoy': <IconBBEnjoy />,
   'bb-deals': <IconBBDeals />,
+  mail: <IconMail />,
 };
 
 interface Props {

@@ -12,7 +12,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias.canvas = false;
+    }
     config.module.rules.push({
       test: /\.node/,
       use: 'raw-loader',

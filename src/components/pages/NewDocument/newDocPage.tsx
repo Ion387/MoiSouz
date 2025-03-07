@@ -1,11 +1,10 @@
 'use client';
 
 import NewDocumentForm from '@/components/forms/NewDocumentForm';
-import { Icon } from '@/components/ui';
 import ProgressBar from '@/components/ui/progressBar';
 import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
-import { Box, Button, Grid2, Link, Typography } from '@mui/material';
+import { Box, Grid2, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import React from 'react';

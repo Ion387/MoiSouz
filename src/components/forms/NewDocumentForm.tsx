@@ -9,28 +9,17 @@ import {
   Paper,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { InputDate } from '../ui/form/input-date';
 import dayjs from 'dayjs';
-import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getApplications } from '@/services/getApplications';
-import { ITradeUnion } from '@/models/TradeUnion';
-import { InputCheckbox } from '../ui/form/input-checkbox';
-import { getSession } from 'next-auth/react';
-import axios from 'axios';
-import { getBackendUrl } from '@/constants/url';
 import { type INewDoc } from '@/models/Doc';
-import { INewDocument } from '@/models/NewDocument';
-import { InputArray } from '../ui/form';
 import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
 
 const itemSchema = yup.object().shape({
@@ -57,10 +46,8 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue: setFormValue,
-    getValues,
   } = methods;
 
   /*const { mutate, isSuccess, data } = useMutation({
@@ -87,9 +74,9 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
     },
   });*/
 
-  const onSubmit: SubmitHandler<INewDocument> = async (data) => {
+  /*const onSubmit: SubmitHandler<INewDocument> = async () => {
     router.push(`/documents?inside`);
-  };
+  };*/
 
   /*useEffect(() => {
     if (isSuccess) {
@@ -129,7 +116,7 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
         }
       >
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={() => {}}>
             <Grid2 container spacing={2}>
               <Grid2 size={6}>
                 <InputLabel>Номер документа</InputLabel>
@@ -214,7 +201,6 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                     lineHeight: '27px',
                   }}
                   onClick={async () => {
-                    await onSubmit(getValues());
                     router.push('/documents?drafts');
                   }}
                 >

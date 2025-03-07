@@ -138,7 +138,7 @@ const BenefitsWrapper = () => {
             width="100%"
             gap={1.5}
             position="absolute"
-            top={-100}
+            top={-116}
             overflow="auto"
             sx={{
               scrollbarWidth: 'none',

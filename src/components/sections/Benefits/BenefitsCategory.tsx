@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { Box, ButtonBase, Typography } from '@mui/material';
 import { IBenefitsCategory } from '@/models/Benefits';
 import { PropsWithSX } from '@/models/Props';
+import { Icon } from '@/components/ui';
+import { BBCategoryIconByName } from '@/utils/BBCategoryIconByName';
 
 interface IProps {
   data: IBenefitsCategory;
@@ -38,9 +40,19 @@ export const BenefitsCategory: FC<PropsWithSX & IProps> = ({
         p={1.5}
         gap={1.5}
         width="100%"
-        height="auto"
+        height="100%"
       >
-        <Typography fontSize={16} fontWeight={600} whiteSpace="nowrap">
+        <Icon
+          sx={{ scale: 0.75 }}
+          name={BBCategoryIconByName(data.name)}
+          color={active ? 'primary.main' : '#000000'}
+        />
+        <Typography
+          fontSize={16}
+          fontWeight={600}
+          whiteSpace="nowrap"
+          color={active ? 'primary.main' : '#000000'}
+        >
           {data.name}
         </Typography>
       </Box>

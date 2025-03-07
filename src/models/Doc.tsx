@@ -27,3 +27,29 @@ export interface IDoc {
     position: string;
   };
 }
+
+export interface INewDoc {
+  tradeunion: ITradeUnion;
+  user: IProfile;
+  status: string;
+  title: string;
+  files: {
+    type: string;
+    source: string;
+    originalName: string;
+    size: number;
+  }[];
+  documentDate: string;
+  documentType: string;
+  documentNumber: string;
+  folder: string;
+  id?: number;
+  file: string;
+  step: string;
+  guid: string;
+  data: {
+    person: string;
+    place: string;
+    article: string;
+  }[];
+}

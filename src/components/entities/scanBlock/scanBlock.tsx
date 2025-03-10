@@ -110,7 +110,7 @@ const ScanBlock = ({ number }: { number: string }) => {
     mutate(data);
   };
   return (
-    <Paper sx={{ height: '100%' }}>
+    <Paper>
       <Box pb={2.4}>
         <a href={file?.file} target="_blank" style={{ width: '100%' }}>
           <ListItemButton

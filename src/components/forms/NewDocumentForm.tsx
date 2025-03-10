@@ -107,7 +107,7 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
   }, [doc]);
 
   return (
-    <Paper className={s.paper}>
+    <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
         adapterLocale="ru"

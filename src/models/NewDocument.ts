@@ -1,9 +1,9 @@
 export interface INewDocument {
   documentDate?: string;
   documentNumber?: string;
+  place: string;
   data: {
     person: string;
-    place: string;
     article: string;
   }[];
 }

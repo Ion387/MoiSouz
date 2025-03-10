@@ -379,6 +379,20 @@ export default createTheme(
                   },
                 },
               },
+              {
+                props: { variant: 'contained-red' },
+                style: {
+                  backgroundColor: globalTheme.palette.red.main,
+                  transition: 'opacity 0.1s ease-out',
+                  width: 36,
+                  height: 36,
+
+                  '&:hover': {
+                    backgroundColor: globalTheme.palette.red.main,
+                    opacity: 0.8,
+                  },
+                },
+              },
             ],
           },
         },

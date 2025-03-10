@@ -24,7 +24,6 @@ import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
 
 const itemSchema = yup.object().shape({
   person: yup.string().required('Обязательное поле'),
-  place: yup.string().required('Обязательное поле'),
   article: yup.string().required('Обязательное поле'),
 });
 
@@ -32,6 +31,7 @@ const schema = yup
   .object({
     documentDate: yup.string(),
     documentNumber: yup.string(),
+    place: yup.string().required('Обязательное поле'),
     data: yup.array().of(itemSchema),
   })
   .required();
@@ -96,10 +96,10 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
     if (doc) {
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
+      setFormValue(`place`, doc.place);
       if (doc.data.length) {
         doc.data.forEach((el, id) => {
           setFormValue(`data.${id}.person`, doc.data[id].person);
-          setFormValue(`data.${id}.place`, doc.data[id].place);
           setFormValue(`data.${id}.article`, doc.data[id].article);
         });
       }
@@ -132,6 +132,18 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                 <InputDate name="documentDate" isFutureAccess />
               </Grid2>
               <Grid2 size={12}>
+                {' '}
+                <InputLabel sx={{ marginBottom: '0' }}>
+                  Место проведения
+                </InputLabel>
+                <TextField
+                  {...register(`place`)}
+                  placeholder="Место проведения"
+                  error={!!errors.place?.message}
+                  helperText={errors.place?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={12}>
                 <InputArrayOfObjects
                   name="data"
                   desc="Добавить вопрос"
@@ -142,15 +154,6 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                       width={'100%'}
                       gap={1.6}
                     >
-                      <InputLabel sx={{ marginBottom: '0' }}>
-                        Место проведения
-                      </InputLabel>
-                      <TextField
-                        {...register(`${name}.${index}.place`)}
-                        placeholder="Место проведения"
-                        error={!!errors?.message}
-                        helperText={errors?.message || ''}
-                      />
                       <InputLabel sx={{ marginBottom: '0' }}>{`Вопрос №${
                         index + 1
                       }`}</InputLabel>

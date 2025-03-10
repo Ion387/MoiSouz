@@ -6,11 +6,12 @@ import { Icon } from '@/components/ui';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { IDoc } from '@/models/Doc';
 import { getDocs } from '@/services/getDocs';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
+import { globalTheme } from '@/styles/theme';
 
 const DocumentsWrapper = () => {
   const { data: docs, isLoading } = useQuery({
@@ -34,6 +35,7 @@ const DocumentsWrapper = () => {
   const [open, setOpen] = useState(
     !!info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionOwner,
   );
+  const [newDocOpen, setNewDocOpen] = useState<boolean>(false);
   const path = usePathname();
 
   useEffect(
@@ -55,16 +57,18 @@ const DocumentsWrapper = () => {
           Документы
         </Typography>
         {info?.ROLES?.includes('ROLE_TRADEUNION') && (
-          <Link href={'/new_document'}>
-            <Button variant="contained">
-              <Icon
-                name={'newDoc'}
-                color="#ffffff"
-                sx={{ marginRight: '6px' }}
-              ></Icon>
-              Создать документ
-            </Button>
-          </Link>
+          <Button
+            variant="contained"
+            onClick={() => setNewDocOpen(true)}
+            sx={{ marginBottom: '12px' }}
+          >
+            <Icon
+              name={'newDoc'}
+              color="#ffffff"
+              sx={{ marginRight: '6px' }}
+            ></Icon>
+            Создать документ
+          </Button>
         )}
       </Box>
       <Table docs={filtredDocs} />
@@ -87,6 +91,65 @@ const DocumentsWrapper = () => {
         title="Для того, чтобы воспользоваться всеми функциями системы, заполните анкету организации, выберите и оплатите тариф"
         onClose={path.includes('profile') ? () => setOpen(false) : () => {}}
       />
+      <Dialog open={newDocOpen} onClose={() => setNewDocOpen(false)}>
+        <Box
+          sx={{
+            p: 2.4,
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            m: '0 auto',
+          }}
+        >
+          <Box display={'flex'} flexDirection={'row'} justifyContent={'center'}>
+            <Typography variant="h3" textAlign={'center'} marginBottom={2}>
+              Выберите тип документа
+            </Typography>
+            <IconButton
+              sx={{ position: 'absolute', top: '-16px', right: '-16px' }}
+              onClick={() => setNewDocOpen(false)}
+            >
+              <Icon name="close"></Icon>
+            </IconButton>
+          </Box>
+          <Link href={'/new_document'} style={{ width: '100%' }}>
+            <Button
+              variant="contained"
+              sx={{
+                padding: '15px 100px',
+                fontSize: '20px',
+                lineHeight: '27px',
+                marginBottom: '20px',
+                width: '100%',
+                '&.Mui-disabled': {
+                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                  color: 'white !important',
+                },
+              }}
+            >
+              Повестка
+            </Button>
+          </Link>
+          <Link href={'/new_protocol'} style={{ width: '100%' }}>
+            <Button
+              variant="contained"
+              sx={{
+                padding: '15px 100px',
+                fontSize: '20px',
+                lineHeight: '27px',
+                width: '100%',
+                '&.Mui-disabled': {
+                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                  color: 'white !important',
+                },
+              }}
+            >
+              Протокол
+            </Button>
+          </Link>
+        </Box>
+      </Dialog>
     </Box>
   );
 };

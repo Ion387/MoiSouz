@@ -14,6 +14,6 @@ declare module '@mui/material/styles' {
 
 declare module '@mui/material/IconButton' {
   interface IconButtonOwnProps {
-    variant?: 'standard' | 'contained' | 'contained-gray';
+    variant?: 'standard' | 'contained' | 'contained-gray' | 'contained-red';
   }
 }

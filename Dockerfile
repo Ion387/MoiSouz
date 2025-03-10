@@ -1,7 +1,17 @@
-FROM node:lts as dependencies
+FROM node:20-alpine3.20
 WORKDIR /var/www
-COPY package.json package-lock.json jsconfig.json .env ./
+COPY package.json yarn.lock .env ./
 #RUN npm install
+# Add any dependencies required to build modules ie: modules with native code.
+RUN apk add --no-cache \
+	build-base \
+	cairo-dev \
+	libpng-dev \
+	g++ \
+	pango-dev \
+	python3 \
+	;
+	
 RUN yarn install
 EXPOSE 3000
 

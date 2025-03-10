@@ -45,7 +45,7 @@ export const Icon = () => (
         width="25.833330"
         height="5.166666"
         fill="currentColor"
-        fill-opacity="1.000000"
+        fillOpacity="1.000000"
       />
       <rect
         id="rect"

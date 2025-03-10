@@ -11,8 +11,8 @@ export const Icon = () => (
       id="path"
       d="M32 0L0 0L0 22L9.33 22L9.33 24.75L22.66 24.75L22.66 22L32 22L32 0ZM29.33 19.25L2.66 19.25L2.66 2.75L29.33 2.75L29.33 19.25Z"
       fill="currentColor"
-      fill-opacity="1.000000"
-      fill-rule="nonzero"
+      fillOpacity="1.000000"
+      fillRule="nonzero"
     />
   </svg>
 );

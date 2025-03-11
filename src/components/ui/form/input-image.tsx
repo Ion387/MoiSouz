@@ -12,9 +12,15 @@ import { PropsWithSX } from '@/models/Props';
 interface Props {
   name: string;
   label?: ReactNode;
+  disabled?: boolean;
 }
 
-export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+export const InputImage: FC<PropsWithSX & Props> = ({
+  sx,
+  name,
+  label,
+  disabled,
+}) => {
   const { control, getValues } = useFormContext();
   const ref = createRef<HTMLInputElement>();
 
@@ -99,11 +105,14 @@ export const InputImage: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
             }}
             variant="outlined"
             onClick={handleOpen}
+            disabled={disabled}
           >
             {preview == null && (
               <>
                 {label}
-                <Icon name="file-add" color="rgb(166, 166, 166)" />
+                {disabled != true && (
+                  <Icon name="file-add" color="rgb(166, 166, 166)" />
+                )}
               </>
             )}
             <FormHelperText id={`${name}-helper`} error={true}>

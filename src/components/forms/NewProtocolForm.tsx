@@ -14,8 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import s from './forms.module.scss';
@@ -52,11 +52,12 @@ const schema = yup
   })
   .required();
 
-const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
+const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
+  const params = useSearchParams();
 
   const router = useRouter();
 
@@ -115,6 +116,14 @@ const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
       }
     }
   }, [currentAgenda]);
+
+  useEffect(() => {
+    const param = !!params.entries().toArray().length
+      ? params.entries().toArray()[0][1]
+      : null;
+    if (param)
+      setCurrentAgenda(agendas.find((el) => el.documentNumber == param));
+  }, [params]);
 
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
@@ -188,7 +197,7 @@ const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
               </Grid2>
               <Grid2 size={12}>
                 <InputLabel>Присутствовали на заседании</InputLabel>
-                <Typography>
+                <Typography component={'div'}>
                   {members.map((el) => (
                     <>
                       <TextField
@@ -388,6 +397,14 @@ const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
         </Grid2>
       </Dialog>
     </Paper>
+  );
+};
+
+const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
+  return (
+    <Suspense>
+      <NewProtocolFormChild doc={doc} />
+    </Suspense>
   );
 };
 

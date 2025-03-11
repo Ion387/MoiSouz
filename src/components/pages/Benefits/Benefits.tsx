@@ -82,9 +82,6 @@ const BenefitsWrapper = () => {
     router.push(`${window.location.pathname}?${KEY_PARAM_CATEGORY}=${data.id}`);
   };
 
-  useEffect(() => {
-    console.log('products', products);
-  }, [products]);
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>

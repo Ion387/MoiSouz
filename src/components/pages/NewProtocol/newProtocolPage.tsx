@@ -13,7 +13,6 @@ import React from 'react';
 const NewProtocol = () => {
   const path = usePathname();
   const number = path.split('/')[3];
-
   const { data: doc } = useQuery({
     queryKey: ['doc'],
     queryFn: () => getDoc<INewProtocol>(number),

@@ -1,12 +1,14 @@
 'use client';
 
 import NewDocumentForm from '@/components/forms/NewDocumentForm';
+import { Icon } from '@/components/ui';
 import ProgressBar from '@/components/ui/progressBar';
 import { INewDoc } from '@/models/Doc';
 import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
-import { Box, Grid2, Typography } from '@mui/material';
+import { Box, Button, Grid2, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -30,16 +32,18 @@ const NewDocument = () => {
           <Typography variant="h3" marginBottom={2}>
             Повестка заседания Профкома
           </Typography>
-          {/*<Link href={doc ? `/protocol/${doc.guid}` : `/protocol/test`}>
-            <Button variant="contained">
-              <Icon
-                name={'newDoc'}
-                color="#ffffff"
-                sx={{ marginRight: '6px' }}
-              ></Icon>
-              Создать протокол
-            </Button>
-          </Link>*/}
+          {doc && (
+            <Link href={`/protocol?agenda${doc.documentNumber}`}>
+              <Button variant="contained">
+                <Icon
+                  name={'newDoc'}
+                  color="#ffffff"
+                  sx={{ marginRight: '6px' }}
+                ></Icon>
+                Создать протокол
+              </Button>
+            </Link>
+          )}
         </Box>
       </Grid2>
       <Grid2 size={8}>

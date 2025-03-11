@@ -2,6 +2,7 @@
 
 import NewDocumentForm from '@/components/forms/NewDocumentForm';
 import ProgressBar from '@/components/ui/progressBar';
+import { INewDoc } from '@/models/Doc';
 import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
 import { Box, Grid2, Typography } from '@mui/material';
@@ -15,8 +16,7 @@ const NewDocument = () => {
 
   const { data: doc } = useQuery({
     queryKey: ['doc'],
-    queryFn: () => getDoc(number),
-    select: (data) => data?.data,
+    queryFn: () => getDoc<INewDoc>(number),
   });
 
   return (

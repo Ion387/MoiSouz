@@ -14,6 +14,7 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import { GlobalWorkerOptions } from 'pdfjs-dist';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { IDoc } from '@/models/Doc';
 
 GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -27,8 +28,7 @@ const DocumentItem = () => {
   const number = path.split('/')[2];
   const { data: doc } = useQuery({
     queryKey: ['doc'],
-    queryFn: () => getDoc(number),
-    select: (data) => data?.data,
+    queryFn: () => getDoc<IDoc>(number),
   });
 
   return (

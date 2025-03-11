@@ -1,4 +1,5 @@
 export interface INewProtocol {
+  step: string;
   documentDate?: string;
   documentNumber?: string;
   documentTime?: string;

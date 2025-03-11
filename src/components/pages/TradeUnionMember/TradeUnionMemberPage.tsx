@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getDoc } from '@/services/getDocs';
 import { stepTransformation } from '@/utils/stepTransformation';
+import { IDoc } from '@/models/Doc';
 
 const TradeUnionMemberPage = () => {
   const [steps, setSteps] = useState<number>(1);
@@ -19,8 +20,8 @@ const TradeUnionMemberPage = () => {
 
   const { data: doc } = useQuery({
     queryKey: ['doc'],
-    queryFn: () => getDoc(number),
-    select: (data) => data?.data,
+    queryFn: () => getDoc<IDoc>(number),
+    select: (data) => data,
   });
 
   useEffect(() => {

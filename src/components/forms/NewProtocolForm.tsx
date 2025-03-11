@@ -27,6 +27,8 @@ import { members } from '@/constants/members';
 import { agendas } from '@/constants/agendas';
 import { Icon } from '../ui/Icon';
 import { type INewDocument } from '@/models/NewDocument';
+import { InputTime } from '../ui/form/input-time';
+import { TextFieldCustom } from '../ui/form/entities/input-textfield';
 
 const itemSchema = yup.object().shape({
   person: yup.string().required('Обязательное поле'),
@@ -141,7 +143,7 @@ const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
               </Grid2>
               <Grid2 size={4}>
                 <InputLabel>Начало заседание</InputLabel>
-                <InputDate name="documentTime" />
+                <InputTime name="documentTime" />
               </Grid2>
               <Grid2 size={12}>
                 <InputLabel>Место проведения</InputLabel>
@@ -279,38 +281,35 @@ const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
                       <Grid2 size={12} marginTop={2.5} container spacing={2.5}>
                         <Grid2 size={4}>
                           <InputLabel>За:</InputLabel>
-                          <TextField
+                          <TextFieldCustom
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',
                               },
                             }}
-                            type="number"
-                            {...register(`data.${id}.for`)}
+                            register={register(`data.${id}.for`)}
                           />
                         </Grid2>
                         <Grid2 size={4}>
                           <InputLabel>Против:</InputLabel>
-                          <TextField
+                          <TextFieldCustom
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',
                               },
                             }}
-                            type="number"
-                            {...register(`data.${id}.against`)}
+                            register={register(`data.${id}.against`)}
                           />
                         </Grid2>
                         <Grid2 size={4}>
                           <InputLabel>Воздержались:</InputLabel>
-                          <TextField
+                          <TextFieldCustom
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',
                               },
                             }}
-                            type="number"
-                            {...register(`data.${id}.abstained`)}
+                            register={register(`data.${id}.abstained`)}
                           />
                         </Grid2>
                       </Grid2>

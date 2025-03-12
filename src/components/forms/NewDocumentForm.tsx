@@ -44,7 +44,13 @@ const schema = yup
   })
   .required();
 
-const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
+const NewDocumentForm = ({
+  doc,
+  guid,
+}: {
+  doc?: INewDoc | null;
+  guid: string;
+}) => {
   const [articlesL, setArticlesL] = useState<number>(0);
   const methods = useForm({
     mode: 'onChange',
@@ -53,7 +59,6 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
 
   const router = useRouter();
   const queryClient = useQueryClient();
-  queryClient.invalidateQueries({ queryKey: ['doc'] });
 
   const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
@@ -111,6 +116,10 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
     if (doc && doc.guid) mutateByGuid(data);
     else mutate(data);
   };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['doc'] });
+  }, [guid]);
 
   useEffect(() => {
     if (isSuccess) {

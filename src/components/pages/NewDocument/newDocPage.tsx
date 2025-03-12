@@ -33,7 +33,7 @@ const NewDocument = () => {
             Повестка заседания Профкома
           </Typography>
           {doc && (
-            <Link href={`/protocol?agenda${doc.documentNumber}`}>
+            <Link href={`/new_protocol?agenda=${doc.documentNumber}`}>
               <Button variant="contained">
                 <Icon
                   name={'newDoc'}
@@ -47,7 +47,7 @@ const NewDocument = () => {
         </Box>
       </Grid2>
       <Grid2 size={8}>
-        <NewDocumentForm doc={doc} />
+        <NewDocumentForm doc={doc} guid={number} />
       </Grid2>
 
       <Grid2 size={4}>

@@ -1,18 +1,41 @@
-export const agendas = [
+import { INewDoc } from '@/models/Doc';
+
+export const agendas: INewDoc[] = [
   {
-    documentNumber: 'BM00001',
-    place: 'Место проведения 1',
-    data: [
-      { article: 'Вопрос 1', person: 'Петров Сергей Васильевич' },
-      { article: 'Вопрос 2', person: 'Иванов Иван Иванович' },
-    ],
+    documentNumber: 'AG00001',
+    data: {
+      address: 'Место проведения 1',
+      questions: [
+        { question: 'Вопрос 1', speaker: 'Петров Сергей Васильевич' },
+        { question: 'Вопрос 2', speaker: 'Иванов Иван Иванович' },
+      ],
+    },
+
+    status: '',
+    title: '',
+    files: [],
+    documentDate: '',
+    documentType: '',
+    folder: '',
+    file: '',
+    step: '',
   },
   {
-    documentNumber: 'BM00002',
-    place: 'Место проведения 2',
-    data: [
-      { article: 'Вопрос 1', person: 'Петров Сергей Васильевич' },
-      { article: 'Вопрос 2', person: 'Иванов Иван Иванович' },
-    ],
+    documentNumber: 'AG00003',
+    data: {
+      address: 'Место проведения 2',
+      questions: [
+        { question: 'Вопрос 1', speaker: 'Петров Сергей Васильевич' },
+        { question: 'Вопрос 2', speaker: 'Иванов Иван Иванович' },
+      ],
+    },
+    status: '',
+    title: '',
+    files: [],
+    documentDate: '',
+    documentType: '',
+    folder: '',
+    file: '',
+    step: '',
   },
 ];

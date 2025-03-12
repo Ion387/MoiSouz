@@ -26,9 +26,9 @@ import { InputDate } from '../ui/form';
 import { members } from '@/constants/members';
 import { agendas } from '@/constants/agendas';
 import { Icon } from '../ui/Icon';
-import { type INewDocument } from '@/models/NewDocument';
 import { InputTime } from '../ui/form/input-time';
 import { TextFieldCustom } from '../ui/form/entities/input-textfield';
+import { type INewDoc } from '@/models/Doc';
 
 const itemSchema = yup.object().shape({
   person: yup.string().required('Обязательное поле'),
@@ -71,14 +71,14 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
   const [arr, setArr] = useState<(string | undefined)[] | undefined>(
     getValues('membersAttending'),
   );
-  const [currentAgenda, setCurrentAgenda] = useState<INewDocument>();
+  const [currentAgenda, setCurrentAgenda] = useState<INewDoc>();
 
   useEffect(() => {
     setArr(members);
   }, [members]);
 
   useEffect(() => {
-    setFormValue('documentNumber', 'CMXXXXX');
+    setFormValue('documentNumber', 'PRXXXXX');
     setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     setFormValue('documentTime', dayjs().format('hh.mm'));
   }, []);
@@ -107,11 +107,17 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
 
   useEffect(() => {
     if (currentAgenda) {
-      setFormValue(`place`, currentAgenda.place);
-      if (currentAgenda.data.length) {
-        currentAgenda.data.forEach((el, id) => {
-          setFormValue(`data.${id}.person`, currentAgenda.data[id].person);
-          setFormValue(`data.${id}.article`, currentAgenda.data[id].article);
+      setFormValue(`place`, currentAgenda.data.address);
+      if (currentAgenda.data.questions?.length) {
+        currentAgenda.data.questions?.forEach((el, id) => {
+          setFormValue(
+            `data.${id}.person`,
+            String(currentAgenda.data.questions?.[id].speaker),
+          );
+          setFormValue(
+            `data.${id}.article`,
+            String(currentAgenda.data.questions?.[id].question),
+          );
         });
       }
     }
@@ -122,7 +128,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
       ? params.entries().toArray()[0][1]
       : null;
     if (param)
-      setCurrentAgenda(agendas.find((el) => el.documentNumber == param));
+      setCurrentAgenda(agendas?.find((el) => el.documentNumber == param));
   }, [params]);
 
   return (
@@ -257,10 +263,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
               </Grid2>
               <Grid2 size={12}>
                 {currentAgenda &&
-                  currentAgenda.data.length &&
-                  currentAgenda.data.map((agenda, id) => (
+                  currentAgenda.data.questions?.length &&
+                  currentAgenda.data.questions?.map((agenda, id) => (
                     <Box
-                      key={agenda.article}
+                      key={agenda.question}
                       sx={{
                         p: 2,
                         border: '1px solid rgb(216, 216, 216)',

@@ -7,7 +7,7 @@ export const nameOfDoc = (type: string): string => {
     case 'AG':
       name = 'Повестка заседания Профкома №';
       break;
-    case 'PG':
+    case 'PR':
       name = 'Протокол заседания профкома №';
       break;
     default:

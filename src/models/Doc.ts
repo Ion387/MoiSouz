@@ -29,8 +29,8 @@ export interface IDoc {
 }
 
 export interface INewDoc {
-  tradeunion: ITradeUnion;
-  user: IProfile;
+  tradeunion?: ITradeUnion;
+  user?: IProfile;
   status: string;
   title: string;
   files: {

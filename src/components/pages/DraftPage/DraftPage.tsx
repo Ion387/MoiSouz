@@ -19,7 +19,7 @@ const DraftPage = () => {
 
   if (doc?.documentNumber?.includes('AM')) return <TradeUnionMemberPage />;
   if (doc?.documentNumber?.includes('AG')) return <NewDocumentPage />;
-  if (doc?.documentNumber?.includes('PG')) return <NewProtocolPage />;
+  if (doc?.documentNumber?.includes('PR')) return <NewProtocolPage />;
   else return <CircularProgress />;
 };
 

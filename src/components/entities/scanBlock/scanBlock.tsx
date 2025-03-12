@@ -78,7 +78,7 @@ const ScanBlock = ({ number }: { number: string }) => {
   const { data: file } = useQuery({
     queryKey: ['doc'],
     queryFn: () => getDoc(number),
-    select: (data) => data?.data,
+    select: (data) => data,
   });
 
   useEffect(() => {
@@ -92,6 +92,7 @@ const ScanBlock = ({ number }: { number: string }) => {
   }, [isSuccess, isSuccess2]);
 
   useEffect(() => {
+    console.log('file', file);
     if (file && file.files) {
       const scan = file?.files.findLast(
         (el) => el.type === 'AM_scan' || el.type === 'AM_signed',
@@ -104,7 +105,7 @@ const ScanBlock = ({ number }: { number: string }) => {
     if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
       mutate2({
         step:
-          file.documnetType === 'AM'
+          file?.documentType === 'AM'
             ? 'На проверке профсоюзом'
             : 'На согласовании',
       });
@@ -206,7 +207,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                 }
                 onClick={() => {
                   if (
-                    file?.documnetType === 'AM' &&
+                    file?.documentType === 'AM' &&
                     !info?.ROLES?.includes('ROLE_TRADEUNION')
                   )
                     mutate2({ step: 'Отправлено в профсоюз' });
@@ -216,10 +217,10 @@ const ScanBlock = ({ number }: { number: string }) => {
                   mutate2({ step: 'Утверждено' });
                 }}
               >
-                {file?.documnetType === 'AM' &&
+                {file?.documentType === 'AM' &&
                 !info?.ROLES?.includes('ROLE_TRADEUNION')
                   ? 'Отправить в профсоюз'
-                  : file?.documnetType === 'AM'
+                  : file?.documentType === 'AM'
                     ? 'Загрузить документы'
                     : 'Утвердить'}
               </Button>

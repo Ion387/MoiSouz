@@ -25,9 +25,6 @@ export interface IDoc {
     inviteDate: string;
     percents: number;
     position: string;
-    file?: unknown;
-    documentType?: string;
-    documentNumber?: string;
   };
 }
 
@@ -51,9 +48,6 @@ export interface INewDoc {
   step: string;
   guid?: string;
   data: {
-    documentType?: string;
-    documentNumber?: string;
-    file?: unknown;
     address: string;
     questions?: {
       speaker: string;

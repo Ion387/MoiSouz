@@ -96,7 +96,6 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
           ))}
         </>
       )}
-
       <Box
         sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
       >

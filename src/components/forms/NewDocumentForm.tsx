@@ -3,6 +3,7 @@ import s from './forms.module.scss';
 import {
   Box,
   Button,
+  CircularProgress,
   FormHelperText,
   Grid2,
   InputLabel,
@@ -54,7 +55,7 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
   const queryClient = useQueryClient();
   queryClient.invalidateQueries({ queryKey: ['doc'] });
 
-  const { data: docs } = useQuery({
+  const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
     select: (data) => data.data,
@@ -198,9 +199,7 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
               </Grid2>
               <Grid2 size={12}>
                 {' '}
-                <InputLabel sx={{ marginBottom: '0' }}>
-                  Место проведения
-                </InputLabel>
+                <InputLabel>Место проведения</InputLabel>
                 <TextField
                   {...register(`address`)}
                   placeholder="Место проведения"
@@ -208,59 +207,65 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                   helperText={errors.address?.message || ''}
                 />
               </Grid2>
-              <Grid2 size={12}>
-                <InputArrayOfObjects
-                  name="questions"
-                  desc="Добавить вопрос"
-                  render={(name, index, register, errors) => (
-                    <Box
-                      display={'flex'}
-                      flexDirection={'column'}
-                      width={'100%'}
-                      gap={1.6}
-                    >
-                      <InputLabel sx={{ marginBottom: '0' }}>{`Вопрос №${
-                        index + 1
-                      }`}</InputLabel>
-                      <TextField
-                        {...register(`${name}.${index}.question`)}
-                        multiline
-                        rows={3}
-                        placeholder="Вопрос"
-                        error={!!errors?.question?.message}
-                        helperText={errors?.question?.message || ''}
-                        disabled={index <= articlesL - 1}
-                      />
-                      <InputLabel sx={{ marginBottom: '0' }}>
-                        Докладчик
-                      </InputLabel>
-                      <Select
-                        fullWidth
-                        sx={{ padding: 1.6 }}
-                        name={`questions.${index}.speaker`}
-                        value={getValues(`questions.${index}.speaker`)}
-                        onChange={(e) => {
-                          setFormValue(
-                            `questions.${index}.speaker`,
-                            String(e.target.value),
-                          );
-                        }}
-                        error={!!errors?.speaker?.message}
+              {!isLoading ? (
+                <Grid2 size={12}>
+                  <InputArrayOfObjects
+                    name="questions"
+                    desc="Добавить вопрос"
+                    render={(name, index, register, errors) => (
+                      <Box
+                        display={'flex'}
+                        flexDirection={'column'}
+                        width={'100%'}
+                        gap={1.6}
                       >
-                        <MenuItem key={0} value={'Докладчик'}>
+                        <InputLabel sx={{ marginBottom: '0' }}>{`Вопрос №${
+                          index + 1
+                        }`}</InputLabel>
+                        <TextField
+                          {...register(`${name}.${index}.question`)}
+                          multiline
+                          rows={3}
+                          placeholder="Вопрос"
+                          error={!!errors?.question?.message}
+                          helperText={errors?.question?.message || ''}
+                          disabled={index <= articlesL - 1}
+                        />
+                        <InputLabel sx={{ marginBottom: '0' }}>
                           Докладчик
-                        </MenuItem>
-                      </Select>
-                      {!!errors?.speaker?.message && (
-                        <FormHelperText sx={{ color: '#FF4949' }}>
-                          {errors?.speaker?.message}
-                        </FormHelperText>
-                      )}
-                    </Box>
-                  )}
-                  defaultValue=""
-                />
-              </Grid2>
+                        </InputLabel>
+                        <Select
+                          fullWidth
+                          sx={{ padding: 1.6 }}
+                          name={`questions.${index}.speaker`}
+                          value={getValues(`questions.${index}.speaker`)}
+                          onChange={(e) => {
+                            setFormValue(
+                              `questions.${index}.speaker`,
+                              String(e.target.value),
+                            );
+                          }}
+                          error={!!errors?.speaker?.message}
+                        >
+                          <MenuItem key={0} value={'Докладчик'}>
+                            Докладчик
+                          </MenuItem>
+                        </Select>
+                        {!!errors?.speaker?.message && (
+                          <FormHelperText sx={{ color: '#FF4949' }}>
+                            {errors?.speaker?.message}
+                          </FormHelperText>
+                        )}
+                      </Box>
+                    )}
+                    defaultValue=""
+                  />
+                </Grid2>
+              ) : (
+                <Grid2 size={12} display={'flex'} justifyContent={'center'}>
+                  <CircularProgress />
+                </Grid2>
+              )}
 
               <Grid2 size={4}>
                 <Button

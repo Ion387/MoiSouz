@@ -92,7 +92,6 @@ const ScanBlock = ({ number }: { number: string }) => {
   }, [isSuccess, isSuccess2]);
 
   useEffect(() => {
-    console.log('file', file);
     if (file && file.files) {
       const scan = file?.files.findLast(
         (el) => el.type === 'AM_scan' || el.type === 'AM_signed',
@@ -102,7 +101,11 @@ const ScanBlock = ({ number }: { number: string }) => {
   }, [file]);
 
   useEffect(() => {
-    if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
+    if (
+      info?.ROLES?.includes('ROLE_TRADEUNION') &&
+      file?.step !== 'На согласовании' &&
+      file?.step !== 'Утверждено'
+    ) {
       mutate2({
         step:
           file?.documentType === 'AM'

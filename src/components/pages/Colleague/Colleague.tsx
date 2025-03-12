@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -10,25 +10,33 @@ import { Icon } from '@/components/ui';
 import { ColleagueCard, ColleagueForm } from '@/components/sections/Colleagues';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { useFetchTUUsers } from '@/hooks/useTU';
-import { useForm } from '@/hooks/UseFormColleagueProfile';
-
-import { IProfile } from '@/models/Profile';
+import {
+  useFetchColleagueProfile,
+  useForm,
+} from '@/hooks/UseFormColleagueProfile';
 
 const ColleagueWrapper = () => {
   const params = useParams();
+  const isCreate = (params.guid as string) == 'create';
 
   const info = useFetchProfile();
-  const { data: tuUsers, loading: loadingTUUsers } = useFetchTUUsers();
 
-  const user: IProfile | undefined = useMemo(() => {
-    const id = parseInt((params.id as string) || '-1');
-    return tuUsers?.find((el) => el.id == id);
-  }, [params, tuUsers]);
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    refetch: refetchUser,
+    clear: clearUser,
+  } = useFetchColleagueProfile((params.guid as string) || '');
 
-  const { onCancel, onSubmit } = useForm();
+  const { onCancel, onSubmit, isLoading: isLoadingForm } = useForm();
 
-  if (info?.hasTradeunionOwner == false) return null;
+  useEffect(() => {
+    if (isCreate) return;
+    refetchUser();
+    return () => clearUser();
+  }, []);
+
+  //if (info) info.hasTradeunionOwner = false;
 
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
@@ -47,27 +55,28 @@ const ColleagueWrapper = () => {
         </Button>
       </Link>
 
-      {loadingTUUsers == false ? (
-        user ? (
-          info?.hasTradeunionOwner == true ? (
+      {info != null && isLoadingUser == false ? (
+        <>
+          {info?.hasTradeunionOwner == true ? (
             <ColleagueForm
               onCancel={onCancel}
               onSubmit={onSubmit}
               defaultValues={user}
+              loading={isLoadingForm}
             />
-          ) : (
+          ) : user ? (
             <>
               <Typography variant="h3" marginBottom={2}>
                 Карточка контакта
               </Typography>
               <ColleagueCard user={user} />
             </>
-          )
-        ) : (
-          <Typography fontSize={14} textAlign="center">
-            Пользователь не найден
-          </Typography>
-        )
+          ) : (
+            <Typography fontSize={14} textAlign="center">
+              Пользователь не найден
+            </Typography>
+          )}
+        </>
       ) : (
         <Box display={'flex'} justifyContent={'center'} width={'100%'}>
           <CircularProgress />

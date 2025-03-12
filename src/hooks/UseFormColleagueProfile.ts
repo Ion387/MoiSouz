@@ -5,7 +5,12 @@ import { getHeaders } from '@/utils/axios';
 import { getBackendUrl } from '@/constants/url';
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import {
+  useIsMutating,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export const useForm = () => {
   const router = useRouter();
@@ -14,26 +19,69 @@ export const useForm = () => {
     router.push('/colleagues');
   };
 
+  const mutationKey = 'colleague-profile';
   const { mutate, isSuccess } = useMutation({
+    mutationKey: [mutationKey],
     mutationFn: async (data: IFormColleagueProfile) => {
-      console.log(data);
-      //saveFormProfile(data);
+      if (data.guid) await saveFormColleagueProfile(data);
+      else await addFormColleagueProfile(data);
     },
     onSuccess: () => {
       router.push('/colleagues');
     },
   });
 
+  const isMutation = useIsMutating({ mutationKey: [mutationKey] });
+
   const onSubmit: (data: IFormColleagueProfile) => Promise<void> = async (
     data,
   ) => mutate(data);
 
-  return { onCancel, onSubmit, isSuccess };
+  return { onCancel, onSubmit, isSuccess, isLoading: isMutation > 0 };
+};
+
+export const useFetchColleagueProfile = (guid: string) => {
+  const queryClient = useQueryClient();
+  const queryKey = `colleague-profile-${guid}`;
+
+  const {
+    data: info,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: [queryKey],
+    queryFn: async () =>
+      axios.get<IFormColleagueProfile>(
+        `${getBackendUrl}/api/private/tradeunion-user/${guid}`,
+        {
+          headers: {
+            ...(await getHeaders()),
+          },
+        },
+      ),
+    select: (data) => data.data,
+    refetchOnMount: false,
+    enabled: false,
+  });
+  const clear = () => queryClient.removeQueries({ queryKey: [queryKey] });
+  return { data: info, isLoading, refetch, clear };
+};
+
+export const addFormColleagueProfile = async (data: IFormColleagueProfile) => {
+  return axios.post<IFormColleagueProfile>(
+    `${getBackendUrl}/api/private/tradeunion-user`,
+    data,
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
 };
 
 export const saveFormColleagueProfile = async (data: IFormColleagueProfile) => {
-  return axios.post<IFormColleagueProfile>(
-    `${getBackendUrl}/api/private/profile-colleague`,
+  return axios.put<IFormColleagueProfile>(
+    `${getBackendUrl}/api/private/tradeunion-user/${data.guid}`,
     data,
     {
       headers: {

@@ -1,15 +1,15 @@
 'use client';
 
 import React, { FC } from 'react';
-
+import Image from 'next/image';
 import { Box, Button, Typography } from '@mui/material';
 
-import { IProfile } from '@/models/Profile';
-import Image from 'next/image';
 import { Icon } from '@/components/ui';
 
+import { IFormColleagueProfile } from '@/models/Colleague';
+
 interface Props {
-  user: IProfile;
+  user: IFormColleagueProfile;
 }
 
 export const ColleagueCard: FC<Props> = ({ user }) => {
@@ -27,7 +27,7 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
       {user.avatar && (
         <Box width={300}>
           <Image
-            src={user.avatar}
+            src={user.avatar as string}
             style={{
               width: '100%',
             }}
@@ -43,13 +43,13 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
               .join(' ')}
           </Typography>
           <Typography fontSize={14} color="gray">
+            {user?.education && user?.education}
+          </Typography>
+          <Typography fontSize={14} color="gray">
             {user?.position && user?.position[0]}
           </Typography>
           <Typography fontSize={14} color="gray">
             {user?.profession && user?.profession[0]}
-          </Typography>
-          <Typography fontSize={14} color="gray">
-            {`Дата вступления: ${user?.birthdate}`}
           </Typography>
           <Box marginTop="auto" marginBottom="auto">
             <Typography fontSize={14} color="gray">

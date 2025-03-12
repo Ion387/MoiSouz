@@ -16,6 +16,7 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 import { useFetchTUOwner, useFetchTUUsers } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
+import Link from 'next/link';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -98,19 +99,47 @@ const ColleaguesWrapper = () => {
             </Box>
 
             {tuActive && info?.hasTradeunionOwner && (
-              <Button
-                variant="contained"
-                sx={{
-                  gap: 1,
-                  height: 'fit-content',
-                  minWidth: 'fit-content',
-                  marginTop: 'auto',
-                }}
-                onClick={handleClickUpload}
+              <Box
+                display="flex"
+                flexDirection="column"
+                minWidth="fit-content"
+                marginTop="auto"
+                gap={1.5}
               >
-                <Icon name="upload" color="secondary.main" />
-                Загрузить участников
-              </Button>
+                <Link
+                  href="/colleagues/create"
+                  style={{
+                    gap: 1,
+                    height: 'fit-content',
+                    width: '100%',
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      gap: 1,
+                      height: 'fit-content',
+                      width: '100%',
+                    }}
+                  >
+                    <Icon name="plus" color="secondary.main" />
+                    Добавить участника
+                  </Button>
+                </Link>
+                <Button
+                  variant="contained"
+                  sx={{
+                    gap: 1,
+                    height: 'fit-content',
+                    minWidth: 'fit-content',
+                    marginTop: 'auto',
+                  }}
+                  onClick={handleClickUpload}
+                >
+                  <Icon name="upload" color="secondary.main" />
+                  Загрузить участников
+                </Button>
+              </Box>
             )}
           </Box>
         ) : (

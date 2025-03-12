@@ -8,21 +8,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Form } from '@/components/entities/profile';
-import { InputAutocomplete, InputDate, InputImage } from '@/components/ui/form';
-import { InputGender } from '@/components/ui/form/entities';
+import {
+  InputArray,
+  InputAutocomplete,
+  InputCheckbox,
+  InputDate,
+  InputImage,
+  InputManyModal,
+} from '@/components/ui/form';
+import { InputAddress, InputGender } from '@/components/ui/form/entities';
 
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
+import { useOptions } from '@/hooks/UseOptions';
 
-import { IOption } from '@/models/Option';
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { ITradeUnion } from '@/models/TradeUnion';
-
-const OPTIONS_ROLES: IOption[] = [
-  { title: 'Член профкома', id: 'member' },
-  { title: 'Председатель профкома', id: 'chairman' },
-  { title: 'Руководитель КРК', id: 'director' },
-  { title: 'Член КРК', id: 'member-krk' },
-];
+import { OPTIONS_EDUCATION, OPTIONS_ROLES } from '@/constants/options';
 
 const schema = yup
   .object({
@@ -34,55 +35,66 @@ const schema = yup
       .string()
       .min(2, 'Минимальная длина фамилии - 2 символа')
       .required('Введите фамилию'),
-    middleName: yup.string(),
-
+    middleName: yup
+      .string()
+      .min(2, 'Минимальная длина Отчества - 2 символа')
+      .required('Введите отчество'),
+    birthdate: yup
+      .string()
+      .required('Укажите дату рождения')
+      .typeError('Укажите дату рождения'),
     gender: yup.string().required('Укажите пол'),
-    enteryear: yup
+    education: yup.string().required('Укажите образование'),
+    avatar: yup
+      .mixed()
+      .nullable()
+      .test('fileSize', 'Максимальный размер - 1 МБ.', (value) => {
+        if (!value || typeof value === 'string') return true;
+        //@ts-expect-error none
+        return convertSizeToBites(value.size) <= 1048576;
+      }),
+    profession: yup.array(
+      yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
+    ),
+    position: yup
+      .array(
+        yup.string().min(2, 'Укажите должность').required('Укажите должность'),
+      )
+      .required(),
+    address: yup.object({
+      postcode: yup.string().nullable(),
+      region: yup.string().nullable(),
+      municipal: yup.string().nullable(),
+      locality: yup.string().nullable(),
+      street: yup.string().nullable(),
+      house: yup.string().nullable(),
+      flat: yup.string().nullable(),
+    }),
+    phone: yup
       .string()
-      .required('Укажите год вступления')
-      .typeError('Укажите год вступления'),
-    filldate: yup
+      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон')
+      .required('Укажите телефон'),
+    phoneDop: yup
       .string()
-      .required('Укажите дату заполнения/приятия')
-      .typeError('Укажите дату заполнения/приятия'),
-
-    tradeunionMainName: yup
-      .string()
-      .min(2, 'Минимальная длина наименования - 2 символа')
-      .required('Введите наименование'),
-    tradeunionMainPhone: yup
-      .string()
-      .min(2, 'Минимальная длина адреса - 2 символа')
-      .required('Введите адрес'),
-    tradeunionMainAddress: yup
-      .string()
-      .min(2, 'Минимальная длина телефона - 2 символа')
-      .required('Введите телефон'),
-
-    tradeunionTerritoryName: yup
-      .string()
-      .min(2, 'Минимальная длина наименования - 2 символа')
-      .required('Введите наименование'),
-    tradeunionTerritoryPhone: yup
-      .string()
-      .min(2, 'Минимальная длина адреса - 2 символа')
-      .required('Введите адрес'),
-    tradeunionTerritoryAddress: yup
-      .string()
-      .min(2, 'Минимальная длина телефона - 2 символа')
-      .required('Введите телефон'),
-
+      .nullable()
+      .transform((_, value) => (value?.length > 0 ? value : null))
+      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон'),
+    children: yup.array(
+      yup.object({
+        name: yup.string().min(2, 'Укажите имя').required('Укажите имя'),
+        gender: yup.string().min(2, 'Укажите пол').required('Укажите пол'),
+        birthdate: yup
+          .string()
+          .required('Укажите дату рождения')
+          .typeError('Укажите дату рождения'),
+      }),
+    ),
+    hobbies: yup
+      .array(yup.number().required())
+      .transform((value) => (value ? value : [])),
+    isActive: yup.bool(),
+    email: yup.string().email('Укажите почту').required('Укажите почту'),
     role: yup.string().required('Укажите роль'),
-
-    tradeunionWasMember: yup.string(),
-    acceptdate: yup
-      .string()
-      .required('Укажите дату принятия')
-      .typeError('Укажите дату принятия'),
-    releasedate: yup
-      .string()
-      .required('Укажите дату выхода')
-      .typeError('Укажите дату выхода'),
   })
   .required();
 
@@ -111,16 +123,10 @@ export const ColleagueForm: FC<Props> = ({
     formState: { errors, isSubmitting },
   } = methods;
 
+  const { data: hobbies } = useOptions({ name: 'hobbies' });
+
   const tuOwner = useFetchTUOwner();
   const tuList = useFetchTUs();
-
-  const optionsTuList = useMemo(
-    () =>
-      tuList?.data
-        ? tuList.data.map((el) => ({ id: el.id || -1, title: el.title }))
-        : [],
-    [tuList],
-  );
 
   const tradeunion: ITradeUnion | undefined = useMemo(
     () =>
@@ -133,9 +139,14 @@ export const ColleagueForm: FC<Props> = ({
   return (
     <Form
       sx={{ pt: 3 }}
-      title="Учётная карточка члена профсоюза"
+      title={
+        defaultValues
+          ? 'Учётная карточка члена профсоюза'
+          : 'Добавление учётной карточки члена профсоюза'
+      }
       loading={loading || isSubmitting}
       onCancel={onCancel}
+      buttonSubmit={defaultValues ? undefined : 'Добавить'}
       onSubmit={handleSubmit(onSubmit)}
       methods={methods}
       defaultValues={defaultValues}
@@ -186,117 +197,149 @@ export const ColleagueForm: FC<Props> = ({
             error={!!errors.firstName?.message}
             helperText={errors.firstName?.message || ''}
           />
+          <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
+          <TextField
+            {...register('middleName')}
+            placeholder="Иванович"
+            error={!!errors.middleName?.message}
+            helperText={errors.middleName?.message || ''}
+          />
         </Box>
 
         <InputImage sx={{ mt: 4, minWidth: '250px' }} name="avatar" disabled />
       </Box>
 
-      <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
-      <TextField
-        {...register('middleName')}
-        placeholder="Иванович"
-        error={!!errors.middleName?.message}
-        helperText={errors.middleName?.message || ''}
-      />
-
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+        <InputDate name="birthdate" label="Дата рождения" />
+
         <InputGender name="gender" label="Пол" />
 
-        <InputDate
-          sx={{ flex: 1 }}
-          name="enteryear"
-          label="Год вступления"
-          views={['year']}
-        />
-
-        <InputDate
-          sx={{ flex: 1 }}
-          name="filldate"
-          label="Дата заполнения/приятия"
+        <InputAutocomplete
+          sx={{ width: '80%' }}
+          name="education"
+          label="Образование"
+          placeholder="Выберите из списка"
+          options={OPTIONS_EDUCATION}
         />
       </Box>
 
-      <InputLabel sx={{ mt: 3 }}>
-        Наименование центрального профоргана
-      </InputLabel>
+      <InputArray
+        sx={{ mt: 3 }}
+        name="profession"
+        label="Специальность по образованию"
+        labelExtra="Дополнительная профессия"
+        desc="Добавить специальность"
+        render={(name, index, register, errors) => (
+          <TextField
+            {...register(`${name}.${index}`)}
+            placeholder="Профессия"
+            error={!!errors?.message}
+            helperText={errors?.message || ''}
+          />
+        )}
+        defaultValue=""
+      />
+
+      <InputArray
+        sx={{ mt: 3 }}
+        name="position"
+        label="Должность"
+        labelExtra="Дополнительная должность"
+        desc="Добавить должность"
+        render={(name, index, register, errors) => (
+          <TextField
+            {...register(`${name}.${index}`)}
+            placeholder="Должность"
+            error={!!errors?.message}
+            helperText={errors?.message || ''}
+          />
+        )}
+        defaultValue=""
+        preadd
+      />
+
+      <InputAddress
+        sx={{ mt: 3 }}
+        name="address"
+        label="Адрес проживания"
+        errors={errors}
+      />
+
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>Номер телефона</InputLabel>
+          <TextField
+            {...register('phone')}
+            placeholder="+79999999999"
+            error={!!errors.phone?.message}
+            helperText={errors.phone?.message || ''}
+            slotProps={{ htmlInput: { maxLength: 12 } }}
+          />
+        </Box>
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>Доп. номер</InputLabel>
+          <TextField
+            {...register('phoneDop')}
+            placeholder="+79999999999"
+            error={!!errors.phoneDop?.message}
+            helperText={errors.phoneDop?.message || ''}
+            slotProps={{ htmlInput: { maxLength: 12 } }}
+          />
+        </Box>
+      </Box>
+
+      <InputArray
+        sx={{ mt: 3 }}
+        name="children"
+        label="Дети"
+        render={(name, index, register, errors) => (
+          <Box sx={{ display: 'flex', flex: 1, gap: 2 }}>
+            <TextField
+              {...register(`${name}.${index}.name`)}
+              placeholder="Имя"
+              error={!!errors?.name?.message}
+              helperText={errors?.name?.message || ''}
+            />
+            <InputGender
+              name={`${name}.${index}.gender`}
+              defaultValue="female"
+            />
+            <InputDate name={`${name}.${index}.birthdate`} />
+          </Box>
+        )}
+        defaultValue={{}}
+      />
+
+      <InputLabel sx={{ mt: 3 }}>Почта</InputLabel>
       <TextField
-        {...register('tradeunionMainName')}
-        placeholder="Введите наименование"
-        error={!!errors.tradeunionMainName?.message}
-        helperText={errors.tradeunionMainName?.message || ''}
+        {...register('email')}
+        placeholder="Почта"
+        error={!!errors.email?.message}
+        helperText={errors.email?.message || ''}
       />
 
       <InputAutocomplete
         sx={{ mt: 3 }}
         name="role"
-        label="Роль члена профсоюза"
+        label="Роль"
         placeholder="Выберите из списка"
         options={OPTIONS_ROLES}
       />
 
-      <InputLabel sx={{ mt: 3 }}>Адрес центрального профоргана</InputLabel>
-      <TextField
-        {...register('tradeunionMainAddress')}
-        placeholder="Введите адрес"
-        error={!!errors.tradeunionMainAddress?.message}
-        helperText={errors.tradeunionMainAddress?.message || ''}
+      <InputManyModal
+        sx={{ mt: 3 }}
+        name="hobbies"
+        label="Увлечения"
+        placeholder="Выберите из списка"
+        options={hobbies?.data || []}
       />
 
-      <InputLabel sx={{ mt: 3 }}>Телефон центрального профоргана</InputLabel>
-      <TextField
-        {...register('tradeunionMainPhone')}
-        placeholder="+79999999999"
-        error={!!errors.tradeunionMainPhone?.message}
-        helperText={errors.tradeunionMainPhone?.message || ''}
-        slotProps={{ htmlInput: { maxLength: 12 } }}
+      <InputCheckbox
+        sx={{ justifyContent: 'center' }}
+        name="isActive"
+        link={'/politics.pdf'}
+        label={`Я соглашаюсь с политикой обработки персональных данных `}
       />
-
-      <InputLabel sx={{ mt: 3 }}>
-        Наименование территориального профоргана
-      </InputLabel>
-      <TextField
-        {...register('tradeunionTerritoryName')}
-        placeholder="Введите наименование"
-        error={!!errors.tradeunionTerritoryName?.message}
-        helperText={errors.tradeunionTerritoryName?.message || ''}
-      />
-
-      <InputLabel sx={{ mt: 3 }}>Адрес территориального профоргана</InputLabel>
-      <TextField
-        {...register('tradeunionTerritoryAddress')}
-        placeholder="Введите адрес"
-        error={!!errors.tradeunionTerritoryAddress?.message}
-        helperText={errors.tradeunionTerritoryAddress?.message || ''}
-      />
-
-      <InputLabel sx={{ mt: 3 }}>
-        Телефон территориального профоргана
-      </InputLabel>
-      <TextField
-        {...register('tradeunionTerritoryPhone')}
-        placeholder="+79999999999"
-        error={!!errors.tradeunionTerritoryPhone?.message}
-        helperText={errors.tradeunionTerritoryPhone?.message || ''}
-        slotProps={{ htmlInput: { maxLength: 12 } }}
-      />
-
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          mt: 3,
-        }}
-      >
-        <InputAutocomplete
-          sx={{ flex: 1 }}
-          name="tradeunionWasMember"
-          label="Cостоял в профсоюзе"
-          placeholder="Выберите из списка"
-          options={optionsTuList}
-        />
-        <InputDate name="acceptdate" label="Дата принятия" />
-        <InputDate name="releasedate" label="Дата выхода" />
-      </Box>
     </Form>
   );
 };

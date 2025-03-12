@@ -1,8 +1,8 @@
-import TradeUnionMemberPage from '@/components/pages/TradeUnionMember/TradeUnionMemberPage';
+import DraftPage from '@/components/pages/DraftPage/DraftPage';
 import React from 'react';
 
 const TradeUnionMemberDraft = () => {
-  return <TradeUnionMemberPage />;
+  return <DraftPage />;
 };
 
 export default TradeUnionMemberDraft;

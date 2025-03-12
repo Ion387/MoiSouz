@@ -102,7 +102,12 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   useEffect(() => {
     if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
-      mutate2({ step: 'На проверке профсоюзом' });
+      mutate2({
+        step:
+          file.documnetType === 'AM'
+            ? 'На проверке профсоюзом'
+            : 'На согласовании',
+      });
     }
   }, []);
 
@@ -130,13 +135,18 @@ const ScanBlock = ({ number }: { number: string }) => {
           to={`/documents/drafts/${number}`}
           icon="edit"
         />
-        {!info?.ROLES?.includes('ROLE_TRADEUNION') && (
-          <ListItem
-            label="Создать такой же"
-            icon="plus"
-            to={`/trade_union_member`}
-          />
-        )}
+        {!info?.ROLES?.includes('ROLE_TRADEUNION') ||
+          (file.documentType !== 'AM' && (
+            <ListItem
+              label="Создать такой же"
+              icon="plus"
+              to={
+                file.documentType !== 'AM'
+                  ? `/new_document`
+                  : `/trade_union_member`
+              }
+            />
+          ))}
         <a download href={file?.file} style={{ width: '100%' }}>
           <ListItemButton
             sx={{
@@ -162,9 +172,13 @@ const ScanBlock = ({ number }: { number: string }) => {
               <>
                 <Grid2 size={12}>
                   <InputFile
+                    sx={{
+                      border: 'dotted 1px rgb(72, 128, 255)',
+                      borderRadius: '10px',
+                    }}
                     mw={'100%'}
                     name="upload"
-                    label="Заявление на вступление в профсоюзную организацию (pdf)"
+                    label="Прикрепить скан (pdf)"
                     accept=".pdf"
                     imageSelect="pdf"
                     type="secondary"
@@ -191,13 +205,23 @@ const ScanBlock = ({ number }: { number: string }) => {
                   info?.ROLES?.includes('ROLE_TRADEUNION') ? 'submit' : 'button'
                 }
                 onClick={() => {
-                  if (!info?.ROLES?.includes('ROLE_TRADEUNION'))
+                  if (
+                    file.documnetType === 'AM' &&
+                    !info?.ROLES?.includes('ROLE_TRADEUNION')
+                  )
                     mutate2({ step: 'Отправлено в профсоюз' });
+                  else {
+                    file.documnetType !== 'AM';
+                  }
+                  mutate2({ step: 'Утверждено' });
                 }}
               >
-                {!info?.ROLES?.includes('ROLE_TRADEUNION')
+                {file.documnetType === 'AM' &&
+                !info?.ROLES?.includes('ROLE_TRADEUNION')
                   ? 'Отправить в профсоюз'
-                  : 'Загрузить документы'}
+                  : file.documnetType === 'AM'
+                    ? 'Загрузить документы'
+                    : 'Утвердить'}
               </Button>
               {/*info?.ROLES?.includes('ROLE_TRADEUNION') && (
                 <Button

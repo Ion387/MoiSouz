@@ -141,8 +141,9 @@ export const InputFile: FC<PropsWithSX & Props> = ({
               flex: 1,
               margin: '0 auto',
               ...((type && STYLES.button[type]) || {}),
-              fontSize: '20px',
               lineHeight: '27px',
+              fontSize: '16px',
+              color: 'rgb(32, 34, 36)',
             }}
             variant="outlined"
             onClick={handleOpen}

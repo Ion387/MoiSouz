@@ -34,7 +34,6 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
   labelExtra,
   render,
   defaultValue,
-  preadd,
   desc,
 }) => {
   const { control, register, formState } = useFormContext();
@@ -46,31 +45,13 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
   const errors: any = formState.errors;
 
   useEffect(() => {
-    if (!preadd) return;
     if (fields.length != 0) return;
-    append(defaultValue);
-  }, [append]);
+    if (fields.length == 0) append(defaultValue);
+  }, []);
 
   return (
     <Box sx={sx}>
-      {fields.length > 0 && (
-        <>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {render(name, 0, register, errors[name] && errors[name][0])}
-            {preadd != true && (
-              <IconButton
-                sx={{ mt: 1.2, position: 'absolute' }}
-                variant="contained-gray"
-                onClick={() => remove(0)}
-              >
-                <Icon name="minus" color="white" />
-              </IconButton>
-            )}
-          </Box>
-        </>
-      )}
-
-      {fields.length > 1 && (
+      {!!fields.length && (
         <>
           {labelExtra && (
             <Box sx={{ display: 'flex', mt: 3 }}>
@@ -80,40 +61,39 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
               </IconButton>
             </Box>
           )}
-          {fields.map(({ id }, index) =>
-            index == 0 ? null : (
-              <Box
-                key={id}
-                sx={{
-                  display: 'flex',
-                  gap: 2,
-                  mt: !labelExtra || index > 1 ? 2 : 0,
-                  position: 'relative',
-                }}
-              >
-                {render(
-                  name,
-                  index,
-                  register,
-                  errors[name] && errors[name][index],
-                )}
-                {(!labelExtra || index > 1) && (
-                  <IconButton
-                    sx={{
-                      mt: 1.2,
-                      position: 'absolute',
-                      top: '-16px',
-                      right: '0px',
-                    }}
-                    variant="contained-gray"
-                    onClick={() => remove(index)}
-                  >
-                    <Icon name="minus" color="white" />
-                  </IconButton>
-                )}
-              </Box>
-            ),
-          )}
+
+          {fields.map(({ id }, index) => (
+            <Box
+              key={id}
+              sx={{
+                display: 'flex',
+                gap: 2,
+                mt: !labelExtra || index > 1 ? 2 : 0,
+                position: 'relative',
+              }}
+            >
+              {render(
+                name,
+                index,
+                register,
+                errors[name] && errors[name][index],
+              )}
+              {(!labelExtra || index > 1) && (
+                <IconButton
+                  sx={{
+                    mt: 1.2,
+                    position: 'absolute',
+                    top: '-16px',
+                    right: '0px',
+                  }}
+                  variant="contained-gray"
+                  onClick={() => remove(index)}
+                >
+                  <Icon name="minus" color="white" />
+                </IconButton>
+              )}
+            </Box>
+          ))}
         </>
       )}
 

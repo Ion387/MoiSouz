@@ -1,9 +1,10 @@
 export interface INewDocument {
   documentDate?: string;
   documentNumber?: string;
-  place: string;
-  data: {
-    person: string;
-    article: string;
+  documentType?: string;
+  address: string;
+  questions?: {
+    speaker: string;
+    question: string;
   }[];
 }

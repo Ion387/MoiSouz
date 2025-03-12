@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui';
 import ProgressBar from '@/components/ui/progressBar';
 import { INewDoc } from '@/models/Doc';
 import { getDoc } from '@/services/getDocs';
-import { stepTransformation } from '@/utils/stepTransformation';
+import { stepTransformationAg } from '@/utils/stepTransformation';
 import { Box, Button, Grid2, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -53,7 +53,7 @@ const NewDocument = () => {
       <Grid2 size={4}>
         <ProgressBar
           initialSteps={['Черновик', 'На согласовании', 'Утверждено']}
-          steps={stepTransformation(String(doc?.step))}
+          steps={stepTransformationAg(String(doc?.step))}
         />
       </Grid2>
     </Grid2>

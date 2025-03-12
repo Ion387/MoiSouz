@@ -4,7 +4,7 @@ import NewProtocolForm from '@/components/forms/NewProtocolForm';
 import ProgressBar from '@/components/ui/progressBar';
 import { INewProtocol } from '@/models/Protocol';
 import { getDoc } from '@/services/getDocs';
-import { stepTransformation } from '@/utils/stepTransformation';
+import { stepTransformationAg } from '@/utils/stepTransformation';
 import { Box, Grid2, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
@@ -38,7 +38,7 @@ const NewProtocol = () => {
       <Grid2 size={4}>
         <ProgressBar
           initialSteps={['Черновик', 'На согласовании', 'Утверждено']}
-          steps={stepTransformation(String(doc?.step))}
+          steps={stepTransformationAg(String(doc?.step))}
         />
       </Grid2>
     </Grid2>

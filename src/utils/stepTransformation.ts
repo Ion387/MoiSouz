@@ -25,3 +25,26 @@ export const stepTransformation = (str: string) => {
   }
   return step;
 };
+
+export const stepTransformationAg = (str: string) => {
+  let step = 0;
+  switch (str) {
+    case 'Черновик':
+      step = 1;
+      break;
+    case 'Ожидает отправки':
+      step = 1;
+      break;
+    case 'На согласовании':
+      step = 2;
+      break;
+    case 'Утверждено':
+      step = 3;
+      break;
+
+    default:
+      step = 0;
+      break;
+  }
+  return step;
+};

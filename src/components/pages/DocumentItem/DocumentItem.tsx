@@ -6,7 +6,10 @@ import ProgressBar from '@/components/ui/progressBar';
 import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { getDoc } from '@/services/getDocs';
-import { stepTransformation } from '@/utils/stepTransformation';
+import {
+  stepTransformation,
+  stepTransformationAg,
+} from '@/utils/stepTransformation';
 import ScanBlock from '@/components/entities/scanBlock/scanBlock';
 import { getBackendUrl } from '@/constants/url';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -15,6 +18,7 @@ import { GlobalWorkerOptions } from 'pdfjs-dist';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { IDoc } from '@/models/Doc';
+import { nameOfDoc } from '@/utils/nameOfDoc';
 
 GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -36,7 +40,7 @@ const DocumentItem = () => {
       {doc && (
         <Grid2 size={12}>
           <Typography variant="h3" marginBottom={2} pt={3}>
-            Заявление о вступлении в профсоюзную организацию №
+            {nameOfDoc(doc.documentType)}
             {doc.documentNumber}
           </Typography>{' '}
         </Grid2>
@@ -62,7 +66,18 @@ const DocumentItem = () => {
 
       {doc && (
         <Grid2 size={5} display={'flex'} flexDirection={'column'}>
-          <ProgressBar steps={doc?.step ? stepTransformation(doc.step) : 0} />
+          <ProgressBar
+            initialSteps={
+              doc.documentType !== 'AM'
+                ? ['Черновик', 'На согласовании', 'Утверждено']
+                : undefined
+            }
+            steps={
+              doc.documentType === 'AM'
+                ? stepTransformation(doc.step)
+                : stepTransformationAg(doc.step)
+            }
+          />
           <Box paddingTop={2.4} sx={{ flex: '1 1 100%' }}>
             <ScanBlock number={number} />
           </Box>

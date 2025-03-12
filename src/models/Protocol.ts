@@ -2,6 +2,7 @@ export interface INewProtocol {
   step: string;
   documentDate?: string;
   documentNumber?: string;
+  documentType?: string;
   documentTime?: string;
   place: string;
   agenda: string;

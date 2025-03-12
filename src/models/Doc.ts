@@ -46,10 +46,12 @@ export interface INewDoc {
   id?: number;
   file: string;
   step: string;
-  guid: string;
-  place: string;
+  guid?: string;
   data: {
-    person: string;
-    article: string;
-  }[];
+    address: string;
+    questions?: {
+      speaker: string;
+      question: string;
+    }[];
+  };
 }

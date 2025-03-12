@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
 import {
   Box,
   Button,
+  FormHelperText,
   Grid2,
   InputLabel,
   MenuItem,
@@ -12,83 +13,115 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { InputDate } from '../ui/form/input-date';
 import dayjs from 'dayjs';
-import { type INewDoc } from '@/models/Doc';
+import { IDoc, type INewDoc } from '@/models/Doc';
 import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getSession } from 'next-auth/react';
+import axios from 'axios';
+import { getBackendUrl } from '@/constants/url';
+import { type INewDocument } from '@/models/NewDocument';
+import { getDocs } from '@/services/getDocs';
 
 const itemSchema = yup.object().shape({
-  person: yup.string().required('Обязательное поле'),
-  article: yup.string().required('Обязательное поле'),
+  speaker: yup.string().required('Обязательное поле'),
+  question: yup.string().required('Обязательное поле'),
 });
 
 const schema = yup
   .object({
     documentDate: yup.string(),
     documentNumber: yup.string(),
-    place: yup.string().required('Обязательное поле'),
-    data: yup.array().of(itemSchema),
+    address: yup.string().required('Обязательное поле'),
+    questions: yup.array().of(itemSchema),
   })
   .required();
 
 const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
+  const [articlesL, setArticlesL] = useState<number>(0);
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
   const router = useRouter();
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries({ queryKey: ['doc'] });
+
+  const { data: docs } = useQuery({
+    queryKey: ['docs'],
+    queryFn: getDocs,
+    select: (data) => data.data,
+  });
 
   const {
+    handleSubmit,
     register,
     formState: { errors },
     setValue: setFormValue,
+    getValues,
+    reset,
   } = methods;
 
-  /*const { mutate, isSuccess, data } = useMutation({
-    mutationFn: async (data: ITradeUnionMember) => {
+  const { mutate, isSuccess, data } = useMutation({
+    mutationFn: async (data: INewDocument) => {
       const session = await getSession();
 
-      return axios.post(`${getBackendUrl}/api/private/document`, data, {
-        headers: { Authorization: `Bearer ${session?.user?.token}` },
-      });
+      return axios.post(
+        `${getBackendUrl}/api/private/document`,
+        {
+          documentDate: data.documentDate,
+          documentNumber: data.documentNumber,
+          data: { address: data.address, questions: data.questions },
+        },
+        {
+          headers: { Authorization: `Bearer ${session?.user?.token}` },
+        },
+      );
     },
-  });*/
+  });
 
-  /* const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
-    mutationFn: async (data: ITradeUnionMember) => {
+  const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
+    mutationFn: async (data: INewDocument) => {
       const session = await getSession();
       if (doc)
         return axios.post(
           `${getBackendUrl}/api/private/document`,
-          { ...data, guid: doc.guid },
+          {
+            documentDate: data.documentDate,
+            documentNumber: data.documentNumber,
+            data: { address: data.address, questions: data.questions },
+            guid: doc.guid,
+          },
           {
             headers: { Authorization: `Bearer ${session?.user?.token}` },
           },
         );
     },
-  });*/
+  });
 
-  /*const onSubmit: SubmitHandler<INewDocument> = async () => {
-    router.push(`/documents?inside`);
-  };*/
+  const onSubmit: SubmitHandler<INewDocument> = async (data) => {
+    if (doc && doc.guid) mutateByGuid(data);
+    else mutate(data);
+  };
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (isSuccess) {
       router.push(`/documents/${data?.data.guid}`);
     }
     if (isSuccessByGuid && doc) {
       router.push(`/documents/${doc.guid}`);
     }
-  }, [isSuccess, data, doc, isSuccessByGuid]);*/
+  }, [isSuccess, data, doc, isSuccessByGuid]);
 
   useEffect(() => {
-    setFormValue('documentNumber', 'BMXXXXX');
+    setFormValue('documentNumber', 'AGXXXXX');
     setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
   }, []);
 
@@ -96,15 +129,47 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
     if (doc) {
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
-      setFormValue(`place`, doc.place);
-      if (doc.data.length) {
-        doc.data.forEach((el, id) => {
-          setFormValue(`data.${id}.person`, doc.data[id].person);
-          setFormValue(`data.${id}.article`, doc.data[id].article);
+      setFormValue(`address`, doc.data.address);
+      if (doc.data?.questions && doc.data.questions?.length) {
+        doc.data.questions?.forEach((el, id) => {
+          setFormValue(
+            `questions.${id}.speaker`,
+            //@ts-expect-error none
+            doc.data.questions[id].speaker,
+          );
+          setFormValue(
+            `questions.${id}.question`,
+            //@ts-expect-error none
+            doc.data.questions[id].question,
+          );
         });
       }
+    } else {
+      reset();
+      setFormValue('documentNumber', 'AGXXXXX');
+      setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     }
   }, [doc]);
+
+  useEffect(() => {
+    if (docs && !doc) {
+      const filteredDocs = docs.filter(
+        (el: IDoc) =>
+          el.documentType === 'AM' && el.step === 'На проверке профсоюзом',
+      );
+      if (filteredDocs && filteredDocs.length) {
+        //@ts-expect-error none
+        filteredDocs.forEach((el, id) => {
+          setFormValue(`questions.${id}.speaker`, 'Докладчик');
+          setFormValue(
+            `questions.${id}.question`,
+            `О включении в профсоюз нового участника на основании заявления\nФИО заявителя: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
+          );
+        });
+      }
+      setArticlesL(filteredDocs.length);
+    }
+  }, [docs, doc]);
 
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
@@ -116,7 +181,7 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
         }
       >
         <FormProvider {...methods}>
-          <form onSubmit={() => {}}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
               <Grid2 size={6}>
                 <InputLabel>Номер документа</InputLabel>
@@ -137,15 +202,15 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                   Место проведения
                 </InputLabel>
                 <TextField
-                  {...register(`place`)}
+                  {...register(`address`)}
                   placeholder="Место проведения"
-                  error={!!errors.place?.message}
-                  helperText={errors.place?.message || ''}
+                  error={!!errors.address?.message}
+                  helperText={errors.address?.message || ''}
                 />
               </Grid2>
               <Grid2 size={12}>
                 <InputArrayOfObjects
-                  name="data"
+                  name="questions"
                   desc="Добавить вопрос"
                   render={(name, index, register, errors) => (
                     <Box
@@ -158,12 +223,13 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                         index + 1
                       }`}</InputLabel>
                       <TextField
-                        {...register(`${name}.${index}.article`)}
+                        {...register(`${name}.${index}.question`)}
                         multiline
                         rows={3}
-                        placeholder="Место проведения"
-                        error={!!errors?.message}
-                        helperText={errors?.message || ''}
+                        placeholder="Вопрос"
+                        error={!!errors?.question?.message}
+                        helperText={errors?.question?.message || ''}
+                        disabled={index <= articlesL - 1}
                       />
                       <InputLabel sx={{ marginBottom: '0' }}>
                         Докладчик
@@ -171,17 +237,28 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                       <Select
                         fullWidth
                         sx={{ padding: 1.6 }}
-                        onChange={() => {}}
-                        error={!!errors?.message}
+                        name={`questions.${index}.speaker`}
+                        value={getValues(`questions.${index}.speaker`)}
+                        onChange={(e) => {
+                          setFormValue(
+                            `questions.${index}.speaker`,
+                            String(e.target.value),
+                          );
+                        }}
+                        error={!!errors?.speaker?.message}
                       >
                         <MenuItem key={0} value={'Докладчик'}>
                           Докладчик
                         </MenuItem>
                       </Select>
+                      {!!errors?.speaker?.message && (
+                        <FormHelperText sx={{ color: '#FF4949' }}>
+                          {errors?.speaker?.message}
+                        </FormHelperText>
+                      )}
                     </Box>
                   )}
                   defaultValue=""
-                  preadd
                 />
               </Grid2>
 
@@ -204,6 +281,16 @@ const NewDocumentForm = ({ doc }: { doc?: INewDoc | null }) => {
                     lineHeight: '27px',
                   }}
                   onClick={async () => {
+                    const values = getValues();
+                    if (
+                      values?.questions?.[values.questions.length - 1]
+                        ?.question == '' ||
+                      values?.questions?.[values.questions.length - 1]
+                        ?.question == undefined
+                    ) {
+                      values?.questions?.pop();
+                    }
+                    await onSubmit(values);
                     router.push('/documents?drafts');
                   }}
                 >

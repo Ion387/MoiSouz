@@ -58,7 +58,6 @@ export const HelpDialog: FC<IDialogProps> = ({ open, onClose }) => {
   // send
   const onSubmit = async (data: IFeedbackForm) => {
     // temp
-    console.log(data);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     alert(JSON.stringify(data));
 

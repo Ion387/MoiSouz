@@ -9,6 +9,9 @@ export interface INewProtocol {
   members: string[];
   membersAttending: string[];
   data: {
+    file?: unknown;
+    documentType?: string;
+    documentNumber?: string;
     person: string;
     article: string;
     decision: string;

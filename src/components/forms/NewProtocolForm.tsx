@@ -237,7 +237,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                             setFormValue('membersAttending', array);
                             setArr(array);
                           }
-                          console.log(arr);
                         }}
                       >
                         <Icon

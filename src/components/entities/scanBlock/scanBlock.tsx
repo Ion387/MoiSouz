@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 'use client';
 
 import { Icon, ListItem } from '@/components/ui';
@@ -30,7 +31,6 @@ const schema = yup
       .mixed<Filetype>()
       .required('Для отправки прикрепите файл')
       .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
-        console.log('value', value);
         if (!value || typeof value === 'string') return true;
         return convertSizeToBites(value.size) <= 1048576;
       }),
@@ -136,12 +136,12 @@ const ScanBlock = ({ number }: { number: string }) => {
           icon="edit"
         />
         {!info?.ROLES?.includes('ROLE_TRADEUNION') ||
-          (file.documentType !== 'AM' && (
+          (file?.documentType !== 'AM' && (
             <ListItem
               label="Создать такой же"
               icon="plus"
               to={
-                file.documentType !== 'AM'
+                file?.documentType !== 'AM'
                   ? `/new_document`
                   : `/trade_union_member`
               }
@@ -206,20 +206,20 @@ const ScanBlock = ({ number }: { number: string }) => {
                 }
                 onClick={() => {
                   if (
-                    file.documnetType === 'AM' &&
+                    file?.documnetType === 'AM' &&
                     !info?.ROLES?.includes('ROLE_TRADEUNION')
                   )
                     mutate2({ step: 'Отправлено в профсоюз' });
                   else {
-                    file.documnetType !== 'AM';
+                    file?.documentType !== 'AM';
                   }
                   mutate2({ step: 'Утверждено' });
                 }}
               >
-                {file.documnetType === 'AM' &&
+                {file?.documnetType === 'AM' &&
                 !info?.ROLES?.includes('ROLE_TRADEUNION')
                   ? 'Отправить в профсоюз'
-                  : file.documnetType === 'AM'
+                  : file?.documnetType === 'AM'
                     ? 'Загрузить документы'
                     : 'Утвердить'}
               </Button>

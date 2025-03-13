@@ -7,12 +7,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
 import { PropsWithSX } from '@/models/Props';
+import { DateView } from '@mui/x-date-pickers/models';
 
 interface Props {
   name: string;
   label?: string;
   dis?: boolean;
   isFutureAccess?: boolean;
+  views?: DateView[];
 }
 
 export const InputDate: FC<PropsWithSX & Props> = ({
@@ -21,6 +23,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
   label,
   dis,
   isFutureAccess,
+  views,
 }) => {
   const { control } = useFormContext();
 
@@ -48,6 +51,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
                 inputProps: { readOnly: true },
               },
             }}
+            views={views}
           />
         )}
       />

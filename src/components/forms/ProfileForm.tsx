@@ -1,7 +1,9 @@
 'use client';
 
 import { FC, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Box, InputLabel, TextField } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,18 +19,11 @@ import {
 } from '@/components/ui/form';
 import { InputAddress, InputGender } from '@/components/ui/form/entities';
 
-import { IFormProfile } from '@/models/Forms';
-import { IOption } from '@/models/Option';
 import { useOptions } from '@/hooks/UseOptions';
-import { usePathname, useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
-import { convertSizeToBites } from '@/utils/convertStringToB';
 
-const OPTIONS_EDUCATION: IOption[] = [
-  { title: 'Среднее общее', id: 'Среднее общее' },
-  { title: 'Среднее профессиональное', id: 'Среднее профессиональное' },
-  { title: 'Высшее', id: 'Высшее' },
-];
+import { convertSizeToBites } from '@/utils/convertStringToB';
+import { IFormProfile } from '@/models/Forms';
+import { OPTIONS_EDUCATION } from '@/constants/options';
 
 const schema = yup
   .object({

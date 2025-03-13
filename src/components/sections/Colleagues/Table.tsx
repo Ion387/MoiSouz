@@ -19,7 +19,7 @@ interface IRowProps {
 const Row: FC<PropsWithChildren & IRowProps> = ({ children, user, owner }) => {
   if (owner) {
     return (
-      <Link href={`/colleagues/${user.id}`} style={{ width: '100%' }}>
+      <Link href={`/colleagues/${user.guid}`} style={{ width: '100%' }}>
         <ButtonBase style={{ width: '100%' }} disabled={!owner}>
           {children}
         </ButtonBase>
@@ -93,22 +93,22 @@ export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
                 }}
               >
                 <Grid2 size={2.5}>
-                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                  <Typography variant="body2" fontWeight={600} py={1}>
                     {el.name}
                   </Typography>
                 </Grid2>
                 <Grid2 size={2.5}>
-                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                  <Typography variant="body2" fontWeight={600} py={1}>
                     {tradeunion?.title}
                   </Typography>
                 </Grid2>
                 <Grid2 size={3.5}>
-                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                  <Typography variant="body2" fontWeight={600} py={1}>
                     {el.position && el.position[0]}
                   </Typography>
                 </Grid2>
                 <Grid2 size={3.5}>
-                  <Typography variant="body2" fontWeight={600} pt={2.4}>
+                  <Typography variant="body2" fontWeight={600} py={1}>
                     {el.phone || el.email}
                   </Typography>
                 </Grid2>

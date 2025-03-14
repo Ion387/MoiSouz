@@ -66,6 +66,12 @@ const NewDocumentForm = ({
     select: (data) => data.data,
   });
 
+  const { data: members, isLoading: isMembersLoading } = useQuery({
+    queryKey: ['members'],
+    queryFn: () => {},
+    select: (data) => data,
+  });
+
   const {
     handleSubmit,
     register,
@@ -287,7 +293,7 @@ const NewDocumentForm = ({
               </Grid2>
               <Grid2 size={4}>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   sx={{
                     width: '100%',
                     padding: '16px 25px',
@@ -313,7 +319,7 @@ const NewDocumentForm = ({
               </Grid2>
               <Grid2 size={4}>
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   sx={{
                     width: '100%',
                     padding: '16px 25px',

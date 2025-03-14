@@ -4,6 +4,7 @@ export interface INewProtocol {
   documentNumber?: string;
   documentType?: string;
   documentTime?: string;
+  guid: string;
   files: {
     type: string;
     source: string;

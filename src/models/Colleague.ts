@@ -10,6 +10,7 @@ export interface IFormColleagueProfile {
   avatar?: object | string | null;
   profession?: string[];
   position: string[];
+  name?: string;
   address: {
     postcode?: string | null;
     region?: string | null;

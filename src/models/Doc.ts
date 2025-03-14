@@ -52,6 +52,7 @@ export interface INewDoc {
     questions?: {
       speaker: string;
       question: string;
+      document?: string;
     }[];
   };
 }

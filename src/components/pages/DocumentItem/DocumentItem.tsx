@@ -1,6 +1,14 @@
 'use client';
 
-import { Box, CircularProgress, Grid2, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid2,
+  Link,
+  Paper,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import ProgressBar from '@/components/ui/progressBar';
 import { usePathname } from 'next/navigation';
@@ -19,6 +27,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { IDoc } from '@/models/Doc';
 import { nameOfDoc } from '@/utils/nameOfDoc';
+import { Icon } from '@/components/ui';
 
 GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -38,11 +47,28 @@ const DocumentItem = () => {
   return (
     <Grid2 container sx={{ p: 2 }} spacing={2.4}>
       {doc && (
-        <Grid2 size={12}>
+        <Grid2
+          size={12}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+        >
           <Typography variant="h3" marginBottom={2} pt={3}>
             {nameOfDoc(doc.documentType)}
             {doc.documentNumber}
           </Typography>{' '}
+          {doc.documentType === 'AG' && (
+            <Link href={`/new_protocol?agenda=${doc.guid}`}>
+              <Button variant="contained">
+                <Icon
+                  name={'newDoc'}
+                  color="#ffffff"
+                  sx={{ marginRight: '6px' }}
+                ></Icon>
+                Создать протокол
+              </Button>
+            </Link>
+          )}
         </Grid2>
       )}
       {doc ? (

@@ -33,7 +33,7 @@ const NewDocument = () => {
             Повестка заседания Профкома
           </Typography>
           {doc && (
-            <Link href={`/new_protocol?agenda=${doc.documentNumber}`}>
+            <Link href={`/new_protocol?agenda=${doc.guid}`}>
               <Button variant="contained">
                 <Icon
                   name={'newDoc'}

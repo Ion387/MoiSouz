@@ -29,10 +29,12 @@ import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { type INewDocument } from '@/models/NewDocument';
 import { getDocs } from '@/services/getDocs';
+import { getMembers } from '@/services/members';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
   question: yup.string().required('Обязательное поле'),
+  document: yup.string(),
 });
 
 const schema = yup
@@ -68,8 +70,8 @@ const NewDocumentForm = ({
 
   const { data: members, isLoading: isMembersLoading } = useQuery({
     queryKey: ['members'],
-    queryFn: () => {},
-    select: (data) => data,
+    queryFn: getMembers,
+    select: (data) => data.data,
   });
 
   const {
@@ -176,7 +178,7 @@ const NewDocumentForm = ({
       if (filteredDocs && filteredDocs.length) {
         //@ts-expect-error none
         filteredDocs.forEach((el, id) => {
-          setFormValue(`questions.${id}.speaker`, 'Докладчик');
+          setFormValue(`questions.${id}.document`, el.guid);
           setFormValue(
             `questions.${id}.question`,
             `О включении в профсоюз нового участника на основании заявления\nФИО заявителя: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
@@ -246,30 +248,44 @@ const NewDocumentForm = ({
                           helperText={errors?.question?.message || ''}
                           disabled={index <= articlesL - 1}
                         />
-                        <InputLabel sx={{ marginBottom: '0' }}>
-                          Докладчик
-                        </InputLabel>
-                        <Select
-                          fullWidth
-                          sx={{ padding: 1.6 }}
-                          name={`questions.${index}.speaker`}
-                          value={getValues(`questions.${index}.speaker`)}
-                          onChange={(e) => {
-                            setFormValue(
-                              `questions.${index}.speaker`,
-                              String(e.target.value),
-                            );
-                          }}
-                          error={!!errors?.speaker?.message}
-                        >
-                          <MenuItem key={0} value={'Докладчик'}>
-                            Докладчик
-                          </MenuItem>
-                        </Select>
-                        {!!errors?.speaker?.message && (
-                          <FormHelperText sx={{ color: '#FF4949' }}>
-                            {errors?.speaker?.message}
-                          </FormHelperText>
+                        <TextField
+                          {...register(`${name}.${index}.document`)}
+                          sx={{ display: 'none' }}
+                        />
+                        {!isMembersLoading && (
+                          <>
+                            <InputLabel sx={{ marginBottom: '0' }}>
+                              Докладчик
+                            </InputLabel>
+                            <Select
+                              fullWidth
+                              sx={{ padding: 1.6 }}
+                              name={`questions.${index}.speaker`}
+                              value={getValues(`questions.${index}.speaker`)}
+                              onChange={(e) => {
+                                setFormValue(
+                                  `questions.${index}.speaker`,
+                                  String(e.target.value),
+                                );
+                              }}
+                              error={!!errors?.speaker?.message}
+                            >
+                              {members &&
+                                members.map((member) => (
+                                  <MenuItem
+                                    key={member.guid}
+                                    value={member.name}
+                                  >
+                                    {member.name}
+                                  </MenuItem>
+                                ))}
+                            </Select>
+                            {!!errors?.speaker?.message && (
+                              <FormHelperText sx={{ color: '#FF4949' }}>
+                                {errors?.speaker?.message}
+                              </FormHelperText>
+                            )}
+                          </>
                         )}
                       </Box>
                     )}

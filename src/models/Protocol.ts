@@ -1,9 +1,13 @@
 export interface INewProtocol {
   step: string;
-  documentDate?: string;
-  documentNumber?: string;
+  documentDate: string;
+  documentNumber: string;
   documentType?: string;
   documentTime?: string;
+  address: string;
+  documentAG: string;
+  userList: string[];
+
   guid: string;
   files: {
     type: string;
@@ -12,16 +16,33 @@ export interface INewProtocol {
     size: number;
   }[];
   file: string;
-  place: string;
-  agenda: string;
-  members: string[];
-  membersAttending: string[];
-  data: {
-    person: string;
-    article: string;
-    decision: string;
-    for: number;
-    against: number;
-    abstained: number;
+  questions: {
+    speaker: string;
+    question: string;
+    decided: string;
+    document: string;
+    approved: number;
+    declined: number;
+    ignored: number;
+  }[];
+}
+
+export interface INewProt {
+  documentDate: string;
+  documentNumber: string;
+  documentType?: string;
+  guid?: string;
+  documentTime?: string;
+  address: string;
+  documentAG: string;
+  userList?: (string | undefined)[];
+  questions: {
+    speaker: string;
+    question: string;
+    decided: string;
+    document?: string;
+    approved?: number;
+    declined?: number;
+    ignored?: number;
   }[];
 }

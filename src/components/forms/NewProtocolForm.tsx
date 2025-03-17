@@ -1,8 +1,9 @@
-import { type INewProtocol } from '@/models/Protocol';
+import { type INewProt } from '@/models/Protocol';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  FormHelperText,
   Grid2,
   IconButton,
   InputLabel,
@@ -35,28 +36,28 @@ import { getSession } from 'next-auth/react';
 import { getBackendUrl } from '@/constants/url';
 
 const itemSchema = yup.object().shape({
-  person: yup.string().required('Обязательное поле'),
-  article: yup.string().required('Обязательное поле'),
-  decision: yup.string().required('Обязательное поле'),
-  for: yup.number(),
-  against: yup.number(),
-  abstained: yup.number(),
+  speaker: yup.string().required('Обязательное поле'),
+  question: yup.string().required('Обязательное поле'),
+  decided: yup.string().required('Обязательное поле'),
+  approved: yup.number(),
+  declined: yup.number(),
+  ignored: yup.number(),
+  document: yup.string(),
 });
 
 const schema = yup
   .object({
-    documentNumber: yup.string(),
-    documentDate: yup.string(),
-    documentTime: yup.string(),
-    place: yup.string().required('Обязательное поле'),
-    agenda: yup.string().required('Обязательное поле'),
-    members: yup.array().of(yup.string()),
-    membersAttending: yup.array().of(yup.string()),
-    data: yup.array().of(itemSchema),
+    documentNumber: yup.string().required('Обязательное поле'),
+    documentDate: yup.string().required('Обязательное поле'),
+    documentTime: yup.string().required('Обязательное поле'),
+    address: yup.string().required('Обязательное поле'),
+    documentAG: yup.string().required('Обязательное поле'),
+    userList: yup.array().of(yup.string()),
+    questions: yup.array().of(itemSchema).required('Обязательное поле'),
   })
   .required();
 
-const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
+const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -70,11 +71,12 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
     formState: { errors },
     setValue: setFormValue,
     getValues,
+    handleSubmit,
   } = methods;
 
   const [arr, setArr] = useState<IFormColleagueProfile[]>([]);
   const [currentAgenda, setCurrentAgenda] = useState<INewDoc>();
-  const { data: members } = useQuery({
+  const { data: members, isLoading: isMembersLoading } = useQuery({
     queryKey: ['members'],
     queryFn: getMembers,
     select: (data) => data.data,
@@ -100,35 +102,44 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
     if (doc) {
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
-      setFormValue('documentTime', doc.documentTime);
-      setFormValue(`place`, doc.place);
-      setFormValue(`agenda`, doc.agenda);
-      setFormValue(`members`, doc.members);
-      setFormValue(`membersAttending`, doc.membersAttending);
-      if (doc.data.length) {
-        doc.data.forEach((el, id) => {
-          setFormValue(`data.${id}.person`, doc.data[id].person);
-          setFormValue(`data.${id}.article`, doc.data[id].article);
-          setFormValue(`data.${id}.decision`, doc.data[id].decision);
-          setFormValue(`data.${id}.for`, doc.data[id].for);
-          setFormValue(`data.${id}.against`, doc.data[id].against);
-          setFormValue(`data.${id}.abstained`, doc.data[id].abstained);
+      if (doc.documentTime) setFormValue('documentTime', doc.documentTime);
+      setFormValue(`address`, doc.address);
+      setFormValue(`documentAG`, doc.documentAG);
+      setFormValue(`userList`, doc.userList);
+      if (doc.questions && doc.questions.length) {
+        doc.questions.forEach((el, id) => {
+          setFormValue(`questions.${id}.speaker`, doc.questions[id].speaker);
+          setFormValue(`questions.${id}.question`, doc.questions[id].question);
+          setFormValue(`questions.${id}.decided`, doc.questions[id].decided);
+          setFormValue(`questions.${id}.approved`, doc.questions[id].approved);
+          setFormValue(`questions.${id}.declined`, doc.questions[id].declined);
+          setFormValue(`questions.${id}.ignored`, doc.questions[id].ignored);
+          setFormValue(`questions.${id}.document`, doc.questions[id].document);
         });
       }
     }
   }, [doc]);
 
   useEffect(() => {
+    if (arr)
+      setFormValue(
+        `userList`,
+        arr.map((el) => el.name),
+      );
+  }, [arr]);
+
+  useEffect(() => {
     if (currentAgenda) {
-      setFormValue(`place`, currentAgenda.data.address);
+      setFormValue(`address`, currentAgenda.data.address);
+      //setFormValue(`documentAG`, currentAgenda.title);
       if (currentAgenda.data.questions?.length) {
         currentAgenda.data.questions?.forEach((el, id) => {
           setFormValue(
-            `data.${id}.person`,
+            `questions.${id}.speaker`,
             String(currentAgenda.data.questions?.[id].speaker),
           );
           setFormValue(
-            `data.${id}.article`,
+            `questions.${id}.question`,
             String(currentAgenda.data.questions?.[id].question),
           );
         });
@@ -137,18 +148,20 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
   }, [currentAgenda]);
 
   const { mutate, isSuccess, data } = useMutation({
-    mutationFn: async (data: INewProtocol) => {
+    mutationFn: async (data: INewProt) => {
       const session = await getSession();
 
       return axios.post(
         `${getBackendUrl}/api/private/document`,
         {
-          documentDate: data.documentDate,
           documentNumber: data.documentNumber,
+          documentDate: data.documentDate,
           data: {
-            address: data.place,
-            members: data.members,
-            membersAttending: data.membersAttending,
+            documentAG: data.documentAG,
+            documentTime: data.documentTime,
+            address: data.address,
+            userList: data.userList,
+            questions: data.questions,
           },
         },
         {
@@ -159,19 +172,21 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
   });
 
   const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
-    mutationFn: async (data: INewProtocol) => {
+    mutationFn: async (data: INewProt) => {
       const session = await getSession();
       if (doc)
         return axios.post(
           `${getBackendUrl}/api/private/document`,
           {
-            documentDate: data.documentDate,
             documentNumber: data.documentNumber,
+            documentDate: data.documentDate,
             guid: doc.guid,
             data: {
-              address: data.place,
-              members: data.members,
-              membersAttending: data.membersAttending,
+              documentAG: data.documentAG,
+              documentTime: data.documentTime,
+              address: data.address,
+              userList: data.userList,
+              questions: data.questions,
             },
           },
           {
@@ -194,11 +209,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
     const param = !!params.entries().toArray().length
       ? params.entries().toArray()[0][1]
       : null;
-    console.log('param', param);
     if (param) setCurrentAgenda(agendas?.find((el) => el.guid == param));
   }, [params, agendas]);
 
-  const onSubmit: SubmitHandler<INewProtocol> = async (data) => {
+  const onSubmit: SubmitHandler<INewProt> = async (data) => {
     if (doc && doc.guid) mutateByGuid(data);
     else mutate(data);
   };
@@ -213,7 +227,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
         }
       >
         <FormProvider {...methods}>
-          <form onSubmit={() => {}}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid2 container spacing={2}>
               {agendas && (
                 <Grid2 size={12}>
@@ -226,7 +240,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                       setCurrentAgenda(
                         agendas?.find((el) => el.guid == e.target.value),
                       );
-                      setFormValue('agenda', String(e.target.value));
+                      setFormValue('documentAG', String(e.target.value));
                     }}
                   >
                     {agendas &&
@@ -260,9 +274,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                   <Grid2 size={12}>
                     <InputLabel>Место проведения</InputLabel>
                     <TextField
-                      {...register('place')}
-                      error={!!errors.place?.message}
-                      helperText={errors.place?.message || ''}
+                      {...register('address')}
+                      error={!!errors.address?.message}
+                      helperText={errors.address?.message || ''}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -308,7 +322,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                               onClick={() => {
                                 if (arr?.includes(el)) {
                                   setFormValue(
-                                    'membersAttending',
+                                    'userList',
                                     arr
                                       ?.filter((item) => item !== el)
                                       .map((elem) => elem.guid),
@@ -322,7 +336,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                                   array?.push(el);
                                   arr?.forEach((elem) => array.push(elem));
                                   setFormValue(
-                                    'membersAttending',
+                                    'userList',
                                     array.map((elem) => elem.guid),
                                   );
                                   setArr(array);
@@ -360,7 +374,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                           <Grid2 size={12}>
                             <InputLabel>Слушали:</InputLabel>
                             <TextField
-                              {...register(`data.${id}.article`)}
+                              {...register(`questions.${id}.question`)}
                               multiline
                               rows={3}
                               disabled
@@ -368,14 +382,50 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                           </Grid2>
                           <Grid2 size={12} marginTop={2.5}>
                             <InputLabel>Докладывал:</InputLabel>
-                            <TextField {...register(`data.${id}.person`)} />
+                            {!isMembersLoading && members && currentAgenda && (
+                              <>
+                                <Select
+                                  fullWidth
+                                  sx={{ padding: 1.6 }}
+                                  name={`questions.${id}.speaker`}
+                                  value={
+                                    currentAgenda.data.questions?.[id].speaker
+                                  }
+                                  onChange={(e) => {
+                                    setFormValue(
+                                      `questions.${id}.speaker`,
+                                      String(e.target.value),
+                                    );
+                                  }}
+                                  error={
+                                    !!errors?.questions?.[id]?.speaker?.message
+                                  }
+                                >
+                                  {members &&
+                                    members.map((member) => (
+                                      <MenuItem
+                                        key={member.guid}
+                                        value={member.name}
+                                      >
+                                        {member.name}
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                                {!!errors?.questions?.[id]?.speaker
+                                  ?.message && (
+                                  <FormHelperText sx={{ color: '#FF4949' }}>
+                                    {errors?.questions?.[id]?.speaker?.message}
+                                  </FormHelperText>
+                                )}
+                              </>
+                            )}
                           </Grid2>
                           <Grid2 size={12} marginTop={2.5}>
                             <InputLabel>Постановили:</InputLabel>
                             <TextField
                               multiline
                               rows={3}
-                              {...register(`data.${id}.decision`)}
+                              {...register(`questions.${id}.decided`)}
                             />
                           </Grid2>
                           <Grid2
@@ -392,7 +442,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                                     textAlign: 'center',
                                   },
                                 }}
-                                register={register(`data.${id}.for`)}
+                                register={register(`questions.${id}.approved`)}
                               />
                             </Grid2>
                             <Grid2 size={4}>
@@ -403,7 +453,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                                     textAlign: 'center',
                                   },
                                 }}
-                                register={register(`data.${id}.against`)}
+                                register={register(`questions.${id}.declined`)}
                               />
                             </Grid2>
                             <Grid2 size={4}>
@@ -414,7 +464,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                                     textAlign: 'center',
                                   },
                                 }}
-                                register={register(`data.${id}.abstained`)}
+                                register={register(`questions.${id}.ignored`)}
                               />
                             </Grid2>
                           </Grid2>
@@ -443,6 +493,8 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
                   }}
                   onClick={async () => {
                     const values = getValues();
+                    if (values.userList?.includes(undefined))
+                      delete values.userList;
                     await onSubmit(values);
                     router.push('/documents?drafts');
                   }}
@@ -472,7 +524,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProtocol | null }) => {
   );
 };
 
-const NewProtocolForm = ({ doc }: { doc?: INewProtocol | null }) => {
+const NewProtocolForm = ({ doc }: { doc?: INewProt | null }) => {
   return (
     <Suspense>
       <NewProtocolFormChild doc={doc} />

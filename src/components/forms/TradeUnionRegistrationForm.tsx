@@ -246,7 +246,7 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (myTradeUnion) {
       reset(myTradeUnion);
-      if (myTradeUnion.parent.guid && tradeUnions) {
+      if (myTradeUnion.parent && myTradeUnion.parent.guid && tradeUnions) {
         setChoosenUnion(
           tradeUnions.find(
             (el: ITradeUnion) => el.guid === myTradeUnion?.parent.guid,

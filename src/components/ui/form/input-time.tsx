@@ -32,17 +32,16 @@ export const InputTime: FC<PropsWithSX & Props> = ({
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <TimePicker
             disabled={!!dis}
-            views={['hours', 'minutes', 'seconds']}
-            defaultValue={value && dayjs(value, 'hh.mm.ss')}
-            value={value ? dayjs(value, 'hh.mm.ss') : dayjs(null)}
+            views={['hours', 'minutes']}
+            defaultValue={value && dayjs(value, 'hh.mm')}
+            value={value ? dayjs(value, 'hh.mm') : dayjs(null)}
+            format="hh.mm"
             sx={{
               '& .MuiInputBase-input': {
                 textAlign: 'center',
               },
             }}
-            onChange={(value: Date) =>
-              onChange(dayjs(value).format('hh.mm.ss'))
-            }
+            onChange={(value: Date) => onChange(dayjs(value).format('hh.mm'))}
             slotProps={{
               textField: {
                 fullWidth: true,

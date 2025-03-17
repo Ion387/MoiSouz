@@ -102,7 +102,8 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     if (doc) {
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
-      if (doc.documentTime) setFormValue('documentTime', doc.documentTime);
+      if (doc.data?.documentTime)
+        setFormValue('documentTime', doc.data?.documentTime);
       setFormValue(`address`, doc.address);
       setFormValue(`documentAG`, doc.documentAG);
       setFormValue(`userList`, doc.userList);
@@ -121,6 +122,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   }, [doc]);
 
   useEffect(() => {
+    if (doc && doc.data && doc.data.documentAG && agendas)
+      setCurrentAgenda(agendas?.find((el) => el.guid == doc.data?.documentAG));
+  }, [doc, agendas]);
+
+  useEffect(() => {
     if (arr)
       setFormValue(
         `userList`,
@@ -129,6 +135,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   }, [arr]);
 
   useEffect(() => {
+    console.log('currentAgenda', currentAgenda);
     if (currentAgenda) {
       setFormValue(`address`, currentAgenda.data.address);
       //setFormValue(`documentAG`, currentAgenda.title);

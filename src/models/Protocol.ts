@@ -45,4 +45,5 @@ export interface INewProt {
     declined?: number;
     ignored?: number;
   }[];
+  data?: { documentAG?: string; documentTime?: string };
 }

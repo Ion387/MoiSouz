@@ -23,6 +23,7 @@ interface Props {
   children?: ReactElement | ReactElement[];
   onClick?: () => void;
   disabled?: boolean;
+  hidden?: boolean;
 }
 
 interface PropsChildren {
@@ -70,7 +71,10 @@ const Item: FC<PropsItem> = ({
   return (
     <>
       <ListItemButton
-        sx={{ pl: indent ? 4.6 * indent : undefined, borderRadius: '6px' }}
+        sx={{
+          pl: indent ? 4.6 * indent : undefined,
+          borderRadius: '6px',
+        }}
         selected={selected && label !== 'Документы'}
         onClick={handleClick}
         disabled={disabled}
@@ -95,7 +99,7 @@ const Item: FC<PropsItem> = ({
   );
 };
 
-const ListItemSP: FC<Props> = ({ to, ...props }) => {
+const ListItemSP: FC<Props> = ({ to, hidden, ...props }) => {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -105,7 +109,7 @@ const ListItemSP: FC<Props> = ({ to, ...props }) => {
 
   if (to) {
     return (
-      <Link href={to} style={{ width: '100%' }}>
+      <Link href={to} style={{ width: '100%', display: hidden ? 'none' : '' }}>
         <Item
           {...props}
           selected={

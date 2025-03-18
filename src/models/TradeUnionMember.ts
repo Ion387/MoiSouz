@@ -9,6 +9,8 @@ export interface ITradeUnionMember {
     position: string;
     isActive?: boolean;
     percents?: number;
+    employerTitle: string;
+    employerName: string;
   };
   tradeunion: number;
   id?: number | null;

@@ -50,6 +50,8 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 1048576;
       }),
+    employerTitle: yup.string().required('Обязательное поле'),
+    employerName: yup.string().required('Обязательное поле'),
     profession: yup
       .array(
         yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
@@ -193,6 +195,30 @@ const ProfileForm: FC<Props> = ({
           placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
         />
+      </Box>
+
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>Наименование работодателя</InputLabel>
+          <TextField
+            {...register('employerTitle')}
+            placeholder="Наименование работодателя"
+            error={!!errors.employerTitle?.message}
+            helperText={errors.employerTitle?.message || ''}
+          />
+        </Box>
+      </Box>
+
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+        <Box sx={{ flex: 1 }}>
+          <InputLabel>ФИО руководителя</InputLabel>
+          <TextField
+            {...register('employerName')}
+            placeholder="ФИО руководителя"
+            error={!!errors.employerName?.message}
+            helperText={errors.employerName?.message || ''}
+          />
+        </Box>
       </Box>
 
       <InputArray

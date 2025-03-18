@@ -51,6 +51,8 @@ const schema = yup
         .bool()
         .oneOf([true], 'Необходимо принять согласие')
         .required('Необходимо принять согласие'),
+      employerTitle: yup.string().required('Обязательное поле'),
+      employerName: yup.string().required('Обязательное поле'),
     }),
     tradeunion: yup.number().required('Обязательное поле'),
     id: yup.number().nullable(),
@@ -132,6 +134,8 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
           firstName: info.firstName,
           lastName: info.lastName,
           position: !!info.position?.length ? info.position[0] : '',
+          employerTitle: info.employerTitle,
+          employerName: info.employerName,
         },
       });
       setFormValue('documentNumber', 'AMXXXXX');
@@ -232,6 +236,25 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   helperText={errors.data?.middleName?.message || ''}
                 />
               </Grid2>
+              <Grid2 size={12}>
+                <InputLabel>Наименование работодателя</InputLabel>
+                <TextField
+                  {...register('data.employerTitle')}
+                  placeholder="Наименование работодателя"
+                  error={!!errors.data?.employerTitle?.message}
+                  helperText={errors.data?.employerTitle?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <InputLabel>ФИО руководителя</InputLabel>
+                <TextField
+                  {...register('data.employerName')}
+                  placeholder="ФИО руководителя"
+                  error={!!errors.data?.employerName?.message}
+                  helperText={errors.data?.employerName?.message || ''}
+                />
+              </Grid2>
+
               <Grid2 size={12}>
                 <InputLabel>Должность</InputLabel>
                 <TextField

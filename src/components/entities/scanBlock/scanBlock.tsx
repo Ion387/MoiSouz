@@ -214,10 +214,8 @@ const ScanBlock = ({ number }: { number: string }) => {
                     !info?.ROLES?.includes('ROLE_TRADEUNION')
                   )
                     mutate2({ step: 'Отправлено в профсоюз' });
-                  else {
-                    file?.documentType !== 'AM';
-                  }
-                  mutate2({ step: 'Утверждено' });
+                  else if (file?.documentType !== 'AM')
+                    mutate2({ step: 'Утверждено' });
                 }}
               >
                 {file?.documentType === 'AM' &&

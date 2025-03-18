@@ -276,7 +276,7 @@ const NewDocumentForm = ({
                                     key={member.guid}
                                     value={member.name}
                                   >
-                                    {member.name}
+                                    {member.role + ' - ' + member.name}
                                   </MenuItem>
                                 ))}
                             </Select>

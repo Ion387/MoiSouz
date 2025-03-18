@@ -151,6 +151,8 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
       setFormValue('data.position', doc.data.position);
       setFormValue('data.inviteDate', doc.data.inviteDate);
       setFormValue('data.isActive', doc.data.isActive);
+      setFormValue('data.employerTitle', doc.data.employerTitle);
+      setFormValue('data.employerName', doc.data.employerName);
       setFormValue('id', doc.id ? doc.id : null);
       setChoosenUnion(doc.tradeunion);
     }

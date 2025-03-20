@@ -41,6 +41,8 @@ export interface ITradeUnion {
   scan: object | null | string;
   participants?: object | null | string;
   parent?: string | null;
+  employerTitle: string;
+  employerName: string;
 }
 
 export interface ITradeUnionUploadUsersForm {

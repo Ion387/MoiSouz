@@ -6,8 +6,10 @@ import { List } from '@mui/material';
 import { ListItem } from '@/components/ui';
 
 import styles from './aside.module.scss';
+import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 
 export const ProfileAside = () => {
+  const { profileInfo: info } = useGetProfileInfo();
   return (
     <List className={styles.wrapper}>
       <List className={styles.content}>
@@ -23,7 +25,11 @@ export const ProfileAside = () => {
           <ListItem label="Входящие" to="/documents?incoming" />
           <ListItem label="Исходящие" to="/documents?outgoing" />
           <ListItem label="Черновики" to="/documents?drafts" />
-          <ListItem label="Внутренние" to="/documents?inside" />
+          <ListItem
+            label="Внутренние"
+            to="/documents?inside"
+            hidden={!info?.ROLES?.includes('ROLE_TRADEUNION')}
+          />
         </ListItem>
         <ListItem label="Мои организации" icon="square-2x2" disabled />
         <ListItem label="Коллеги" icon="peoples" to="/colleagues" />

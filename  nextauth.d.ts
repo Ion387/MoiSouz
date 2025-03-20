@@ -27,6 +27,8 @@ interface IUser extends DefaultUser {
   phoneDop?: string;
   position?: string[];
   profession?: string[];
+  employerTitle?: string;
+  employerName?: string;
 }
 declare module 'next-auth' {
   interface User extends IUser {}

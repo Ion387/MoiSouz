@@ -48,6 +48,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               phoneDop: user.data.phoneDop,
               position: user.data.position,
               profession: user.data.profession,
+              employerName: user.data.employerName,
+              employerTitle: user.data.employerTitle,
             },
           };
         }
@@ -90,6 +92,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.phoneDop = user.data.phoneDop;
         token.position = user.data.position;
         token.profession = user.data.profession;
+        token.employerName = user.data.employerName;
+        token.employerTitle = user.data.employerTitle;
       }
 
       return Promise.resolve(token);
@@ -119,6 +123,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.phoneDop = token.phoneDop;
       session.user.position = token.position;
       session.user.profession = token.profession;
+      session.user.employerName = token.employerName;
+      session.user.employerTitle = token.employerTitle;
 
       return Promise.resolve(session);
     },

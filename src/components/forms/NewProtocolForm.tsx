@@ -414,7 +414,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                         key={member.guid}
                                         value={member.name}
                                       >
-                                        {member.name}
+                                        {member.role + ' - ' + member.name}
                                       </MenuItem>
                                     ))}
                                 </Select>

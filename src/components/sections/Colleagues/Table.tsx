@@ -1,5 +1,3 @@
-import { IProfile } from '@/models/Profile';
-import { ITradeUnion } from '@/models/TradeUnion';
 import {
   Box,
   ButtonBase,
@@ -7,41 +5,116 @@ import {
   Grid2,
   Paper,
   Typography,
+  MenuItem,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Popover,
 } from '@mui/material';
-import Link from 'next/link';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
+
+import { IFormColleagueProfile } from '@/models/Colleague';
+import { ITradeUnion } from '@/models/TradeUnion';
+import { Icon } from '@/components/ui';
+import { PropsWithSX } from '@/models/Props';
 
 interface IRowProps {
-  user: IProfile;
-  owner?: boolean;
+  user: IFormColleagueProfile;
+  clickable?: boolean;
+  disabled?: boolean;
+
+  onClick?: (user: IFormColleagueProfile) => void;
 }
 
-const Row: FC<PropsWithChildren & IRowProps> = ({ children, user, owner }) => {
-  if (owner) {
+const Row: FC<PropsWithChildren & PropsWithSX & IRowProps> = ({
+  children,
+  sx,
+  user,
+  clickable,
+  disabled,
+  onClick,
+}) => {
+  if (clickable) {
     return (
-      <Link href={`/colleagues/${user.guid}`} style={{ width: '100%' }}>
-        <ButtonBase style={{ width: '100%' }} disabled={!owner}>
-          {children}
-        </ButtonBase>
-      </Link>
+      <ButtonBase
+        sx={{ width: '100%', ...(sx || {}) }}
+        onClick={() => onClick && onClick(user)}
+        disabled={disabled}
+      >
+        {children}
+      </ButtonBase>
     );
   }
   return children;
 };
 
 interface ITableProps {
-  users: IProfile[] | undefined;
+  users: IFormColleagueProfile[] | undefined;
   tradeunion?: ITradeUnion | null;
   owner?: boolean;
+
+  onClick?: (user: IFormColleagueProfile) => void;
+  onShow?: (user: IFormColleagueProfile) => void;
+  onEdit?: (user: IFormColleagueProfile) => void;
+  onDelete?: (user: IFormColleagueProfile) => void;
 }
 
-export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
+export const Table: FC<ITableProps> = ({
+  users,
+  tradeunion,
+  owner,
+  onClick,
+  onShow,
+  onEdit,
+  onDelete,
+}) => {
   const groupedData = users;
+
+  const [openMenu, setOpenMenu] = useState<{
+    user: IFormColleagueProfile;
+    anchorE1: HTMLElement;
+  } | null>(null);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    user: IFormColleagueProfile,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpenMenu({
+      user,
+      anchorE1: event.currentTarget,
+    });
+  };
+  const handleMenuClose = () => {
+    setOpenMenu(null);
+  };
+
+  const handleRowClick = (user: IFormColleagueProfile) => {
+    handleMenuClose();
+    if (openMenu) return;
+    if (onClick) onClick(user);
+  };
+
+  const handleMenuShow = (user: IFormColleagueProfile) => {
+    handleMenuClose();
+    if (onShow) onShow(user);
+  };
+
+  const handleMenuEdit = (user: IFormColleagueProfile) => {
+    handleMenuClose();
+    if (onEdit) onEdit(user);
+  };
+
+  const handleMenuDelete = (user: IFormColleagueProfile) => {
+    handleMenuClose();
+    if (onDelete) onDelete(user);
+  };
 
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
       <Grid2 container sx={{ p: 1.6 }}>
-        <Grid2 size={2.5}>
+        <Grid2 size={2}>
           <Typography
             variant="body2"
             fontWeight={700}
@@ -59,7 +132,7 @@ export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
             Организация
           </Typography>
         </Grid2>
-        <Grid2 size={3.5}>
+        <Grid2 size={2.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -68,13 +141,22 @@ export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
             Должность
           </Typography>
         </Grid2>
-        <Grid2 size={3.5}>
+        <Grid2 size={2}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
             fontWeight={700}
           >
-            Предпочитаемый способ связи
+            Роль
+          </Typography>
+        </Grid2>
+        <Grid2 size={2.5}>
+          <Typography
+            variant="body2"
+            textTransform={'uppercase'}
+            fontWeight={700}
+          >
+            Способ связи
           </Typography>
         </Grid2>
       </Grid2>
@@ -82,7 +164,16 @@ export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
       {groupedData && !!groupedData.length ? (
         groupedData.map((el, index, arr) => (
           <Box key={el.id}>
-            <Row user={el} owner={owner}>
+            <Row
+              sx={{
+                backgroundColor: `${
+                  openMenu?.user == el ? 'rgba(0,0,0,0.1)' : ''
+                } !important`,
+              }}
+              user={el}
+              clickable={true}
+              onClick={handleRowClick}
+            >
               <Grid2
                 container
                 sx={{
@@ -92,26 +183,102 @@ export const Table: FC<ITableProps> = ({ users, tradeunion, owner }) => {
                   userSelect: owner ? 'none' : 'all',
                 }}
               >
-                <Grid2 size={2.5}>
-                  <Typography variant="body2" fontWeight={600} py={1}>
+                <Grid2 size={2}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                  >
                     {el.name}
                   </Typography>
                 </Grid2>
                 <Grid2 size={2.5}>
-                  <Typography variant="body2" fontWeight={600} py={1}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                  >
                     {tradeunion?.title}
                   </Typography>
                 </Grid2>
-                <Grid2 size={3.5}>
-                  <Typography variant="body2" fontWeight={600} py={1}>
+                <Grid2 size={2.5}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                  >
                     {el.position && el.position[0]}
                   </Typography>
                 </Grid2>
-                <Grid2 size={3.5}>
-                  <Typography variant="body2" fontWeight={600} py={1}>
-                    {el.phone || el.email}
+                <Grid2 size={2}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                  >
+                    {el.role}
                   </Typography>
                 </Grid2>
+                <Grid2 size={2.5}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                  >
+                    {[el.email, el.phone].filter((el) => el).join(', ')}
+                  </Typography>
+                </Grid2>
+                {owner && (
+                  <Grid2 size={0.5}>
+                    <IconButton onClick={(e) => handleMenuOpen(e, el)}>
+                      <Icon name="menu" color="darkgray" />
+                    </IconButton>
+                    <Popover
+                      id="user-menu"
+                      anchorEl={openMenu?.anchorE1}
+                      open={openMenu != null}
+                      onClose={handleMenuClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      slotProps={{
+                        paper: {
+                          variant: 'popover',
+                        },
+                      }}
+                      disableScrollLock
+                    >
+                      <MenuItem onClick={() => handleMenuShow(el)}>
+                        <ListItemIcon>
+                          <Icon name="eye-on" />
+                        </ListItemIcon>
+                        <ListItemText>Посмотреть</ListItemText>
+                      </MenuItem>
+                      <MenuItem onClick={() => handleMenuEdit(el)}>
+                        <ListItemIcon>
+                          <Icon name="edit" />
+                        </ListItemIcon>
+                        <ListItemText>Редактировать</ListItemText>
+                      </MenuItem>
+                      <MenuItem onClick={() => handleMenuDelete(el)}>
+                        <ListItemIcon>
+                          <Icon name="delete" color="red" />
+                        </ListItemIcon>
+                        <ListItemText>Удалить</ListItemText>
+                      </MenuItem>
+                    </Popover>
+                  </Grid2>
+                )}
               </Grid2>
             </Row>
             {index !== arr.length - 1 && <Divider></Divider>}

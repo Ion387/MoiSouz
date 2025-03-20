@@ -42,6 +42,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   options?: IOption[];
+  disabled?: boolean;
 }
 
 export const InputManyModal: FC<PropsWithSX & Props> = ({
@@ -50,6 +51,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
   label,
   placeholder,
   options = [],
+  disabled,
 }) => {
   const { control, getValues } = useFormContext();
 
@@ -118,6 +120,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
             }}
             variant="outlined"
             onClick={handleOpen}
+            disabled={disabled}
           >
             {value && value.length > 0 ? (
               <>

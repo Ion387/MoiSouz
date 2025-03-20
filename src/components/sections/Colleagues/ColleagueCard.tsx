@@ -7,6 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { Icon } from '@/components/ui';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
+import { getBackendUrl } from '@/constants/url';
 
 interface Props {
   user: IFormColleagueProfile;
@@ -25,15 +26,13 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
       boxShadow="5px 5px 30px rgba(0,0,0,0.2)"
     >
       {user.avatar && (
-        <Box width={300}>
-          <Image
-            src={user.avatar as string}
-            style={{
-              width: '100%',
-            }}
-            alt=""
-          />
-        </Box>
+        <Image
+          src={`${getBackendUrl}${user.avatar as string}`}
+          width={300}
+          height={250}
+          style={{ objectFit: 'cover' }}
+          alt=""
+        />
       )}
       <Box display="flex" flex={1}>
         <Box display="flex" flexDirection="column" flex={1} p={2}>

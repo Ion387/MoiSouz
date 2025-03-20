@@ -4,3 +4,7 @@ export * from './input-date';
 export * from './input-checkbox';
 export * from './input-image';
 export * from './input-many-modal';
+export * from './input-file';
+export * from './input-array-of-objects';
+export * from './input-time';
+export * from './entities';

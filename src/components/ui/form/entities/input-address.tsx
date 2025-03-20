@@ -11,6 +11,7 @@ interface Props {
   label?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any;
+  disabled?: boolean;
 }
 
 export const InputAddress: FC<PropsWithSX & Props> = ({
@@ -18,6 +19,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
   name,
   label,
   errors,
+  disabled,
 }) => {
   const { register } = useFormContext();
 
@@ -37,6 +39,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
             placeholder="Индекс"
             error={errors && !!errors[name]?.index?.message}
             helperText={(errors && errors[name]?.index?.message) || ''}
+            disabled={disabled}
           />
           <TextField
             {...register(`${name}.region`)}
@@ -44,6 +47,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
             placeholder="Регион"
             error={errors && !!errors[name]?.region?.message}
             helperText={(errors && errors[name]?.region?.message) || ''}
+            disabled={disabled}
           />
         </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -52,12 +56,14 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
             placeholder="Муниципальное образование"
             error={errors && !!errors[name]?.municipal?.message}
             helperText={(errors && errors[name]?.municipal?.message) || ''}
+            disabled={disabled}
           />
           <TextField
             {...register(`${name}.locality`)}
             placeholder="Населенный пункт"
             error={errors && !!errors[name]?.locality?.message}
             helperText={(errors && errors[name]?.locality?.message) || ''}
+            disabled={disabled}
           />
         </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -67,6 +73,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
             placeholder="Улица"
             error={errors && !!errors[name]?.street?.message}
             helperText={(errors && errors[name]?.street?.message) || ''}
+            disabled={disabled}
           />
           <Box sx={{ display: 'flex', gap: 2, flex: 1 }}>
             <TextField
@@ -74,12 +81,14 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
               placeholder="Дом/Здание"
               error={errors && !!errors[name]?.house?.message}
               helperText={(errors && errors[name]?.house?.message) || ''}
+              disabled={disabled}
             />
             <TextField
               {...register(`${name}.flat`)}
               placeholder="Квартира"
               error={errors && !!errors[name]?.flat?.message}
               helperText={(errors && errors[name]?.flat?.message) || ''}
+              disabled={disabled}
             />
           </Box>
         </Box>

@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { globalTheme } from '@/styles/theme';
+import { TradeunionCheckDialog } from '@/components/entities/profile/dialogs/tradeunion-check-dialog';
 
 const DocumentsWrapper = () => {
   const { data: docs, isLoading } = useQuery({
@@ -72,17 +73,13 @@ const DocumentsWrapper = () => {
         )}
       </Box>
       <Table docs={filtredDocs} />
-      <NewProfileDialog
+      <TradeunionCheckDialog
         open={
           !info?.ROLES?.includes('ROLE_TRADEUNION') &&
           docs &&
           !docs.length &&
           !isLoading
         }
-        btn="Вступить в профсоюз"
-        link="/trade_union_member"
-        title="Для того, чтобы воспользоваться всеми функциями системы, вступите в профсоюзную организацию"
-        onClose={() => {}}
       />
       <NewProfileDialog
         open={open}

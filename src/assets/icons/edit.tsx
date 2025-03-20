@@ -24,7 +24,7 @@ export const Icon = () => (
       width="6.006796"
       height="19.021521"
       transform="rotate(45.0648 15.349854 0.000000)"
-      stroke="#351B1B"
+      stroke="currentColor"
       strokeOpacity="1.000000"
       strokeWidth="1.500000"
     />
@@ -38,7 +38,7 @@ export const Icon = () => (
     <path
       id="path"
       d="M6.75 8.85L10.75 12.86"
-      stroke="#351B1B"
+      stroke="currentColor"
       strokeOpacity="1.000000"
       strokeWidth="1.500000"
       strokeLinejoin="round"
@@ -54,7 +54,7 @@ export const Icon = () => (
     <path
       id="path"
       d="M0.75 18.88L3.75 15.87"
-      stroke="#351B1B"
+      stroke="currentColor"
       strokeOpacity="1.000000"
       strokeWidth="1.500000"
       strokeLinejoin="round"
@@ -68,7 +68,7 @@ export const Icon = () => (
       width="2.001133"
       height="2.003397"
       transform="rotate(30.0561 14.386963 3.516785)"
-      fill="#351B1B"
+      fill="currentColor"
       fillOpacity="1.000000"
     />
   </svg>

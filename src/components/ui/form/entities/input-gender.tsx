@@ -17,9 +17,15 @@ interface Props {
   name: string;
   label?: string;
   defaultValue?: 'female' | 'male';
+  disabled?: boolean;
 }
 
-export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
+export const InputGender: FC<PropsWithSX & Props> = ({
+  sx,
+  name,
+  label,
+  disabled,
+}) => {
   const { control } = useFormContext();
 
   return (
@@ -48,6 +54,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                 <Radio
                   color="primary"
                   style={{ height: '29px', width: '29px' }}
+                  disabled={disabled}
                 />
               }
               label={
@@ -64,6 +71,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({ sx, name, label }) => {
                 <Radio
                   color={'error'}
                   style={{ height: '29px', width: '29px' }}
+                  disabled={disabled}
                 />
               }
               label={

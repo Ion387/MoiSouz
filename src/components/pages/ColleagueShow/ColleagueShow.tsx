@@ -7,15 +7,15 @@ import Link from 'next/link';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui';
-import { ColleagueCard, ColleagueForm } from '@/components/sections/Colleagues';
+import {
+  ColleagueCard,
+  ColleagueCardExtended,
+} from '@/components/sections/Colleagues';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import {
-  useFetchColleagueProfile,
-  useForm,
-} from '@/hooks/UseFormColleagueProfile';
+import { useFetchColleagueProfile } from '@/hooks/UseFormColleagueProfile';
 
-const ColleagueWrapper = () => {
+const ColleagueShowWrapper = () => {
   const params = useParams();
   const isCreate = (params.guid as string) == 'create';
 
@@ -24,15 +24,11 @@ const ColleagueWrapper = () => {
   const {
     data: user,
     isLoading: isLoadingUser,
-    refetch: refetchUser,
     clear: clearUser,
   } = useFetchColleagueProfile((params.guid as string) || '');
 
-  const { onCancel, onSubmit, isLoading: isLoadingForm } = useForm();
-
   useEffect(() => {
     if (isCreate) return;
-    refetchUser();
     return () => clearUser();
   }, []);
 
@@ -57,19 +53,16 @@ const ColleagueWrapper = () => {
 
       {info != null && isLoadingUser == false ? (
         <>
-          {info?.hasTradeunionOwner == true ? (
-            <ColleagueForm
-              onCancel={onCancel}
-              onSubmit={onSubmit}
-              defaultValues={user}
-              loading={isLoadingForm}
-            />
-          ) : user ? (
+          {user ? (
             <>
               <Typography variant="h3" marginBottom={2}>
                 Карточка контакта
               </Typography>
-              <ColleagueCard user={user} />
+              {info?.hasTradeunionOwner ? (
+                <ColleagueCardExtended user={user} />
+              ) : (
+                <ColleagueCard user={user} />
+              )}
             </>
           ) : (
             <Typography fontSize={14} textAlign="center">
@@ -86,12 +79,12 @@ const ColleagueWrapper = () => {
   );
 };
 
-const ColleaguePage = () => {
+const ColleagueShowPage = () => {
   return (
     <Suspense>
-      <ColleagueWrapper />
+      <ColleagueShowWrapper />
     </Suspense>
   );
 };
 
-export default ColleaguePage;
+export default ColleagueShowPage;

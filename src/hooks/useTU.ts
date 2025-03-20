@@ -4,7 +4,7 @@ import { getHeaders } from '@/utils/axios';
 import { useQuery } from '@tanstack/react-query';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { IResponseList } from '@/models/Response';
-import { IProfile } from '@/models/Profile';
+import { IFormColleagueProfile } from '@/models/Colleague';
 
 export const useFetchTUOwner = () => {
   const { data: info } = useQuery({
@@ -53,11 +53,14 @@ export const useFetchTUUsers = () => {
   } = useQuery({
     queryKey: ['tradeunion-users'],
     queryFn: async () =>
-      axios.get<IProfile[]>(`${getBackendUrl}/api/private/tradeunion-users`, {
-        headers: {
-          ...(await getHeaders()),
+      axios.get<IFormColleagueProfile[]>(
+        `${getBackendUrl}/api/private/tradeunion-users`,
+        {
+          headers: {
+            ...(await getHeaders()),
+          },
         },
-      }),
+      ),
     select: (data) => data.data,
     refetchOnMount: 'always',
   });

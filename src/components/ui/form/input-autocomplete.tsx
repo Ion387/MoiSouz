@@ -12,6 +12,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   options: IOption[];
+  disabled?: boolean;
 }
 
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
@@ -20,6 +21,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   label,
   placeholder,
   options,
+  disabled,
 }) => {
   const { control } = useFormContext();
 
@@ -44,6 +46,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
                 helperText={error?.message}
               />
             )}
+            disabled={disabled}
           />
         </FormGroup>
       )}

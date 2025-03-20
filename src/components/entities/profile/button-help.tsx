@@ -1,8 +1,10 @@
+'use client';
+
 import { FC, useState } from 'react';
 import { IconButton } from '@mui/material';
 
 import { Icon } from '@/components/ui';
-import { HelpDialog } from './help-dialog';
+import { HelpDialog } from './dialogs';
 
 import { PropsWithClassName, PropsWithSX } from '@/models/Props';
 

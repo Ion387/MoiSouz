@@ -25,6 +25,8 @@ export const useForm = () => {
     mutationFn: async (data: IFormColleagueProfile) => {
       if (data.guid) await saveFormColleagueProfile(data);
       else await addFormColleagueProfile(data);
+
+      console.log('REASON FILE', data.reasonFile);
     },
     onSuccess: () => {
       router.push('/colleagues');
@@ -60,8 +62,7 @@ export const useFetchColleagueProfile = (guid: string) => {
         },
       ),
     select: (data) => data.data,
-    refetchOnMount: false,
-    enabled: false,
+    refetchOnMount: 'always',
   });
   const clear = () => queryClient.removeQueries({ queryKey: [queryKey] });
   return { data: info, isLoading, refetch, clear };

@@ -11,6 +11,7 @@ interface Props {
   label?: ReactNode;
   defaultValue?: boolean;
   link?: string;
+  disabled?: boolean;
 }
 
 export const InputCheckbox: FC<PropsWithSX & Props> = ({
@@ -18,6 +19,7 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
   name,
   label,
   link,
+  disabled,
 }) => {
   const { control } = useFormContext();
   let fhalf = '';
@@ -45,6 +47,7 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
                 value={value == true}
                 checked={value == true}
                 onChange={onChange}
+                disabled={disabled}
               />
             }
             label={

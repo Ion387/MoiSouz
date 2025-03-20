@@ -149,6 +149,17 @@ export default createTheme(
                 margin: '0',
               },
             },
+
+            variants: [
+              {
+                props: { variant: 'popover' },
+                style: {
+                  boxShadow: '0px 0px 10px rgba(0,0,0,0.05)',
+                  borderRadius: 10,
+                  padding: 5,
+                },
+              },
+            ],
           },
         },
       },

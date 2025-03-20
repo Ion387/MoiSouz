@@ -1,8 +1,7 @@
 'use client';
 
 import { FC, useMemo } from 'react';
-import Image from 'next/image';
-import { Box, InputLabel, TextField, Typography } from '@mui/material';
+import { Box, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -13,10 +12,12 @@ import {
   InputAutocomplete,
   InputCheckbox,
   InputDate,
+  InputFile,
   InputImage,
   InputManyModal,
 } from '@/components/ui/form';
 import { InputAddress, InputGender } from '@/components/ui/form/entities';
+import { TradeUnionCardSimple } from './TradeUnionCardSimple';
 
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
 import { useOptions } from '@/hooks/UseOptions';
@@ -95,6 +96,23 @@ const schema = yup
     isActive: yup.bool(),
     email: yup.string().email('Укажите почту').required('Укажите почту'),
     role: yup.string().required('Укажите роль'),
+    reason: yup.string(),
+    history: yup.array(
+      yup.object({
+        name: yup
+          .string()
+          .min(2, 'Укажите название')
+          .required('Укажите название'),
+        startDate: yup
+          .string()
+          .required('Укажите дату принятия')
+          .typeError('Укажите дату принятия'),
+        finishDate: yup
+          .string()
+          .required('Укажите дату выхода')
+          .typeError('Укажите дату выхода'),
+      }),
+    ),
   })
   .required();
 
@@ -136,11 +154,13 @@ export const ColleagueForm: FC<Props> = ({
     [tuOwner, tuList],
   );
 
+  const isEdit = defaultValues != null;
+
   return (
     <Form
       sx={{ pt: 3 }}
       title={
-        defaultValues
+        isEdit
           ? 'Учётная карточка члена профсоюза'
           : 'Добавление учётной карточки члена профсоюза'
       }
@@ -152,33 +172,7 @@ export const ColleagueForm: FC<Props> = ({
       defaultValues={defaultValues}
       checkTradeUnionMember={false}
     >
-      {tradeunion && (
-        <Box
-          display="flex"
-          alignItems="center"
-          gap={2}
-          mb={2}
-          overflow="hidden"
-        >
-          <Image
-            style={{
-              borderRadius: 10,
-            }}
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${tradeunion.logo}`}
-            alt=""
-            width={110}
-            height={110}
-          />
-          <Box>
-            <Typography fontSize={13} color="blue" fontWeight={400}>
-              Региональная общественная организация
-            </Typography>
-            <Typography fontSize={18} color="blue" fontWeight="bold">
-              {tradeunion.title}
-            </Typography>
-          </Box>
-        </Box>
-      )}
+      {tradeunion && <TradeUnionCardSimple data={tradeunion} />}
 
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ flex: 1 }}>
@@ -188,6 +182,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иванов"
             error={!!errors.lastName?.message}
             helperText={errors.lastName?.message || ''}
+            disabled={isEdit}
           />
 
           <InputLabel sx={{ mt: 3 }}>Имя</InputLabel>
@@ -196,6 +191,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иван"
             error={!!errors.firstName?.message}
             helperText={errors.firstName?.message || ''}
+            disabled={isEdit}
           />
           <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
           <TextField
@@ -203,6 +199,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иванович"
             error={!!errors.middleName?.message}
             helperText={errors.middleName?.message || ''}
+            disabled={isEdit}
           />
         </Box>
 
@@ -210,9 +207,9 @@ export const ColleagueForm: FC<Props> = ({
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <InputDate name="birthdate" label="Дата рождения" />
+        <InputDate name="birthdate" label="Дата рождения" disabled={isEdit} />
 
-        <InputGender name="gender" label="Пол" />
+        <InputGender name="gender" label="Пол" disabled={isEdit} />
 
         <InputAutocomplete
           sx={{ width: '80%' }}
@@ -220,6 +217,7 @@ export const ColleagueForm: FC<Props> = ({
           label="Образование"
           placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
+          disabled={isEdit}
         />
       </Box>
 
@@ -235,9 +233,11 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Профессия"
             error={!!errors?.message}
             helperText={errors?.message || ''}
+            disabled={isEdit}
           />
         )}
         defaultValue=""
+        disabled={isEdit}
       />
 
       <InputArray
@@ -252,10 +252,12 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Должность"
             error={!!errors?.message}
             helperText={errors?.message || ''}
+            disabled={isEdit}
           />
         )}
         defaultValue=""
         preadd
+        disabled={isEdit}
       />
 
       <InputAddress
@@ -263,6 +265,7 @@ export const ColleagueForm: FC<Props> = ({
         name="address"
         label="Адрес проживания"
         errors={errors}
+        disabled={isEdit}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
@@ -274,6 +277,7 @@ export const ColleagueForm: FC<Props> = ({
             error={!!errors.phone?.message}
             helperText={errors.phone?.message || ''}
             slotProps={{ htmlInput: { maxLength: 12 } }}
+            disabled={isEdit}
           />
         </Box>
         <Box sx={{ flex: 1 }}>
@@ -284,6 +288,7 @@ export const ColleagueForm: FC<Props> = ({
             error={!!errors.phoneDop?.message}
             helperText={errors.phoneDop?.message || ''}
             slotProps={{ htmlInput: { maxLength: 12 } }}
+            disabled={isEdit}
           />
         </Box>
       </Box>
@@ -299,15 +304,18 @@ export const ColleagueForm: FC<Props> = ({
               placeholder="Имя"
               error={!!errors?.name?.message}
               helperText={errors?.name?.message || ''}
+              disabled={isEdit}
             />
             <InputGender
               name={`${name}.${index}.gender`}
               defaultValue="female"
+              disabled={isEdit}
             />
-            <InputDate name={`${name}.${index}.birthdate`} />
+            <InputDate name={`${name}.${index}.birthdate`} disabled={isEdit} />
           </Box>
         )}
         defaultValue={{}}
+        disabled={isEdit}
       />
 
       <InputLabel sx={{ mt: 3 }}>Почта</InputLabel>
@@ -316,14 +324,72 @@ export const ColleagueForm: FC<Props> = ({
         placeholder="Почта"
         error={!!errors.email?.message}
         helperText={errors.email?.message || ''}
+        disabled={isEdit}
       />
 
-      <InputAutocomplete
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+        <InputAutocomplete
+          sx={{ flex: 1 }}
+          name="role"
+          label="Роль"
+          placeholder="Выберите из списка"
+          options={OPTIONS_ROLES}
+        />
+        <InputAutocomplete
+          sx={{ flex: 1 }}
+          name="reason"
+          label="Основание, на котором присвоена роль"
+          placeholder="Выберите из списка"
+          options={OPTIONS_ROLES}
+        />
+      </Box>
+
+      <InputFile
+        sx={{ mt: 2 }}
+        name="reasonFile"
+        label={
+          <span>
+            Прикрепить Документ, на основании коротого присвоена роль <br />
+            (документ в формате pdf)
+          </span>
+        }
+        accept=".pdf"
+        imageSelect="pdf"
+        type="secondary"
+      />
+
+      <InputArray
         sx={{ mt: 3 }}
-        name="role"
-        label="Роль"
-        placeholder="Выберите из списка"
-        options={OPTIONS_ROLES}
+        name="history"
+        label="История участия в профсоюзных организациях"
+        render={(name, index, register, errors) => (
+          <Box sx={{ display: 'flex', flex: 1, gap: 2 }}>
+            <Box sx={{ flex: 1 }}>
+              <InputLabel>Cостоял в профсоюзе</InputLabel>
+              <TextField
+                {...register(`${name}.${index}.name`)}
+                placeholder="Название профсоюзной организации"
+                error={!!errors?.name?.message}
+                helperText={errors?.name?.message || ''}
+                disabled={isEdit}
+              />
+            </Box>
+            <InputDate
+              sx={{ flex: 0.4 }}
+              name={`${name}.${index}.startDate`}
+              label="Дата принятия"
+              disabled={isEdit}
+            />
+            <InputDate
+              sx={{ flex: 0.4 }}
+              name={`${name}.${index}.finishDate`}
+              label="Дата выхода"
+              disabled={isEdit}
+            />
+          </Box>
+        )}
+        defaultValue={{}}
+        disabled={isEdit}
       />
 
       <InputManyModal
@@ -332,6 +398,7 @@ export const ColleagueForm: FC<Props> = ({
         label="Увлечения"
         placeholder="Выберите из списка"
         options={hobbies?.data || []}
+        disabled={isEdit}
       />
 
       <InputCheckbox
@@ -339,6 +406,7 @@ export const ColleagueForm: FC<Props> = ({
         name="isActive"
         link={'/politics.pdf'}
         label={`Я соглашаюсь с политикой обработки персональных данных `}
+        disabled={isEdit}
       />
     </Form>
   );

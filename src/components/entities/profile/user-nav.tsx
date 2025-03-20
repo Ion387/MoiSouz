@@ -2,8 +2,6 @@ import { FC } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import Image from 'next/image';
 
-import { Icon } from '@/components/ui';
-
 import { PropsWithSX } from '@/models/Props';
 import Link from 'next/link';
 
@@ -58,7 +56,7 @@ export const UserNav: FC<Props & PropsWithSX> = ({
           </Typography>
         </Box>
 
-        <Icon sx={{ ml: 2.5 }} name="arrow-dropdown" color="red" />
+        {/*<Icon sx={{ ml: 2.5 }} name="arrow-dropdown" color="red" />*/}
       </Button>
     </Link>
   );

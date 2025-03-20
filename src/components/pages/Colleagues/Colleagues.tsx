@@ -3,7 +3,13 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  Typography,
+} from '@mui/material';
 
 import { Icon } from '@/components/ui';
 import {
@@ -17,6 +23,7 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { useFetchTUOwner, useFetchTUUsers } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
 import Link from 'next/link';
+import { IFormColleagueProfile } from '@/models/Colleague';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -34,6 +41,9 @@ const ColleaguesWrapper = () => {
   } = useFetchTUUsers();
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [userDelete, setUserDelete] = useState<IFormColleagueProfile | null>(
+    null,
+  );
 
   const tuList: { data: ITradeUnion[] } | null = useMemo(
     () => (tuOwner && tuUsers ? { data: [tuOwner] } : null),
@@ -58,7 +68,7 @@ const ColleaguesWrapper = () => {
   const handleClickTradeunion = (data: ITradeUnion) => {
     // unselect !?
     if (data.id == tuActive?.id) {
-      router.push(`${window.location.pathname}`);
+      //router.push(`${window.location.pathname}`);
       refetchTUUsers();
       return;
     }
@@ -77,6 +87,27 @@ const ColleaguesWrapper = () => {
     refetchTUUsers();
   };
 
+  const handleUserClick = (user: IFormColleagueProfile) => {
+    router.push(`/colleagues/show/${user.guid}`);
+  };
+
+  const handleUserShow = (user: IFormColleagueProfile) => {
+    router.push(`/colleagues/show/${user.guid}`);
+  };
+
+  const handleUserEdit = (user: IFormColleagueProfile) => {
+    router.push(`/colleagues/edit/${user.guid}`);
+  };
+
+  const handleUserDelete = (user: IFormColleagueProfile) => {
+    setUserDelete(user);
+  };
+  const handleUserDeleteAccept = () => {
+    if (userDelete == null) return;
+    setUserDelete(null);
+    console.log('DELET USER', userDelete);
+  };
+
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>
@@ -84,7 +115,7 @@ const ColleaguesWrapper = () => {
           Коллеги
         </Typography>
 
-        {tuList ? (
+        {tuList && (
           <Box display="flex" justifyContent="space-between" gap={1.5}>
             <Box display="flex" flexWrap="wrap" gap={1.5}>
               {tuList?.data.map((el) => (
@@ -142,10 +173,6 @@ const ColleaguesWrapper = () => {
               </Box>
             )}
           </Box>
-        ) : (
-          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-            <CircularProgress />
-          </Box>
         )}
 
         {!loadingTUUsers && tuUsers ? (
@@ -153,6 +180,10 @@ const ColleaguesWrapper = () => {
             users={(tuActive && tuUsers) || []}
             tradeunion={tuActive}
             owner={info?.hasTradeunionOwner}
+            onClick={handleUserClick}
+            onShow={handleUserShow}
+            onEdit={handleUserEdit}
+            onDelete={handleUserDelete}
           />
         ) : (
           <Box display={'flex'} justifyContent={'center'} width={'100%'}>
@@ -169,6 +200,36 @@ const ColleaguesWrapper = () => {
           onSuccess={handleSuccessUpload}
         />
       )}
+
+      <Dialog
+        open={Boolean(userDelete)}
+        onClose={() => setUserDelete(null)}
+        PaperProps={{
+          sx: {
+            p: 4,
+            gap: 2,
+          },
+        }}
+      >
+        {userDelete && (
+          <Typography fontSize={18} fontWeight={500} textAlign={'center'}>
+            Удалить пользователя <b>{userDelete.name}</b>?
+          </Typography>
+        )}
+
+        <Box display="flex" justifyContent="space-around">
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: 'red !important',
+            }}
+            onClick={handleUserDeleteAccept}
+          >
+            Удалить
+          </Button>
+          <Button onClick={() => setUserDelete(null)}>Отмена</Button>
+        </Box>
+      </Dialog>
     </>
   );
 };

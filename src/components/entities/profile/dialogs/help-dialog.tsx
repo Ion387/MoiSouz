@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC, useEffect, useState } from 'react';
 import {
   Dialog,
@@ -11,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Icon } from '@/components/ui';
-import { Form } from './form';
+import { Form } from '../form';
 
 import { IFeedbackForm } from '@/models/Forms';
 

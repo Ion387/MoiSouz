@@ -17,3 +17,9 @@ declare module '@mui/material/IconButton' {
     variant?: 'standard' | 'contained' | 'contained-gray' | 'contained-red';
   }
 }
+
+declare module '@mui/material/Paper' {
+  interface PaperPropsVariantOverrides {
+    popover: true;
+  }
+}

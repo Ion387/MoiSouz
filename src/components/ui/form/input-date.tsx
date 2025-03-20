@@ -15,6 +15,7 @@ interface Props {
   dis?: boolean;
   isFutureAccess?: boolean;
   views?: DateView[];
+  disabled?: boolean;
 }
 
 export const InputDate: FC<PropsWithSX & Props> = ({
@@ -24,6 +25,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
   dis,
   isFutureAccess,
   views,
+  disabled,
 }) => {
   const { control } = useFormContext();
 
@@ -35,7 +37,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
         control={control}
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
-            disabled={!!dis}
+            disabled={!!dis || disabled}
             defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
             value={value ? dayjs(value, 'DD.MM.YYYY') : dayjs(null)}
             maxDate={!isFutureAccess ? dayjs() : null}

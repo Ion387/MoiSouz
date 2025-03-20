@@ -25,6 +25,7 @@ interface Props {
   defaultValue: any;
   preadd?: boolean;
   desc?: string;
+  disabled?: boolean;
 }
 
 export const InputArray: FC<PropsWithSX & Props> = ({
@@ -36,6 +37,7 @@ export const InputArray: FC<PropsWithSX & Props> = ({
   defaultValue,
   preadd,
   desc,
+  disabled,
 }) => {
   const { control, register, formState } = useFormContext();
   const { fields, append, remove } = useFieldArray<FieldValues>({
@@ -55,25 +57,33 @@ export const InputArray: FC<PropsWithSX & Props> = ({
     <Box sx={sx}>
       <Box sx={{ display: 'flex' }}>
         {label && <InputLabel>{label}</InputLabel>}
-        <InputLabel
-          sx={{
-            maxWidth: 'fit-content',
-            pr: '12px',
-            mb: 0,
-            lineHeight: '32px',
-          }}
-        >
-          {desc}
-        </InputLabel>
-        <IconButton variant="contained" onClick={() => append(defaultValue)}>
-          <Icon name="plus" color="white" />
-        </IconButton>
+        {!disabled && (
+          <>
+            <InputLabel
+              sx={{
+                maxWidth: 'fit-content',
+                pr: '12px',
+                mb: 0,
+                lineHeight: '32px',
+              }}
+            >
+              {desc}
+            </InputLabel>
+
+            <IconButton
+              variant="contained"
+              onClick={() => append(defaultValue)}
+            >
+              <Icon name="plus" color="white" />
+            </IconButton>
+          </>
+        )}
       </Box>
       {fields.length > 0 && (
         <>
           <Box sx={{ display: 'flex', gap: 2 }}>
             {render(name, 0, register, errors[name] && errors[name][0])}
-            {preadd != true && (
+            {!disabled && preadd != true && (
               <IconButton
                 sx={{ mt: 1.2 }}
                 variant="contained-gray"
@@ -91,9 +101,12 @@ export const InputArray: FC<PropsWithSX & Props> = ({
           {labelExtra && (
             <Box sx={{ display: 'flex', mt: 3 }}>
               <InputLabel>{labelExtra}</InputLabel>
-              <IconButton variant="contained-gray" onClick={() => remove(1)}>
-                <Icon name="minus" color="white" />
-              </IconButton>
+
+              {!disabled && (
+                <IconButton variant="contained-gray" onClick={() => remove(1)}>
+                  <Icon name="minus" color="white" />
+                </IconButton>
+              )}
             </Box>
           )}
           {fields.map(({ id }, index) =>
@@ -112,7 +125,7 @@ export const InputArray: FC<PropsWithSX & Props> = ({
                   register,
                   errors[name] && errors[name][index],
                 )}
-                {(!labelExtra || index > 1) && (
+                {!disabled && (!labelExtra || index > 1) && (
                   <IconButton
                     sx={{ mt: 1.2 }}
                     variant="contained-gray"

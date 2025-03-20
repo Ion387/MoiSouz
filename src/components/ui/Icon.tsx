@@ -59,6 +59,7 @@ import { Icon as IconBBChild } from '@/assets/icons/bb-child';
 import { Icon as IconBBEnjoy } from '@/assets/icons/bb-enjoy';
 import { Icon as IconBBDeals } from '@/assets/icons/bb-deals';
 import { Icon as IconMail } from '@/assets/icons/mail';
+import { Icon as IconDelete } from '@/assets/icons/delete';
 
 const NAMES = [
   'document',
@@ -111,6 +112,7 @@ const NAMES = [
   'bb-enjoy',
   'bb-deals',
   'mail',
+  'delete',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -165,6 +167,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   'bb-enjoy': <IconBBEnjoy />,
   'bb-deals': <IconBBDeals />,
   mail: <IconMail />,
+  delete: <IconDelete />,
 };
 
 interface Props {

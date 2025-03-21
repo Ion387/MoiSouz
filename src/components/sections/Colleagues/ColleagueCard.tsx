@@ -2,9 +2,7 @@
 
 import React, { FC } from 'react';
 import Image from 'next/image';
-import { Box, Button, Typography } from '@mui/material';
-
-import { Icon } from '@/components/ui';
+import { Box, Typography } from '@mui/material';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { getBackendUrl } from '@/constants/url';
@@ -50,6 +48,7 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
           <Typography fontSize={14} color="gray">
             {user?.profession && user?.profession[0]}
           </Typography>
+          {/*
           <Box marginTop="auto" marginBottom="auto">
             <Typography fontSize={14} color="gray">
               {user?.email}
@@ -74,6 +73,7 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
               Связаться
             </Typography>
           </Button>
+          */}
         </Box>
         <Box width="fit-content" p={2} textAlign="right">
           <Typography fontSize={14} color="gray">

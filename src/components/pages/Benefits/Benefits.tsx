@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useMemo } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Slider from 'react-slick';
@@ -12,13 +12,13 @@ import {
   BenefitsProduct,
   BenefitsStat,
 } from '@/components/sections/Benefits';
-import { IBenefitsCategory, IBenefitsProduct } from '@/models/Benefits';
+import { IBenefitsCategory } from '@/models/Benefits';
 
-import useMobile from '@/hooks/UseMobile';
+import useScreen from '@/hooks/useScreen';
 import { useQuery } from '@tanstack/react-query';
 import {
   getBenefitsCategories,
-  getBenefitsProducts,
+  useFetchBenefitsProducts,
 } from '@/services/benefits';
 
 const KEY_PARAM_CATEGORY = 'category';
@@ -36,40 +36,33 @@ const SLIDER_SETTINGS = {
 const BenefitsWrapper = () => {
   const params = useSearchParams();
   const router = useRouter();
-  const mobile = useMobile();
+  const screen = useScreen();
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['benefits-products'],
-    queryFn: getBenefitsProducts,
-    select: (data) => data.data.data,
+  const categoryActive = useMemo(() => {
+    const param = params?.get(KEY_PARAM_CATEGORY);
+    return param ? parseInt(param) : null;
+  }, [params]);
+
+  const {
+    data: { data: products, isFetching, hasMore, empty },
+    actions: { loadMore },
+  } = useFetchBenefitsProducts({
+    category: categoryActive,
   });
 
-  const { data: BENEFITS_CATEGORIES } = useQuery({
+  const { data: categories } = useQuery({
     queryKey: ['benefits-categories'],
     queryFn: getBenefitsCategories,
     select: (data) => data.data.data,
   });
 
   const category: IBenefitsCategory | null = useMemo(() => {
-    if (BENEFITS_CATEGORIES)
+    if (categories)
       return (
-        BENEFITS_CATEGORIES.find(
-          (el: IBenefitsCategory) =>
-            el.id == (params?.get(KEY_PARAM_CATEGORY) ?? -1),
-        ) ?? null
+        categories.find((el: IBenefitsCategory) => el.id == categoryActive) ??
+        null
       );
-  }, [BENEFITS_CATEGORIES, params]);
-
-  const products: IBenefitsProduct[] = useMemo(() => {
-    if (!isFetching) {
-      return category == null
-        ? data
-        : data.filter(
-            (el: IBenefitsProduct) => el.main_category?.id == category.id,
-            //el.categories.some((el2) => el2.id == category.id),
-          );
-    } else return [];
-  }, [data, category, isFetching]);
+  }, [categories, categoryActive]);
 
   const handleClickCategory = (data: IBenefitsCategory) => {
     // unselect !?
@@ -91,8 +84,8 @@ const BenefitsWrapper = () => {
           <BenefitsStat
             name="Скидок получено"
             sx={{
-              flex: mobile ? '100%' : '30%',
-              maxWidth: mobile ? '100%' : 'calc(50% - 7px)',
+              flex: screen == 'mobile' ? '100%' : '30%',
+              maxWidth: screen == 'mobile' ? '100%' : 'calc(50% - 7px)',
             }}
             value={12}
             icon="benefits-coin"
@@ -101,8 +94,8 @@ const BenefitsWrapper = () => {
           <BenefitsStat
             name="Льгот получено"
             sx={{
-              flex: mobile ? '100%' : '30%',
-              maxWidth: mobile ? '100%' : 'calc(50% - 7px)',
+              flex: screen == 'mobile' ? '100%' : '30%',
+              maxWidth: screen == 'mobile' ? '100%' : 'calc(50% - 7px)',
             }}
             value={2}
             icon="benefits-gift"
@@ -111,8 +104,8 @@ const BenefitsWrapper = () => {
           <BenefitsStat
             name="Текущая экономия"
             sx={{
-              flex: mobile ? '100%' : '30%',
-              maxWidth: mobile ? '100%' : 'calc(50% - 7px)',
+              flex: screen == 'mobile' ? '100%' : '30%',
+              maxWidth: screen == 'mobile' ? '100%' : 'calc(50% - 7px)',
             }}
             value="700₽"
             icon="benefits-chart"
@@ -129,16 +122,18 @@ const BenefitsWrapper = () => {
           marginTop={14}
         >
           <Box position="absolute" width="100%" paddingX={3} top={-140}>
-            {BENEFITS_CATEGORIES && (
+            {categories && (
               <Slider
                 {...SLIDER_SETTINGS}
-                slidesToShow={mobile ? 3 : 6}
-                initialSlide={BENEFITS_CATEGORIES.findIndex(
+                slidesToShow={
+                  screen == 'mobile' ? 2 : screen == 'tablet' ? 3 : 5
+                }
+                initialSlide={categories.findIndex(
                   (el: IBenefitsCategory) =>
                     el.id == (params?.get(KEY_PARAM_CATEGORY) || -1),
                 )}
               >
-                {BENEFITS_CATEGORIES.map((el: IBenefitsCategory) => (
+                {categories.map((el: IBenefitsCategory) => (
                   <Box key={el.id} paddingX={0.5}>
                     <BenefitsCategory
                       sx={{
@@ -155,27 +150,49 @@ const BenefitsWrapper = () => {
             )}
           </Box>
 
-          {isFetching ? (
+          {products.map((el) => (
+            <Link
+              key={el.id}
+              href={`/benefits/product/${el.id}`}
+              style={{
+                display: 'flex',
+                flex:
+                  screen == 'mobile'
+                    ? '100%'
+                    : screen == 'tablet'
+                      ? 'calc(50% - 8px)'
+                      : 'calc(33% - 8px)',
+                maxWidth:
+                  screen == 'mobile'
+                    ? '100%'
+                    : screen == 'tablet'
+                      ? 'calc(50% - 8px)'
+                      : 'calc(33% - 8px)',
+                width: '100%',
+              }}
+            >
+              <BenefitsProduct data={el} active={el.id == category?.id} />
+            </Link>
+          ))}
+
+          {isFetching && (
             <Box display={'flex'} justifyContent={'center'} width={'100%'}>
               <CircularProgress />
             </Box>
-          ) : (
-            products.map((el) => (
-              <Link
-                key={el.id}
-                href={`/benefits/product/${el.id}`}
-                style={{
-                  display: 'flex',
-                  flex: mobile ? '100%' : '40%',
-                  maxWidth: mobile ? '100%' : 'calc(33% - 8px)',
-                  width: '100%',
-                }}
-              >
-                <BenefitsProduct data={el} active={el.id == category?.id} />
-              </Link>
-            ))
           )}
         </Box>
+
+        {!isFetching && hasMore && (
+          <Button variant="text" onClick={loadMore}>
+            Показать ещё
+          </Button>
+        )}
+
+        {!isFetching && empty && (
+          <Typography fontSize={16} fontWeight="bold" align="center">
+            Нет данных
+          </Typography>
+        )}
       </Box>
     </>
   );

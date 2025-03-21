@@ -1,28 +1,41 @@
 'use client';
 
-import React, { createRef, Suspense, useEffect, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useMemo } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import Slider from 'react-slick';
+
+import { SliderArrowNext, SliderArrowPrev } from '@/components/ui';
 import {
   BenefitsCategory,
   BenefitsProduct,
   BenefitsStat,
 } from '@/components/sections/Benefits';
 import { IBenefitsCategory, IBenefitsProduct } from '@/models/Benefits';
+
 import useMobile from '@/hooks/UseMobile';
-import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import {
   getBenefitsCategories,
   getBenefitsProducts,
 } from '@/services/benefits';
-import { useQuery } from '@tanstack/react-query';
 
 const KEY_PARAM_CATEGORY = 'category';
+
+const SLIDER_SETTINGS = {
+  infinite: true,
+  speed: 500,
+  //slidesToShow: 6,
+  slidesToScroll: 1,
+  swipeToSlide: true,
+  prevArrow: <SliderArrowPrev />,
+  nextArrow: <SliderArrowNext />,
+};
 
 const BenefitsWrapper = () => {
   const params = useSearchParams();
   const router = useRouter();
-  const refCategories = createRef<HTMLDivElement>();
   const mobile = useMobile();
 
   const { data, isFetching } = useQuery({
@@ -36,20 +49,6 @@ const BenefitsWrapper = () => {
     queryFn: getBenefitsCategories,
     select: (data) => data.data.data,
   });
-
-  useEffect(() => {
-    if (refCategories.current == null) return;
-    const abort = new AbortController();
-    refCategories.current.addEventListener(
-      'wheel',
-      function (event) {
-        event.preventDefault();
-        this.scrollLeft += event.deltaY / 2;
-      },
-      { signal: abort.signal },
-    );
-    return () => abort.abort();
-  }, [refCategories.current, data]);
 
   const category: IBenefitsCategory | null = useMemo(() => {
     if (BENEFITS_CATEGORIES)
@@ -127,33 +126,32 @@ const BenefitsWrapper = () => {
           flexWrap="wrap"
           width="100%"
           gap={1.5}
-          marginTop={10}
+          marginTop={14}
         >
-          <Box
-            ref={refCategories}
-            display="flex"
-            width="100%"
-            gap={1.5}
-            position="absolute"
-            top={-116}
-            overflow="auto"
-            sx={{
-              scrollbarWidth: 'none',
-            }}
-          >
-            {BENEFITS_CATEGORIES ? (
-              BENEFITS_CATEGORIES.map((el: IBenefitsCategory) => (
-                <BenefitsCategory
-                  key={el.id}
-                  data={el}
-                  active={el.id == category?.id}
-                  onClick={handleClickCategory}
-                />
-              ))
-            ) : (
-              <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-                <CircularProgress />
-              </Box>
+          <Box position="absolute" width="100%" paddingX={3} top={-140}>
+            {BENEFITS_CATEGORIES && (
+              <Slider
+                {...SLIDER_SETTINGS}
+                slidesToShow={mobile ? 3 : 6}
+                initialSlide={BENEFITS_CATEGORIES.findIndex(
+                  (el: IBenefitsCategory) =>
+                    el.id == (params?.get(KEY_PARAM_CATEGORY) || -1),
+                )}
+              >
+                {BENEFITS_CATEGORIES.map((el: IBenefitsCategory) => (
+                  <Box key={el.id} paddingX={0.5}>
+                    <BenefitsCategory
+                      sx={{
+                        height: '125px',
+                        width: '100%',
+                      }}
+                      data={el}
+                      active={el.id == category?.id}
+                      onClick={handleClickCategory}
+                    />
+                  </Box>
+                ))}
+              </Slider>
             )}
           </Box>
 
@@ -169,7 +167,7 @@ const BenefitsWrapper = () => {
                 style={{
                   display: 'flex',
                   flex: mobile ? '100%' : '40%',
-                  maxWidth: mobile ? '100%' : 'calc(50% - 8px)',
+                  maxWidth: mobile ? '100%' : 'calc(33% - 8px)',
                   width: '100%',
                 }}
               >

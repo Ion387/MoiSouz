@@ -3,9 +3,12 @@ import { getHeaders } from '@/utils/axios';
 import axios from 'axios';
 
 export const getBenefitsProducts = async () => {
-  const response = await axios.get(`${getBackendUrl}/api/private/discounts`, {
-    headers: { ...(await getHeaders()) },
-  });
+  const response = await axios.get(
+    `${getBackendUrl}/api/private/discounts?perPage=25`,
+    {
+      headers: { ...(await getHeaders()) },
+    },
+  );
 
   return response;
 };

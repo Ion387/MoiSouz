@@ -37,8 +37,10 @@
     "react-hook-form": "^7.54.0",
     "react-imask": "^7.6.1",
     "react-input-mask": "^2.0.4",
+    "react-slick": "^0.30.3",
     "react-to-print": "^3.0.5",
     "sass": "^1.82.0",
+    "slick-carousel": "^1.8.1",
     "use-media": "^1.5.0",
     "yup": "^1.6.0"
   },
@@ -47,6 +49,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-slick": "^0.23.13",
     "@typescript-eslint/parser": "^8.18.1-alpha.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.4",

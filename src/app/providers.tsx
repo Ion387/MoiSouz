@@ -8,6 +8,8 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { SessionProvider } from 'next-auth/react';
 import { YMaps } from '@pbe/react-yandex-maps';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const Providers = ({ children }: PropsWithChildren) => {
   const { setMode } = useColorScheme();

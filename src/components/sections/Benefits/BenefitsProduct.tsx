@@ -41,7 +41,7 @@ export const BenefitsProduct: FC<PropsWithSX & IProps> = ({
       >
         <img
           style={{
-            height: '250px',
+            height: '160px',
             objectFit: 'cover',
             objectPosition: 'top left',
             backgroundColor: 'gray',

@@ -20,8 +20,6 @@ export const BenefitsCategory: FC<PropsWithSX & IProps> = ({
   return (
     <ButtonBase
       sx={{
-        width: 'fit-content',
-        minWidth: 'fit-content',
         borderRadius: '14px',
         overflow: 'hidden',
         borderWidth: 2,
@@ -50,8 +48,14 @@ export const BenefitsCategory: FC<PropsWithSX & IProps> = ({
         <Typography
           fontSize={16}
           fontWeight={600}
-          whiteSpace="nowrap"
+          lineHeight={1}
           color={active ? 'primary.main' : '#000000'}
+          sx={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
           {data.name}
         </Typography>

@@ -45,16 +45,37 @@ export const useFetchTUs = (
   return info;
 };
 
-export const useFetchTUUsers = () => {
+export const useFetchUserTUs = () => {
+  const { data: info } = useQuery({
+    queryKey: ['user-tradeunions'],
+    queryFn: async () =>
+      axios.get<ITradeUnion[]>(
+        `${getBackendUrl}/api/private/user-tradeunions`,
+        {
+          headers: {
+            ...(await getHeaders()),
+          },
+        },
+      ),
+    select: (data) => data.data,
+    refetchOnMount: 'always',
+  });
+  return info;
+};
+
+interface PropsFetchTUUsers {
+  guid: string;
+}
+export const useFetchTUUsers = ({ guid }: PropsFetchTUUsers) => {
   const {
     data: info,
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ['tradeunion-users'],
+    queryKey: [`tradeunion-users-${guid}`],
     queryFn: async () =>
       axios.get<IFormColleagueProfile[]>(
-        `${getBackendUrl}/api/private/tradeunion-users`,
+        `${getBackendUrl}/api/private/tradeunion-users?guid=${guid}`,
         {
           headers: {
             ...(await getHeaders()),

@@ -20,7 +20,7 @@ import {
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 
-import { useFetchTUOwner, useFetchTUUsers } from '@/hooks/useTU';
+import { useFetchUserTUs, useFetchTUUsers } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
 import Link from 'next/link';
 import { IFormColleagueProfile } from '@/models/Colleague';
@@ -32,28 +32,22 @@ const ColleaguesWrapper = () => {
   const router = useRouter();
 
   const info = useFetchProfile();
-  //const tuList = useFetchTUs();
-  const tuOwner = useFetchTUOwner();
   const {
     data: tuUsers,
     loading: loadingTUUsers,
     refetch: refetchTUUsers,
-  } = useFetchTUUsers();
+  } = useFetchTUUsers({ guid: params?.get(KEY_PARAM_ORGANIZATION) || '' });
+  const tuList = useFetchUserTUs();
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [userDelete, setUserDelete] = useState<IFormColleagueProfile | null>(
     null,
   );
 
-  const tuList: { data: ITradeUnion[] } | null = useMemo(
-    () => (tuOwner && tuUsers ? { data: [tuOwner] } : null),
-    [tuOwner, tuUsers],
-  );
-
   const tuActive: ITradeUnion | null = useMemo(
     () =>
-      tuList?.data.find(
-        (el) => el.id == (params?.get(KEY_PARAM_ORGANIZATION) ?? -1),
+      tuList?.find(
+        (el) => el.guid == (params?.get(KEY_PARAM_ORGANIZATION) ?? -1),
       ) ?? null,
     [tuList, params],
   );
@@ -61,20 +55,20 @@ const ColleaguesWrapper = () => {
   useEffect(() => {
     if (tuActive != null) return;
     if (tuList == null) return;
-    if (tuList.data.length == 0) return;
-    handleClickTradeunion(tuList.data[0]);
+    if (tuList.length == 0) return;
+    handleClickTradeunion(tuList[0]);
   }, [tuList]);
 
   const handleClickTradeunion = (data: ITradeUnion) => {
     // unselect !?
-    if (data.id == tuActive?.id) {
+    if (data.guid == tuActive?.guid) {
       //router.push(`${window.location.pathname}`);
       refetchTUUsers();
       return;
     }
 
     router.push(
-      `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${data.id}`,
+      `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${data.guid}`,
     );
     refetchTUUsers();
   };
@@ -118,13 +112,13 @@ const ColleaguesWrapper = () => {
         {tuList && (
           <Box display="flex" justifyContent="space-between" gap={1.5}>
             <Box display="flex" flexWrap="wrap" gap={1.5}>
-              {tuList?.data.map((el) => (
+              {tuList?.map((el) => (
                 <TradeUnionCard
-                  key={el.id}
+                  key={el.guid}
                   data={el}
                   count={tuUsers?.length}
                   onClick={handleClickTradeunion}
-                  active={tuActive?.id == el.id}
+                  active={tuActive?.guid == el.guid}
                 />
               ))}
             </Box>

@@ -71,21 +71,19 @@ const BenefitsProductPage = () => {
                   width: '100%',
                   aspectRatio: '17 / 9',
                   borderRadius: '10px',
-                  marginBottom: '12px',
+                  objectFit: 'cover',
                 }}
                 alt={product.name}
                 src={`data:image/png;base64,${product.image}`}
               />
-              <Box display={'flex'} gap={0.6} flexWrap={'wrap'}>
-                {!!product.cities.length && (
+              {!!product.cities.length && (
+                <Box display={'flex'} gap={0.6} mt={1} flexWrap={'wrap'}>
                   <Box>
                     <Typography variant="h4" fontWeight={600}>
                       Города:
                     </Typography>
                   </Box>
-                )}
-                {!!product.cities.length &&
-                  product.cities.map(
+                  {product.cities.map(
                     (
                       el: { name: string },
                       id: number,
@@ -96,7 +94,8 @@ const BenefitsProductPage = () => {
                       else return <Box key={el.name}>{el.name}</Box>;
                     },
                   )}
-              </Box>
+                </Box>
+              )}
             </Paper>
           </Grid2>
           <Grid2 size={8}>
@@ -104,10 +103,12 @@ const BenefitsProductPage = () => {
               <Typography variant="h3" fontWeight={600} marginBottom="12px">
                 Описание
               </Typography>
-              <div
-                className="description"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              ></div>
+              <Box p={2}>
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                ></div>
+              </Box>
               {!!product.coords.length && (
                 <>
                   <Typography variant="h3" fontWeight={600} marginTop="12px">

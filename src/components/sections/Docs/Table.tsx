@@ -1,12 +1,14 @@
-import { IDoc } from '@/models/Doc';
+import { type IDoc, type INewDoc } from '@/models/Doc';
 import { groupByTU } from '@/utils/groupByTradeUnion';
 import { Box, Divider, Grid2, Paper, Typography } from '@mui/material';
 import Link from 'next/link';
 import React, { FC } from 'react';
 import s from './table.module.scss';
+import { statusColor } from '@/utils/statusColor';
+import { type INewProt } from '@/models/Protocol';
 
 interface ITableProps {
-  docs: IDoc[] | undefined;
+  docs: IDoc[] | INewProt[] | INewDoc[] | undefined;
 }
 
 const Table: FC<ITableProps> = ({ docs }) => {
@@ -33,7 +35,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
             Документ
           </Typography>
         </Grid2>
-        <Grid2 size={2}>
+        <Grid2 size={1.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -43,7 +45,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
             Номер
           </Typography>
         </Grid2>
-        <Grid2 size={2}>
+        <Grid2 size={1.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -53,7 +55,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
             Дата
           </Typography>
         </Grid2>
-        <Grid2 size={2}>
+        <Grid2 size={1.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -61,6 +63,16 @@ const Table: FC<ITableProps> = ({ docs }) => {
             textAlign={'center'}
           >
             Статус
+          </Typography>
+        </Grid2>
+        <Grid2 size={1.5}>
+          <Typography
+            variant="body2"
+            textTransform={'uppercase'}
+            fontWeight={700}
+            textAlign={'center'}
+          >
+            Связь
           </Typography>
         </Grid2>
       </Grid2>
@@ -81,7 +93,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                     <Box key={doc.guid} className={s.hover}>
                       <Link
                         href={
-                          doc.folder === 'drafts'
+                          'folder' in doc && doc.folder === 'drafts'
                             ? `/documents/drafts/${doc.guid}`
                             : `/documents/${doc.guid}`
                         }
@@ -92,10 +104,14 @@ const Table: FC<ITableProps> = ({ docs }) => {
                             <Typography variant="body2" fontWeight={600}>
                               {doc.documentType === 'AM'
                                 ? 'Заявление на вступление'
-                                : doc.documentType}
+                                : doc.documentType === 'AG'
+                                  ? 'Повестка'
+                                  : doc.documentType === 'PR'
+                                    ? 'Протокол'
+                                    : doc.documentType}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2.666}>
+                          <Grid2 size={2}>
                             <Typography
                               variant="body2"
                               fontWeight={600}
@@ -104,7 +120,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               {doc.documentNumber}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2.666}>
+                          <Grid2 size={2}>
                             <Typography
                               variant="body2"
                               fontWeight={600}
@@ -113,14 +129,41 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               {doc.documentDate}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2.666}>
+                          <Grid2 size={2}>
                             <Typography
                               variant="body2"
                               fontWeight={600}
                               textAlign={'center'}
                             >
+                              <span
+                                className={s.statusBadge}
+                                style={{
+                                  backgroundColor: statusColor(doc.step),
+                                }}
+                              ></span>
                               {doc.step}
                             </Typography>
+                          </Grid2>
+                          <Grid2
+                            size={2}
+                            display={'flex'}
+                            justifyContent={'center'}
+                          >
+                            {doc.data &&
+                              'documentAG' in doc.data &&
+                              doc?.data?.documentAG && (
+                                <Link
+                                  href={`/documents/${doc?.data?.documentAG}`}
+                                >
+                                  <Typography
+                                    variant="body2"
+                                    fontWeight={600}
+                                    sx={{ textDecoration: 'underline' }}
+                                  >
+                                    Повестка
+                                  </Typography>
+                                </Link>
+                              )}
                           </Grid2>
                         </Grid2>
                       </Link>

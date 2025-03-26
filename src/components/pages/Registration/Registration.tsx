@@ -108,10 +108,12 @@ const Registration = () => {
           </IconButton>
         </Link>
 
-        {open && !!resData?.data.description ? (
+        {!open && !resData?.data.description ? (
           <>
             <Typography variant="h3" textAlign={'center'} marginTop={'24px'}>
-              {'Поздравляем, Вы зарегистрированы в сервисе МойСоюз!'}
+              {
+                'Мы отправили на Ваш адрес электронной почты ссылку для подтверждения регистрации!'
+              }
             </Typography>
             <Link href="/" style={{ width: '100%' }}>
               <Button

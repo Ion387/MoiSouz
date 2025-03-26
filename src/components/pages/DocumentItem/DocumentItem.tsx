@@ -72,7 +72,7 @@ const DocumentItem = () => {
         </Grid2>
       )}
       {doc ? (
-        <Grid2 size={7}>
+        <Grid2 size={8}>
           <Paper
             sx={{ height: '100%', maxHeight: '850px', overflow: 'hidden' }}
           >
@@ -85,13 +85,13 @@ const DocumentItem = () => {
           </Paper>
         </Grid2>
       ) : (
-        <Grid2 size={7}>
+        <Grid2 size={8}>
           <CircularProgress />
         </Grid2>
       )}
 
       {doc && (
-        <Grid2 size={5} display={'flex'} flexDirection={'column'}>
+        <Grid2 size={4} display={'flex'} flexDirection={'column'}>
           <ProgressBar
             initialSteps={
               doc.documentType !== 'AM'

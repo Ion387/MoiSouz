@@ -31,7 +31,7 @@ const Confirm = () => {
         <Typography variant="h3" textAlign={'center'}>
           {data?.data.status === 'error'
             ? data?.data.description
-            : 'Поздравляем, Вы зарегистрированы в сервисе МойСоюз!'}
+            : 'Мы отправили на Ваш адрес электронной почты ссылку для подтверждения регистрации!'}
         </Typography>
         <Link href="/" style={{ width: '100%' }}>
           <Button

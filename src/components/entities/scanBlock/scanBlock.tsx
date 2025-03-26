@@ -161,7 +161,7 @@ const ScanBlock = ({ number }: { number: string }) => {
               <Icon name={'repo'} />
             </ListItemIcon>
 
-            <ListItemText primary={'Скачать заявление'} />
+            <ListItemText primary={'Скачать'} />
           </ListItemButton>
         </a>
       </Box>

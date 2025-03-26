@@ -21,8 +21,6 @@ export interface IDoc {
   step: string;
   guid: string;
   data: {
-    employerName: string;
-    employerTitle: string;
     isActive: boolean;
     inviteDate: string;
     percents: number;

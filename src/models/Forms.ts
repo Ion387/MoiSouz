@@ -8,8 +8,6 @@ export interface IFormProfile {
   avatar: object;
   profession: string[];
   position: string[];
-  employerTitle: string;
-  employerName: string;
   address: {
     postcode: string;
     region: string;

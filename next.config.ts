@@ -16,9 +16,12 @@ const nextConfig: NextConfig = {
     if (isServer) {
       config.resolve.alias.canvas = false;
     }
+    config.resolve.alias['pdfjs-dist'] = 'pdfjs-dist/legacy/build/pdf';
     config.module.rules.push({
       test: /\.node/,
-      use: 'raw-loader',
+      use: {
+        loader: 'raw-loader',
+      },
     });
 
     return config;

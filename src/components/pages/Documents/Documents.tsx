@@ -57,7 +57,7 @@ const DocumentsWrapper = () => {
         <Typography variant="h3" marginBottom={2}>
           Документы
         </Typography>
-        {info?.ROLES?.includes('ROLE_TRADEUNION') && (
+        {
           <Button
             variant="contained"
             onClick={() => setNewDocOpen(true)}
@@ -70,7 +70,7 @@ const DocumentsWrapper = () => {
             ></Icon>
             Создать документ
           </Button>
-        )}
+        }
       </Box>
       <Table docs={filtredDocs} />
       <TradeunionCheckDialog
@@ -110,41 +110,82 @@ const DocumentsWrapper = () => {
               <Icon name="close"></Icon>
             </IconButton>
           </Box>
-          <Link href={'/new_document'} style={{ width: '100%' }}>
-            <Button
-              variant="contained"
-              sx={{
-                padding: '15px 100px',
-                fontSize: '20px',
-                lineHeight: '27px',
-                marginBottom: '20px',
-                width: '100%',
-                '&.Mui-disabled': {
-                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                  color: 'white !important',
-                },
-              }}
-            >
-              Повестка
-            </Button>
-          </Link>
-          <Link href={'/new_protocol'} style={{ width: '100%' }}>
-            <Button
-              variant="contained"
-              sx={{
-                padding: '15px 100px',
-                fontSize: '20px',
-                lineHeight: '27px',
-                width: '100%',
-                '&.Mui-disabled': {
-                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                  color: 'white !important',
-                },
-              }}
-            >
-              Протокол
-            </Button>
-          </Link>
+          {info?.ROLES?.includes('ROLE_TRADEUNION') ? (
+            <>
+              <Link href={'/new_document'} style={{ width: '100%' }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '15px 100px',
+                    fontSize: '20px',
+                    lineHeight: '27px',
+                    marginBottom: '20px',
+                    width: '100%',
+                    '&.Mui-disabled': {
+                      backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                      color: 'white !important',
+                    },
+                  }}
+                >
+                  Повестка
+                </Button>
+              </Link>
+              <Link href={'/new_protocol'} style={{ width: '100%' }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '15px 100px',
+                    fontSize: '20px',
+                    lineHeight: '27px',
+                    width: '100%',
+                    '&.Mui-disabled': {
+                      backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                      color: 'white !important',
+                    },
+                  }}
+                >
+                  Протокол
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href={'/trade_union_member'} style={{ width: '100%' }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '15px 100px',
+                    fontSize: '20px',
+                    lineHeight: '27px',
+                    marginBottom: '20px',
+                    width: '100%',
+                    '&.Mui-disabled': {
+                      backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                      color: 'white !important',
+                    },
+                  }}
+                >
+                  Заявление на вступление в профсоюз
+                </Button>
+              </Link>
+              <Button
+                variant="contained"
+                disabled
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.light} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                Обращение в профсоюз
+              </Button>
+            </>
+          )}
         </Box>
       </Dialog>
     </Box>

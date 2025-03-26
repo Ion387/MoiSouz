@@ -50,8 +50,6 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 1048576;
       }),
-    employerTitle: yup.string().required('Обязательное поле'),
-    employerName: yup.string().required('Обязательное поле'),
     profession: yup
       .array(
         yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
@@ -78,7 +76,11 @@ const schema = yup
     phoneDop: yup
       .string()
       .nullable()
-      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон'),
+      .test(
+        'phoneDop-format',
+        'Укажите корректный телефон',
+        (value) => !value || /^(\+7|7|8)+([0-9]){10}$/.test(value),
+      ),
     children: yup.array(
       yup.object({
         name: yup.string().min(2, 'Укажите имя').required('Укажите имя'),
@@ -197,30 +199,6 @@ const ProfileForm: FC<Props> = ({
         />
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <Box sx={{ flex: 1 }}>
-          <InputLabel>Наименование работодателя</InputLabel>
-          <TextField
-            {...register('employerTitle')}
-            placeholder="Наименование работодателя"
-            error={!!errors.employerTitle?.message}
-            helperText={errors.employerTitle?.message || ''}
-          />
-        </Box>
-      </Box>
-
-      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <Box sx={{ flex: 1 }}>
-          <InputLabel>ФИО руководителя</InputLabel>
-          <TextField
-            {...register('employerName')}
-            placeholder="ФИО руководителя"
-            error={!!errors.employerName?.message}
-            helperText={errors.employerName?.message || ''}
-          />
-        </Box>
-      </Box>
-
       <InputArray
         sx={{ mt: 3 }}
         name="profession"
@@ -276,7 +254,7 @@ const ProfileForm: FC<Props> = ({
           />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>Доп. номер</InputLabel>
+          <InputLabel>Дополнительный номер</InputLabel>
           <TextField
             {...register('phoneDop')}
             placeholder="+79999999999"

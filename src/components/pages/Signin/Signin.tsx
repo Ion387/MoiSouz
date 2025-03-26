@@ -10,6 +10,7 @@ import {
   InputAdornment,
   IconButton,
   CircularProgress,
+  Grid2,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -83,18 +84,46 @@ const Signin = () => {
           <TextField
             {...register('email')}
             placeholder="example@mail.ru"
-            error={!!errors.email?.message}
-            helperText={errors.email?.message || ''}
+            error={!!errors.email?.message || signInError}
+            helperText={
+              signInError
+                ? 'Не верно указан адрес электронной почты или пароль'
+                : errors.email?.message || ''
+            }
             sx={{ marginBottom: '25px' }}
           />
-          <InputLabel>Пароль</InputLabel>
+          <Grid2
+            container
+            display={'flex'}
+            flexDirection={'row'}
+            justifyContent={'space-between'}
+            width={'100%'}
+            alignItems={'center'}
+          >
+            <Grid2 size={6}>
+              <InputLabel>Пароль</InputLabel>
+            </Grid2>
+            <Grid2 size={6} display={'flex'} justifyContent={'flex-end'}>
+              <Link href={'/password-recover'}>
+                <Typography
+                  fontSize={'18px'}
+                  lineHeight={'25px'}
+                  color="rgb(32, 34, 36)"
+                >
+                  Забыли пароль?
+                </Typography>
+              </Link>
+            </Grid2>
+          </Grid2>
           <TextField
             {...register('password')}
             type={showPassword ? 'text' : 'password'}
             error={!!errors.password?.message || signInError}
             sx={{ marginBottom: '25px' }}
             helperText={
-              signInError ? 'Неверный пароль' : errors.password?.message || ''
+              signInError
+                ? 'Не верно указан адрес электронной почты или пароль'
+                : errors.password?.message || ''
             }
             slotProps={{
               input: {

@@ -1,13 +1,27 @@
-import { IDoc } from '@/models/Doc';
+import { type IDoc, type INewDoc } from '@/models/Doc';
+import { type INewProt } from '@/models/Protocol';
 
-export const groupByTU = (docs: IDoc[]) => {
+export const groupByTU = (docs: IDoc[] | INewProt[] | INewDoc[]) => {
   if (Array.isArray(docs)) {
     const arrOfTU = Array.from(
-      new Set(docs.map((doc) => doc?.tradeunion?.title)),
+      new Set(
+        docs.map((doc) => {
+          if ('tradeunion' in doc && doc.tradeunion) {
+            return doc.tradeunion.title;
+          }
+          return 'Моя организация';
+        }),
+      ),
     );
+
     return arrOfTU.map((tu) => ({
       tradeunion: tu,
-      docs: docs.filter((doc) => doc?.tradeunion?.title === tu),
+      docs: docs.filter((doc) => {
+        if (tu !== 'Моя организация') {
+          return 'tradeunion' in doc && doc.tradeunion?.title === tu;
+        }
+        return !('tradeunion' in doc) || doc.tradeunion?.title === undefined;
+      }),
     }));
   }
 };

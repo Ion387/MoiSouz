@@ -71,18 +71,18 @@ export const Table: FC<ITableProps> = ({
   const groupedData = users;
 
   const [openMenu, setOpenMenu] = useState<{
-    user: IFormColleagueProfile;
+    index: number;
     anchorE1: HTMLElement;
   } | null>(null);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
-    user: IFormColleagueProfile,
+    index: number,
   ) => {
     event.preventDefault();
     event.stopPropagation();
     setOpenMenu({
-      user,
+      index,
       anchorE1: event.currentTarget,
     });
   };
@@ -167,7 +167,7 @@ export const Table: FC<ITableProps> = ({
             <Row
               sx={{
                 backgroundColor: `${
-                  openMenu?.user == el ? 'rgba(0,0,0,0.1)' : ''
+                  openMenu?.index == index ? 'rgba(0,0,0,0.1)' : ''
                 } !important`,
               }}
               user={el}
@@ -235,13 +235,13 @@ export const Table: FC<ITableProps> = ({
                 </Grid2>
                 {owner && (
                   <Grid2 size={0.5}>
-                    <IconButton onClick={(e) => handleMenuOpen(e, el)}>
+                    <IconButton onClick={(e) => handleMenuOpen(e, index)}>
                       <Icon name="menu" color="darkgray" />
                     </IconButton>
                     <Popover
                       id="user-menu"
                       anchorEl={openMenu?.anchorE1}
-                      open={openMenu != null}
+                      open={openMenu?.index == index}
                       onClose={handleMenuClose}
                       anchorOrigin={{
                         vertical: 'bottom',

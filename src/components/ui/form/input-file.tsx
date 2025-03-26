@@ -49,6 +49,7 @@ interface Props {
   imageSelect?: IconName;
   /** Deafult is "primary" */
   type?: 'primary' | 'secondary'; //
+  defaultFile?: string;
 }
 
 export const InputFile: FC<PropsWithSX & Props> = ({
@@ -60,12 +61,18 @@ export const InputFile: FC<PropsWithSX & Props> = ({
   imageInit = 'cloud',
   imageSelect,
   type = 'primary',
+  defaultFile,
 }) => {
   const { control, getValues, setValue } = useFormContext();
   const ref = createRef<HTMLInputElement>();
 
   const [preview, setPreview] = useState<string | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | string | null>(null);
   const value = getValues(name);
+
+  useEffect(() => {
+    if (defaultFile) setPreview(defaultFile);
+  }, [defaultFile]);
 
   useEffect(() => {
     if (value == null) {
@@ -80,12 +87,14 @@ export const InputFile: FC<PropsWithSX & Props> = ({
     switch (typeof value) {
       case 'object':
         const formData = new FormData();
+        setUploadedFile(value);
         formData.append('file', value);
         setPreview(value.name || value.originalName);
         break;
 
       case 'string':
         setPreview(`${getBackendUrl}${value}`);
+        setUploadedFile(`${getBackendUrl}${value}`);
         break;
 
       default:
@@ -99,6 +108,25 @@ export const InputFile: FC<PropsWithSX & Props> = ({
 
   const handleClear = () => {
     setValue(name, null, { shouldValidate: true });
+  };
+
+  const handleDownload = () => {
+    if (!uploadedFile) return;
+    if (typeof uploadedFile === 'object') {
+      const url = URL.createObjectURL(uploadedFile);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = uploadedFile.name;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+    if (typeof uploadedFile === 'string') {
+      const link = document.createElement('a');
+      link.href = uploadedFile;
+      link.download = uploadedFile;
+      link.target = '_blank';
+      link.click();
+    }
   };
 
   return (
@@ -146,7 +174,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({
               color: 'rgb(32, 34, 36)',
             }}
             variant="outlined"
-            onClick={handleOpen}
+            onClick={preview == null ? handleOpen : handleDownload}
           >
             {preview == null ? (
               <Box
@@ -181,14 +209,16 @@ export const InputFile: FC<PropsWithSX & Props> = ({
                 >
                   {preview}
                 </Typography>
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleClear();
-                  }}
-                >
-                  <Icon name="close" color="#000" />
-                </span>
+                {!defaultFile && (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClear();
+                    }}
+                  >
+                    <Icon name="close" color="#000" />
+                  </span>
+                )}
               </Box>
             )}
             <FormHelperText id={`${name}-helper`} error={true}>

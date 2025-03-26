@@ -39,9 +39,13 @@ const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
   question: yup.string().required('Обязательное поле'),
   decided: yup.string().required('Обязательное поле'),
-  approved: yup.number(),
-  declined: yup.number(),
-  ignored: yup.number(),
+  approved: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? 0 : value)),
+  declined: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? 0 : value)),
+  ignored: yup.number().transform((value) => (Number.isNaN(value) ? 0 : value)),
   document: yup.string(),
 });
 
@@ -72,11 +76,13 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     setValue: setFormValue,
     getValues,
     handleSubmit,
+    setError,
   } = methods;
 
   const [arr, setArr] = useState<IFormColleagueProfile[]>([]);
+  const [members, setMembers] = useState<IFormColleagueProfile[]>([]);
   const [currentAgenda, setCurrentAgenda] = useState<INewDoc>();
-  const { data: members, isLoading: isMembersLoading } = useQuery({
+  const { data: membersData, isLoading: isMembersLoading } = useQuery({
     queryKey: ['members'],
     queryFn: getMembers,
     select: (data) => data.data,
@@ -87,6 +93,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     queryFn: getAgendas,
     select: (data) => data.data,
   });
+
+  useEffect(() => {
+    if (membersData) setMembers(membersData.filter((el) => el.role));
+  }, [membersData]);
 
   useEffect(() => {
     if (members) setArr(members);
@@ -135,7 +145,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   }, [arr]);
 
   useEffect(() => {
-    console.log('currentAgenda', currentAgenda);
     if (currentAgenda) {
       setFormValue(`address`, currentAgenda.data.address);
       //setFormValue(`documentAG`, currentAgenda.title);
@@ -220,8 +229,27 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   }, [params, agendas]);
 
   const onSubmit: SubmitHandler<INewProt> = async (data) => {
-    if (doc && doc.guid) mutateByGuid(data);
-    else mutate(data);
+    let errorsCount = 0;
+    data.questions.forEach((q, id) => {
+      const a = q.approved ? q.approved : 0;
+      const d = q.declined ? q.declined : 0;
+      const i = q.ignored ? q.ignored : 0;
+      if (a + d + i != data.userList?.length) {
+        setError(`questions.${id}.approved`, {
+          message:
+            'Число голосов не совпадает с количеством участников заседания',
+        });
+        setError(`questions.${id}.declined`, {
+          message: ' ',
+        });
+        setError(`questions.${id}.ignored`, {
+          message: ' ',
+        });
+        errorsCount += 1;
+      }
+    });
+    if (doc && doc.guid && errorsCount == 0) mutateByGuid(data);
+    else if (errorsCount == 0) mutate(data);
   };
 
   return (
@@ -241,7 +269,13 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                   <InputLabel>Повестка</InputLabel>
                   <Select
                     fullWidth
-                    sx={{ padding: 1.6 }}
+                    sx={{
+                      padding: 1.6,
+                      '& .MuiSelect-select span::before': {
+                        content: '"Выберите повестку"',
+                        opacity: '0.54',
+                      },
+                    }}
                     value={currentAgenda?.guid || ''}
                     onChange={(e) => {
                       setCurrentAgenda(
@@ -450,6 +484,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                   },
                                 }}
                                 register={register(`questions.${id}.approved`)}
+                                error={
+                                  errors.questions
+                                    ? errors?.questions[id]?.approved?.message
+                                    : undefined
+                                }
                               />
                             </Grid2>
                             <Grid2 size={4}>
@@ -461,6 +500,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                   },
                                 }}
                                 register={register(`questions.${id}.declined`)}
+                                error={
+                                  errors.questions
+                                    ? errors?.questions[id]?.declined?.message
+                                    : undefined
+                                }
                               />
                             </Grid2>
                             <Grid2 size={4}>
@@ -472,6 +516,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                   },
                                 }}
                                 register={register(`questions.${id}.ignored`)}
+                                error={
+                                  errors.questions
+                                    ? errors?.questions[id]?.ignored?.message
+                                    : undefined
+                                }
                               />
                             </Grid2>
                           </Grid2>

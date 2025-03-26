@@ -4,7 +4,6 @@ import { type IProfile } from './Profile';
 export interface IDoc {
   tradeunion: ITradeUnion;
   user: IProfile;
-  status: string;
   title: string;
   files: {
     type: string;
@@ -19,6 +18,7 @@ export interface IDoc {
   id?: number;
   file: string;
   step: string;
+  status: 'VIEWED' | 'NEW';
   guid: string;
   data: {
     isActive: boolean;
@@ -31,7 +31,7 @@ export interface IDoc {
 export interface INewDoc {
   tradeunion?: ITradeUnion;
   user?: IProfile;
-  status: string;
+  status: 'VIEWED' | 'NEW';
   title: string;
   files: {
     type: string;

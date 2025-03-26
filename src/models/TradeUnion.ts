@@ -22,7 +22,13 @@ export interface ITradeUnion {
     lastName: string;
     firstName: string;
     middleName?: string | null;
+  };
+  employer?: {
+    lastName: string;
+    firstName: string;
+    middleName?: string | null;
     inn: string;
+    title: string;
   };
   chairmanEmail: string;
   chairmanPhone: string;
@@ -40,9 +46,6 @@ export interface ITradeUnion {
   tradeunionOwner?: { guid: string };
   scan: object | null | string;
   participants?: object | null | string;
-  parent?: string | null;
-  employerTitle: string;
-  employerName: string;
 }
 
 export interface ITradeUnionUploadUsersForm {

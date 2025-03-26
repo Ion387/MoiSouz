@@ -1,4 +1,4 @@
-export const statusColor = (status: string): string => {
+export const statusColor = (status?: string): string => {
   let color = '';
   switch (status) {
     case 'Ожидает отправки':

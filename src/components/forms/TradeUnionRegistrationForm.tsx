@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
 import {
   Autocomplete,
+  Box,
   Button,
   Checkbox,
   Grid2,
@@ -151,7 +152,13 @@ const schema = yup
     chairman: yup.object({
       firstName: yup.string().required('Обязательное поле'),
       lastName: yup.string().required('Обязательное поле'),
-      middleName: yup.string().required('Обязательное поле'),
+      middleName: yup.string().nullable(),
+    }),
+    employer: yup.object({
+      title: yup.string().required('Обязательное поле'),
+      firstName: yup.string().required('Обязательное поле'),
+      lastName: yup.string().required('Обязательное поле'),
+      middleName: yup.string().nullable(),
       inn: yup
         .string()
         .required('Обязательное поле')
@@ -580,15 +587,7 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={12}>
                 <InputLabel sx={{ marginBottom: 0 }}>Председатель</InputLabel>
               </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('chairman.firstName')}
-                  placeholder="Имя"
-                  error={!!errors.chairman?.firstName?.message}
-                  helperText={errors.chairman?.firstName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
+              <Grid2 size={12}>
                 <TextField
                   {...register('chairman.lastName')}
                   placeholder="Фамилия"
@@ -596,20 +595,20 @@ const TradeUnionRegistrationForm = () => {
                   helperText={errors.chairman?.lastName?.message || ''}
                 />
               </Grid2>
-              <Grid2 size={6}>
+              <Grid2 size={12}>
+                <TextField
+                  {...register('chairman.firstName')}
+                  placeholder="Имя"
+                  error={!!errors.chairman?.firstName?.message}
+                  helperText={errors.chairman?.firstName?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={12}>
                 <TextField
                   {...register('chairman.middleName')}
                   placeholder="Отчество"
                   error={!!errors.chairman?.middleName?.message}
                   helperText={errors.chairman?.middleName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextFieldCustom
-                  register={register('chairman.inn')}
-                  placeholder="ИНН"
-                  error={errors.chairman?.inn?.message}
-                  maxL={12}
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -627,6 +626,49 @@ const TradeUnionRegistrationForm = () => {
                   register={register('chairmanPhone')}
                   placeholder="+79999999999"
                   error={errors.chairmanPhone?.message}
+                  maxL={12}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <InputLabel sx={{ marginBottom: 0 }}>Работодатель</InputLabel>
+              </Grid2>
+              <Grid2 size={12}>
+                <TextField
+                  {...register('employer.title')}
+                  placeholder="Полное наименование организации-работодателя"
+                  error={!!errors.employer?.title?.message}
+                  helperText={errors.employer?.title?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={6}>
+                <TextField
+                  {...register('employer.lastName')}
+                  placeholder="Фамилия руководителя организации-работодателя"
+                  error={!!errors.employer?.lastName?.message}
+                  helperText={errors.employer?.lastName?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={6}>
+                <TextField
+                  {...register('employer.firstName')}
+                  placeholder="Имя руководителя организации-работодателя"
+                  error={!!errors.employer?.firstName?.message}
+                  helperText={errors.employer?.firstName?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={6}>
+                <TextField
+                  {...register('employer.middleName')}
+                  placeholder="Отчество руководителя организации-работодателя"
+                  error={!!errors.employer?.middleName?.message}
+                  helperText={errors.employer?.middleName?.message || ''}
+                />
+              </Grid2>
+              <Grid2 size={6}>
+                <TextFieldCustom
+                  register={register('employer.inn')}
+                  placeholder="ИНН организации-работодателя"
+                  error={errors.employer?.inn?.message}
                   maxL={12}
                 />
               </Grid2>
@@ -728,11 +770,39 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 size={12}>
                 <InputFile
                   name="participants"
-                  label="Загрузить участников"
+                  label={
+                    <span>
+                      Загрузить участников <br />
+                      (документ в формате xls)
+                    </span>
+                  }
                   accept=".xls,.xlsx"
                   imageInit="upload"
-                  type="primary"
+                  type="secondary"
                 />
+              </Grid2>
+              <Grid2 size={12}>
+                <Box
+                  width={'50%'}
+                  m={'0 auto'}
+                  display={'flex'}
+                  alignItems={'center'}
+                  gap={1.2}
+                  justifyContent={'center'}
+                  component={'a'}
+                  href="/members-template.xlsx"
+                  download
+                >
+                  <img src="/images/xml.svg" alt="xml"></img>
+                  <Typography
+                    lineHeight={'27px'}
+                    fontSize={16}
+                    color="rgb(32, 34, 36)"
+                    fontWeight={600}
+                  >
+                    Шаблон списка участников профсоюза
+                  </Typography>
+                </Box>
               </Grid2>
               <Grid2 size={12}>
                 <InputCheckbox

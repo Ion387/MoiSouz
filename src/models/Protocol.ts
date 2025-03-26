@@ -36,7 +36,8 @@ export interface INewProt {
   address: string;
   documentAG: string;
   userList?: (string | undefined)[];
-  step: string;
+  step?: string;
+  status?: 'VIEWED' | 'NEW';
   questions: {
     speaker: string;
     question: string;

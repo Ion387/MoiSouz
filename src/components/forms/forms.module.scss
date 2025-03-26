@@ -17,3 +17,7 @@
   left: -16px;
   top: calc(100% - 2px);
 }
+.notranslate::after {
+  content: 'Выберите';
+  opacity: 0.54;
+}

@@ -82,7 +82,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
           <Box key={el.tradeunion + index}>
             <Grid2 container sx={{ p: 1.6 }}>
               <Grid2 size={3}>
-                <Typography variant="body2" fontWeight={600} pt={2.4}>
+                <Typography variant="body2" fontWeight={700} pt={2.4}>
                   {el.tradeunion}
                 </Typography>
               </Grid2>
@@ -90,7 +90,10 @@ const Table: FC<ITableProps> = ({ docs }) => {
                 {el &&
                   el.docs &&
                   el.docs.map((doc, id, array) => (
-                    <Box key={doc.guid} className={s.hover}>
+                    <Box
+                      key={doc.guid}
+                      className={doc.status === 'NEW' ? s.hoverBold : s.hover}
+                    >
                       <Link
                         href={
                           'folder' in doc && doc.folder === 'drafts'
@@ -101,7 +104,10 @@ const Table: FC<ITableProps> = ({ docs }) => {
                       >
                         <Grid2 container sx={{ py: 2.4 }}>
                           <Grid2 size={4}>
-                            <Typography variant="body2" fontWeight={600}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={doc.status === 'NEW' ? 700 : 600}
+                            >
                               {doc.documentType === 'AM'
                                 ? 'Заявление на вступление'
                                 : doc.documentType === 'AG'
@@ -114,7 +120,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                           <Grid2 size={2}>
                             <Typography
                               variant="body2"
-                              fontWeight={600}
+                              fontWeight={doc.status === 'NEW' ? 700 : 600}
                               textAlign={'center'}
                             >
                               {doc.documentNumber}
@@ -123,7 +129,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                           <Grid2 size={2}>
                             <Typography
                               variant="body2"
-                              fontWeight={600}
+                              fontWeight={doc.status === 'NEW' ? 700 : 600}
                               textAlign={'center'}
                             >
                               {doc.documentDate}
@@ -132,7 +138,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                           <Grid2 size={2}>
                             <Typography
                               variant="body2"
-                              fontWeight={600}
+                              fontWeight={doc.status === 'NEW' ? 700 : 600}
                               textAlign={'center'}
                             >
                               <span
@@ -157,7 +163,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                 >
                                   <Typography
                                     variant="body2"
-                                    fontWeight={600}
+                                    fontWeight={
+                                      doc.status === 'NEW' ? 700 : 600
+                                    }
                                     sx={{ textDecoration: 'underline' }}
                                   >
                                     Повестка

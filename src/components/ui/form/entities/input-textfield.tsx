@@ -31,6 +31,7 @@ export const TextFieldCustom: FC<PropsWithSX & Props> = ({
     maxLength: maxL,
     max: 99999999999999999999999999,
   });
+  if (error) console.log(error);
   return (
     <>
       {label && <InputLabel error={error != null}>{label}</InputLabel>}

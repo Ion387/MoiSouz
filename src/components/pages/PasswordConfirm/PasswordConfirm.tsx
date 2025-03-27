@@ -56,7 +56,7 @@ const PasswordConfirm = () => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate: mutateToken } = useMutation({
+  const { mutate: mutateToken, data: newData } = useMutation({
     mutationFn: (token: string) => {
       return sendToken(token);
     },
@@ -79,7 +79,7 @@ const PasswordConfirm = () => {
   const mobile = useMobile();
 
   const onSubmit: SubmitHandler<{ password: string }> = async (data) => {
-    mutatePass({ token: token, pass: data.password });
+    mutatePass({ token: newData?.data.token, pass: data.password });
     handleOpen();
   };
 

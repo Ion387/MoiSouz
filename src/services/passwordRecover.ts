@@ -8,13 +8,13 @@ export const sendEmail = async (email: string) => {
 };
 
 export const sendToken = async (token: string) => {
-  return axios.post(`${getBackendUrl}/api/confirm/recover`, {
+  return axios.post(`${getBackendUrl}/api/confirm/recover/`, {
     token: token,
   });
 };
 
 export const sendPassword = async (token: string, pass: string) => {
-  return axios.post(`${getBackendUrl}/api/confirm/password`, {
+  return axios.post(`${getBackendUrl}/api/confirm/password/`, {
     token: token,
     password: pass,
   });

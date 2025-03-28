@@ -108,6 +108,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({
 
   const handleClear = () => {
     setValue(name, null, { shouldValidate: true });
+    setPreview(null);
   };
 
   const handleDownload = () => {
@@ -154,7 +155,8 @@ export const InputFile: FC<PropsWithSX & Props> = ({
             onChange={(event: any) => {
               const file = event.target.files[0];
               if (file == null) return;
-              setValue(name, file, { shouldValidate: true });
+              setValue(name, file, { shouldValidate: true, shouldTouch: true });
+              setPreview(file.name || file.originalName);
             }}
           />
           <Button

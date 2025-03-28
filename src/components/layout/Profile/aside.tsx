@@ -13,7 +13,7 @@ export const ProfileAside = () => {
   return (
     <List className={styles.wrapper}>
       <List className={styles.content}>
-        <ListItem label="Главная" icon="time" to="/main" />
+        <ListItem label="Главная" icon="time" disabled />
         <ListItem label="Уведомления" icon="notify" disabled />
         <ListItem label="Задачи" icon="tasks" disabled />
         <ListItem

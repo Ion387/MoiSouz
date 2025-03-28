@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
 import {
-  Box,
   Button,
   CircularProgress,
-  FormHelperText,
   Grid2,
   InputLabel,
-  MenuItem,
   Paper,
-  Select,
   TextField,
 } from '@mui/material';
 import * as yup from 'yup';
@@ -30,6 +26,7 @@ import { getBackendUrl } from '@/constants/url';
 import { type INewDocument } from '@/models/NewDocument';
 import { getDocs } from '@/services/getDocs';
 import { getMembers } from '@/services/members';
+import QuestionFields from '../ui/form/question';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -181,7 +178,7 @@ const NewDocumentForm = ({
           setFormValue(`questions.${id}.document`, el.guid);
           setFormValue(
             `questions.${id}.question`,
-            `О включении в профсоюз нового участника на основании заявления\nФИО заявителя: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
+            `О включении в профсоюз нового участника на основании заявления\nЗаявитель: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
           );
         });
       }
@@ -230,64 +227,18 @@ const NewDocumentForm = ({
                     name="questions"
                     desc="Добавить вопрос"
                     render={(name, index, register, errors) => (
-                      <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        width={'100%'}
-                        gap={1.6}
-                      >
-                        <InputLabel sx={{ marginBottom: '0' }}>{`Вопрос №${
-                          index + 1
-                        }`}</InputLabel>
-                        <TextField
-                          {...register(`${name}.${index}.question`)}
-                          multiline
-                          rows={3}
-                          placeholder="Вопрос"
-                          error={!!errors?.question?.message}
-                          helperText={errors?.question?.message || ''}
-                          disabled={index <= articlesL - 1}
-                        />
-                        <TextField
-                          {...register(`${name}.${index}.document`)}
-                          sx={{ display: 'none' }}
-                        />
-                        {!isMembersLoading && (
-                          <>
-                            <InputLabel sx={{ marginBottom: '0' }}>
-                              Докладчик
-                            </InputLabel>
-                            <Select
-                              fullWidth
-                              sx={{ padding: 1.6 }}
-                              name={`questions.${index}.speaker`}
-                              value={getValues(`questions.${index}.speaker`)}
-                              onChange={(e) => {
-                                setFormValue(
-                                  `questions.${index}.speaker`,
-                                  String(e.target.value),
-                                );
-                              }}
-                              error={!!errors?.speaker?.message}
-                            >
-                              {members &&
-                                members.map((member) => (
-                                  <MenuItem
-                                    key={member.guid}
-                                    value={member.name}
-                                  >
-                                    {member.role + ' - ' + member.name}
-                                  </MenuItem>
-                                ))}
-                            </Select>
-                            {!!errors?.speaker?.message && (
-                              <FormHelperText sx={{ color: '#FF4949' }}>
-                                {errors?.speaker?.message}
-                              </FormHelperText>
-                            )}
-                          </>
-                        )}
-                      </Box>
+                      <QuestionFields
+                        name={name}
+                        index={index}
+                        register={register}
+                        errors={errors}
+                        members={members}
+                        isMembersLoading={isMembersLoading}
+                        articlesL={articlesL}
+                        getValues={getValues}
+                        setFormValue={setFormValue}
+                        questionType="default"
+                      />
                     )}
                     defaultValue=""
                   />
@@ -302,7 +253,7 @@ const NewDocumentForm = ({
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
-                  onClick={() => router.push('/main')}
+                  onClick={() => router.push('/documents?incoming')}
                 >
                   Отменить
                 </Button>

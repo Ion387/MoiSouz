@@ -12,7 +12,7 @@ export const useForm = () => {
 
   const queryClient = useQueryClient();
   const onCancel = () => {
-    router.push('/main');
+    router.push('/documents?incoming');
   };
 
   const { mutate, isSuccess } = useMutation({

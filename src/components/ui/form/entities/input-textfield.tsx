@@ -14,6 +14,8 @@ interface Props {
   disabled?: boolean;
   fullWidth?: boolean;
   register: object;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange?: any;
 }
 
 export const TextFieldCustom: FC<PropsWithSX & Props> = ({
@@ -25,28 +27,44 @@ export const TextFieldCustom: FC<PropsWithSX & Props> = ({
   disabled,
   fullWidth,
   register,
+  onChange,
 }) => {
   const { ref } = useIMask({
     mask: Number,
     maxLength: maxL,
     max: 99999999999999999999999999,
   });
-  if (error) console.log(error);
   return (
     <>
       {label && <InputLabel error={error != null}>{label}</InputLabel>}
-      <TextField
-        sx={{
-          ...(sx || {}),
-        }}
-        {...register}
-        placeholder={placeholder}
-        error={!!error}
-        helperText={error || ''}
-        disabled={disabled}
-        fullWidth={fullWidth}
-        slotProps={{ htmlInput: { maxLength: maxL, ref: ref } }}
-      />
+      {!onChange ? (
+        <TextField
+          sx={{
+            ...(sx || {}),
+          }}
+          {...register}
+          placeholder={placeholder}
+          error={!!error}
+          helperText={error || ''}
+          disabled={disabled}
+          fullWidth={fullWidth}
+          slotProps={{ htmlInput: { maxLength: maxL, ref: ref } }}
+        />
+      ) : (
+        <TextField
+          sx={{
+            ...(sx || {}),
+          }}
+          {...register}
+          placeholder={placeholder}
+          error={!!error}
+          helperText={error || ''}
+          disabled={disabled}
+          fullWidth={fullWidth}
+          slotProps={{ htmlInput: { maxLength: maxL, ref: ref } }}
+          onChange={onChange}
+        />
+      )}
     </>
   );
 };

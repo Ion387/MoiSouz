@@ -43,9 +43,9 @@ export interface INewProt {
     question: string;
     decided: string;
     document?: string;
-    approved?: number;
-    declined?: number;
-    ignored?: number;
+    approved?: number | null;
+    declined?: number | null;
+    ignored?: number | null;
   }[];
   data?: { documentAG?: string; documentTime?: string };
 }

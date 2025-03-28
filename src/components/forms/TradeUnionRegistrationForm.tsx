@@ -287,7 +287,7 @@ const TradeUnionRegistrationForm = () => {
     if (isSuccess && !myTradeUnion?.tariff?.id) {
       router.push('/tariffs');
     } else if (isSuccess) {
-      router.push('/main');
+      router.push('/documents?incoming');
     }
     queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
   }, [isSuccess, myTradeUnion]);
@@ -816,7 +816,7 @@ const TradeUnionRegistrationForm = () => {
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
-                  onClick={() => router.push('/main')}
+                  onClick={() => router.push('/documents?incoming')}
                 >
                   Отменить
                 </Button>

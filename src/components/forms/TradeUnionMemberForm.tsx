@@ -308,7 +308,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
-                  onClick={() => router.push('/main')}
+                  onClick={() => router.push('/documents?incoming')}
                 >
                   Отменить
                 </Button>

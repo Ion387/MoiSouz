@@ -115,6 +115,14 @@ const ScanBlock = ({ number }: { number: string }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
+      mutate2({
+        step: 'Утверждено',
+      });
+    }
+  }, [isSuccess]);
+
   const onSubmit: SubmitHandler<object> = async (data) => {
     mutate(data);
   };
@@ -176,10 +184,6 @@ const ScanBlock = ({ number }: { number: string }) => {
               <>
                 <Grid2 size={12}>
                   <InputFile
-                    sx={{
-                      border: 'dotted 1px rgb(72, 128, 255)',
-                      borderRadius: '10px',
-                    }}
                     mw={'100%'}
                     name="upload"
                     label="Прикрепить скан (pdf)"
@@ -214,8 +218,6 @@ const ScanBlock = ({ number }: { number: string }) => {
                     !info?.ROLES?.includes('ROLE_TRADEUNION')
                   )
                     mutate2({ step: 'Отправлено в профсоюз' });
-                  else if (file?.documentType !== 'AM')
-                    mutate2({ step: 'Утверждено' });
                 }}
               >
                 {file?.documentType === 'AM' &&

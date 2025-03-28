@@ -34,6 +34,8 @@ import { getAgendas } from '@/services/agendas';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { getBackendUrl } from '@/constants/url';
+import { defaultQuestions } from '@/constants/defaultQuestions';
+import ProtocolQuestion from '../ui/form/protocolQuestions';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -41,11 +43,16 @@ const itemSchema = yup.object().shape({
   decided: yup.string().required('Обязательное поле'),
   approved: yup
     .number()
-    .transform((value) => (Number.isNaN(value) ? 0 : value)),
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .nullable(),
   declined: yup
     .number()
-    .transform((value) => (Number.isNaN(value) ? 0 : value)),
-  ignored: yup.number().transform((value) => (Number.isNaN(value) ? 0 : value)),
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .nullable(),
+  ignored: yup
+    .number()
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .nullable(),
   document: yup.string(),
 });
 
@@ -81,6 +88,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
 
   const [arr, setArr] = useState<IFormColleagueProfile[]>([]);
   const [members, setMembers] = useState<IFormColleagueProfile[]>([]);
+  const [isCanView, setIsCanView] = useState<{
+    a: number;
+    d: number;
+    i: number;
+  }>({ a: 0, d: 0, i: 0 });
   const [currentAgenda, setCurrentAgenda] = useState<INewDoc>();
   const { data: membersData, isLoading: isMembersLoading } = useQuery({
     queryKey: ['members'],
@@ -105,7 +117,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   useEffect(() => {
     setFormValue('documentNumber', 'PRXXXXX');
     setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
-    setFormValue('documentTime', dayjs().format('hh.mm'));
+    setFormValue('documentTime', dayjs().format('HH.mm'));
   }, []);
 
   useEffect(() => {
@@ -145,23 +157,23 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   }, [arr]);
 
   useEffect(() => {
-    if (currentAgenda) {
-      setFormValue(`address`, currentAgenda.data.address);
-      //setFormValue(`documentAG`, currentAgenda.title);
-      if (currentAgenda.data.questions?.length) {
-        currentAgenda.data.questions?.forEach((el, id) => {
-          setFormValue(
-            `questions.${id}.speaker`,
-            String(currentAgenda.data.questions?.[id].speaker),
-          );
-          setFormValue(
-            `questions.${id}.question`,
-            String(currentAgenda.data.questions?.[id].question),
-          );
+    if (!doc) {
+      if (currentAgenda) {
+        setFormValue(`address`, currentAgenda.data.address);
+        defaultQuestions.forEach((q, id) => {
+          setFormValue(`questions.${id}.question`, q.question);
+          setFormValue(`questions.${id}.decided`, q.decided);
+          setFormValue(`questions.${id}.speaker`, q.speaker);
         });
+        if (currentAgenda.data.questions?.length) {
+          currentAgenda.data.questions?.forEach((el, id) => {
+            setFormValue(`questions.${id + 4}.speaker`, String(el.speaker));
+            setFormValue(`questions.${id + 4}.question`, String(el.question));
+          });
+        }
       }
     }
-  }, [currentAgenda]);
+  }, [currentAgenda, defaultQuestions, doc]);
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: INewProt) => {
@@ -252,6 +264,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     else if (errorsCount == 0) mutate(data);
   };
 
+  const onSubmitDraft: SubmitHandler<INewProt> = async (data) => {
+    if (doc && doc.guid) mutateByGuid(data);
+    else mutate(data);
+  };
+
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
       <LocalizationProvider
@@ -336,9 +353,8 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     <Typography component={'div'}>
                       {members &&
                         members.map((el) => (
-                          <>
+                          <Box key={el.guid}>
                             <TextField
-                              key={el.guid}
                               sx={{
                                 position: 'relative',
                                 marginBottom: 2.5,
@@ -389,189 +405,287 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                 color="white"
                               />
                             </IconButton>
-                          </>
+                          </Box>
                         ))}
                     </Typography>
                   </Grid2>
-                  <Grid2>
-                    <Typography variant="body1">
-                      В соответствии с п.3 ст. 18 Устава Профсоюза заседание
-                      профсоюзного органа считается правомочным (имеет кворум) и
-                      объявляется открытым
-                    </Typography>
+                  <Grid2 size={12}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        border: '1px solid rgb(216, 216, 216)',
+                        mb: '25px',
+                      }}
+                    >
+                      <Grid2 size={12}>
+                        <InputLabel>Слушали:</InputLabel>
+                        <TextField
+                          {...register(`questions.${0}.question`)}
+                          multiline
+                          rows={3}
+                          disabled
+                        />
+                      </Grid2>
+                      <Grid2 size={12} marginTop={2.5} position={'relative'}>
+                        <InputLabel>Докладывал:</InputLabel>
+                        {!isMembersLoading && arr && (
+                          <>
+                            <Select
+                              fullWidth
+                              sx={{ padding: 1.6 }}
+                              name={`questions.${0}.speaker`}
+                              value={getValues(`questions.${0}.speaker`)}
+                              onChange={(e) => {
+                                setFormValue(
+                                  `questions.${0}.speaker`,
+                                  String(e.target.value),
+                                );
+                              }}
+                              error={!!errors?.questions?.[0]?.speaker?.message}
+                            >
+                              {arr &&
+                                arr.map((member) => (
+                                  <MenuItem
+                                    key={member.guid}
+                                    value={member.name}
+                                  >
+                                    {member.role + ' - ' + member.name}
+                                  </MenuItem>
+                                ))}
+                            </Select>
+                            {!!errors?.questions?.[0]?.speaker?.message && (
+                              <FormHelperText
+                                sx={{
+                                  color: '#FF4949',
+                                  position: 'absolute',
+                                }}
+                              >
+                                {errors?.questions?.[0]?.speaker?.message}
+                              </FormHelperText>
+                            )}
+                          </>
+                        )}
+                      </Grid2>
+                      <Grid2 size={12} marginTop={2.5}>
+                        <InputLabel>Постановили:</InputLabel>
+                        <TextField
+                          multiline
+                          rows={3}
+                          {...register(`questions.${0}.decided`)}
+                          disabled
+                        />
+                      </Grid2>
+                      <Grid2 size={12} marginTop={2.5} container spacing={2.5}>
+                        <Grid2 size={4}>
+                          <InputLabel>За:</InputLabel>
+                          <TextFieldCustom
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                textAlign: 'center',
+                              },
+                            }}
+                            register={register(`questions.${0}.approved`)}
+                            error={
+                              errors.questions
+                                ? errors?.questions[0]?.approved?.message
+                                : undefined
+                            }
+                            onChange={(
+                              e: React.ChangeEvent<
+                                HTMLTextAreaElement | HTMLInputElement
+                              >,
+                            ) => {
+                              setFormValue(
+                                `questions.${0}.approved`,
+                                e.target.value == ''
+                                  ? null
+                                  : Number(e.target.value),
+                              );
+                              setIsCanView((prev) => ({
+                                ...prev,
+                                a: Number(e.target.value),
+                              }));
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={4}>
+                          <InputLabel>Против:</InputLabel>
+                          <TextFieldCustom
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                textAlign: 'center',
+                              },
+                            }}
+                            register={register(`questions.${0}.declined`)}
+                            error={
+                              errors.questions
+                                ? errors?.questions[0]?.declined?.message
+                                : undefined
+                            }
+                            onChange={(
+                              e: React.ChangeEvent<
+                                HTMLTextAreaElement | HTMLInputElement
+                              >,
+                            ) => {
+                              setFormValue(
+                                `questions.${0}.declined`,
+                                e.target.value == ''
+                                  ? null
+                                  : Number(e.target.value),
+                              );
+                              setIsCanView((prev) => ({
+                                ...prev,
+                                d: Number(e.target.value),
+                              }));
+                            }}
+                          />
+                        </Grid2>
+                        <Grid2 size={4}>
+                          <InputLabel>Воздержались:</InputLabel>
+                          <TextFieldCustom
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                textAlign: 'center',
+                              },
+                            }}
+                            register={register(`questions.${0}.ignored`)}
+                            error={
+                              errors.questions
+                                ? errors?.questions[0]?.ignored?.message
+                                : undefined
+                            }
+                            onChange={(
+                              e: React.ChangeEvent<
+                                HTMLTextAreaElement | HTMLInputElement
+                              >,
+                            ) => {
+                              setFormValue(
+                                `questions.${0}.ignored`,
+                                e.target.value == ''
+                                  ? null
+                                  : Number(e.target.value),
+                              );
+                              setIsCanView((prev) => ({
+                                ...prev,
+                                i: Number(e.target.value),
+                              }));
+                            }}
+                          />
+                        </Grid2>
+                      </Grid2>
+                    </Box>
                   </Grid2>
                   <Grid2 size={12}>
-                    {currentAgenda &&
-                      currentAgenda.data.questions?.length &&
-                      currentAgenda.data.questions?.map((agenda, id) => (
-                        <Box
-                          key={agenda.question + id}
-                          sx={{
-                            p: 2,
-                            border: '1px solid rgb(216, 216, 216)',
-                            mb: '25px',
-                          }}
+                    {arr.length > 2 &&
+                    isCanView.a >= isCanView.d + isCanView.i &&
+                    isCanView.a + isCanView.d + isCanView.i == arr.length &&
+                    currentAgenda &&
+                    currentAgenda.data.questions?.length ? (
+                      [
+                        ...defaultQuestions.slice(1),
+                        ...currentAgenda?.data.questions,
+                      ].map((agenda, id, array) => (
+                        <ProtocolQuestion
+                          key={agenda.question + id + 1}
+                          id={id}
+                          array={array}
+                          arr={arr}
+                          setFormValue={setFormValue}
+                          errors={errors}
+                          isMembersLoading={isMembersLoading}
+                          register={register}
+                          type={
+                            id < 3
+                              ? 'assessors'
+                              : agenda.document
+                                ? 'members'
+                                : undefined
+                          }
+                        />
+                      ))
+                    ) : arr.length < 3 ? (
+                      <Box>
+                        <Typography
+                          color={'#FF4949'}
+                          textAlign={'center'}
+                          fontWeight={600}
                         >
-                          <Grid2 size={12}>
-                            <InputLabel>Слушали:</InputLabel>
-                            <TextField
-                              {...register(`questions.${id}.question`)}
-                              multiline
-                              rows={3}
-                              disabled
-                            />
-                          </Grid2>
-                          <Grid2 size={12} marginTop={2.5}>
-                            <InputLabel>Докладывал:</InputLabel>
-                            {!isMembersLoading && members && currentAgenda && (
-                              <>
-                                <Select
-                                  fullWidth
-                                  sx={{ padding: 1.6 }}
-                                  name={`questions.${id}.speaker`}
-                                  value={
-                                    currentAgenda.data.questions?.[id].speaker
-                                  }
-                                  onChange={(e) => {
-                                    setFormValue(
-                                      `questions.${id}.speaker`,
-                                      String(e.target.value),
-                                    );
-                                  }}
-                                  error={
-                                    !!errors?.questions?.[id]?.speaker?.message
-                                  }
-                                >
-                                  {members &&
-                                    members.map((member) => (
-                                      <MenuItem
-                                        key={member.guid}
-                                        value={member.name}
-                                      >
-                                        {member.role + ' - ' + member.name}
-                                      </MenuItem>
-                                    ))}
-                                </Select>
-                                {!!errors?.questions?.[id]?.speaker
-                                  ?.message && (
-                                  <FormHelperText sx={{ color: '#FF4949' }}>
-                                    {errors?.questions?.[id]?.speaker?.message}
-                                  </FormHelperText>
-                                )}
-                              </>
-                            )}
-                          </Grid2>
-                          <Grid2 size={12} marginTop={2.5}>
-                            <InputLabel>Постановили:</InputLabel>
-                            <TextField
-                              multiline
-                              rows={3}
-                              {...register(`questions.${id}.decided`)}
-                            />
-                          </Grid2>
-                          <Grid2
-                            size={12}
-                            marginTop={2.5}
-                            container
-                            spacing={2.5}
-                          >
-                            <Grid2 size={4}>
-                              <InputLabel>За:</InputLabel>
-                              <TextFieldCustom
-                                sx={{
-                                  '& .MuiInputBase-input': {
-                                    textAlign: 'center',
-                                  },
-                                }}
-                                register={register(`questions.${id}.approved`)}
-                                error={
-                                  errors.questions
-                                    ? errors?.questions[id]?.approved?.message
-                                    : undefined
-                                }
-                              />
-                            </Grid2>
-                            <Grid2 size={4}>
-                              <InputLabel>Против:</InputLabel>
-                              <TextFieldCustom
-                                sx={{
-                                  '& .MuiInputBase-input': {
-                                    textAlign: 'center',
-                                  },
-                                }}
-                                register={register(`questions.${id}.declined`)}
-                                error={
-                                  errors.questions
-                                    ? errors?.questions[id]?.declined?.message
-                                    : undefined
-                                }
-                              />
-                            </Grid2>
-                            <Grid2 size={4}>
-                              <InputLabel>Воздержались:</InputLabel>
-                              <TextFieldCustom
-                                sx={{
-                                  '& .MuiInputBase-input': {
-                                    textAlign: 'center',
-                                  },
-                                }}
-                                register={register(`questions.${id}.ignored`)}
-                                error={
-                                  errors.questions
-                                    ? errors?.questions[id]?.ignored?.message
-                                    : undefined
-                                }
-                              />
-                            </Grid2>
-                          </Grid2>
-                        </Box>
-                      ))}
+                          Количество участников заседание должно быть больше 2
+                        </Typography>
+                      </Box>
+                    ) : isCanView.a + isCanView.d + isCanView.i !=
+                      arr.length ? (
+                      <Box>
+                        <Typography
+                          color={'#FF4949'}
+                          textAlign={'center'}
+                          fontWeight={600}
+                        >
+                          Число голосов не совпадает с количеством участников
+                          заседания
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Box>
+                        <Typography
+                          color={'#FF4949'}
+                          textAlign={'center'}
+                          fontWeight={600}
+                        >
+                          Необходимо утвердить повестку заседания
+                        </Typography>
+                      </Box>
+                    )}
                   </Grid2>
                 </>
               )}
-              <Grid2 size={4}>
+              <Grid2 size={arr.length > 2 ? 4 : 12}>
                 <Button
                   variant="outlined"
                   sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
-                  onClick={() => router.push('/main')}
+                  onClick={() => router.push('/documents?incoming')}
                 >
                   Отменить
                 </Button>
               </Grid2>
-              <Grid2 size={4}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    width: '100%',
-                    padding: '16px 25px',
-                    fontSize: '20px',
-                    lineHeight: '27px',
-                  }}
-                  onClick={async () => {
-                    const values = getValues();
-                    if (values.userList?.includes(undefined))
-                      delete values.userList;
-                    await onSubmit(values);
-                    router.push('/documents?drafts');
-                  }}
-                >
-                  В черновик
-                </Button>
-              </Grid2>
-              <Grid2 size={4}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    width: '100%',
-                    padding: '16px 25px',
-                    fontSize: '20px',
-                    lineHeight: '27px',
-                  }}
-                  type="submit"
-                >
-                  Далее
-                </Button>
-              </Grid2>
+              {arr.length > 2 && (
+                <>
+                  <Grid2 size={4}>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        width: '100%',
+                        padding: '16px 25px',
+                        fontSize: '20px',
+                        lineHeight: '27px',
+                      }}
+                      onClick={async () => {
+                        const values = getValues();
+                        if (values.userList?.includes(undefined))
+                          delete values.userList;
+                        await onSubmitDraft(values);
+                        router.push('/documents?drafts');
+                      }}
+                    >
+                      В черновик
+                    </Button>
+                  </Grid2>
+                  <Grid2 size={4}>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        width: '100%',
+                        padding: '16px 25px',
+                        fontSize: '20px',
+                        lineHeight: '27px',
+                      }}
+                      type="submit"
+                    >
+                      Далее
+                    </Button>
+                  </Grid2>
+                </>
+              )}
             </Grid2>
           </form>
         </FormProvider>

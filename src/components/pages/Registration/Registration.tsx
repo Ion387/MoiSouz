@@ -16,7 +16,7 @@ import {
   Tabs,
   Tab,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
@@ -74,6 +74,7 @@ const Registration = () => {
     passwordRepeat: false,
   });
   const [open, setOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const mobile = useMobile();
 
@@ -87,6 +88,8 @@ const Registration = () => {
     data: resData,
     isPending,
     isSuccess,
+    isError,
+    error: resError,
   } = useMutation({
     mutationFn: (data: IReg) => {
       return axios.post(`${getBackendUrl}/api/registration`, data);
@@ -97,6 +100,14 @@ const Registration = () => {
     mutate({ ...data, isTradeunion: !!tabs });
     handleOpen();
   };
+
+  useEffect(() => {
+    if (isError) {
+      //@ts-expect-error none
+      if (resData) setError(resData?.data.description);
+      else if (resError) setError(resError.message);
+    }
+  }, [isError, resData]);
 
   return (
     <Box className={s.container}>
@@ -114,6 +125,50 @@ const Registration = () => {
               {
                 'Мы отправили на Ваш адрес электронной почты ссылку для подтверждения регистрации!'
               }
+            </Typography>
+            <Link href="/" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
+              </Button>
+            </Link>
+            <Link href="/signin" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Войти' : 'Войти в личный кабинет'}
+              </Button>
+            </Link>
+          </>
+        ) : isError && error ? (
+          <>
+            <Typography variant="h3" textAlign={'center'} marginTop={'24px'}>
+              {error}
             </Typography>
             <Link href="/" style={{ width: '100%' }}>
               <Button

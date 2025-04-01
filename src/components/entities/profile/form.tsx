@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { FC, PropsWithChildren, RefObject } from 'react';
+import { FC, PropsWithChildren, RefObject, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -37,6 +37,7 @@ interface Props {
   /** for FormProvider */
   methods: UseFormReturn<any, any, undefined>;
   defaultValues?: any;
+  errorsExtra?: { [key: string]: string } | null;
 
   /**  */
   checkTradeUnionMember?: boolean;
@@ -58,9 +59,18 @@ export const Form: FC<
   onCancel,
   onSubmit,
   methods,
+  errorsExtra,
   checkTradeUnionMember = true,
 }) => {
   const path = usePathname();
+
+  useEffect(() => {
+    if (errorsExtra == null) return;
+    Object.keys(errorsExtra).forEach(
+      (key) =>
+        methods?.setError(key, { type: 'custom', message: errorsExtra[key] }),
+    );
+  }, [errorsExtra]);
 
   return (
     <LocalizationProvider

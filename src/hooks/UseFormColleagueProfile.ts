@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { getHeaders } from '@/utils/axios';
 
@@ -20,12 +20,26 @@ export const useForm = () => {
   };
 
   const mutationKey = 'colleague-profile';
-  const { mutate, isSuccess } = useMutation({
+  const { mutate, isSuccess, error } = useMutation({
     mutationKey: [mutationKey],
     mutationFn: async (data: IFormColleagueProfile) => {
-      if (data.guid) await saveFormColleagueProfile(data);
-      else await addFormColleagueProfile(data);
-
+      try {
+        if (data.guid) await saveFormColleagueProfile(data);
+        else await addFormColleagueProfile(data);
+      } catch (err) {
+        const error = err as AxiosError<{
+          status: string;
+          description: string;
+        }>;
+        if (
+          error.response?.data?.description?.startsWith(
+            'Пользователь с эл. почтой',
+          )
+        ) {
+          throw new Error('email');
+        }
+        throw new Error('email');
+      }
       console.log('REASON FILE', data.reasonFile);
     },
     onSuccess: () => {
@@ -39,7 +53,7 @@ export const useForm = () => {
     data,
   ) => mutate(data);
 
-  return { onCancel, onSubmit, isSuccess, isLoading: isMutation > 0 };
+  return { onCancel, onSubmit, isSuccess, isLoading: isMutation > 0, error };
 };
 
 export const useFetchColleagueProfile = (guid: string) => {

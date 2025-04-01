@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -27,7 +27,14 @@ const ColleagueEditWrapper = () => {
     clear: clearUser,
   } = useFetchColleagueProfile((params.guid as string) || '');
 
-  const { onCancel, onSubmit, isLoading: isLoadingForm } = useForm();
+  const { onCancel, onSubmit, isLoading: isLoadingForm, error } = useForm();
+  const errors = useMemo(() => {
+    switch (error?.message) {
+      case 'email':
+        return { email: 'Указанная почта уже существует' };
+    }
+    return null;
+  }, [error]);
 
   useEffect(() => {
     if (isCreate) return;
@@ -59,6 +66,7 @@ const ColleagueEditWrapper = () => {
               onSubmit={onSubmit}
               defaultValues={user}
               loading={isLoadingForm}
+              errorsExtra={errors}
             />
           ) : (
             <Typography fontSize={14} textAlign="center">

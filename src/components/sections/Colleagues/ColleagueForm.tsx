@@ -122,6 +122,7 @@ interface Props {
   loading?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: IFormColleagueProfile | any;
+  errorsExtra?: { [key: string]: string } | null;
 }
 
 export const ColleagueForm: FC<Props> = ({
@@ -129,6 +130,7 @@ export const ColleagueForm: FC<Props> = ({
   onSubmit,
   loading,
   defaultValues,
+  errorsExtra,
 }) => {
   const methods = useForm<IFormColleagueProfile>({
     mode: 'onChange',
@@ -188,6 +190,7 @@ export const ColleagueForm: FC<Props> = ({
       onSubmit={handleSubmit(onSubmit)}
       methods={methods}
       defaultValues={defaultValues}
+      errorsExtra={errorsExtra}
       checkTradeUnionMember={false}
     >
       {tradeunion && <TradeUnionCardSimple data={tradeunion} />}

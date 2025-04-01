@@ -154,13 +154,31 @@ export const ColleagueForm: FC<Props> = ({
     [tuOwner, tuList],
   );
 
-  const isEdit = defaultValues != null;
+  const isDisabled = useMemo(() => {
+    if (defaultValues == null) return false;
+
+    const isEmptyString = (value: string) =>
+      value == null || value.trim().length == 0;
+
+    if (isEmptyString(defaultValues.lastName)) return false;
+    if (isEmptyString(defaultValues.firstName)) return false;
+    if (isEmptyString(defaultValues.middleName)) return false;
+    if (isEmptyString(defaultValues.birthdate)) return false;
+    if (isEmptyString(defaultValues.gender)) return false;
+    if (isEmptyString(defaultValues.education)) return false;
+    if (defaultValues.position == null || defaultValues.position.length == 0)
+      return false;
+    if (isEmptyString(defaultValues.phone)) return false;
+    if (isEmptyString(defaultValues.email)) return false;
+
+    return true;
+  }, [defaultValues]);
 
   return (
     <Form
       sx={{ pt: 3 }}
       title={
-        isEdit
+        isDisabled
           ? 'Учётная карточка члена профсоюза'
           : 'Добавление учётной карточки члена профсоюза'
       }
@@ -182,7 +200,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иванов"
             error={!!errors.lastName?.message}
             helperText={errors.lastName?.message || ''}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
 
           <InputLabel sx={{ mt: 3 }}>Имя</InputLabel>
@@ -191,7 +209,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иван"
             error={!!errors.firstName?.message}
             helperText={errors.firstName?.message || ''}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
           <InputLabel sx={{ mt: 3 }}>Отчество</InputLabel>
           <TextField
@@ -199,7 +217,7 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Иванович"
             error={!!errors.middleName?.message}
             helperText={errors.middleName?.message || ''}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
         </Box>
 
@@ -207,9 +225,13 @@ export const ColleagueForm: FC<Props> = ({
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <InputDate name="birthdate" label="Дата рождения" disabled={isEdit} />
+        <InputDate
+          name="birthdate"
+          label="Дата рождения"
+          disabled={isDisabled}
+        />
 
-        <InputGender name="gender" label="Пол" disabled={isEdit} />
+        <InputGender name="gender" label="Пол" disabled={isDisabled} />
 
         <InputAutocomplete
           sx={{ width: '80%' }}
@@ -217,7 +239,7 @@ export const ColleagueForm: FC<Props> = ({
           label="Образование"
           placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
-          disabled={isEdit}
+          disabled={isDisabled}
         />
       </Box>
 
@@ -233,11 +255,11 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Профессия"
             error={!!errors?.message}
             helperText={errors?.message || ''}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
         )}
         defaultValue=""
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <InputArray
@@ -252,12 +274,12 @@ export const ColleagueForm: FC<Props> = ({
             placeholder="Должность"
             error={!!errors?.message}
             helperText={errors?.message || ''}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
         )}
         defaultValue=""
         preadd
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <InputAddress
@@ -265,7 +287,7 @@ export const ColleagueForm: FC<Props> = ({
         name="address"
         label="Адрес проживания"
         errors={errors}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
@@ -277,7 +299,7 @@ export const ColleagueForm: FC<Props> = ({
             error={!!errors.phone?.message}
             helperText={errors.phone?.message || ''}
             slotProps={{ htmlInput: { maxLength: 12 } }}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
         </Box>
         <Box sx={{ flex: 1 }}>
@@ -288,7 +310,7 @@ export const ColleagueForm: FC<Props> = ({
             error={!!errors.phoneDop?.message}
             helperText={errors.phoneDop?.message || ''}
             slotProps={{ htmlInput: { maxLength: 12 } }}
-            disabled={isEdit}
+            disabled={isDisabled}
           />
         </Box>
       </Box>
@@ -304,18 +326,21 @@ export const ColleagueForm: FC<Props> = ({
               placeholder="Имя"
               error={!!errors?.name?.message}
               helperText={errors?.name?.message || ''}
-              disabled={isEdit}
+              disabled={isDisabled}
             />
             <InputGender
               name={`${name}.${index}.gender`}
               defaultValue="female"
-              disabled={isEdit}
+              disabled={isDisabled}
             />
-            <InputDate name={`${name}.${index}.birthdate`} disabled={isEdit} />
+            <InputDate
+              name={`${name}.${index}.birthdate`}
+              disabled={isDisabled}
+            />
           </Box>
         )}
         defaultValue={{}}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <InputLabel sx={{ mt: 3 }}>Почта</InputLabel>
@@ -324,7 +349,7 @@ export const ColleagueForm: FC<Props> = ({
         placeholder="Почта"
         error={!!errors.email?.message}
         helperText={errors.email?.message || ''}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
@@ -371,25 +396,25 @@ export const ColleagueForm: FC<Props> = ({
                 placeholder="Название профсоюзной организации"
                 error={!!errors?.name?.message}
                 helperText={errors?.name?.message || ''}
-                disabled={isEdit}
+                disabled={isDisabled}
               />
             </Box>
             <InputDate
               sx={{ flex: 0.4 }}
               name={`${name}.${index}.startDate`}
               label="Дата принятия"
-              disabled={isEdit}
+              disabled={isDisabled}
             />
             <InputDate
               sx={{ flex: 0.4 }}
               name={`${name}.${index}.finishDate`}
               label="Дата выхода"
-              disabled={isEdit}
+              disabled={isDisabled}
             />
           </Box>
         )}
         defaultValue={{}}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <InputManyModal
@@ -398,7 +423,7 @@ export const ColleagueForm: FC<Props> = ({
         label="Увлечения"
         placeholder="Выберите из списка"
         options={hobbies?.data || []}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
 
       <InputCheckbox
@@ -406,7 +431,7 @@ export const ColleagueForm: FC<Props> = ({
         name="isActive"
         link={'/politics.pdf'}
         label={`Я соглашаюсь с политикой обработки персональных данных `}
-        disabled={isEdit}
+        disabled={isDisabled}
       />
     </Form>
   );

@@ -16,7 +16,7 @@ import {
   Tabs,
   Tab,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
@@ -88,11 +88,15 @@ const Registration = () => {
     data: resData,
     isPending,
     isSuccess,
-    isError,
-    error: resError,
   } = useMutation({
     mutationFn: (data: IReg) => {
       return axios.post(`${getBackendUrl}/api/registration`, data);
+    },
+    onError: (e, v, c) => {
+      console.log(e);
+      console.log(v);
+      console.log(c);
+      setError(e.message);
     },
   });
 
@@ -100,14 +104,6 @@ const Registration = () => {
     mutate({ ...data, isTradeunion: !!tabs });
     handleOpen();
   };
-
-  useEffect(() => {
-    if (isError) {
-      //@ts-expect-error none
-      if (resData) setError(resData?.data.description);
-      else if (resError) setError(resError.message);
-    }
-  }, [isError, resData]);
 
   return (
     <Box className={s.container}>
@@ -165,7 +161,7 @@ const Registration = () => {
               </Button>
             </Link>
           </>
-        ) : isError && error ? (
+        ) : error ? (
           <>
             <Typography variant="h3" textAlign={'center'} marginTop={'24px'}>
               {error}

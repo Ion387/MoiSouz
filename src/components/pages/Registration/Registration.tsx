@@ -92,11 +92,9 @@ const Registration = () => {
     mutationFn: (data: IReg) => {
       return axios.post(`${getBackendUrl}/api/registration`, data);
     },
-    onError: (e, v, c) => {
-      console.log(e);
-      console.log(v);
-      console.log(c);
-      setError(e.message);
+    onError: (e) => {
+      //@ts-expect-error none
+      setError(e.response.data.description);
     },
   });
 

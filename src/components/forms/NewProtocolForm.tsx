@@ -326,7 +326,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     <InputDate name="documentDate" />
                   </Grid2>
                   <Grid2 size={4}>
-                    <InputLabel>Начало заседание</InputLabel>
+                    <InputLabel>Начало заседания</InputLabel>
                     <InputTime name="documentTime" />
                   </Grid2>
                   <Grid2 size={12}>
@@ -610,7 +610,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                           textAlign={'center'}
                           fontWeight={600}
                         >
-                          Количество участников заседание должно быть больше 2
+                          Количество участников заседания должно быть больше 2
                         </Typography>
                       </Box>
                     ) : isCanView.a + isCanView.d + isCanView.i !=

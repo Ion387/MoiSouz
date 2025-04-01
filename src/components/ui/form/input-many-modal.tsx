@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
   Box,
@@ -53,12 +53,27 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
   options = [],
   disabled,
 }) => {
+  const refButton = useRef<HTMLButtonElement>(null);
+  const [width, setWidth] = useState<number>(500);
+
   const { control, getValues } = useFormContext();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
 
   const [selected, setSelected] = useState<IOptionValue[]>([]);
+
+  useEffect(() => {
+    const target = refButton.current;
+    if (target == null) return;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setWidth(entry.contentRect.width);
+      }
+    });
+    resizeObserver.observe(target);
+    return () => resizeObserver.unobserve(target);
+  }, [refButton.current]);
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -94,6 +109,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
             flexDirection: 'column',
             ...(sx || {}),
           }}
+          ref={refButton}
         >
           {label && <InputLabel>{label}</InputLabel>}
           <Button
@@ -143,15 +159,12 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
+              vertical: 'center',
+              horizontal: 'center',
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            sx={{
-              maxWidth: 800,
+              vertical: 'center',
+              horizontal: 'center',
             }}
             disableScrollLock
           >
@@ -162,6 +175,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
                 gap: 2,
                 p: 2,
                 backgroundColor: 'secondary.main',
+                width: width - 45,
               }}
             >
               <Box

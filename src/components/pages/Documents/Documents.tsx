@@ -76,8 +76,7 @@ const DocumentsWrapper = () => {
       <TradeunionCheckDialog
         open={
           !info?.ROLES?.includes('ROLE_TRADEUNION') &&
-          docs &&
-          !docs.length &&
+          !info?.hasTradeunionMember &&
           !isLoading
         }
       />

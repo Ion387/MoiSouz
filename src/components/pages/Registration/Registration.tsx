@@ -74,6 +74,7 @@ const Registration = () => {
     passwordRepeat: false,
   });
   const [open, setOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const mobile = useMobile();
 
@@ -90,6 +91,10 @@ const Registration = () => {
   } = useMutation({
     mutationFn: (data: IReg) => {
       return axios.post(`${getBackendUrl}/api/registration`, data);
+    },
+    onError: (e) => {
+      //@ts-expect-error none
+      setError(e.response.data.description);
     },
   });
 
@@ -114,6 +119,50 @@ const Registration = () => {
               {
                 'Мы отправили на Ваш адрес электронной почты ссылку для подтверждения регистрации!'
               }
+            </Typography>
+            <Link href="/" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Главная' : 'Перейти на стартовую страницу'}
+              </Button>
+            </Link>
+            <Link href="/signin" style={{ width: '100%' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '15px 100px',
+                  fontSize: '20px',
+                  lineHeight: '27px',
+                  minWidth: mobile ? '106px' : '338px',
+                  marginTop: '24px',
+                  width: '100%',
+                  '&.Mui-disabled': {
+                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                    color: 'white !important',
+                  },
+                }}
+              >
+                {mobile ? 'Войти' : 'Войти в личный кабинет'}
+              </Button>
+            </Link>
+          </>
+        ) : error ? (
+          <>
+            <Typography variant="h3" textAlign={'center'} marginTop={'24px'}>
+              {error}
             </Typography>
             <Link href="/" style={{ width: '100%' }}>
               <Button

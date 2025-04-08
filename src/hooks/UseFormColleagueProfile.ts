@@ -38,7 +38,6 @@ export const useForm = () => {
         ) {
           throw new Error('email');
         }
-        throw new Error('email');
       }
       console.log('REASON FILE', data.reasonFile);
     },

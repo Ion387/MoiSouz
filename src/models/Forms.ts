@@ -28,7 +28,7 @@ export interface IFormProfile {
   isActive: boolean;
 }
 
-export interface IFeedbackForm {
-  question: string;
-  description?: string;
+export interface IFormFeedback {
+  title: string;
+  message?: string;
 }

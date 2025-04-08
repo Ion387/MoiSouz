@@ -21,8 +21,9 @@ import { useRouter } from 'next/navigation';
 import * as yup from 'yup';
 
 import { Icon } from '@/components/ui';
+import { ButtonFeedback } from '@/components/entities/profile';
+
 import { type ISignin } from '@/models/Signin';
-import { ButtonHelp } from '@/components/entities/profile';
 
 import s from './signin.module.scss';
 
@@ -72,7 +73,7 @@ const Signin = () => {
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
-        <ButtonHelp className={s.help} />
+        <ButtonFeedback className={s.help} />
         <Link href={'/'} className={s.cross}>
           <IconButton>
             <Icon name="close" />

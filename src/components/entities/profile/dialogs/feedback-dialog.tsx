@@ -15,12 +15,14 @@ import * as yup from 'yup';
 import { Icon } from '@/components/ui';
 import { Form } from '../form';
 
-import { IFeedbackForm } from '@/models/Forms';
+import { saveFormFeedback } from '@/hooks/UseFeedback';
+
+import { IFormFeedback } from '@/models/Forms';
 
 const schema = yup
   .object({
-    question: yup.string().required('Укажите вопрос'),
-    description: yup.string(),
+    title: yup.string().required('Укажите вопрос'),
+    message: yup.string(),
   })
   .required();
 
@@ -29,11 +31,12 @@ interface IDialogProps {
   onClose?: () => void;
 }
 
-export const HelpDialog: FC<IDialogProps> = ({ open, onClose }) => {
+export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
   const [reseted, setReseted] = useState<boolean>(true);
   const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const methods = useForm<IFeedbackForm>({
+  const methods = useForm<IFormFeedback>({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
@@ -53,19 +56,20 @@ export const HelpDialog: FC<IDialogProps> = ({ open, onClose }) => {
 
     if (open == true && reseted == false) {
       methods.reset();
+      setSuccessMessage(null);
+      setSuccess(false);
       setReseted(true);
     }
   }, [methods, open]);
 
   // send
-  const onSubmit = async (data: IFeedbackForm) => {
-    // temp
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert(JSON.stringify(data));
+  const onSubmit = async (data: IFormFeedback) => {
+    const response = await saveFormFeedback(data);
 
     // success
     if (onClose) onClose();
     setSuccess(true);
+    setSuccessMessage(response.data?.description);
   };
 
   return (
@@ -100,18 +104,18 @@ export const HelpDialog: FC<IDialogProps> = ({ open, onClose }) => {
           </Typography>
           <InputLabel sx={{ mt: 3 }}>Ваш вопрос</InputLabel>
           <TextField
-            {...register('question')}
+            {...register('title')}
             placeholder="Опишите проблему"
-            error={!!errors.question?.message}
-            helperText={errors.question?.message || ''}
+            error={!!errors.title?.message}
+            helperText={errors.title?.message || ''}
           />
           <InputLabel sx={{ mt: 3 }}>Комментарий</InputLabel>
           <TextField
-            {...register('description')}
+            {...register('message')}
             sx={{ mb: 3 }}
             placeholder="Опишите проблему"
-            error={!!errors.description?.message}
-            helperText={errors.description?.message || ''}
+            error={!!errors.message?.message}
+            helperText={errors.message?.message || ''}
             multiline
             rows={4}
           />
@@ -129,10 +133,7 @@ export const HelpDialog: FC<IDialogProps> = ({ open, onClose }) => {
         }}
       >
         <Typography variant="h3" textAlign={'center'}>
-          Ваш вопрос принят.
-        </Typography>
-        <Typography variant="h3" textAlign={'center'}>
-          Спасибо за обращение!
+          {successMessage}
         </Typography>
       </Dialog>
     </>

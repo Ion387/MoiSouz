@@ -16,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 import * as yup from 'yup';
 import { Icon } from '@/components/ui';
-import { ButtonHelp } from '@/components/entities/profile';
+import { ButtonFeedback } from '@/components/entities/profile';
 import s from './password.module.scss';
 import { sendEmail } from '@/services/passwordRecover';
 import { useMutation } from '@tanstack/react-query';
@@ -109,7 +109,7 @@ const PasswordRecover = () => {
           </>
         ) : (
           <>
-            <ButtonHelp className={s.help} />
+            <ButtonFeedback className={s.help} />
             <Link href={'/'} className={s.cross}>
               <IconButton>
                 <Icon name="close" />

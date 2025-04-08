@@ -28,7 +28,7 @@ import { getBackendUrl } from '@/constants/url';
 import { Icon } from '@/components/ui';
 import { type IReg } from '@/models/Reg';
 import s from './reg.module.scss';
-import { ButtonHelp } from '@/components/entities/profile';
+import { ButtonFeedback } from '@/components/entities/profile';
 import { globalTheme } from '@/styles/theme';
 
 const Registration = () => {
@@ -106,7 +106,7 @@ const Registration = () => {
   return (
     <Box className={s.container}>
       <Paper className={s.paper}>
-        <ButtonHelp className={s.help} />
+        <ButtonFeedback className={s.help} />
         <Link href={'/'} className={s.cross}>
           <IconButton>
             <Icon name="close" />

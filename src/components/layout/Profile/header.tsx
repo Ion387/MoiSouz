@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Box, Container, IconButton } from '@mui/material';
 import clsx from 'clsx';
-import { ButtonHelp, UserNav } from '@/components/entities/profile';
+import { ButtonFeedback, UserNav } from '@/components/entities/profile';
 import styles from './header.module.scss';
 import { Icon } from '@/components/ui';
 import { signOut } from 'next-auth/react';
@@ -53,7 +53,7 @@ export const ProfileHeader = () => {
         <Image width={93} height={15} alt="Logo image" src="/images/Logo.svg" />
 
         <Box>
-          <ButtonHelp sx={{ mr: 0.5 }} />
+          <ButtonFeedback sx={{ mr: 0.5 }} />
           {/*<ButtonNotify count={0} />*/}
           <UserNav
             role={

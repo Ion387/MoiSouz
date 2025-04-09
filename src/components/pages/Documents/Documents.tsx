@@ -9,13 +9,14 @@ import { getDocs } from '@/services/getDocs';
 import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { globalTheme } from '@/styles/theme';
 import { TradeunionCheckDialog } from '@/components/entities/profile/dialogs/tradeunion-check-dialog';
+import { useIsUserActive } from '@/hooks/useIsUserActive';
 
 const DocumentsWrapper = () => {
-  const { data: docs, isLoading } = useQuery({
+  const { data: docs } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
     select: (data) => data.data,
@@ -33,19 +34,32 @@ const DocumentsWrapper = () => {
         : [];
 
   const info = useFetchProfile();
-  const [open, setOpen] = useState(
-    !!info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionOwner,
-  );
+  const isActive = useIsUserActive();
+  const [open, setOpen] = useState(false);
+  const [openMember, setOpenMember] = useState(false);
   const [newDocOpen, setNewDocOpen] = useState<boolean>(false);
-  const path = usePathname();
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setOpen(
         !!info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionOwner,
-      ),
-    [info],
-  );
+      );
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [info]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpenMember(
+        !info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionMember,
+      );
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [info?.ROLES, info?.hasTradeunionMember]);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -60,7 +74,11 @@ const DocumentsWrapper = () => {
         {
           <Button
             variant="contained"
-            onClick={() => setNewDocOpen(true)}
+            onClick={() => {
+              if (isActive) setNewDocOpen(true);
+              else if (info?.ROLES?.includes('ROLE_TRADEUNION')) setOpen(true);
+              else setOpenMember(true);
+            }}
             sx={{ marginBottom: '12px' }}
           >
             <Icon
@@ -73,19 +91,13 @@ const DocumentsWrapper = () => {
         }
       </Box>
       <Table docs={filtredDocs} />
-      <TradeunionCheckDialog
-        open={
-          !info?.ROLES?.includes('ROLE_TRADEUNION') &&
-          !info?.hasTradeunionMember &&
-          !isLoading
-        }
-      />
+      <TradeunionCheckDialog open={openMember} setOpen={setOpenMember} />
       <NewProfileDialog
         open={open}
         btn="Заполнить"
         link="/profile"
         title="Для того, чтобы воспользоваться всеми функциями системы, заполните анкету организации, выберите и оплатите тариф"
-        onClose={path.includes('profile') ? () => setOpen(false) : () => {}}
+        onClose={() => setOpen(false)}
       />
       <Dialog open={newDocOpen} onClose={() => setNewDocOpen(false)}>
         <Box

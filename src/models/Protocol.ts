@@ -47,5 +47,19 @@ export interface INewProt {
     declined?: number | null;
     ignored?: number | null;
   }[];
-  data?: { documentAG?: string; documentTime?: string };
+  data?: {
+    documentAG?: string;
+    documentTime?: string;
+    address?: string;
+    questions: {
+      speaker: string;
+      question: string;
+      decided: string;
+      document?: string;
+      approved?: number | null;
+      declined?: number | null;
+      ignored?: number | null;
+    }[];
+    userList?: (string | undefined)[];
+  };
 }

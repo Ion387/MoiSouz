@@ -169,7 +169,7 @@ const ColleaguesWrapper = () => {
           </Box>
         )}
 
-        {!loadingTUUsers && tuUsers ? (
+        {!loadingTUUsers ? (
           <Table
             users={(tuActive && tuUsers) || []}
             tradeunion={tuActive}

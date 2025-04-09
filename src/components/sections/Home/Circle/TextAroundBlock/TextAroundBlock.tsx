@@ -20,7 +20,7 @@ const TextAroundBlock = () => {
         Конструктор оргструктуры, процессов и их автоматизация
       </Typography>
       <Typography className={`${s.textAround} ${s.textPosition6}`}>
-        Инструменты краудсрсинга, краудфандинга и геймификации (награды,
+        Инструменты краудсорсинга, краудфандинга и геймификации (награды,
         конкурсы)
       </Typography>
       <Typography className={`${s.textAround} ${s.textPosition7}`}>

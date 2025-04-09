@@ -2,7 +2,7 @@
 
 import { FC, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Box, InputLabel, TextField } from '@mui/material';
+import { Box, CircularProgress, InputLabel, TextField } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -44,11 +44,11 @@ const schema = yup
     education: yup.string().required('Укажите образование'),
     avatar: yup
       .mixed()
-      .required('Укажите фото')
-      .test('fileSize', 'Максимальный размер - 1 МБ.', (value) => {
+      .required('Добавьте аватарку')
+      .test('fileSize', 'Максимальный размер - 2 МБ.', (value) => {
         if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
     profession: yup
       .array(
@@ -63,7 +63,7 @@ const schema = yup
     address: yup.object({
       postcode: yup.string().required('Укажите индекс'),
       region: yup.string().required('Укажите регион'),
-      municipal: yup.string().required('Укажите муниципальное образование'),
+      municipal: yup.string().nullable(),
       locality: yup.string().required('Укажите населенный пункт'),
       street: yup.string().required('Укажите улицу'),
       house: yup.string().required('Укажите дом/здание'),
@@ -109,6 +109,7 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: IFormProfile | any;
   setSteps?: (arg0: number) => void;
+  stepTitle?: string;
 }
 
 const ProfileForm: FC<Props> = ({
@@ -117,6 +118,7 @@ const ProfileForm: FC<Props> = ({
   loading,
   defaultValues,
   setSteps,
+  stepTitle,
 }) => {
   const methods = useForm<IFormProfile>({
     mode: 'onChange',
@@ -145,7 +147,7 @@ const ProfileForm: FC<Props> = ({
   return (
     <Form
       sx={{ pt: 3 }}
-      title="Анкета профиля"
+      title={stepTitle ? stepTitle : 'Анкета профиля'}
       loading={loading || isSubmitting}
       onCancel={onCancel}
       onSubmit={handleSubmit(onSubmit)}
@@ -178,11 +180,15 @@ const ProfileForm: FC<Props> = ({
           />
         </Box>
 
-        <InputImage
-          sx={{ mt: 4, minWidth: '250px' }}
-          name="avatar"
-          label="Добавить фото"
-        />
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <InputImage
+            sx={{ mt: 4, minWidth: '250px' }}
+            name="avatar"
+            label="Добавить фото"
+          />
+        )}
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>

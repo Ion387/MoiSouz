@@ -49,10 +49,10 @@ const schema = yup
     avatar: yup
       .mixed()
       .nullable()
-      .test('fileSize', 'Максимальный размер - 1 МБ.', (value) => {
+      .test('fileSize', 'Максимальный размер - 2 МБ.', (value) => {
         if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
     profession: yup.array(
       yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),

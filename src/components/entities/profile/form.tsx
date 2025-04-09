@@ -99,7 +99,14 @@ export const Form: FC<
               )}
               {checkTradeUnionMember &&
                 !path.includes('trade_union_member') && (
-                  <Grid2 size={4} container justifyContent={'flex-end'}>
+                  <Grid2
+                    size={4}
+                    container
+                    justifyContent={'flex-end'}
+                    flexDirection={'column'}
+                    alignItems={'flex-end'}
+                    gap={'20px'}
+                  >
                     <Link href={'/trade_union_member'}>
                       <Button
                         variant="contained"
@@ -107,6 +114,7 @@ export const Form: FC<
                           padding: '15px 15px',
                           fontSize: '16px',
                           lineHeight: '27px',
+                          minWidth: '196px',
                           '&.Mui-disabled': {
                             backgroundColor: `${globalTheme.palette.primary.main} !important`,
                             color: 'white !important',
@@ -114,6 +122,23 @@ export const Form: FC<
                         }}
                       >
                         Вступить в профсоюз
+                      </Button>
+                    </Link>
+                    <Link href={'/membership'}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          padding: '15px 15px',
+                          fontSize: '16px',
+                          minWidth: '196px',
+                          lineHeight: '27px',
+                          '&.Mui-disabled': {
+                            backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                            color: 'white !important',
+                          },
+                        }}
+                      >
+                        Я уже в профсоюзе
                       </Button>
                     </Link>
                   </Grid2>

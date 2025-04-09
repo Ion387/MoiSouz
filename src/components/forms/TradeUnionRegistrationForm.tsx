@@ -177,18 +177,18 @@ const schema = yup
     logo: yup
       .mixed()
       .nullable()
-      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
         if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
     scan: yup
       .mixed()
       .required('Обязательное поле')
-      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
         if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
     parent: yup.string().nullable(),
   })
@@ -541,6 +541,7 @@ const TradeUnionRegistrationForm = () => {
                   register={register('address.postcode')}
                   placeholder="Индекс"
                   error={errors.address?.postcode?.message}
+                  maxL={6}
                 />
               </Grid2>
               <Grid2 size={8}>

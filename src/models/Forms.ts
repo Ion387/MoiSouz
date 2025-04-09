@@ -11,7 +11,7 @@ export interface IFormProfile {
   address: {
     postcode: string;
     region: string;
-    municipal: string;
+    municipal?: string | null;
     locality: string;
     street: string;
     house: string;

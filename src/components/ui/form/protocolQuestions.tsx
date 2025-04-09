@@ -184,6 +184,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
         <Grid2 size={4}>
           <InputLabel>За:</InputLabel>
           <TextFieldCustom
+            maxL={arr.length.toString().length}
             sx={{
               '& .MuiInputBase-input': {
                 textAlign: 'center',
@@ -200,6 +201,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
         <Grid2 size={4}>
           <InputLabel>Против:</InputLabel>
           <TextFieldCustom
+            maxL={arr.length.toString().length}
             sx={{
               '& .MuiInputBase-input': {
                 textAlign: 'center',
@@ -216,6 +218,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
         <Grid2 size={4}>
           <InputLabel>Воздержались:</InputLabel>
           <TextFieldCustom
+            maxL={arr.length.toString().length}
             sx={{
               '& .MuiInputBase-input': {
                 textAlign: 'center',

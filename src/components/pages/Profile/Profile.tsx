@@ -6,7 +6,13 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { useForm } from '@/hooks/UseFormProfile';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-const ProfilePage = ({ setSteps }: { setSteps?: (arg0: number) => void }) => {
+const ProfilePage = ({
+  setSteps,
+  stepTitle,
+}: {
+  setSteps?: (arg0: number) => void;
+  stepTitle?: string;
+}) => {
   const info = useFetchProfile();
 
   const { onCancel, onSubmit } = useForm();
@@ -26,6 +32,7 @@ const ProfilePage = ({ setSteps }: { setSteps?: (arg0: number) => void }) => {
       setSteps={setSteps}
       onCancel={onCancel}
       onSubmit={onSubmit}
+      stepTitle={stepTitle}
       loading={!info}
       defaultValues={info}
     />

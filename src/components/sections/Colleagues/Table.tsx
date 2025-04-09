@@ -52,7 +52,6 @@ interface ITableProps {
   users: IFormColleagueProfile[] | undefined;
   tradeunion?: ITradeUnion | null;
   owner?: boolean;
-
   onClick?: (user: IFormColleagueProfile) => void;
   onShow?: (user: IFormColleagueProfile) => void;
   onEdit?: (user: IFormColleagueProfile) => void;
@@ -123,7 +122,7 @@ export const Table: FC<ITableProps> = ({
             ФИО
           </Typography>
         </Grid2>
-        <Grid2 size={2.5}>
+        <Grid2 size={!!owner ? 2.5 : 3.5}>
           <Typography
             variant="body2"
             fontWeight={700}
@@ -132,7 +131,7 @@ export const Table: FC<ITableProps> = ({
             Организация
           </Typography>
         </Grid2>
-        <Grid2 size={2.5}>
+        <Grid2 size={!!owner ? 2.5 : 3.5}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -141,7 +140,7 @@ export const Table: FC<ITableProps> = ({
             Должность
           </Typography>
         </Grid2>
-        <Grid2 size={2}>
+        <Grid2 size={!!owner ? 2 : 3}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -150,15 +149,17 @@ export const Table: FC<ITableProps> = ({
             Роль
           </Typography>
         </Grid2>
-        <Grid2 size={2.5}>
-          <Typography
-            variant="body2"
-            textTransform={'uppercase'}
-            fontWeight={700}
-          >
-            Способ связи
-          </Typography>
-        </Grid2>
+        {!!owner && (
+          <Grid2 size={2.5}>
+            <Typography
+              variant="body2"
+              textTransform={'uppercase'}
+              fontWeight={700}
+            >
+              Способ связи
+            </Typography>
+          </Grid2>
+        )}
       </Grid2>
       <Divider></Divider>
       {groupedData && !!groupedData.length ? (
@@ -193,7 +194,7 @@ export const Table: FC<ITableProps> = ({
                     {el.name}
                   </Typography>
                 </Grid2>
-                <Grid2 size={2.5}>
+                <Grid2 size={!!owner ? 2.5 : 3.5}>
                   <Typography
                     variant="body2"
                     fontWeight={600}
@@ -203,7 +204,7 @@ export const Table: FC<ITableProps> = ({
                     {tradeunion?.title}
                   </Typography>
                 </Grid2>
-                <Grid2 size={2.5}>
+                <Grid2 size={!!owner ? 2.5 : 3.5}>
                   <Typography
                     variant="body2"
                     fontWeight={600}
@@ -213,7 +214,7 @@ export const Table: FC<ITableProps> = ({
                     {el.position && el.position[0]}
                   </Typography>
                 </Grid2>
-                <Grid2 size={2}>
+                <Grid2 size={!!owner ? 2 : 3}>
                   <Typography
                     variant="body2"
                     fontWeight={600}
@@ -223,17 +224,19 @@ export const Table: FC<ITableProps> = ({
                     {el.role}
                   </Typography>
                 </Grid2>
-                <Grid2 size={2.5}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    py={1}
-                    sx={{ userSelect: 'none' }}
-                  >
-                    {[el.email, el.phone].filter((el) => el).join(', ')}
-                  </Typography>
-                </Grid2>
-                {owner && (
+                {!!owner && (
+                  <Grid2 size={2.5}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      py={1}
+                      sx={{ userSelect: 'none' }}
+                    >
+                      {[el.email, el.phone].filter((el) => el).join(', ')}
+                    </Typography>
+                  </Grid2>
+                )}
+                {!!owner && (
                   <Grid2 size={0.5}>
                     <IconButton onClick={(e) => handleMenuOpen(e, index)}>
                       <Icon name="menu" color="darkgray" />

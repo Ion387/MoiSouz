@@ -2,7 +2,6 @@ import { Box, Container, Typography } from '@mui/material';
 import React from 'react';
 import s from './layout.module.scss';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const LandingFooter = () => {
   return (
@@ -10,21 +9,16 @@ const LandingFooter = () => {
       <Container>
         <Box className={s.footerBox}>
           <Box className={s.footerList}>
-            <Typography
-              component="a"
-              href={`tel:+7 945 777 33 33`}
-              variant="body2"
-            >
-              +7 945 777 33 33
+            <Typography component="a" href={`tel:+79052207677`} variant="body2">
+              +79052207677
             </Typography>
             <Typography
               component="a"
-              href={`mailto:info@moisouz.ru`}
+              href={`mailto:info@profsouz24.ru`}
               variant="body2"
             >
-              info@moisouz.ru
+              info@profsouz24.ru
             </Typography>
-            <Typography variant="body2">profsouz24.ru</Typography>
           </Box>
           <Box>
             <Image
@@ -35,21 +29,11 @@ const LandingFooter = () => {
             />
           </Box>
           <Box className={s.footerList}>
-            <Link href={`/`}>
+            <a href={`/User_agreement.pdf`} target="_blank">
               <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
-                Лицензионное соглашение
+                Пользовательское соглашение
               </Typography>
-            </Link>
-            <Link href={`/`}>
-              <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
-                Сотрудничество
-              </Typography>
-            </Link>
-            <Link href={`/`}>
-              <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
-                Работа
-              </Typography>
-            </Link>
+            </a>
           </Box>
         </Box>
       </Container>

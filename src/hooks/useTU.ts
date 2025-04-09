@@ -84,6 +84,7 @@ export const useFetchTUUsers = ({ guid }: PropsFetchTUUsers) => {
       ),
     select: (data) => data.data,
     refetchOnMount: 'always',
+    enabled: !!guid,
   });
   return { data: info, loading: isFetching, refetch };
 };

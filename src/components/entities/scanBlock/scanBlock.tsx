@@ -30,9 +30,9 @@ const schema = yup
     upload: yup
       .mixed<Filetype>()
       .required('Для отправки прикрепите файл')
-      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
         if (!value || typeof value === 'string') return true;
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
   })
   .required();
@@ -41,9 +41,9 @@ const schemaForUsers = yup
   .object({
     upload: yup
       .mixed<Filetype>()
-      .test('fileSize', 'Максимальный размер - 1 МБ', (value) => {
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
         if (!value || typeof value === 'string') return true;
-        return convertSizeToBites(value.size) <= 1048576;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
   })
   .required();
@@ -116,7 +116,7 @@ const ScanBlock = ({ number }: { number: string }) => {
   }, []);
 
   useEffect(() => {
-    if (info?.ROLES?.includes('ROLE_TRADEUNION')) {
+    if (info?.ROLES?.includes('ROLE_TRADEUNION') && isSuccess) {
       mutate2({
         step: 'Утверждено',
       });

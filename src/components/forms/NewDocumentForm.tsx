@@ -237,7 +237,6 @@ const NewDocumentForm = ({
                         articlesL={articlesL}
                         getValues={getValues}
                         setFormValue={setFormValue}
-                        questionType="default"
                       />
                     )}
                     defaultValue=""

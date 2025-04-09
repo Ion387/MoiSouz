@@ -77,10 +77,7 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
         </Box>
         <Box width="fit-content" p={2} textAlign="right">
           <Typography fontSize={14} color="gray">
-            {user.birthdate}
-          </Typography>
-          <Typography fontSize={14} color="gray">
-            {`id ${user.id}`}
+            {`№${user.id}`}
           </Typography>
         </Box>
       </Box>

@@ -126,14 +126,13 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
 
   useEffect(() => {
     if (info) {
-      reset({
-        data: {
-          middleName: info.middleName,
-          firstName: info.firstName,
-          lastName: info.lastName,
-          position: !!info.position?.length ? info.position[0] : '',
-        },
-      });
+      setFormValue('data.middleName', info.middleName);
+      setFormValue('data.firstName', String(info.firstName));
+      setFormValue('data.lastName', String(info.lastName));
+      setFormValue(
+        'data.position',
+        !!info.position?.length ? info.position[0] : '',
+      );
       setFormValue('documentNumber', 'AMXXXXX');
       setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     }
@@ -212,6 +211,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   placeholder="Иван"
                   error={!!errors.data?.firstName?.message}
                   helperText={errors.data?.firstName?.message || ''}
+                  slotProps={{ input: { readOnly: true } }}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -221,6 +221,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   placeholder="Иванов"
                   error={!!errors.data?.lastName?.message}
                   helperText={errors.data?.lastName?.message || ''}
+                  slotProps={{ input: { readOnly: true } }}
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -230,6 +231,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   placeholder="Иванович"
                   error={!!errors.data?.middleName?.message}
                   helperText={errors.data?.middleName?.message || ''}
+                  slotProps={{ input: { readOnly: true } }}
                 />
               </Grid2>
 
@@ -240,6 +242,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   placeholder="Бухгалтер"
                   error={!!errors.data?.position?.message}
                   helperText={errors.data?.position?.message || ''}
+                  slotProps={{ input: { readOnly: true } }}
                 />
               </Grid2>
 

@@ -126,18 +126,30 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
       setFormValue('documentDate', doc.documentDate);
       if (doc.data?.documentTime)
         setFormValue('documentTime', doc.data?.documentTime);
-      setFormValue(`address`, doc.address);
-      setFormValue(`documentAG`, doc.documentAG);
-      setFormValue(`userList`, doc.userList);
-      if (doc.questions && doc.questions.length) {
-        doc.questions.forEach((el, id) => {
-          setFormValue(`questions.${id}.speaker`, doc.questions[id].speaker);
-          setFormValue(`questions.${id}.question`, doc.questions[id].question);
-          setFormValue(`questions.${id}.decided`, doc.questions[id].decided);
-          setFormValue(`questions.${id}.approved`, doc.questions[id].approved);
-          setFormValue(`questions.${id}.declined`, doc.questions[id].declined);
-          setFormValue(`questions.${id}.ignored`, doc.questions[id].ignored);
-          setFormValue(`questions.${id}.document`, doc.questions[id].document);
+      if (doc.data?.address) setFormValue(`address`, doc.data?.address);
+      if (doc.data?.documentAG)
+        setFormValue(`documentAG`, doc.data?.documentAG);
+      if (doc.data?.userList) setFormValue(`userList`, doc.data?.userList);
+      if (doc.data?.questions && doc.data?.questions.length) {
+        setIsCanView({
+          a: doc.data?.questions[0].approved
+            ? doc.data?.questions[0].approved
+            : 0,
+          d: doc.data?.questions[0].declined
+            ? doc.data?.questions[0].declined
+            : 0,
+          i: doc.data?.questions[0].ignored
+            ? doc.data?.questions[0].ignored
+            : 0,
+        });
+        doc.data?.questions.forEach((el, id) => {
+          setFormValue(`questions.${id}.speaker`, el.speaker);
+          setFormValue(`questions.${id}.question`, el.question);
+          setFormValue(`questions.${id}.decided`, el.decided);
+          setFormValue(`questions.${id}.approved`, el.approved);
+          setFormValue(`questions.${id}.declined`, el.declined);
+          setFormValue(`questions.${id}.ignored`, el.ignored);
+          setFormValue(`questions.${id}.document`, el.document);
         });
       }
     }
@@ -145,7 +157,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
 
   useEffect(() => {
     if (doc && doc.data && doc.data.documentAG && agendas)
-      setCurrentAgenda(agendas?.find((el) => el.guid == doc.data?.documentAG));
+      setCurrentAgenda(
+        agendas?.find((el) => el.documentNumber == doc.data?.documentAG),
+      );
   }, [doc, agendas]);
 
   useEffect(() => {
@@ -160,6 +174,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     if (!doc) {
       if (currentAgenda) {
         setFormValue(`address`, currentAgenda.data.address);
+        setFormValue(`documentAG`, currentAgenda.documentNumber);
         defaultQuestions.forEach((q, id) => {
           setFormValue(`questions.${id}.question`, q.question);
           setFormValue(`questions.${id}.decided`, q.decided);
@@ -246,6 +261,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
       const a = q.approved ? q.approved : 0;
       const d = q.declined ? q.declined : 0;
       const i = q.ignored ? q.ignored : 0;
+      console.log(a, d, i);
       if (a + d + i != data.userList?.length) {
         setError(`questions.${id}.approved`, {
           message:
@@ -479,6 +495,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         <Grid2 size={4}>
                           <InputLabel>За:</InputLabel>
                           <TextFieldCustom
+                            maxL={arr.length.toString().length}
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',
@@ -511,6 +528,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         <Grid2 size={4}>
                           <InputLabel>Против:</InputLabel>
                           <TextFieldCustom
+                            maxL={arr.length.toString().length}
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',
@@ -543,6 +561,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         <Grid2 size={4}>
                           <InputLabel>Воздержались:</InputLabel>
                           <TextFieldCustom
+                            maxL={arr.length.toString().length}
                             sx={{
                               '& .MuiInputBase-input': {
                                 textAlign: 'center',

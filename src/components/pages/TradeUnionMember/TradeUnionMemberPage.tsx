@@ -30,10 +30,13 @@ const TradeUnionMemberPage = () => {
     }
   }, [info]);
   return (
-    <Grid2 container sx={{ p: 2 }} spacing={1.2}>
+    <Grid2 container spacing={1.2}>
       {steps === 1 ? (
         <Grid2 size={doc?.step ? 8 : 12}>
-          <ProfilePage setSteps={setSteps} />
+          <ProfilePage
+            stepTitle="Необходимо заполнить анкету профиля"
+            setSteps={setSteps}
+          />
         </Grid2>
       ) : (
         <Grid2 size={doc?.step ? 8 : 12}>

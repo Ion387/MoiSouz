@@ -4,6 +4,7 @@ export const OPTIONS_EDUCATION: IOption[] = [
   { title: 'Среднее общее', id: 'Среднее общее' },
   { title: 'Среднее профессиональное', id: 'Среднее профессиональное' },
   { title: 'Высшее', id: 'Высшее' },
+  { title: 'Неоконченное высшее', id: 'Неоконченное высшее' },
 ];
 
 export const OPTIONS_ROLES: IOption[] = [

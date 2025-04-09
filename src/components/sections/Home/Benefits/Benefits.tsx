@@ -25,7 +25,7 @@ const Benefits = () => {
             className={s.title}
             maxWidth={400}
           >
-            РОСТ ДОХОДА И ЭКОНОМИИ ДО 20 000 РУБЛЕЙ
+            РОСТ ДОХОДА И ЭКОНОМИЯ ДО 20 000 РУБЛЕЙ
           </Typography>
         </Grid2>
         <Grid2

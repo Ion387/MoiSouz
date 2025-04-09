@@ -12,6 +12,7 @@ import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
 
 import { ITradeUnion } from '@/models/TradeUnion';
 import { getBackendUrl } from '@/constants/url';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 interface PropsField {
   name: string;
@@ -55,6 +56,8 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
 
   if (user == null) return null;
 
+  dayjs.extend(customParseFormat);
+
   return (
     <Box
       display="flex"
@@ -71,7 +74,7 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           fontSize={14}
           marginLeft="auto"
           fontWeight={500}
-        >{`№${user.guid}`}</Typography>
+        >{`№${user.id}`}</Typography>
       </Box>
 
       <Box display="flex" justifyContent="space-between">
@@ -84,23 +87,18 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           />
 
           <Field
-            name="Основная профессия"
-            value={user.profession && user.profession[0]}
-          />
-
-          <Field
             name="Год рождения"
-            value={dayjs(user.birthdate).format('YYYY')}
+            value={dayjs(user.birthdate, 'DD.MM.YYYY').format('YYYY')}
           />
 
           <Field
             name="Основная профессия"
-            value={user.profession && user.profession[0]}
+            value={user.position && user.position[0]}
           />
 
           <Field
             name="Специальность по образованию"
-            value={user.position && user.position[0]}
+            value={user.profession && user.profession[0]}
           />
 
           <Field name="Образование" value={user.education} />

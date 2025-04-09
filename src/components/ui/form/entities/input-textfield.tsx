@@ -10,7 +10,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   error?: string;
-  maxL?: number;
+  maxL: number;
   disabled?: boolean;
   fullWidth?: boolean;
   register: object;
@@ -30,7 +30,8 @@ export const TextFieldCustom: FC<PropsWithSX & Props> = ({
   onChange,
 }) => {
   const { ref } = useIMask({
-    mask: Number,
+    mask: '0'.repeat(maxL),
+    prepare: (value) => value.replace(/[^0-9]/g, ''),
     maxLength: maxL,
     max: 99999999999999999999999999,
   });

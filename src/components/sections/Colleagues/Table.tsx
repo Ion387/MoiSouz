@@ -273,7 +273,10 @@ export const Table: FC<ITableProps> = ({
                         </ListItemIcon>
                         <ListItemText>Редактировать</ListItemText>
                       </MenuItem>
-                      <MenuItem onClick={() => handleMenuDelete(el)}>
+                      <MenuItem
+                        onClick={() => handleMenuDelete(el)}
+                        sx={{ display: 'none' }}
+                      >
                         <ListItemIcon>
                           <Icon name="delete" color="red" />
                         </ListItemIcon>

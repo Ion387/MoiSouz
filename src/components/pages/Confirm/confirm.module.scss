@@ -11,11 +11,21 @@
   max-width: 630px;
   width: 100%;
   border-radius: 24px;
-  padding: 55px 55px 77px;
+  padding: 55px 55px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  a {
-    width: 100%;
-  }
+  position: relative;
+}
+
+.cross {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.help {
+  position: absolute;
+  top: 12px;
+  left: 12px;
 }

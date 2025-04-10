@@ -98,7 +98,8 @@ export const Form: FC<
                 </Grid2>
               )}
               {checkTradeUnionMember &&
-                !path.includes('trade_union_member') && (
+                !path.includes('trade_union_member') &&
+                !path.includes('membership') && (
                   <Grid2
                     size={4}
                     container

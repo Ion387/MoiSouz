@@ -50,7 +50,7 @@ const MembershipForm = () => {
       const session = await getSession();
       return axios.put(
         `${getBackendUrl}/api/private/tradeunion-user-exists/${data.tu}`,
-        null,
+        { guid: data.tu },
         {
           headers: { Authorization: `Bearer ${session?.user?.token}` },
         },

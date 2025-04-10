@@ -261,7 +261,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
       const a = q.approved ? q.approved : 0;
       const d = q.declined ? q.declined : 0;
       const i = q.ignored ? q.ignored : 0;
-      console.log(a, d, i);
       if (a + d + i != data.userList?.length) {
         setError(`questions.${id}.approved`, {
           message:

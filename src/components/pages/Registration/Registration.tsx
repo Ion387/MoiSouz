@@ -124,7 +124,7 @@ const Registration = () => {
                 'Мы отправили на Ваш адрес электронной почты ссылку для подтверждения регистрации!'
               }
             </Typography>
-            <Link href="/" style={{ width: '100%' }}>
+            {/* {<Link href="/" style={{ width: '100%' }}>
               <Button
                 variant="contained"
                 sx={{
@@ -161,7 +161,7 @@ const Registration = () => {
               >
                 {mobile ? 'Войти' : 'Войти в личный кабинет'}
               </Button>
-            </Link>
+            </Link>} */}
           </>
         ) : error ? (
           <>

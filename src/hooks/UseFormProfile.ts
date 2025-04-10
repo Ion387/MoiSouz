@@ -18,6 +18,14 @@ export const useForm = () => {
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: IFormProfile) => {
       saveFormProfile(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+
+  const { mutate: mutateAvatar, isSuccess: isSuccessAvatar } = useMutation({
+    mutationFn: async (data: IFormProfile) => {
       saveFormProfileAvatar(data.avatar);
     },
     onSuccess: () => {
@@ -25,10 +33,12 @@ export const useForm = () => {
     },
   });
 
-  const onSubmit: (data: IFormProfile) => Promise<void> = async (data) =>
+  const onSubmit: (data: IFormProfile) => Promise<void> = async (data) => {
     mutate(data);
+    mutateAvatar(data);
+  };
 
-  return { onCancel, onSubmit, isSuccess };
+  return { onCancel, onSubmit, isSuccess, isSuccessAvatar };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

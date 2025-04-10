@@ -40,7 +40,7 @@ const Confirm = () => {
     <Box className={s.container}>
       {error ? (
         <Paper className={s.paper}>
-          <ButtonFeedback className={s.help} />
+          <ButtonFeedback className={s.help} withEmail />
           <Link href={'/'} className={s.cross}>
             <IconButton>
               <Icon name="close" />

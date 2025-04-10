@@ -31,4 +31,5 @@ export interface IFormProfile {
 export interface IFormFeedback {
   title: string;
   message?: string;
+  email?: string;
 }

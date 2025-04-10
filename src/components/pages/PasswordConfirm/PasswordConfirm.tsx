@@ -136,7 +136,7 @@ const PasswordConfirm = () => {
           </>
         ) : (
           <>
-            <ButtonFeedback className={s.help} />
+            <ButtonFeedback className={s.help} withEmail />
             <Link href={'/'} className={s.cross}>
               <IconButton>
                 <Icon name="close" />

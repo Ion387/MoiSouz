@@ -8,9 +8,14 @@ import { FeedbackDialog } from './dialogs';
 
 import { PropsWithClassName, PropsWithSX } from '@/models/Props';
 
-export const ButtonFeedback: FC<PropsWithClassName & PropsWithSX> = ({
+interface Props {
+  withEmail?: boolean;
+}
+
+export const ButtonFeedback: FC<PropsWithClassName & PropsWithSX & Props> = ({
   className,
   sx,
+  withEmail,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -19,7 +24,11 @@ export const ButtonFeedback: FC<PropsWithClassName & PropsWithSX> = ({
       <IconButton className={className} sx={sx} onClick={() => setOpen(true)}>
         <Icon name="help" />
       </IconButton>
-      <FeedbackDialog open={open} onClose={() => setOpen(false)} />
+      <FeedbackDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        withEmail={withEmail}
+      />
     </>
   );
 };

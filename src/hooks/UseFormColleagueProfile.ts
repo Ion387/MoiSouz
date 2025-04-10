@@ -2,8 +2,6 @@ import axios, { AxiosError } from 'axios';
 
 import { getHeaders } from '@/utils/axios';
 
-import { getBackendUrl } from '@/constants/url';
-import { IFormColleagueProfile } from '@/models/Colleague';
 import { useRouter } from 'next/navigation';
 import {
   useIsMutating,
@@ -11,6 +9,11 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+
+import { getBackendUrl } from '@/constants/url';
+
+import { IFormColleagueProfile } from '@/models/Colleague';
+import { IDoc } from '@/models/Doc';
 
 export const useForm = () => {
   const router = useRouter();
@@ -24,8 +27,10 @@ export const useForm = () => {
     mutationKey: [mutationKey],
     mutationFn: async (data: IFormColleagueProfile) => {
       try {
-        if (data.guid) await saveFormColleagueProfile(data);
-        else await addFormColleagueProfile(data);
+        let guid = data.guid || '';
+        if (guid) await saveFormColleagueProfile(data);
+        else guid = (await addFormColleagueProfile(data)).data.guid || '';
+        await uploadColleagueProfileReasonFile(guid, data.reasonFile);
       } catch (err) {
         const error = err as AxiosError<{
           status: string;
@@ -39,7 +44,6 @@ export const useForm = () => {
           throw new Error('email');
         }
       }
-      console.log('REASON FILE', data.reasonFile);
     },
     onSuccess: () => {
       router.push('/colleagues');
@@ -81,6 +85,29 @@ export const useFetchColleagueProfile = (guid: string) => {
   return { data: info, isLoading, refetch, clear };
 };
 
+export const uploadColleagueProfileReasonFile = async (
+  guid: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  file: any,
+) => {
+  if (typeof file != 'object') {
+    return null;
+  }
+
+  const formData = new FormData();
+  formData.append('reasonfile', file);
+
+  return axios.post<IFormColleagueProfile>(
+    `${getBackendUrl}/api/private/tradeunion-user-reasonfile/${guid}`,
+    formData,
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
+};
+
 export const addFormColleagueProfile = async (data: IFormColleagueProfile) => {
   return axios.post<IFormColleagueProfile>(
     `${getBackendUrl}/api/private/tradeunion-user`,
@@ -103,4 +130,36 @@ export const saveFormColleagueProfile = async (data: IFormColleagueProfile) => {
       },
     },
   );
+};
+
+export const deleteColleagueProfile = async (data: IFormColleagueProfile) => {
+  return axios.delete<IFormColleagueProfile>(
+    `${getBackendUrl}/api/private/tradeunion-user/${data.guid}`,
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
+};
+
+const getProtocols = async () => {
+  return axios.get<IDoc[]>(
+    `${getBackendUrl}/api/private/documents?documentType[]=PR`,
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
+};
+
+export const useProtocols = () => {
+  const { data } = useQuery({
+    queryKey: [`colleagues-protocols`],
+    queryFn: () => getProtocols(),
+    select: (data) => data.data,
+  });
+
+  return { data };
 };

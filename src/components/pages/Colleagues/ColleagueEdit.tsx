@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useEffect, useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
@@ -17,7 +17,8 @@ import {
 
 const ColleagueEditWrapper = () => {
   const params = useParams();
-  const isCreate = (params.guid as string) == 'create';
+  const pathname = usePathname();
+  const isCreate = pathname.endsWith('/create');
 
   const info = useFetchProfile();
 
@@ -58,7 +59,7 @@ const ColleagueEditWrapper = () => {
         </Button>
       </Link>
 
-      {info != null && isLoadingUser == false ? (
+      {info != null && (isCreate == true || isLoadingUser == false) ? (
         <>
           {info?.hasTradeunionOwner == true ? (
             <ColleagueForm

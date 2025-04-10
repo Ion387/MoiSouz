@@ -30,8 +30,8 @@ export interface IFormColleagueProfile {
   hobbies?: number[];
   email: string;
   role: string;
-  reason?: string;
-  reasonFile?: string;
+  reason?: string | null;
+  reasonFile?: string | null;
   history?: {
     name: string;
     startDate: string;

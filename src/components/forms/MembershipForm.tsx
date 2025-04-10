@@ -9,9 +9,10 @@ import {
   MenuItem,
   Paper,
   Select,
+  Typography,
 } from '@mui/material';
 import s from './forms.module.scss';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getApplications } from '@/services/getApplications';
 import { useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
@@ -44,17 +45,22 @@ const MembershipForm = () => {
     setValue,
   } = methods;
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, error } = useMutation({
     mutationFn: async (data: { tu: string }) => {
       const session = await getSession();
       return axios.put(
         `${getBackendUrl}/api/private/tradeunion-user-exists/${data.tu}`,
-        { guid: data.tu },
+        null,
         {
           headers: { Authorization: `Bearer ${session?.user?.token}` },
         },
       );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      router.push('/documents?incoming');
     },
   });
 
@@ -68,6 +74,16 @@ const MembershipForm = () => {
 
   return (
     <Paper className={s.paper}>
+      {error && (
+        <Typography
+          variant="h3"
+          textAlign={'center'}
+          marginBottom={'12px'}
+          color="#FF4949"
+        >
+          Пользователь не обнаружен в выбранном профсоюзе
+        </Typography>
+      )}
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 container spacing={2.5}>

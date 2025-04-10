@@ -19,26 +19,39 @@ import { saveFormFeedback } from '@/hooks/UseFeedback';
 
 import { IFormFeedback } from '@/models/Forms';
 
-const schema = yup
+const schemaDefault = yup
   .object({
     title: yup.string().required('Укажите вопрос'),
     message: yup.string(),
   })
   .required();
 
+const schemaWithEmail = yup
+  .object({
+    title: yup.string().required('Укажите вопрос'),
+    message: yup.string(),
+    email: yup.string().email('Укажите почту').required('Укажите почту'),
+  })
+  .required();
+
 interface IDialogProps {
   open: boolean;
   onClose?: () => void;
+  withEmail?: boolean;
 }
 
-export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
+export const FeedbackDialog: FC<IDialogProps> = ({
+  open,
+  onClose,
+  withEmail,
+}) => {
   const [reseted, setReseted] = useState<boolean>(true);
   const [success, setSuccess] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const methods = useForm<IFormFeedback>({
     mode: 'onChange',
-    resolver: yupResolver(schema),
+    resolver: yupResolver(withEmail ? schemaWithEmail : schemaDefault),
   });
 
   const {
@@ -69,7 +82,10 @@ export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
     // success
     if (onClose) onClose();
     setSuccess(true);
-    setSuccessMessage(response.data?.description);
+    setSuccessMessage(
+      response.data?.description ||
+        'Спасибо за обращение!\r\nВаш вопрос принят.',
+    );
   };
 
   return (
@@ -103,12 +119,14 @@ export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
             Поддержка
           </Typography>
           <InputLabel sx={{ mt: 3 }}>Ваш вопрос</InputLabel>
+
           <TextField
             {...register('title')}
             placeholder="Опишите проблему"
             error={!!errors.title?.message}
             helperText={errors.title?.message || ''}
           />
+
           <InputLabel sx={{ mt: 3 }}>Комментарий</InputLabel>
           <TextField
             {...register('message')}
@@ -119,6 +137,18 @@ export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
             multiline
             rows={4}
           />
+
+          {withEmail && (
+            <>
+              <InputLabel>Почта</InputLabel>
+              <TextField
+                {...register('email')}
+                placeholder="Почта"
+                error={!!errors.email?.message}
+                helperText={errors.email?.message || ''}
+              />
+            </>
+          )}
         </Form>
       </Dialog>
 
@@ -132,7 +162,7 @@ export const FeedbackDialog: FC<IDialogProps> = ({ open, onClose }) => {
           },
         }}
       >
-        <Typography variant="h3" textAlign={'center'}>
+        <Typography variant="h3" textAlign="center" whiteSpace="pre-line">
           {successMessage}
         </Typography>
       </Dialog>

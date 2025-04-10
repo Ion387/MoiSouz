@@ -2,6 +2,7 @@
 
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 import {
   Box,
@@ -22,8 +23,8 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 import { useFetchUserTUs, useFetchTUUsers } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
-import Link from 'next/link';
 import { IFormColleagueProfile } from '@/models/Colleague';
+import { deleteColleagueProfile } from '@/hooks/UseFormColleagueProfile';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -96,10 +97,11 @@ const ColleaguesWrapper = () => {
   const handleUserDelete = (user: IFormColleagueProfile) => {
     setUserDelete(user);
   };
-  const handleUserDeleteAccept = () => {
+  const handleUserDeleteAccept = async () => {
     if (userDelete == null) return;
     setUserDelete(null);
-    console.log('DELET USER', userDelete);
+    await deleteColleagueProfile(userDelete);
+    refetchTUUsers();
   };
 
   return (

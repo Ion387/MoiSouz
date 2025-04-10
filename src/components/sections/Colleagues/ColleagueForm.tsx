@@ -21,9 +21,11 @@ import { TradeUnionCardSimple } from './TradeUnionCardSimple';
 
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
 import { useOptions } from '@/hooks/UseOptions';
+import { useProtocols } from '@/hooks/UseFormColleagueProfile';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { ITradeUnion } from '@/models/TradeUnion';
+import { IOption } from '@/models/Option';
 import { OPTIONS_EDUCATION, OPTIONS_ROLES } from '@/constants/options';
 
 const schema = yup
@@ -96,7 +98,7 @@ const schema = yup
     isActive: yup.bool(),
     email: yup.string().email('Укажите почту').required('Укажите почту'),
     role: yup.string().required('Укажите роль'),
-    reason: yup.string(),
+    reason: yup.string().nullable(),
     history: yup.array(
       yup.object({
         name: yup
@@ -154,6 +156,12 @@ export const ColleagueForm: FC<Props> = ({
         ? tuList.data.find((el) => el.guid == tuOwner?.guid)
         : undefined,
     [tuOwner, tuList],
+  );
+
+  const { data: protocols } = useProtocols();
+  const optionsProtocol: IOption[] = useMemo(
+    () => protocols?.map((el) => ({ id: el.guid, title: el.title })) || [],
+    [protocols],
   );
 
   const isDisabled = useMemo(() => {
@@ -368,7 +376,7 @@ export const ColleagueForm: FC<Props> = ({
           name="reason"
           label="Основание, на котором присвоена роль"
           placeholder="Выберите из списка"
-          options={OPTIONS_ROLES}
+          options={optionsProtocol}
         />
       </Box>
 

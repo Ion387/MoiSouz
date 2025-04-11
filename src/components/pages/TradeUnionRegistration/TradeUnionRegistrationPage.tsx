@@ -37,7 +37,7 @@ const TradeUnionRegistrationPage = () => {
       ) : steps === 3 ? (
         <Grid2 size={12}>
           <Paper>
-            <Tariffs noTitle />
+            <Tariffs noTitle isSoon />
           </Paper>
         </Grid2>
       ) : (

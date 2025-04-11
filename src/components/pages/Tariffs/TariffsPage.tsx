@@ -11,7 +11,7 @@ const TariffsPage = () => {
         Выберите тариф
       </Typography>
       <Paper>
-        <Tariffs isActive />
+        <Tariffs isActive isSoon />
       </Paper>
     </Box>
   );

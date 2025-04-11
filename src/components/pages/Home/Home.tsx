@@ -23,7 +23,7 @@ const HomePage = () => {
         <Steps />
         <Plus />
         <Benefits />
-        <Tariffs />
+        <Tariffs noPrice isSoon />
       </Container>
       <LandingFooter />
       <ScrollButton />

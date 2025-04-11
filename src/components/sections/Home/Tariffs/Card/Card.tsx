@@ -6,7 +6,12 @@ import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { ITarrif } from '@/models/Tarrif';
 import Link from 'next/link';
 
-const CardItem: FC<ITarrif> = ({
+interface Props {
+  noPrice?: boolean;
+  isSoon?: boolean;
+}
+
+const CardItem: FC<ITarrif & Props> = ({
   title,
   price,
   priceDesc,
@@ -18,6 +23,8 @@ const CardItem: FC<ITarrif> = ({
   isActive,
   id,
   handleSubmit,
+  noPrice,
+  isSoon,
 }) => {
   return (
     <Box className={main ? s.mainItem : s.item}>
@@ -26,24 +33,28 @@ const CardItem: FC<ITarrif> = ({
         <Typography className={main ? s.mainTitle : s.title}>
           {title}
         </Typography>
-        <Typography className={main ? s.mainPrice : s.price}>
-          {price}
-        </Typography>
-        <Typography
-          className={main ? s.mainDesc : s.desc}
-          sx={{
-            marginBottom:
-              title === '«ВОЗДУХ»' ? '42px !important' : '8px !important',
-          }}
-        >
-          {priceDesc}
-        </Typography>
-        <Typography className={main ? s.mainPrice : s.price}>
-          {price1}
-        </Typography>
-        <Typography className={main ? s.mainDesc : s.desc}>
-          {priceDesc1}
-        </Typography>
+        {noPrice != true && (
+          <>
+            <Typography className={main ? s.mainPrice : s.price}>
+              {price}
+            </Typography>
+            <Typography
+              className={main ? s.mainDesc : s.desc}
+              sx={{
+                marginBottom:
+                  title === '«ВОЗДУХ»' ? '42px !important' : '8px !important',
+              }}
+            >
+              {priceDesc}
+            </Typography>
+            <Typography className={main ? s.mainPrice : s.price}>
+              {price1}
+            </Typography>
+            <Typography className={main ? s.mainDesc : s.desc}>
+              {priceDesc1}
+            </Typography>
+          </>
+        )}
         <List className={s.list}>
           {list.map((item) => (
             <ListItem key={item} className={main ? s.mainL : s.l}>
@@ -54,7 +65,10 @@ const CardItem: FC<ITarrif> = ({
       </Box>
       <Box className={s.cardFooter}>
         {desc && (
-          <Typography className={main ? s.mainDesc2 : s.desc2}>
+          <Typography
+            className={main ? s.mainDesc2 : s.desc2}
+            whiteSpace="break-spaces"
+          >
             {desc}
           </Typography>
         )}
@@ -67,9 +81,10 @@ const CardItem: FC<ITarrif> = ({
                 padding: '14px 17px',
                 width: '100%',
                 border: '0px',
+                maxWidth: '180px',
               }}
             >
-              Оформить подписку
+              {isSoon ? 'Скоро' : 'Оформить подписку'}
             </Button>
           </Link>
         ) : (
@@ -81,9 +96,10 @@ const CardItem: FC<ITarrif> = ({
               padding: '14px 17px',
               width: '100%',
               border: '0px',
+              maxWidth: '180px',
             }}
           >
-            Оформить подписку
+            {isSoon ? 'Скоро' : 'Оформить подписку'}
           </Button>
         )}
       </Box>

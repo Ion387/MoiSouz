@@ -80,8 +80,11 @@ const CardItem: FC<ITarrif & Props> = ({
                 color: main ? 'rgb(72, 128, 255)' : '#fff',
                 padding: '14px 17px',
                 width: '100%',
-                border: '0px',
+                border: 'unset !important',
+                outline: 'unset !important',
+                boxShadow: 'unset !important',
                 maxWidth: '180px',
+                marginTop: 1.5,
               }}
             >
               {isSoon ? 'Скоро' : 'Оформить подписку'}
@@ -95,8 +98,11 @@ const CardItem: FC<ITarrif & Props> = ({
               color: main ? 'rgb(72, 128, 255)' : '#fff',
               padding: '14px 17px',
               width: '100%',
-              border: '0px',
+              border: 'unset !important',
+              outline: 'unset !important',
+              boxShadow: 'unset !important',
               maxWidth: '180px',
+              marginTop: 1.5,
             }}
           >
             {isSoon ? 'Скоро' : 'Оформить подписку'}

@@ -57,9 +57,13 @@ const schema = yup
       .string()
       .required('Обязательное поле')
       .matches(
-        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
-        'Некорректный номер телефона',
-      ),
+        /^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/,
+        'Введите корректный номер (+7XXXXXXXXXX)',
+      )
+      .test('phone-length', 'Номер должен содержать 11 цифр', (value) => {
+        const cleaned = value?.replace(/[^\d]/g, '');
+        return cleaned?.length === 11;
+      }),
     title: yup.string().required('Обязательное поле'),
     creationDate: yup.string().required('Обязательное поле'),
     ogrn: yup
@@ -119,8 +123,8 @@ const schema = yup
       .string()
       .required('Обязательное поле')
       .matches(
-        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
-        'Некорректный номер телефона',
+        /^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/,
+        'Введите корректный номер (+7XXXXXXXXXX)',
       ),
     bank: yup.object({
       bank: yup.string().required('Обязательное поле'),
@@ -162,7 +166,11 @@ const schema = yup
       inn: yup
         .string()
         .required('Обязательное поле')
-        .max(12, 'Число символов не должно превышать 12'),
+        .test(
+          'inn',
+          (params) => validateInn(params.value),
+          (value) => !validateInn(String(value)),
+        ),
     }),
     percents: yup
       .number()
@@ -627,7 +635,8 @@ const TradeUnionRegistrationForm = () => {
                   register={register('chairmanPhone')}
                   placeholder="+79999999999"
                   error={errors.chairmanPhone?.message}
-                  maxL={12}
+                  maxL={11}
+                  allowPlus
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -725,7 +734,8 @@ const TradeUnionRegistrationForm = () => {
                   register={register('phone')}
                   placeholder="+79999999999"
                   error={errors.phone?.message}
-                  maxL={12}
+                  maxL={11}
+                  allowPlus
                 />
               </Grid2>
               <Grid2 size={6}>

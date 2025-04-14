@@ -104,7 +104,10 @@ const ScanBlock = ({ number }: { number: string }) => {
     if (
       info?.ROLES?.includes('ROLE_TRADEUNION') &&
       file?.step !== 'На согласовании' &&
-      file?.step !== 'Утверждено'
+      file?.step !== 'Утверждено' &&
+      file?.step !== 'Оригинал получен' &&
+      file?.step !==
+        'Решение положительное, ожидает передачи оригинала в Профсоюз'
     ) {
       mutate2({
         step:
@@ -116,9 +119,23 @@ const ScanBlock = ({ number }: { number: string }) => {
   }, []);
 
   useEffect(() => {
-    if (info?.ROLES?.includes('ROLE_TRADEUNION') && isSuccess) {
+    if (
+      info?.ROLES?.includes('ROLE_TRADEUNION') &&
+      isSuccess &&
+      file?.documentType !== 'AM'
+    ) {
       mutate2({
         step: 'Утверждено',
+      });
+    }
+    if (
+      info?.ROLES?.includes('ROLE_TRADEUNION') &&
+      isSuccess &&
+      file?.step ===
+        'Решение положительное, ожидает передачи оригинала в профсоюз'
+    ) {
+      mutate2({
+        step: 'Оригинал получен',
       });
     }
   }, [isSuccess]);

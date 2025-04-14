@@ -1,7 +1,6 @@
 'use client';
 
 import { FC } from 'react';
-
 import { InputLabel, TextField } from '@mui/material';
 import { PropsWithSX } from '@/models/Props';
 import { useIMask } from 'react-imask';
@@ -16,6 +15,7 @@ interface Props {
   register: object;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: any;
+  allowPlus?: boolean; // Новый проп для разрешения знака +
 }
 
 export const TextFieldCustom: FC<PropsWithSX & Props> = ({
@@ -28,44 +28,45 @@ export const TextFieldCustom: FC<PropsWithSX & Props> = ({
   fullWidth,
   register,
   onChange,
+  allowPlus = false,
 }) => {
   const { ref } = useIMask({
-    mask: '0'.repeat(maxL),
-    prepare: (value) => value.replace(/[^0-9]/g, ''),
+    mask: allowPlus ? '+7'.repeat(1) + '0'.repeat(maxL) : '0'.repeat(maxL),
+    prepare: (value) => {
+      if (allowPlus) {
+        const hasPlus = value.startsWith('+');
+        const cleaned = value.replace(/[^0-9]/g, '');
+        return hasPlus ? '+' + cleaned : cleaned;
+      }
+      return value.replace(/[^0-9]/g, '');
+    },
     maxLength: maxL,
-    max: 99999999999999999999999999,
+    blocks: {
+      '0': { mask: /[0-9]/ },
+    },
   });
+
   return (
     <>
       {label && <InputLabel error={error != null}>{label}</InputLabel>}
-      {!onChange ? (
-        <TextField
-          sx={{
-            ...(sx || {}),
-          }}
-          {...register}
-          placeholder={placeholder}
-          error={!!error}
-          helperText={error || ''}
-          disabled={disabled}
-          fullWidth={fullWidth}
-          slotProps={{ htmlInput: { maxLength: maxL, ref: ref } }}
-        />
-      ) : (
-        <TextField
-          sx={{
-            ...(sx || {}),
-          }}
-          {...register}
-          placeholder={placeholder}
-          error={!!error}
-          helperText={error || ''}
-          disabled={disabled}
-          fullWidth={fullWidth}
-          slotProps={{ htmlInput: { maxLength: maxL, ref: ref } }}
-          onChange={onChange}
-        />
-      )}
+      <TextField
+        sx={{
+          ...(sx || {}),
+        }}
+        {...register}
+        placeholder={placeholder}
+        error={!!error}
+        helperText={error || ''}
+        disabled={disabled}
+        fullWidth={fullWidth}
+        slotProps={{
+          htmlInput: {
+            maxLength: maxL + (allowPlus ? 1 : 0),
+            ref: ref,
+          },
+        }}
+        onChange={onChange}
+      />
     </>
   );
 };

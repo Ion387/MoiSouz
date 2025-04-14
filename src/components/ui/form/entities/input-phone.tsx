@@ -1,59 +1,55 @@
 'use client';
 
-import { FC } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import { FormGroup, InputLabel } from '@mui/material';
-import { MuiTelInput } from 'mui-tel-input';
-import { PropsWithSX } from '@/models/Props';
+import React from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { TextField } from '@mui/material';
+import { useIMask } from 'react-imask';
 
-interface Props {
+interface InputPhoneProps {
   name: string;
   label?: string;
-  placeholder?: string;
+  required?: boolean;
 }
 
-export const InputPhone: FC<PropsWithSX & Props> = ({
-  sx,
+export const InputPhone: React.FC<InputPhoneProps> = ({
   name,
-  label,
-  placeholder,
+  label = 'Телефон',
+  required = false,
 }) => {
   const { control } = useFormContext();
+  const { ref: imaskRef } = useIMask({
+    mask: '+{7}0000000000',
+
+    blocks: {
+      '0': { mask: /[0-9]/ },
+    },
+  });
 
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field: { value, onChange }, fieldState: { error } }) => (
-        <FormGroup sx={sx}>
-          {label && <InputLabel>{label}</InputLabel>}
-          <MuiTelInput
-            sx={
-              error
-                ? {
-                    '&>.MuiFormHelperText-root': {
-                      color: '#FF4949',
-                    },
-                    '&>.Mui-focused': {
-                      '&>fieldset': {
-                        borderColor: '#FF4949 !important',
-                      },
-                    },
-                    fieldset: {
-                      borderColor: '#FF4949',
-                    },
-                  }
-                : {}
-            }
-            placeholder={placeholder}
-            value={value}
-            onChange={(value) => onChange(value.replaceAll(' ', ''))}
-            disableDropdown
-            defaultCountry="RU"
-            onlyCountries={['RU']}
-            helperText={error && error.message}
-          />
-        </FormGroup>
+      rules={{
+        required: required ? 'Обязательное поле' : false,
+        pattern: {
+          value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+          message: 'Введите корректный номер (+7 XXX XXX-XX-XX)',
+        },
+      }}
+      render={({ field, fieldState: { error } }) => (
+        <TextField
+          {...field}
+          inputRef={(el) => {
+            field.ref(el);
+          }}
+          slotProps={{ htmlInput: { ref: imaskRef } }}
+          label={label}
+          placeholder="+7 (XXX) XXX-XX-XX"
+          error={!!error}
+          helperText={error?.message}
+          fullWidth
+          margin="normal"
+        />
       )}
     />
   );

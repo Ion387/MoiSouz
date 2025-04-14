@@ -17,7 +17,11 @@ import {
   InputImage,
   InputManyModal,
 } from '@/components/ui/form';
-import { InputAddress, InputGender } from '@/components/ui/form/entities';
+import {
+  InputAddress,
+  InputGender,
+  TextFieldCustom,
+} from '@/components/ui/form/entities';
 
 import { useOptions } from '@/hooks/UseOptions';
 
@@ -71,8 +75,11 @@ const schema = yup
     }),
     phone: yup
       .string()
-      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон')
-      .required('Укажите телефон'),
+      .required('Обязательное поле')
+      .matches(
+        /^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/,
+        'Введите корректный номер (+7XXXXXXXXXX)',
+      ),
     phoneDop: yup
       .string()
       .nullable()
@@ -251,22 +258,22 @@ const ProfileForm: FC<Props> = ({
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <Box sx={{ flex: 1 }}>
           <InputLabel>Номер телефона</InputLabel>
-          <TextField
-            {...register('phone')}
+          <TextFieldCustom
+            register={register('phone')}
             placeholder="+79999999999"
-            error={!!errors.phone?.message}
-            helperText={errors.phone?.message || ''}
-            slotProps={{ htmlInput: { maxLength: 12 } }}
+            error={errors.phone?.message}
+            maxL={11}
+            allowPlus
           />
         </Box>
         <Box sx={{ flex: 1 }}>
           <InputLabel>Дополнительный номер</InputLabel>
-          <TextField
-            {...register('phoneDop')}
+          <TextFieldCustom
+            register={register('phoneDop')}
             placeholder="+79999999999"
-            error={!!errors.phoneDop?.message}
-            helperText={errors.phoneDop?.message || ''}
-            slotProps={{ htmlInput: { maxLength: 12 } }}
+            error={errors.phoneDop?.message}
+            maxL={11}
+            allowPlus
           />
         </Box>
       </Box>

@@ -13,13 +13,14 @@ import { ITarrif } from '@/models/Tarrif';
 import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 import { useRouter } from 'next/navigation';
 
-const Tariffs = ({
-  noTitle,
-  isActive,
-}: {
+interface Props {
   noTitle?: boolean;
+  noPrice?: boolean;
+  isSoon?: boolean;
   isActive?: boolean;
-}) => {
+}
+
+const Tariffs = ({ noTitle, noPrice, isSoon, isActive }: Props) => {
   const { data } = useQuery({
     queryKey: ['tariffs'],
     queryFn: getTariffs,
@@ -65,15 +66,21 @@ const Tariffs = ({
             <Typography variant="h3" textTransform="uppercase">
               «Элементарный»
             </Typography>
-            <Typography className={s.price}>9,9 рублей</Typography>
-            <Typography
-              className={s.desc}
-              sx={{ marginBottom: '8px !important' }}
-            >
-              за пользователя в месяц *
-            </Typography>
-            <Typography className={s.price}>4,9 рублей</Typography>
-            <Typography className={s.desc}>при оплате за год</Typography>
+            {noPrice != true && (
+              <>
+                <Typography className={s.price}>9,9 рублей</Typography>
+                <Typography
+                  className={s.desc}
+                  sx={{ marginBottom: '8px !important' }}
+                >
+                  за пользователя в месяц
+                </Typography>
+                {/*
+                <Typography className={s.price}>4,9 рублей</Typography>
+                <Typography className={s.desc}>при оплате за год</Typography>
+                */}
+              </>
+            )}
           </Box>
         </Box>
         <List>
@@ -120,7 +127,7 @@ const Tariffs = ({
         )}
       </Box>
       <Grid2 container spacing={2.5}>
-        {items.map((item) => (
+        {items.map((item, i) => (
           <Grid2 key={item.title} size={{ xs: 12, sm: 6, lg: 3 }}>
             <CardItem
               id={
@@ -131,6 +138,8 @@ const Tariffs = ({
                   : undefined
               }
               isActive={isActive}
+              noPrice={noPrice}
+              isSoon={isSoon && i > 0}
               title={item.title}
               price={item.price}
               priceDesc={item.priceDesc}

@@ -12,6 +12,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { getMyTU } from '@/services/getMyTU';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 
 export const ProfileHeader = () => {
   const info = useFetchProfile();
@@ -50,7 +51,14 @@ export const ProfileHeader = () => {
   return (
     <Box component={'header'} className={clsx(styles.wrapper, styles.shadow)}>
       <Container className={clsx(styles.content)}>
-        <Image width={93} height={15} alt="Logo image" src="/images/Logo.svg" />
+        <Link href={'/main'}>
+          <Image
+            width={93}
+            height={15}
+            alt="Logo image"
+            src="/images/Logo.svg"
+          />
+        </Link>
 
         <Box>
           <ButtonFeedback sx={{ mr: 0.5 }} />

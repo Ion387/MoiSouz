@@ -38,21 +38,26 @@ export const InputDate: FC<PropsWithSX & Props> = ({
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <DatePicker
             disabled={!!dis || disabled}
-            defaultValue={value && dayjs(value, 'DD.MM.YYYY')}
-            value={value ? dayjs(value, 'DD.MM.YYYY') : dayjs(null)}
-            maxDate={!isFutureAccess ? dayjs() : null}
-            onChange={(value: Date) =>
-              onChange(dayjs(value).format('DD.MM.YYYY'))
-            }
+            value={value ? dayjs(value, 'DD.MM.YYYY') : null}
+            maxDate={!isFutureAccess ? dayjs() : undefined}
+            onChange={(date) => {
+              onChange(date ? date.format('DD.MM.YYYY') : null);
+            }}
+            onAccept={(date) => {
+              onChange(date ? date.format('DD.MM.YYYY') : null);
+            }}
             slotProps={{
               textField: {
                 fullWidth: true,
                 variant: 'outlined',
                 error: !!error,
                 helperText: error?.message,
-                inputProps: { readOnly: true },
+                inputProps: {
+                  placeholder: 'DD.MM.YYYY',
+                },
               },
             }}
+            format="DD.MM.YYYY"
             views={views}
           />
         )}

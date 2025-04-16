@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { Box, FormGroup, InputLabel, TextField } from '@mui/material';
 
 import { PropsWithSX } from '@/models/Props';
+import { TextFieldCustom } from './input-textfield';
 
 interface Props {
   name: string;
@@ -33,13 +34,13 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
       {label && <InputLabel>{label}</InputLabel>}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            {...register(`${name}.postcode`)}
+          <TextFieldCustom
+            register={register(`${name}.postcode`)}
             sx={{ flex: 1 }}
             placeholder="Индекс"
-            error={errors && !!errors[name]?.index?.message}
-            helperText={(errors && errors[name]?.index?.message) || ''}
+            error={errors[name]?.postcode?.message}
             disabled={disabled}
+            maxL={6}
           />
           <TextField
             {...register(`${name}.region`)}

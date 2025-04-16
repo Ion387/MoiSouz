@@ -104,7 +104,10 @@ const schema = yup
         (value) => !ValidateOktmo(String(value)),
       ),
     address: yup.object({
-      postcode: yup.string().required('Укажите индекс'),
+      postcode: yup
+        .string()
+        .required('Укажите индекс')
+        .length(6, 'Почтовый индекс должен содержать 6 символов'),
       region: yup.string().required('Укажите регион'),
       area: yup.string(),
       city: yup.string().required('Укажите населенный пункт'),

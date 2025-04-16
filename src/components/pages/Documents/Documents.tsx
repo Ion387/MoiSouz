@@ -179,7 +179,7 @@ const DocumentsWrapper = () => {
                   Заявление на вступление в профсоюз
                 </Button>
               </Link>
-              <Button
+              {/* {<Button
                 variant="contained"
                 disabled
                 sx={{
@@ -194,7 +194,7 @@ const DocumentsWrapper = () => {
                 }}
               >
                 Обращение в профсоюз
-              </Button>
+              </Button>} */}
             </>
           )}
         </Box>

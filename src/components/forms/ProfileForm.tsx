@@ -65,7 +65,10 @@ const schema = yup
       )
       .required(),
     address: yup.object({
-      postcode: yup.string().required('Укажите индекс'),
+      postcode: yup
+        .string()
+        .required('Укажите индекс')
+        .length(6, 'Почтовый индекс должен содержать 6 символов'),
       region: yup.string().required('Укажите регион'),
       municipal: yup.string().nullable(),
       locality: yup.string().required('Укажите населенный пункт'),

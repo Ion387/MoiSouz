@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
 import {
   Button,
+  FormHelperText,
   Grid2,
   InputLabel,
   MenuItem,
@@ -13,7 +14,12 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { ITradeUnionMember } from '@/models/TradeUnionMember';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -70,10 +76,10 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
     setValue: setFormValue,
     getValues,
+    control,
   } = methods;
 
   const { mutate, isSuccess, data } = useMutation({
@@ -129,10 +135,6 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
       setFormValue('data.middleName', info.middleName);
       setFormValue('data.firstName', String(info.firstName));
       setFormValue('data.lastName', String(info.lastName));
-      setFormValue(
-        'data.position',
-        !!info.position?.length ? info.position[0] : '',
-      );
       setFormValue('documentNumber', 'AMXXXXX');
       setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     }
@@ -155,8 +157,9 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     const union = tradeUnions.find(
       (el: ITradeUnion) => Number(el.id) === Number(e.target.value),
     );
-    reset({ data: { percents: union.percents || 0 } });
+
     setPercents(union.percents || 0);
+    setFormValue('data.percents', union.percents || 0);
     setChoosenUnion(union);
     setFormValue('documentNumber', doc?.documentNumber || 'AMXXXXX');
     setFormValue(
@@ -205,22 +208,22 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 </>
               )}
               <Grid2 size={12}>
-                <InputLabel>Имя</InputLabel>
-                <TextField
-                  {...register('data.firstName')}
-                  placeholder="Иван"
-                  error={!!errors.data?.firstName?.message}
-                  helperText={errors.data?.firstName?.message || ''}
-                  slotProps={{ input: { readOnly: true } }}
-                />
-              </Grid2>
-              <Grid2 size={12}>
                 <InputLabel>Фамилия</InputLabel>
                 <TextField
                   {...register('data.lastName')}
                   placeholder="Иванов"
                   error={!!errors.data?.lastName?.message}
                   helperText={errors.data?.lastName?.message || ''}
+                  slotProps={{ input: { readOnly: true } }}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <InputLabel>Имя</InputLabel>
+                <TextField
+                  {...register('data.firstName')}
+                  placeholder="Иван"
+                  error={!!errors.data?.firstName?.message}
+                  helperText={errors.data?.firstName?.message || ''}
                   slotProps={{ input: { readOnly: true } }}
                 />
               </Grid2>
@@ -235,15 +238,51 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 />
               </Grid2>
 
-              <Grid2 size={12}>
+              <Grid2 size={12} sx={{ position: 'relative' }}>
                 <InputLabel>Должность</InputLabel>
-                <TextField
-                  {...register('data.position')}
-                  placeholder="Бухгалтер"
-                  error={!!errors.data?.position?.message}
-                  helperText={errors.data?.position?.message || ''}
-                  slotProps={{ input: { readOnly: true } }}
-                />
+                <Controller
+                  name={'data.position'}
+                  control={control}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <>
+                      <Select
+                        fullWidth
+                        sx={{
+                          padding: 1.6,
+                          '& .MuiSelect-select span::before': {
+                            content: '"Выберите должность"',
+                            opacity: '0.54',
+                          },
+                        }}
+                        value={value}
+                        onChange={(e) => {
+                          onChange(e.target.value);
+                        }}
+                      >
+                        {info &&
+                          info?.position &&
+                          info?.position.map((el: string) => (
+                            <MenuItem key={el} value={el}>
+                              {el}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                      {error && (
+                        <FormHelperText
+                          sx={{
+                            color: '#FF4949',
+                            position: 'absolute',
+                          }}
+                        >
+                          {error.message}
+                        </FormHelperText>
+                      )}
+                    </>
+                  )}
+                ></Controller>
               </Grid2>
 
               <Grid2 size={12} sx={{ position: 'relative' }}>

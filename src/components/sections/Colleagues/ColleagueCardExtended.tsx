@@ -4,6 +4,7 @@ import React, { FC, useMemo } from 'react';
 import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import { TradeUnionCardSimple } from './TradeUnionCardSimple';
 
@@ -11,8 +12,6 @@ import { IFormColleagueProfile } from '@/models/Colleague';
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
 
 import { ITradeUnion } from '@/models/TradeUnion';
-import { getBackendUrl } from '@/constants/url';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 interface PropsField {
   name: string;
@@ -70,11 +69,13 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
     >
       <Box display="flex">
         {tradeunion && <TradeUnionCardSimple data={tradeunion} />}
+        {/*
         <Typography
           fontSize={14}
           marginLeft="auto"
           fontWeight={500}
         >{`№${user.id}`}</Typography>
+        */}
       </Box>
 
       <Box display="flex" justifyContent="space-between">
@@ -106,7 +107,9 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
 
         {user.avatar && (
           <Image
-            src={`${getBackendUrl}${user.avatar as string}`}
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${
+              user.avatar as string
+            }`}
             width={200}
             height={250}
             style={{ objectFit: 'cover', borderRadius: 10 }}

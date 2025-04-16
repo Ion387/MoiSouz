@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Box, Typography } from '@mui/material';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
-import { getBackendUrl } from '@/constants/url';
 
 interface Props {
   user: IFormColleagueProfile;
@@ -25,7 +24,7 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
     >
       {user.avatar && (
         <Image
-          src={`${getBackendUrl}${user.avatar as string}`}
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${user.avatar as string}`}
           width={300}
           height={250}
           style={{ objectFit: 'cover' }}
@@ -75,11 +74,13 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
           </Button>
           */}
         </Box>
+        {/*
         <Box width="fit-content" p={2} textAlign="right">
           <Typography fontSize={14} color="gray">
             {`№${user.id}`}
           </Typography>
         </Box>
+        */}
       </Box>
     </Box>
   );

@@ -773,7 +773,7 @@ const TradeUnionRegistrationForm = () => {
                   label={
                     <span>
                       Прикрепить Устав профсоюзной организации <br />
-                      (документ в формате pdf)
+                      (документ в формате pdf размером до 2МБ)
                     </span>
                   }
                   accept=".pdf"
@@ -787,7 +787,7 @@ const TradeUnionRegistrationForm = () => {
                   label={
                     <span>
                       Загрузить участников <br />
-                      (документ в формате xls)
+                      (документ в формате xls размером до 2МБ)
                     </span>
                   }
                   accept=".xls,.xlsx"

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Dialog, IconButton, Typography } from '@mui/material';
+import { Box, Dialog, IconButton, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -147,6 +147,29 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
           >
             Загрузка участников профсоюза
           </Typography>
+
+          <Box
+            width={'100%'}
+            m={'0 auto 32px'}
+            display={'flex'}
+            alignItems={'center'}
+            gap={1.2}
+            justifyContent={'center'}
+            component={'a'}
+            href="/members-template.xlsx"
+            download
+          >
+            <img src="/images/xml.svg" alt="xml"></img>
+            <Typography
+              lineHeight={'27px'}
+              fontSize={16}
+              color="rgb(32, 34, 36)"
+              fontWeight={600}
+              alignItems={'center'}
+            >
+              Шаблон списка участников профсоюза
+            </Typography>
+          </Box>
 
           <InputAutocomplete
             name="tradeunion"

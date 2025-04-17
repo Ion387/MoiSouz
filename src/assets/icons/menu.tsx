@@ -1,71 +1,41 @@
 export const Icon = () => (
   <svg
-    width="40.000000"
-    height="40.000000"
-    viewBox="0 0 40 40"
+    width="40"
+    height="40"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <defs>
-      <clipPath id="clip528_35">
-        <rect
-          id="Стоу меню"
-          width="40.000000"
-          height="40.000000"
-          fill="white"
-          fillOpacity="0"
-        />
-      </clipPath>
-    </defs>
-    <g clipPath="url(#clip528_35)">
+    <g clipPath="url(#clip0_7995_53811)">
       <path
-        id="path"
-        d="M8.01 11.48L8 11.5C7.16 11.5 6.5 10.84 6.5 10C6.5 9.15 7.16 8.5 8 8.5L8.01 8.52L8.01 11.48ZM34.64 8.52L34.66 8.5C35.5 8.5 36.16 9.15 36.16 10C36.16 10.84 35.5 11.5 34.66 11.5L34.64 11.48L34.64 8.52Z"
-        fill="#000000"
-        fillOpacity="0"
-        fillRule="nonzero"
-      />
-      <path
-        id="path"
-        d="M8 10L34.66 10"
+        d="M11 12C11 12.2652 11.1054 12.5196 11.2929 12.7071C11.4804 12.8946 11.7348 13 12 13C12.2652 13 12.5196 12.8946 12.7071 12.7071C12.8946 12.5196 13 12.2652 13 12C13 11.7348 12.8946 11.4804 12.7071 11.2929C12.5196 11.1054 12.2652 11 12 11C11.7348 11 11.4804 11.1054 11.2929 11.2929C11.1054 11.4804 11 11.7348 11 12Z"
+        fill="currentColor"
         stroke="currentColor"
-        strokeOpacity="1.000000"
-        strokeWidth="3.000000"
-        strokeLinejoin="round"
+        strokeWidth="1.7"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        id="path"
-        d="M8.49 21.67L8.47 21.69C7.63 21.69 6.97 21.03 6.97 20.19C6.97 19.35 7.63 18.69 8.47 18.69L8.49 18.71L8.49 21.67ZM35.12 18.71L35.14 18.69C35.98 18.69 36.64 19.35 36.64 20.19C36.64 21.03 35.98 21.69 35.14 21.69L35.12 21.67L35.12 18.71Z"
-        fill="#000000"
-        fillOpacity="0"
-        fillRule="nonzero"
-      />
-      <path
-        id="path"
-        d="M8.47 20.19L35.14 20.19"
+        d="M11 19C11 19.2652 11.1054 19.5196 11.2929 19.7071C11.4804 19.8946 11.7348 20 12 20C12.2652 20 12.5196 19.8946 12.7071 19.7071C12.8946 19.5196 13 19.2652 13 19C13 18.7348 12.8946 18.4804 12.7071 18.2929C12.5196 18.1054 12.2652 18 12 18C11.7348 18 11.4804 18.1054 11.2929 18.2929C11.1054 18.4804 11 18.7348 11 19Z"
+        fill="currentColor"
         stroke="currentColor"
-        strokeOpacity="1.000000"
-        strokeWidth="3.000000"
-        strokeLinejoin="round"
+        strokeWidth="1.7"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        id="path"
-        d="M8.49 31.67L8.47 31.69C7.63 31.69 6.97 31.03 6.97 30.19C6.97 29.35 7.63 28.69 8.47 28.69L8.49 28.71L8.49 31.67ZM35.12 28.71L35.14 28.69C35.98 28.69 36.64 29.35 36.64 30.19C36.64 31.03 35.98 31.69 35.14 31.69L35.12 31.67L35.12 28.71Z"
-        fill="#000000"
-        fillOpacity="0"
-        fillRule="nonzero"
-      />
-      <path
-        id="path"
-        d="M8.47 30.19L35.14 30.19"
+        d="M11 5C11 5.26522 11.1054 5.51957 11.2929 5.70711C11.4804 5.89464 11.7348 6 12 6C12.2652 6 12.5196 5.89464 12.7071 5.70711C12.8946 5.51957 13 5.26522 13 5C13 4.73478 12.8946 4.48043 12.7071 4.29289C12.5196 4.10536 12.2652 4 12 4C11.7348 4 11.4804 4.10536 11.2929 4.29289C11.1054 4.48043 11 4.73478 11 5Z"
+        fill="currentColor"
         stroke="currentColor"
-        strokeOpacity="1.000000"
-        strokeWidth="3.000000"
-        strokeLinejoin="round"
+        strokeWidth="1.7"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
+    <defs>
+      <clipPath id="clip0_7995_53811">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
   </svg>
 );

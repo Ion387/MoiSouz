@@ -10,7 +10,7 @@ import {
 import React, { FC } from 'react';
 import { TextFieldCustom } from './entities';
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { IFormColleagueProfile } from '@/models/Colleague';
+
 import { defaultOptions, defaultQuestions } from '@/constants/defaultQuestions';
 
 interface IProtocolQuestionsProps {
@@ -23,7 +23,7 @@ interface IProtocolQuestionsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;
   isMembersLoading: boolean;
-  arr: IFormColleagueProfile[];
+  arr: { role: string; name?: string }[];
   setFormValue: UseFormSetValue<{
     userList?: (string | undefined)[] | undefined;
     address: string;
@@ -110,7 +110,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
             >
               {arr &&
                 arr.map((member) => (
-                  <MenuItem key={member.guid} value={member.name}>
+                  <MenuItem key={member.name + member.role} value={member.name}>
                     {member.role + ' - ' + member.name}
                   </MenuItem>
                 ))}
@@ -152,7 +152,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
             {arr &&
               arr.map((member) => (
                 <MenuItem
-                  key={member.guid}
+                  key={member.name}
                   value={defaultQuestions[id + 1].decided + '- ' + member.name}
                 >
                   {defaultQuestions[id + 1].decided + '- ' + member.name}

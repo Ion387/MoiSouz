@@ -28,8 +28,6 @@ import { InputTime } from '../ui/form/input-time';
 import { TextFieldCustom } from '../ui/form/entities/input-textfield';
 import { type INewDoc } from '@/models/Doc';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getMembers } from '@/services/members';
-import { IFormColleagueProfile } from '@/models/Colleague';
 import { getAgendas } from '@/services/agendas';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
@@ -86,29 +84,29 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     setError,
   } = methods;
 
-  const [arr, setArr] = useState<IFormColleagueProfile[]>([]);
-  const [members, setMembers] = useState<IFormColleagueProfile[]>([]);
+  const [arr, setArr] = useState<{ role: string; name?: string }[]>([]);
+  const [members, setMembers] = useState<{ role: string; name?: string }[]>([]);
   const [isCanView, setIsCanView] = useState<{
     a: number;
     d: number;
     i: number;
   }>({ a: 0, d: 0, i: 0 });
   const [currentAgenda, setCurrentAgenda] = useState<INewDoc>();
-  const { data: membersData, isLoading: isMembersLoading } = useQuery({
-    queryKey: ['members'],
-    queryFn: getMembers,
-    select: (data) => data.data,
-  });
 
-  const { data: agendas } = useQuery({
+  const { data: agendas, isLoading: isMembersLoading } = useQuery({
     queryKey: ['agendas'],
     queryFn: getAgendas,
     select: (data) => data.data,
   });
 
   useEffect(() => {
-    if (membersData) setMembers(membersData.filter((el) => el.role));
-  }, [membersData]);
+    if (currentAgenda && currentAgenda.members && currentAgenda.invitedMembers)
+      setMembers([...currentAgenda.members, ...currentAgenda.invitedMembers]);
+    else if (currentAgenda && currentAgenda.members)
+      setMembers([...currentAgenda.members]);
+    else if (currentAgenda && currentAgenda.invitedMembers)
+      setMembers([...currentAgenda.invitedMembers]);
+  }, [currentAgenda]);
 
   useEffect(() => {
     if (members) setArr(members);
@@ -368,7 +366,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     <Typography component={'div'}>
                       {members &&
                         members.map((el) => (
-                          <Box key={el.guid}>
+                          <Box key={el.role + el.name}>
                             <TextField
                               sx={{
                                 position: 'relative',
@@ -397,7 +395,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                     'userList',
                                     arr
                                       ?.filter((item) => item !== el)
-                                      .map((elem) => elem.guid),
+                                      .map(
+                                        (elem) => elem.role + '-' + elem.name,
+                                      ),
                                   );
                                   setArr(
                                     (prev) =>
@@ -409,7 +409,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                   arr?.forEach((elem) => array.push(elem));
                                   setFormValue(
                                     'userList',
-                                    array.map((elem) => elem.guid),
+                                    array.map(
+                                      (elem) => elem.role + '-' + elem.name,
+                                    ),
                                   );
                                   setArr(array);
                                 }
@@ -461,7 +463,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                               {arr &&
                                 arr.map((member) => (
                                   <MenuItem
-                                    key={member.guid}
+                                    key={member.role + ' - ' + member.name}
                                     value={member.name}
                                   >
                                     {member.role + ' - ' + member.name}

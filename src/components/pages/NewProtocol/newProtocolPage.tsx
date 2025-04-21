@@ -37,7 +37,11 @@ const NewProtocol = () => {
 
       <Grid2 size={4}>
         <ProgressBar
-          initialSteps={['Черновик', 'На согласовании', 'Утверждено']}
+          initialSteps={
+            doc?.step === 'Отказ' || doc?.step === 'Отклонено'
+              ? ['Черновик', 'На согласовании', 'Отклонено']
+              : ['Черновик', 'На согласовании', 'Утверждено']
+          }
           steps={stepTransformationAg(String(doc?.step))}
         />
       </Grid2>

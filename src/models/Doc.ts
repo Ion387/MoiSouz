@@ -47,8 +47,27 @@ export interface INewDoc {
   file: string;
   step: string;
   guid?: string;
+  members?: { role: string; name: string }[] | null;
+  invitedMembers?:
+    | {
+        role: string;
+        firstName: string;
+        lastName: string;
+        middleName: string;
+        name?: string;
+      }[]
+    | null;
   data: {
     address: string;
+    members?: { role: string; name: string }[] | null;
+    invitedMembers?:
+      | {
+          role: string;
+          firstName: string;
+          lastName: string;
+          middleName: string;
+        }[]
+      | null;
     questions?: {
       speaker: string;
       question: string;

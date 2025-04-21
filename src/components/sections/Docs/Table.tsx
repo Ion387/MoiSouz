@@ -19,12 +19,15 @@ import { statusColor } from '@/utils/statusColor';
 import { type INewProt } from '@/models/Protocol';
 import { Icon } from '@/components/ui';
 import { useRouter } from 'next/navigation';
+import { deleteDoc } from '@/services/getDocs';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ITableProps {
   docs: IDoc[] | INewProt[] | INewDoc[] | undefined;
+  isDrafts?: boolean;
 }
 
-const Table: FC<ITableProps> = ({ docs }) => {
+const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
   const groupedDocs = docs ? groupByTU(docs) : [];
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState<{
@@ -60,10 +63,12 @@ const Table: FC<ITableProps> = ({ docs }) => {
     handleMenuClose();
     router.push(`/documents/drafts/${doc.guid}`);
   };
+  const queryClient = useQueryClient();
 
   const handleMenuDelete = (doc: IDoc | INewDoc | INewProt) => {
     handleMenuClose();
-    console.log(doc.guid);
+    deleteDoc(doc.guid);
+    queryClient.invalidateQueries({ queryKey: ['docs'] });
   };
 
   return (
@@ -226,72 +231,73 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               )}
                           </Grid2>
                         </Link>
-                        <Grid2 position={'absolute'} top={5.5} right={-56}>
-                          <IconButton
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              handleMenuOpen(e, index);
-                            }}
-                          >
-                            <Icon name="menu" color="darkgray" />
-                          </IconButton>
-                          <Popover
-                            id="user-menu"
-                            anchorEl={openMenu?.anchorE1}
-                            open={openMenu?.index == index}
-                            onClose={handleMenuClose}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'left',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            slotProps={{
-                              paper: {
-                                variant: 'popover',
-                              },
-                            }}
-                            disableScrollLock
-                          >
-                            <MenuItem
+                        {isDrafts && (
+                          <Grid2 position={'absolute'} top={5.5} right={-56}>
+                            <IconButton
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleMenuShow(doc);
+                                e.preventDefault();
+                                handleMenuOpen(e, index);
                               }}
                             >
-                              <ListItemIcon>
-                                <Icon name="eye-on" />
-                              </ListItemIcon>
-                              <ListItemText>Посмотреть</ListItemText>
-                            </MenuItem>
-                            <MenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleMenuEdit(doc);
+                              <Icon name="menu" color="darkgray" />
+                            </IconButton>
+                            <Popover
+                              id="user-menu"
+                              anchorEl={openMenu?.anchorE1}
+                              open={openMenu?.index == index}
+                              onClose={handleMenuClose}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
                               }}
-                            >
-                              <ListItemIcon>
-                                <Icon name="edit" />
-                              </ListItemIcon>
-                              <ListItemText>Редактировать</ListItemText>
-                            </MenuItem>
-                            <MenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleMenuDelete(doc);
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
                               }}
-                              sx={{ display: 'none' }}
+                              slotProps={{
+                                paper: {
+                                  variant: 'popover',
+                                },
+                              }}
+                              disableScrollLock
                             >
-                              <ListItemIcon>
-                                <Icon name="delete" color="red" />
-                              </ListItemIcon>
-                              <ListItemText>Удалить</ListItemText>
-                            </MenuItem>
-                          </Popover>
-                        </Grid2>
+                              <MenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMenuShow(doc);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <Icon name="eye-on" />
+                                </ListItemIcon>
+                                <ListItemText>Посмотреть</ListItemText>
+                              </MenuItem>
+                              <MenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMenuEdit(doc);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <Icon name="edit" />
+                                </ListItemIcon>
+                                <ListItemText>Редактировать</ListItemText>
+                              </MenuItem>
+                              <MenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMenuDelete(doc);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <Icon name="delete" color="red" />
+                                </ListItemIcon>
+                                <ListItemText>Удалить</ListItemText>
+                              </MenuItem>
+                            </Popover>
+                          </Grid2>
+                        )}
                       </Grid2>
 
                       {id !== array.length - 1 && <Divider></Divider>}

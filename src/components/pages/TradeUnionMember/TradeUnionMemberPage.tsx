@@ -48,7 +48,10 @@ const TradeUnionMemberPage = () => {
       )}
       <Grid2 size={4}>
         {doc?.step && (
-          <ProgressBar steps={stepTransformation(String(doc?.step))} />
+          <ProgressBar
+            steps={stepTransformation(String(doc?.step))}
+            decision={doc?.step === 'Отказ'}
+          />
         )}
       </Grid2>
     </Grid2>

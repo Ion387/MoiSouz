@@ -1,4 +1,3 @@
-import { IFormColleagueProfile } from '@/models/Colleague';
 import {
   Box,
   FormHelperText,
@@ -46,7 +45,7 @@ interface IQuestionFieldsProps {
     address: string;
   }>;
   isMembersLoading: boolean;
-  members: IFormColleagueProfile[] | undefined;
+  members: { role: string; name: string }[] | undefined;
   articlesL: number;
 }
 
@@ -99,7 +98,7 @@ const QuestionFields: FC<IQuestionFieldsProps> = ({
               members
                 .filter((el) => el.role)
                 .map((member) => (
-                  <MenuItem key={member.guid} value={member.name}>
+                  <MenuItem key={member.name} value={member.name}>
                     {member.role + ' - ' + member.name}
                   </MenuItem>
                 ))}

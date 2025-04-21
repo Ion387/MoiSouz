@@ -27,3 +27,11 @@ export const getDoc = async <T extends IDoc | INewDoc | INewProtocol>(
     return null;
   }
 };
+
+export const deleteDoc = async (guid: string | undefined) => {
+  if (guid) {
+    return await axios.delete(`${getBackendUrl}/api/private/document/${guid}`, {
+      headers: { ...(await getHeaders()) },
+    });
+  }
+};

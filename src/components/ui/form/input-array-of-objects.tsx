@@ -6,8 +6,8 @@ import {
   useFieldArray,
   useFormContext,
   UseFormRegister,
+  useWatch,
 } from 'react-hook-form';
-
 import { Icon } from '@/components/ui/Icon';
 import { PropsWithSX } from '@/models/Props';
 
@@ -15,7 +15,6 @@ interface Props {
   name: string;
   label?: string;
   labelExtra?: string;
-
   render: (
     name: string,
     index: number,
@@ -25,6 +24,8 @@ interface Props {
   defaultValue: any;
   preadd?: boolean;
   desc?: string;
+  position?: boolean;
+  onArrayChange?: (values: any[]) => void;
 }
 
 export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
@@ -35,14 +36,28 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
   render,
   defaultValue,
   desc,
+  position,
+  onArrayChange,
 }) => {
   const { control, register, formState } = useFormContext();
-  const { fields, append, remove } = useFieldArray<FieldValues>({
+  const { fields, append, remove } = useFieldArray({
     control,
     name,
   });
 
+  const arrayValues = useWatch({
+    control,
+    name,
+    defaultValue: fields.map((field) => field),
+  });
+
   const errors: any = formState.errors;
+
+  useEffect(() => {
+    if (onArrayChange) {
+      onArrayChange(arrayValues);
+    }
+  }, [arrayValues, onArrayChange]);
 
   useEffect(() => {
     if (fields.length != 0) return;
@@ -62,9 +77,9 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
             </Box>
           )}
 
-          {fields.map(({ id }, index) => (
+          {fields.map((field, index) => (
             <Box
-              key={id}
+              key={field.id}
               sx={{
                 display: 'flex',
                 gap: 2,
@@ -83,8 +98,8 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
                   sx={{
                     mt: 1.2,
                     position: 'absolute',
-                    top: '-16px',
-                    right: '0px',
+                    top: !position ? '-16px' : '0px',
+                    right: !position ? '0px' : '-40px',
                   }}
                   variant="contained-gray"
                   onClick={() => remove(index)}

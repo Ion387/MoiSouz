@@ -12,6 +12,7 @@ import { IFormColleagueProfile } from '@/models/Colleague';
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
 
 import { ITradeUnion } from '@/models/TradeUnion';
+import { PropsWithStyle } from '@/models/Props';
 
 interface PropsField {
   name: string;
@@ -19,13 +20,19 @@ interface PropsField {
   big?: boolean;
 }
 
-const Field: FC<PropsField> = ({ name, value, big }) => {
+const Field: FC<PropsWithStyle & PropsField> = ({
+  style,
+  name,
+  value,
+  big,
+}) => {
   return (
     <Box
       display="flex"
       flexDirection={big ? 'column' : 'row'}
       gap={0.5}
       marginTop={1}
+      style={style}
     >
       <Typography fontSize={14} fontWeight="bold">
         {name}
@@ -67,15 +74,16 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
       boxShadow="5px 5px 30px rgba(0,0,0,0.2)"
       padding={2}
     >
-      <Box display="flex">
+      <Box display="flex" justifyContent="space-between">
         {tradeunion && <TradeUnionCardSimple data={tradeunion} />}
-        {/*
-        <Typography
-          fontSize={14}
-          marginLeft="auto"
-          fontWeight={500}
-        >{`№${user.id}`}</Typography>
-        */}
+        <Box display="flex" flexDirection="column" alignItems="end">
+          <Typography fontSize={14} fontWeight="bold">
+            Уникальный номер участника МойСоюз
+          </Typography>
+          <Typography fontSize={14} fontWeight={600} color="darkgray">
+            {user.card?.match(/.{1,4}/g)?.join(' ')}
+          </Typography>
+        </Box>
       </Box>
 
       <Box display="flex" justifyContent="space-between">

@@ -100,12 +100,19 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   });
 
   useEffect(() => {
-    if (currentAgenda && currentAgenda.members && currentAgenda.invitedMembers)
-      setMembers([...currentAgenda.members, ...currentAgenda.invitedMembers]);
-    else if (currentAgenda && currentAgenda.members)
-      setMembers([...currentAgenda.members]);
-    else if (currentAgenda && currentAgenda.invitedMembers)
-      setMembers([...currentAgenda.invitedMembers]);
+    if (
+      currentAgenda &&
+      currentAgenda.data.members &&
+      currentAgenda.data.invitedMembers
+    )
+      setMembers([
+        ...currentAgenda.data.members,
+        ...currentAgenda.data.invitedMembers,
+      ]);
+    else if (currentAgenda && currentAgenda.data.members)
+      setMembers([...currentAgenda.data.members]);
+    else if (currentAgenda && currentAgenda.data.invitedMembers)
+      setMembers([...currentAgenda.data.invitedMembers]);
   }, [currentAgenda]);
 
   useEffect(() => {
@@ -178,15 +185,22 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
           setFormValue(`questions.${id}.decided`, q.decided);
           setFormValue(`questions.${id}.speaker`, q.speaker);
         });
-        if (currentAgenda.data.questions?.length) {
+        if (currentAgenda.data.questions?.length && members) {
           currentAgenda.data.questions?.forEach((el, id) => {
-            setFormValue(`questions.${id + 4}.speaker`, String(el.speaker));
+            const currentMember = members.find(
+              (member) => member.name === el.speaker,
+            );
+
+            setFormValue(
+              `questions.${id + 4}.speaker`,
+              currentMember?.role + '-' + currentMember?.name,
+            );
             setFormValue(`questions.${id + 4}.question`, String(el.question));
           });
         }
       }
     }
-  }, [currentAgenda, defaultQuestions, doc]);
+  }, [currentAgenda, defaultQuestions, doc, members]);
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: INewProt) => {

@@ -73,6 +73,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
   key,
   type,
 }) => {
+  console.log(array);
   return (
     <Box
       key={key}
@@ -99,7 +100,11 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
               fullWidth
               sx={{ padding: 1.6 }}
               name={`questions.${id + 1}.speaker`}
-              defaultValue={array[id].speaker}
+              defaultValue={
+                arr.find((member) => array[id].speaker === member.name)?.role +
+                '-' +
+                arr.find((member) => array[id].speaker === member.name)?.name
+              }
               onChange={(e) => {
                 setFormValue(
                   `questions.${id + 1}.speaker`,
@@ -110,7 +115,10 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
             >
               {arr &&
                 arr.map((member) => (
-                  <MenuItem key={member.name + member.role} value={member.name}>
+                  <MenuItem
+                    key={member.name + member.role}
+                    value={member.role + '-' + member.name}
+                  >
                     {member.role + ' - ' + member.name}
                   </MenuItem>
                 ))}

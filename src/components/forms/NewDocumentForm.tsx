@@ -149,9 +149,15 @@ const NewDocumentForm = ({
         role: el.role,
         name:
           el.middleName && el.firstName && el.lastName
-            ? el.firstName.at(0) + '.' + el.middleName.at(0) + '.' + el.lastName
-            : el.firstName && el.lastName
-              ? el.firstName.at(0) + '.' + el.lastName
+            ? el.lastName +
+              ' ' +
+              el.firstName.at(0) +
+              '.' +
+              ' ' +
+              el.middleName.at(0) +
+              '.'
+            : el.lastName && el.lastName
+              ? el.lastName + ' ' + el.firstName.at(0) + '.'
               : '',
       })),
     ]);

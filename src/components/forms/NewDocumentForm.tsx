@@ -142,7 +142,6 @@ const NewDocumentForm = ({
   }, [membersData]);
 
   useEffect(() => {
-    console.log(invitedMembers);
     setSelectedMembers([
       ...selectedNotInvitedMembers,
       ...invitedMembers.map((el) => ({

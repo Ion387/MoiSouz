@@ -50,6 +50,7 @@ export interface INewProt {
   data?: {
     documentAG?: string;
     documentTime?: string;
+    guid?: string;
     address?: string;
     questions: {
       speaker: string;

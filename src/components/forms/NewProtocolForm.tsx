@@ -214,6 +214,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
           data: {
             documentAG: data.documentAG,
             documentTime: data.documentTime,
+            guid: currentAgenda?.guid,
             address: data.address,
             userList: data.userList,
             questions: data.questions,
@@ -240,6 +241,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
               documentAG: data.documentAG,
               documentTime: data.documentTime,
               address: data.address,
+              guid: currentAgenda?.guid,
               userList: data.userList,
               questions: data.questions,
             },
@@ -628,6 +630,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                           errors={errors}
                           isMembersLoading={isMembersLoading}
                           register={register}
+                          getValues={getValues}
                           type={
                             id < 3
                               ? 'assessors'

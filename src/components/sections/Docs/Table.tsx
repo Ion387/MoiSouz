@@ -213,11 +213,9 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                             justifyContent={'center'}
                           >
                             {doc.data &&
-                              'documentAG' in doc.data &&
-                              doc?.data?.documentAG && (
-                                <Link
-                                  href={`/documents/${doc?.data?.documentAG}`}
-                                >
+                              'guid' in doc.data &&
+                              doc?.data?.guid && (
+                                <Link href={`/documents/${doc?.data?.guid}`}>
                                   <Typography
                                     variant="body2"
                                     fontWeight={

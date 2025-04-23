@@ -25,6 +25,7 @@ export interface IDoc {
     inviteDate: string;
     percents: number;
     position: string;
+    guid?: string;
   };
 }
 

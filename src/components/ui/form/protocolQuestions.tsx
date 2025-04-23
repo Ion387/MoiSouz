@@ -9,7 +9,12 @@ import {
 } from '@mui/material';
 import React, { FC } from 'react';
 import { TextFieldCustom } from './entities';
-import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 
 import { defaultOptions, defaultQuestions } from '@/constants/defaultQuestions';
 
@@ -60,11 +65,27 @@ interface IProtocolQuestionsProps {
   }>;
   key: string;
   type?: 'assessors' | 'members';
+  getValues: UseFormGetValues<{
+    userList?: (string | undefined)[] | undefined;
+    address: string;
+    questions: {
+      document?: string | undefined;
+      approved?: number | null | undefined;
+      declined?: number | null | undefined;
+      ignored?: number | null | undefined;
+      speaker: string;
+      question: string;
+      decided: string;
+    }[];
+    documentNumber: string;
+    documentDate: string;
+    documentTime: string;
+    documentAG: string;
+  }>;
 }
 
 const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
   id,
-  array,
   register,
   isMembersLoading,
   arr,
@@ -72,8 +93,8 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
   errors,
   key,
   type,
+  getValues,
 }) => {
-  console.log(array);
   return (
     <Box
       key={key}
@@ -100,11 +121,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
               fullWidth
               sx={{ padding: 1.6 }}
               name={`questions.${id + 1}.speaker`}
-              defaultValue={
-                arr.find((member) => array[id].speaker === member.name)?.role +
-                '-' +
-                arr.find((member) => array[id].speaker === member.name)?.name
-              }
+              defaultValue={getValues(`questions.${id + 1}.speaker`)}
               onChange={(e) => {
                 setFormValue(
                   `questions.${id + 1}.speaker`,
@@ -149,6 +166,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
             fullWidth
             sx={{ padding: 1.6 }}
             name={`questions.${id + 1}.decided`}
+            defaultValue={getValues(`questions.${id + 1}.decided`)}
             onChange={(e) => {
               setFormValue(
                 `questions.${id + 1}.decided`,
@@ -172,6 +190,7 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
             fullWidth
             sx={{ padding: 1.6 }}
             name={`questions.${id + 1}.decided`}
+            defaultValue={getValues(`questions.${id + 1}.decided`)}
             onChange={(e) => {
               setFormValue(
                 `questions.${id + 1}.decided`,

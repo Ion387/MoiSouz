@@ -263,7 +263,7 @@ export const ColleagueForm: FC<Props> = ({
         render={(name, index, register, errors) => (
           <TextField
             {...register(`${name}.${index}`)}
-            placeholder="Профессия"
+            placeholder="Специальность по образованию"
             error={!!errors?.message}
             helperText={errors?.message || ''}
             disabled={isDisabled}
@@ -374,9 +374,14 @@ export const ColleagueForm: FC<Props> = ({
         <InputAutocomplete
           sx={{ flex: 1 }}
           name="reason"
-          label="Основание, на котором присвоена роль"
+          label="Основание"
           placeholder="Выберите из списка"
           options={optionsProtocol}
+        />
+        <InputDate
+          sx={{ flex: 0.6 }}
+          name={`invitedAt`}
+          label="Дата вступления"
         />
       </Box>
 

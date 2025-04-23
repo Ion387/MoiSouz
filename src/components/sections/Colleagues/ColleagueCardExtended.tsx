@@ -76,7 +76,13 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
     >
       <Box display="flex" justifyContent="space-between">
         {tradeunion && <TradeUnionCardSimple data={tradeunion} />}
-        <Box display="flex" flexDirection="column" alignItems="end">
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="end"
+          marginLeft="auto"
+          marginBottom={2}
+        >
           <Typography fontSize={14} fontWeight="bold">
             Уникальный номер участника МойСоюз
           </Typography>
@@ -86,7 +92,7 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
         </Box>
       </Box>
 
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" justifyContent="space-between" marginBottom={2}>
         <Box>
           <Field
             name="ФИО"
@@ -96,21 +102,17 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           />
 
           <Field
-            name="Год рождения"
-            value={dayjs(user.birthdate, 'DD.MM.YYYY').format('YYYY')}
-          />
-
-          <Field
-            name="Основная профессия"
-            value={user.position && user.position[0]}
-          />
-
-          <Field
             name="Специальность по образованию"
             value={user.profession && user.profession[0]}
           />
 
+          <Field name="Дата рождения" value={user.birthdate} />
+
           <Field name="Образование" value={user.education} />
+
+          <Field name="Дата вступления в Профсоюз" value={user.invitedAt} />
+
+          <Field name="Дата заполнения карточки" value={user.updatedAt} />
         </Box>
 
         {user.avatar && (
@@ -118,27 +120,83 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${
               user.avatar as string
             }`}
-            width={200}
-            height={250}
+            width={128}
+            height={172}
             style={{ objectFit: 'cover', borderRadius: 10 }}
             alt=""
           />
         )}
       </Box>
 
-      {user.history && (
+      {tradeunion && (
+        <Field
+          name="Наименование первичной профсоюзной организации, выдавшей профсоюзную карточку"
+          value={tradeunion?.title}
+          big
+        />
+      )}
+
+      {tradeunion?.address && (
+        <Field
+          name="Адрес первичной профсоюзной организации"
+          value={[
+            tradeunion?.address?.city,
+            `${tradeunion?.address?.street} ${tradeunion?.address?.house}`,
+            tradeunion?.address?.flat,
+          ]
+            .filter((el) => el != null && el.trim().length > 0)
+            .join(', ')}
+          big
+        />
+      )}
+
+      <Box display="flex">
+        <Field
+          style={{
+            flex: 1,
+          }}
+          name="Занимаемая должность"
+          value={user.position && user.position[0]}
+          big
+        />
+        <Field
+          style={{
+            flex: 1,
+          }}
+          name="Домашний адрес"
+          value={[
+            user?.address?.locality,
+            `${user?.address?.street} ${user?.address?.house}`,
+            user?.address?.flat,
+          ]
+            .filter((el) => el != null && el.trim().length > 0)
+            .join(', ')}
+          big
+        />
+      </Box>
+
+      <Field
+        style={{
+          flex: 1,
+        }}
+        name="Контактный телефон"
+        value={user.phone}
+        big
+      />
+
+      {/*user.history && user.history.length > 0 && (
         <Typography fontSize={16} fontWeight="bold" marginTop={4}>
           История участия в профсоюзных организациях
         </Typography>
-      )}
+      )*/}
 
-      {user.history?.map((el, i) => (
+      {/*user.history?.map((el, i) => (
         <Box key={`history-${i}`} marginTop={2}>
           <Field name="Название организации" value={el.name} big />
           <Field name="Дата принятия" value={el.startDate} />
           <Field name="Дата выхода" value={el.finishDate} />
         </Box>
-      ))}
+      ))*/}
     </Box>
   );
 };

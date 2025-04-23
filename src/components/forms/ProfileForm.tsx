@@ -224,7 +224,7 @@ const ProfileForm: FC<Props> = ({
         render={(name, index, register, errors) => (
           <TextField
             {...register(`${name}.${index}`)}
-            placeholder="Профессия"
+            placeholder="Специальность по образованию"
             error={!!errors?.message}
             helperText={errors?.message || ''}
           />

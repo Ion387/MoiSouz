@@ -39,4 +39,7 @@ export interface IFormColleagueProfile {
     finishDate: string;
   }[];
   isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  invitedAt?: string;
 }

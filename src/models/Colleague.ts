@@ -1,6 +1,7 @@
 export interface IFormColleagueProfile {
   id?: number;
   guid?: string;
+  card?: string;
   firstName: string;
   lastName: string;
   middleName: string;
@@ -38,4 +39,7 @@ export interface IFormColleagueProfile {
     finishDate: string;
   }[];
   isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  invitedAt?: string;
 }

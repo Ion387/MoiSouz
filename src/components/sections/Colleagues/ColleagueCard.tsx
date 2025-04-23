@@ -74,13 +74,16 @@ export const ColleagueCard: FC<Props> = ({ user }) => {
           </Button>
           */}
         </Box>
-        {/*
         <Box width="fit-content" p={2} textAlign="right">
-          <Typography fontSize={14} color="gray">
-            {`№${user.id}`}
-          </Typography>
+          <Box display="flex" flexDirection="column" alignItems="end">
+            <Typography fontSize={14} fontWeight="bold">
+              Уникальный номер участника МойСоюз
+            </Typography>
+            <Typography fontSize={14} fontWeight={600} color="darkgray">
+              {user.card?.match(/.{1,4}/g)?.join(' ')}
+            </Typography>
+          </Box>
         </Box>
-        */}
       </Box>
     </Box>
   );

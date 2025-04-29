@@ -21,6 +21,9 @@ export interface IDoc {
   status: 'VIEWED' | 'NEW';
   guid: string;
   data: {
+    lastName: string;
+    firstName: string;
+    middleName: string;
     isActive: boolean;
     inviteDate: string;
     percents: number;

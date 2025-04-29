@@ -137,6 +137,7 @@ const ScanBlock = ({ number }: { number: string }) => {
       file?.step !== 'На проверке профсоюзом' &&
       file?.step !== 'Утверждено' &&
       file?.step !== 'Оригинал получен' &&
+      file?.step !== 'Отказ' &&
       file?.step !==
         'Решение положительное, ожидает передачи оригинала в Профсоюз'
     ) {
@@ -190,11 +191,16 @@ const ScanBlock = ({ number }: { number: string }) => {
             <ListItemText primary={'Распечатать'} />
           </ListItemButton>
         </a>
-        <ListItem
-          label="Редактировать"
-          to={`/documents/drafts/${number}`}
-          icon="edit"
-        />
+        {!(
+          info?.ROLES?.includes('ROLE_TRADEUNION') &&
+          file?.documentType === 'AM'
+        ) && (
+          <ListItem
+            label="Редактировать"
+            to={`/documents/drafts/${number}`}
+            icon="edit"
+          />
+        )}
         {!info?.ROLES?.includes('ROLE_TRADEUNION') ||
           (file?.documentType !== 'AM' && (
             <ListItem

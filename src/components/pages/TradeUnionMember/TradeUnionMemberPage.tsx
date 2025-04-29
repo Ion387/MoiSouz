@@ -18,14 +18,14 @@ const TradeUnionMemberPage = () => {
   const path = usePathname();
   const number = path.split('/')[3];
 
-  const { data: doc } = useQuery({
+  const { data: doc, isLoading } = useQuery({
     queryKey: ['doc'],
     queryFn: () => getDoc<IDoc>(number),
     select: (data) => data,
   });
 
   useEffect(() => {
-    if (!!info?.phone) {
+    if (!!info?.phone || info?.ROLES?.includes('ROLE_TRADEUNION')) {
       setSteps(2);
     }
   }, [info]);
@@ -47,8 +47,24 @@ const TradeUnionMemberPage = () => {
         </Grid2>
       )}
       <Grid2 size={4}>
-        {doc?.step && (
+        {doc?.step && !isLoading && (
           <ProgressBar
+            initialSteps={
+              doc?.step === 'Отказ' || doc?.step === 'Отклонено'
+                ? [
+                    'Ожидает отправки',
+                    'Отправлено в профсоюз',
+                    'На проверке профсоюзом',
+                    'Отказ',
+                  ]
+                : [
+                    'Ожидает отправки',
+                    'Отправлено в профсоюз',
+                    'На проверке профсоюзом',
+                    'Решение положительное, ожидает передачи оригинала в профсоюз',
+                    'Оригинал получен',
+                  ]
+            }
             steps={stepTransformation(String(doc?.step))}
             decision={doc?.step === 'Отказ'}
           />

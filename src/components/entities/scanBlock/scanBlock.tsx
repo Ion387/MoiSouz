@@ -163,7 +163,7 @@ const ScanBlock = ({ number }: { number: string }) => {
       info?.ROLES?.includes('ROLE_TRADEUNION') &&
       isSuccess &&
       file?.step ===
-        'Решение положительное, ожидает передачи оригинала в профсоюз'
+        'Решение положительное, ожидает передачи оригинала в Профсоюз'
     ) {
       mutate2({
         step: 'Оригинал получен',

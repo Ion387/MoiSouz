@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
+import { ITradeUnion } from '@/models/TradeUnion';
+import { getHeaders } from '@/utils/axios';
 
 const schema = yup
   .object({
@@ -37,6 +39,21 @@ const MembershipForm = () => {
     queryKey: ['tradeUnions'],
     queryFn: getApplications,
     select: (data) => data.data.data,
+  });
+
+  const { data: info } = useQuery({
+    queryKey: ['user-tradeunions'],
+    queryFn: async () =>
+      axios.get<ITradeUnion[]>(
+        `${getBackendUrl}/api/private/user-tradeunions`,
+        {
+          headers: {
+            ...(await getHeaders()),
+          },
+        },
+      ),
+    select: (data) => data.data,
+    refetchOnMount: 'always',
   });
 
   const {
@@ -102,12 +119,20 @@ const MembershipForm = () => {
                 onChange={(e) => setCurrentTU(e.target.value)}
               >
                 {tus &&
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  tus.map((tu: any) => (
-                    <MenuItem key={tu.guid} value={tu.guid}>
-                      {tu.title}
-                    </MenuItem>
-                  ))}
+                  info &&
+                  tus
+                    .filter(
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      (t: any) =>
+                        info.find((ut: ITradeUnion) => ut.guid === t.guid) ===
+                        undefined,
+                    )
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    .map((tu: any) => (
+                      <MenuItem key={tu.guid} value={tu.guid}>
+                        {tu.title}
+                      </MenuItem>
+                    ))}
               </Select>
               {errors.tu && (
                 <FormHelperText

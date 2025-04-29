@@ -36,6 +36,7 @@ import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
+import { getHeaders } from '@/utils/axios';
 
 const schema = yup
   .object({
@@ -81,6 +82,21 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     getValues,
     control,
   } = methods;
+
+  const { data: infoUT } = useQuery({
+    queryKey: ['user-tradeunions'],
+    queryFn: async () =>
+      axios.get<ITradeUnion[]>(
+        `${getBackendUrl}/api/private/user-tradeunions`,
+        {
+          headers: {
+            ...(await getHeaders()),
+          },
+        },
+      ),
+    select: (data) => data.data,
+    refetchOnMount: 'always',
+  });
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
@@ -295,11 +311,20 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   error={!!errors.tradeunion?.message}
                 >
                   {tradeUnions &&
-                    tradeUnions.map((el: ITradeUnion) => (
-                      <MenuItem key={el.id} value={el.id}>
-                        {el.title}
-                      </MenuItem>
-                    ))}
+                    infoUT &&
+                    tradeUnions
+                      .filter(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (t: any) =>
+                          infoUT.find(
+                            (ut: ITradeUnion) => ut.guid === t.guid,
+                          ) === undefined,
+                      )
+                      .map((el: ITradeUnion) => (
+                        <MenuItem key={el.id} value={el.id}>
+                          {el.title}
+                        </MenuItem>
+                      ))}
                 </Select>
                 {!!errors.tradeunion?.message && (
                   <Typography className={s.errorText}>

@@ -154,7 +154,6 @@ const BenefitsWrapper = () => {
             <Link
               key={el.id}
               href={`/benefits/product/${el.id}`}
-              target="_blank"
               style={{
                 display: 'flex',
                 flex:

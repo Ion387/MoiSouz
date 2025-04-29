@@ -76,7 +76,7 @@ const ScanBlock = ({ number }: { number: string }) => {
   });
 
   const { data: file } = useQuery({
-    queryKey: ['doc'],
+    queryKey: ['doc', number],
     queryFn: () => getDoc(number),
     select: (data) => data,
   });
@@ -93,9 +93,7 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   useEffect(() => {
     if (file && file.files) {
-      const scan = file?.files.findLast(
-        (el) => el.type === 'AM_scan' || el.type === 'AM_signed',
-      );
+      const scan = file?.files.findLast((el) => el.type.includes('signed'));
       setValue('upload', scan);
     }
   }, [file]);
@@ -104,6 +102,7 @@ const ScanBlock = ({ number }: { number: string }) => {
     if (
       info?.ROLES?.includes('ROLE_TRADEUNION') &&
       file?.step !== 'На согласовании' &&
+      file?.step !== 'На проверке профсоюзом' &&
       file?.step !== 'Утверждено' &&
       file?.step !== 'Оригинал получен' &&
       file?.step !==
@@ -116,7 +115,7 @@ const ScanBlock = ({ number }: { number: string }) => {
             : 'На согласовании',
       });
     }
-  }, []);
+  }, [file]);
 
   useEffect(() => {
     if (

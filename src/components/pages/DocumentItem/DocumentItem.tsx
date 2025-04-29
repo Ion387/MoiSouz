@@ -9,10 +9,10 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProgressBar from '@/components/ui/progressBar';
 import { usePathname } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDoc } from '@/services/getDocs';
 import {
   stepTransformation,
@@ -39,10 +39,17 @@ const DocumentItem = () => {
     sidebarTabs: () => [],
   });
   const number = path.split('/')[2];
-  const { data: doc } = useQuery({
-    queryKey: ['doc'],
+  const queryClient = useQueryClient();
+  const { data: doc, isLoading } = useQuery({
+    queryKey: ['doc', number],
+    enabled: !!number,
+    refetchOnMount: true,
     queryFn: () => getDoc<IDoc>(number),
   });
+  useEffect(() => {
+    queryClient.setQueryData(['doc'], null);
+    queryClient.invalidateQueries({ queryKey: ['doc'] });
+  }, [number, queryClient]);
 
   return (
     <Grid2 container sx={{ p: 2 }} spacing={2.4}>
@@ -90,7 +97,7 @@ const DocumentItem = () => {
         </Grid2>
       )}
 
-      {doc && (
+      {doc && !isLoading && (
         <Grid2 size={4} display={'flex'} flexDirection={'column'}>
           <ProgressBar
             initialSteps={
@@ -105,7 +112,7 @@ const DocumentItem = () => {
             }
           />
           <Box paddingTop={2.4} sx={{ flex: '1 1 100%' }}>
-            <ScanBlock number={number} />
+            <ScanBlock number={doc.guid} />
           </Box>
         </Grid2>
       )}

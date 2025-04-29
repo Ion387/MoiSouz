@@ -370,11 +370,15 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     <InputLabel>В состав профкома избраны</InputLabel>
                     <Typography variant="body1">
                       {members &&
-                        members.reduce((acc, el, id, arr) => {
-                          if (id < arr.length - 1) {
-                            return acc + el.name + ', ';
-                          } else return acc + el.name;
-                        }, '')}
+                        members
+                          .filter(
+                            (member) => !member.role.includes('Приглашенный'),
+                          )
+                          .reduce((acc, el, id, arr) => {
+                            if (id < arr.length - 1) {
+                              return acc + el.name + ', ';
+                            } else return acc + el.name;
+                          }, '')}
                     </Typography>
                   </Grid2>
                   <Grid2 size={12}>

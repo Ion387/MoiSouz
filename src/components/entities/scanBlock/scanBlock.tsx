@@ -16,7 +16,7 @@ import {
   Paper,
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
@@ -66,6 +66,9 @@ const ScanBlock = ({ number }: { number: string }) => {
     },
   });
 
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isBtn, setIsBtn] = useState<boolean>(true);
+
   const { mutate: mutate2, isSuccess: isSuccess2 } = useMutation({
     mutationFn: async (data: { step: string }) => {
       postDoc(data, number);
@@ -90,6 +93,35 @@ const ScanBlock = ({ number }: { number: string }) => {
     /*if (isSuccess2 && info?.ROLES?.includes('ROLE_TRADEUNION'))
       router.push(`/documents?incoming`);*/
   }, [isSuccess, isSuccess2]);
+
+  useEffect(() => {
+    if (
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType !== 'AM') ||
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('Решение')) ||
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('получен'))
+    )
+      setIsActive(true);
+  }, [info, file]);
+
+  useEffect(() => {
+    if (
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('Ожидает отправки')) ||
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('Отправлено в профсоюз')) ||
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('На проверке'))
+    )
+      setIsBtn(false);
+  }, [info, file]);
 
   useEffect(() => {
     if (file && file.files) {
@@ -196,7 +228,7 @@ const ScanBlock = ({ number }: { number: string }) => {
           style={{ height: 'calc(100% - 208px)' }}
         >
           <Grid2 container position={'relative'} height={'100%'}>
-            {info?.ROLES?.includes('ROLE_TRADEUNION') && (
+            {isActive && (
               <>
                 <Grid2 size={12}>
                   <InputFile
@@ -211,39 +243,42 @@ const ScanBlock = ({ number }: { number: string }) => {
               </>
             )}
 
-            <Grid2 size={12} display={'flex'} alignItems={'end'}>
-              <Button
-                variant="contained"
-                sx={{
-                  padding: '15px 15px',
-                  fontSize: '20px',
-                  lineHeight: '27px',
-                  width: '100%',
-                  marginTop: '24px',
-                  '&.Mui-disabled': {
-                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                    color: 'white !important',
-                  },
-                }}
-                type={
-                  info?.ROLES?.includes('ROLE_TRADEUNION') ? 'submit' : 'button'
-                }
-                onClick={() => {
-                  if (
-                    file?.documentType === 'AM' &&
-                    !info?.ROLES?.includes('ROLE_TRADEUNION')
-                  )
-                    mutate2({ step: 'Отправлено в профсоюз' });
-                }}
-              >
-                {file?.documentType === 'AM' &&
-                !info?.ROLES?.includes('ROLE_TRADEUNION')
-                  ? 'Отправить в профсоюз'
-                  : file?.documentType === 'AM'
-                    ? 'Загрузить документы'
-                    : 'Утвердить'}
-              </Button>
-              {/*info?.ROLES?.includes('ROLE_TRADEUNION') && (
+            {isBtn && (
+              <Grid2 size={12} display={'flex'} alignItems={'end'}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '15px 15px',
+                    fontSize: '20px',
+                    lineHeight: '27px',
+                    width: '100%',
+                    marginTop: '24px',
+                    '&.Mui-disabled': {
+                      backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                      color: 'white !important',
+                    },
+                  }}
+                  type={
+                    info?.ROLES?.includes('ROLE_TRADEUNION')
+                      ? 'submit'
+                      : 'button'
+                  }
+                  onClick={() => {
+                    if (
+                      file?.documentType === 'AM' &&
+                      !info?.ROLES?.includes('ROLE_TRADEUNION')
+                    )
+                      mutate2({ step: 'Отправлено в профсоюз' });
+                  }}
+                >
+                  {file?.documentType === 'AM' &&
+                  !info?.ROLES?.includes('ROLE_TRADEUNION')
+                    ? 'Отправить в профсоюз'
+                    : file?.documentType === 'AM'
+                      ? 'Загрузить документы'
+                      : 'Утвердить'}
+                </Button>
+                {/*info?.ROLES?.includes('ROLE_TRADEUNION') && (
                 <Button
                   variant="contained"
                   sx={{
@@ -264,7 +299,8 @@ const ScanBlock = ({ number }: { number: string }) => {
                   На проверке Профсоюзом
                 </Button>
               )*/}
-            </Grid2>
+              </Grid2>
+            )}
           </Grid2>
         </form>
       </FormProvider>

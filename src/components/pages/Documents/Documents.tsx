@@ -190,7 +190,7 @@ const DocumentsWrapper = () => {
               <>
                 <Link
                   href={'/trade_union_member'}
-                  style={{ width: '50%', margin: '0 auto' }}
+                  style={{ width: '100%', margin: '0 auto' }}
                 >
                   <Button
                     variant="contained"

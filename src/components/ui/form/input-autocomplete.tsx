@@ -2,7 +2,8 @@
 
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Autocomplete, FormGroup, InputLabel, TextField } from '@mui/material';
+
+import { InputAutocomplete as BaseInputAutocomplete } from '@/components/ui/input';
 
 import { PropsWithSX } from '@/models/Props';
 import { IOption } from '@/models/Option';
@@ -13,6 +14,7 @@ interface Props {
   placeholder?: string;
   options: IOption[];
   disabled?: boolean;
+  error?: string;
 }
 
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
@@ -30,25 +32,16 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
       name={name}
       control={control}
       render={({ field: { value, onChange }, fieldState: { error } }) => (
-        <FormGroup sx={sx}>
-          {label && <InputLabel>{label}</InputLabel>}
-          <Autocomplete
-            value={options.find((el) => el.id == value) || null}
-            getOptionLabel={(option) => option.title}
-            onChange={(_, value) => onChange(value?.id)}
-            disablePortal
-            options={options}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder={placeholder}
-                error={!!error}
-                helperText={error?.message}
-              />
-            )}
-            disabled={disabled}
-          />
-        </FormGroup>
+        <BaseInputAutocomplete
+          sx={sx}
+          label={label}
+          options={options}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          error={error?.message}
+        />
       )}
     />
   );

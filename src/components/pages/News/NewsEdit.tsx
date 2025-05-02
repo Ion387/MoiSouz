@@ -1,21 +1,18 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 
 import { Icon } from '@/components/ui';
-import { ColleagueForm } from '@/components/forms/ColleagueForm';
+import { NewsForm } from '@/components/forms/NewsForm';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import {
-  useFetchColleagueProfile,
-  useForm,
-} from '@/hooks/UseFormColleagueProfile';
+import { useFetchNewsOne, useForm } from '@/hooks/useNews';
 
-const ColleagueEditWrapper = () => {
+const NewsEditWrapper = () => {
   const params = useParams();
   const pathname = usePathname();
   const isCreate = pathname.endsWith('/create');
@@ -23,28 +20,21 @@ const ColleagueEditWrapper = () => {
   const info = useFetchProfile();
 
   const {
-    data: user,
-    isLoading: isLoadingUser,
-    clear: clearUser,
-  } = useFetchColleagueProfile((params.guid as string) || '');
+    data: newsOne,
+    isLoading: isLoadingNewsOne,
+    clear: clearNewsOne,
+  } = useFetchNewsOne({ code: (params.code as string) || '' });
 
-  const { onCancel, onSubmit, isLoading: isLoadingForm, error } = useForm();
-  const errors = useMemo(() => {
-    switch (error?.message) {
-      case 'email':
-        return { email: 'Указанная почта уже существует' };
-    }
-    return null;
-  }, [error]);
+  const { onCancel, onSubmit, isLoading: isLoadingForm } = useForm();
 
   useEffect(() => {
     if (isCreate) return;
-    return () => clearUser();
+    return () => clearNewsOne();
   }, []);
 
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
-      <Link href="/colleagues">
+      <Link href="/news/edit">
         <Button
           variant="text"
           sx={{
@@ -55,19 +45,18 @@ const ColleagueEditWrapper = () => {
           }}
         >
           <Icon name="arrow-back" color="black" />
-          назад к списку коллег
+          назад к списку новостей
         </Button>
       </Link>
 
-      {info != null && (isCreate == true || isLoadingUser == false) ? (
+      {info != null && (isCreate == true || isLoadingNewsOne == false) ? (
         <>
           {info?.hasTradeunionOwner == true ? (
-            <ColleagueForm
+            <NewsForm
               onCancel={onCancel}
               onSubmit={onSubmit}
-              defaultValues={user}
+              defaultValues={newsOne}
               loading={isLoadingForm}
-              errorsExtra={errors}
             />
           ) : (
             <Typography fontSize={14} textAlign="center">
@@ -84,12 +73,12 @@ const ColleagueEditWrapper = () => {
   );
 };
 
-const ColleagueEditPage = () => {
+const NewsEditPage = () => {
   return (
     <Suspense>
-      <ColleagueEditWrapper />
+      <NewsEditWrapper />
     </Suspense>
   );
 };
 
-export default ColleagueEditPage;
+export default NewsEditPage;

@@ -15,3 +15,8 @@ export const OPTIONS_ROLES: IOption[] = [
   { title: 'Член КРК', id: 'Член КРК' },
   { title: 'Член профсоюза', id: 'Член профсоюза' },
 ];
+
+export const OPTIONS_NEWS_STATUS: IOption[] = [
+  { title: 'Опубликовано', id: 'published' },
+  { title: 'Черновик', id: 'draft' },
+];

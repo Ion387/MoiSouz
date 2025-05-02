@@ -62,6 +62,32 @@ a {
   background-color: transparent !important;
 }
 
+.jodit-react-container,
+.jodit-dialog__content,
+.html {
+  a {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  td {
+    padding: 0.4em;
+    border: 1px solid var(--jd-color-border);
+  }
+
+  .jodit-ui-group__about {
+    display: none !important;
+  }
+
+  .jodit-status-bar__item-right:has(a) {
+    margin: 0 !important;
+    a {
+      display: none !important;
+    }
+  }
+}
+
 canvas {
   border: 1px dotted rgb(234, 235, 235);
 }

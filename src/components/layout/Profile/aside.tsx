@@ -39,12 +39,14 @@ export const ProfileAside = () => {
         <ListItem label="Магазин" icon="square-3x3" disabled />
         <ListItem label="Информация" icon="info" disabled />
 
+        {/*
         <ListItem label="Новости" icon="info" to="/news" />
 
         <ListItem label="Новости" icon="info">
           <ListItem label="Опубликовано" to="/news/edit?status=published" />
           <ListItem label="Черновик" to="/news/edit?status=draft" />
         </ListItem>
+        */}
       </List>
     </List>
   );

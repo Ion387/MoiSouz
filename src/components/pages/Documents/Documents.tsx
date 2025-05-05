@@ -56,7 +56,9 @@ const DocumentsWrapper = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setOpen(
-        !!info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionOwner,
+        info != null &&
+          !!info?.ROLES?.includes('ROLE_TRADEUNION') &&
+          !info?.hasTradeunionOwner,
       );
     }, 1000);
     return () => {
@@ -67,7 +69,9 @@ const DocumentsWrapper = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setOpenMember(
-        !info?.ROLES?.includes('ROLE_TRADEUNION') && !info?.hasTradeunionMember,
+        info != null &&
+          !info?.ROLES?.includes('ROLE_TRADEUNION') &&
+          !info?.hasTradeunionMember,
       );
     }, 1000);
     return () => {

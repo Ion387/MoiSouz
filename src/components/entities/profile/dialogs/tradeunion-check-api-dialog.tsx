@@ -20,8 +20,9 @@ export const TradeunionCheckApiDialog = () => {
   return (
     <TradeunionCheckDialog
       open={
+        info != null &&
         !info?.ROLES?.includes('ROLE_TRADEUNION') &&
-        docs &&
+        docs != null &&
         !docs.length &&
         !isLoading
       }

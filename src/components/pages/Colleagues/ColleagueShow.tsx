@@ -19,7 +19,7 @@ const ColleagueShowWrapper = () => {
   const params = useParams();
   const isCreate = (params.guid as string) == 'create';
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   const {
     data: user,

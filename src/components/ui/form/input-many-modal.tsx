@@ -183,6 +183,8 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
                   display: 'flex',
                   flexWrap: 'wrap',
                   gap: 1,
+                  overflowY: 'auto',
+                  maxHeight: 500,
                 }}
               >
                 {options.map((el) => (

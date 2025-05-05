@@ -10,7 +10,7 @@ import { globalTheme } from '@/styles/theme';
 
 const TradeUnionRegistrationPage = () => {
   const [steps, setSteps] = useState<number>(1);
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   useEffect(() => {
     if (!!info?.phone) {

@@ -5,7 +5,7 @@ import { getHeaders } from '@/utils/axios';
 import { getBackendUrl } from '@/constants/url';
 import { IFormProfile } from '@/models/Forms';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useForm = () => {
   const router = useRouter();
@@ -15,30 +15,18 @@ export const useForm = () => {
     router.push('/documents?incoming');
   };
 
-  const { mutate, isSuccess } = useMutation({
-    mutationFn: async (data: IFormProfile) => {
-      saveFormProfile(data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-    },
-  });
-
-  const { mutate: mutateAvatar, isSuccess: isSuccessAvatar } = useMutation({
-    mutationFn: async (data: IFormProfile) => {
-      saveFormProfileAvatar(data.avatar);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-    },
-  });
-
   const onSubmit: (data: IFormProfile) => Promise<void> = async (data) => {
-    mutate(data);
-    mutateAvatar(data);
+    try {
+      await saveFormProfile(data);
+      await saveFormProfileAvatar(data.avatar);
+    } catch {}
+    await queryClient.invalidateQueries({ queryKey: ['profile'] });
   };
 
-  return { onCancel, onSubmit, isSuccess, isSuccessAvatar };
+  return {
+    onCancel,
+    onSubmit,
+  };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

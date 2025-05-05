@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import s from './forms.module.scss';
 import {
   Button,
-  FormHelperText,
   Grid2,
   InputLabel,
   MenuItem,
@@ -14,12 +13,7 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Controller,
-  FormProvider,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { ITradeUnionMember } from '@/models/TradeUnionMember';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -37,6 +31,7 @@ import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
 import { getHeaders } from '@/utils/axios';
+import { InputAutocomplete } from '../ui/form';
 
 const schema = yup
   .object({
@@ -80,7 +75,6 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     formState: { errors },
     setValue: setFormValue,
     getValues,
-    control,
   } = methods;
 
   const { data: infoUT } = useQuery({
@@ -128,7 +122,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
     else mutateByGuid(data);
   };
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const [show, setShow] = useState<boolean>(false);
 
   const { data: tradeUnions } = useQuery({
@@ -151,6 +145,7 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
       setFormValue('data.middleName', info.middleName);
       setFormValue('data.firstName', String(info.firstName));
       setFormValue('data.lastName', String(info.lastName));
+      setFormValue('data.position', String(info.position && info.position[0]));
       setFormValue('documentNumber', 'AMXXXXX');
       setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
     }
@@ -254,52 +249,15 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 />
               </Grid2>
 
-              <Grid2 size={12} sx={{ position: 'relative' }}>
-                <InputLabel>Должность</InputLabel>
-                <Controller
-                  name={'data.position'}
-                  control={control}
-                  render={({
-                    field: { value, onChange },
-                    fieldState: { error },
-                  }) => (
-                    <>
-                      <Select
-                        fullWidth
-                        sx={{
-                          padding: 1.6,
-                          '& .MuiSelect-select span::before': {
-                            content: '"Выберите должность"',
-                            opacity: '0.54',
-                          },
-                        }}
-                        value={value}
-                        onChange={(e) => {
-                          onChange(e.target.value);
-                        }}
-                      >
-                        {info &&
-                          info?.position &&
-                          info?.position.map((el: string) => (
-                            <MenuItem key={el} value={el}>
-                              {el}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                      {error && (
-                        <FormHelperText
-                          sx={{
-                            color: '#FF4949',
-                            position: 'absolute',
-                          }}
-                        >
-                          {error.message}
-                        </FormHelperText>
-                      )}
-                    </>
-                  )}
-                ></Controller>
-              </Grid2>
+              <InputAutocomplete
+                sx={{ width: '100%' }}
+                name="data.position"
+                label="Должность"
+                placeholder="Выберите должность"
+                options={
+                  info?.position?.map((el) => ({ id: el, title: el })) || []
+                }
+              />
 
               <Grid2 size={12} sx={{ position: 'relative' }}>
                 <InputLabel>Наименования профсоюза</InputLabel>

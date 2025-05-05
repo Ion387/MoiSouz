@@ -11,9 +11,12 @@ enum NAMES {
 const getOptions = async ({ name }: { name: NAMES }) => {
   const session = await getSession();
 
-  return axios.get<IOptionsResponse>(`${getBackendUrl}/api/${name}`, {
-    headers: { Authorization: `Bearer ${session?.user?.token}` },
-  });
+  return axios.get<IOptionsResponse>(
+    `${getBackendUrl}/api/${name}?itemsPerPage=1000`,
+    {
+      headers: { Authorization: `Bearer ${session?.user?.token}` },
+    },
+  );
 };
 
 export const useOptions = ({ name }: { name: string }) => {

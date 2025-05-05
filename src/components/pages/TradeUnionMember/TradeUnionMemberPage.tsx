@@ -14,7 +14,7 @@ import { IDoc } from '@/models/Doc';
 
 const TradeUnionMemberPage = () => {
   const [steps, setSteps] = useState<number>(1);
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const path = usePathname();
   const number = path.split('/')[3];
 

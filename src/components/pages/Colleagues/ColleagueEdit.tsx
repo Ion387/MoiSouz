@@ -20,7 +20,7 @@ const ColleagueEditWrapper = () => {
   const pathname = usePathname();
   const isCreate = pathname.endsWith('/create');
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   const {
     data: user,

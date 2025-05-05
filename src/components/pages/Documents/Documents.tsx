@@ -33,7 +33,7 @@ const DocumentsWrapper = () => {
         ? docs
         : [];
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const isActive = useIsUserActive();
   const [open, setOpen] = useState(false);
   const [openMember, setOpenMember] = useState(false);

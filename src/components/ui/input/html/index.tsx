@@ -1,9 +1,13 @@
 'use client';
 
 import { FC, useMemo, useRef } from 'react';
-import JoditEditor from 'jodit-react';
+import dynamic from 'next/dynamic';
 
 import styles from './index.module.scss';
+
+const JoditEditor = dynamic(() => import('jodit-react'), {
+  ssr: false,
+});
 
 interface Props {
   value: string;

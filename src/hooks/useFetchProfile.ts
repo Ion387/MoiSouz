@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { User } from 'next-auth';
 
 export const useFetchProfile = () => {
-  const { data: info } = useQuery({
+  const { data: info, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: async () =>
       axios.get<User>(`${getBackendUrl}/api/private/profile`, {
@@ -16,5 +16,5 @@ export const useFetchProfile = () => {
     select: (data) => data.data,
     refetchOnMount: 'always',
   });
-  return info;
+  return { info, refetch };
 };

@@ -31,7 +31,7 @@ const NewsListEditWrapper = () => {
     params.get(KEY_PARAM_STATUS),
   );
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const {
     data: newsList,
     isLoading: loadingNewsList,

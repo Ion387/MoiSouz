@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Grid2,
   InputLabel,
   MenuItem,
@@ -43,6 +44,7 @@ import { saveFormTULogo, saveFormTUScan } from '@/services/postLogoandFile';
 import { getMyTU } from '@/services/getMyTU';
 import { convertSizeToBites } from '@/utils/convertStringToB';
 import { saveFormTUUsers } from '@/hooks/useTU';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 const schema = yup
   .object({
@@ -231,12 +233,19 @@ const TradeUnionRegistrationForm = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isSuccess } = useMutation({
+  const { refetch } = useFetchProfile();
+
+  const {
+    mutate,
+    isSuccess,
+    isPending: isLoading,
+  } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
-      registration(data);
-      saveFormTULogo(data.logo);
-      saveFormTUScan(data.scan);
-      saveFormTUUsers(data.participants);
+      await registration(data);
+      await saveFormTULogo(data.logo);
+      await saveFormTUScan(data.scan);
+      await saveFormTUUsers(data.participants);
+      await refetch();
     },
   });
 
@@ -372,484 +381,508 @@ const TradeUnionRegistrationForm = () => {
       >
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid2 container spacing={2}>
-              <Grid2 size={12}>
-                <Checkbox
-                  checked={inn}
-                  value={inn}
-                  onClick={() => setInn((prev) => !prev)}
-                />
-                <Typography
-                  component={'span'}
-                  variant="body1"
-                  fontWeight={600}
-                  pt={0.2}
-                >
-                  Организация без ИНН
-                </Typography>
-              </Grid2>
-              {inn && (
+            <fieldset
+              style={{
+                border: 'none',
+              }}
+              disabled={isLoading}
+            >
+              <Grid2 container spacing={2}>
                 <Grid2 size={12}>
-                  <InputLabel>Вышестоящая организация</InputLabel>
-                  <Select
-                    fullWidth
-                    sx={{ padding: 1.6 }}
-                    onChange={handleOrgChange}
-                    value={
-                      chosenUnion
-                        ? chosenUnion?.inn + '/' + chosenUnion?.title
-                        : ''
-                    }
+                  <Checkbox
+                    checked={inn}
+                    value={inn}
+                    onClick={() => setInn((prev) => !prev)}
+                  />
+                  <Typography
+                    component={'span'}
+                    variant="body1"
+                    fontWeight={600}
+                    pt={0.2}
                   >
-                    {tradeUnions &&
-                      tradeUnions.map((el: ITradeUnion) => {
-                        if (el.title !== myTradeUnion?.title)
-                          return (
-                            <MenuItem
-                              key={el.title + el.inn}
-                              value={el.inn + '/' + el.title}
-                            >
-                              {el.inn + ' - ' + el.title}
-                            </MenuItem>
-                          );
-                      })}
-                  </Select>
+                    Организация без ИНН
+                  </Typography>
                 </Grid2>
-              )}
-              <Grid2 size={9} container>
-                <Grid2 size={12}>
-                  <InputLabel>Наименование</InputLabel>
-                  <TextField
-                    {...register('title')}
-                    placeholder="Профсоюз"
-                    error={!!errors.title?.message}
-                    helperText={errors.title?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <InputLabel>Дата образования</InputLabel>
-                  <InputDate name="creationDate" />
-                </Grid2>
-              </Grid2>
-              <Grid2 size={3}>
-                <InputImage
-                  sx={{ width: '100%', height: 'calc(100% - 40px)', mt: 4 }}
-                  name="logo"
-                  label="Добавить логотип"
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ИНН
-                </InputLabel>
-                <TextFieldCustom
-                  register={register('inn')}
-                  placeholder="111111111111"
-                  error={errors.inn?.message}
-                  disabled={inn}
-                  maxL={12}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  КПП
-                </InputLabel>
-                <TextFieldCustom
-                  register={register('kpp')}
-                  placeholder="111111111"
-                  error={errors.kpp?.message}
-                  disabled={inn}
-                  maxL={9}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ОГРН
-                </InputLabel>
-                <TextFieldCustom
-                  register={register('ogrn')}
-                  placeholder="1111111111111"
-                  error={errors.ogrn?.message}
-                  disabled={inn}
-                  maxL={13}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  Дата пост. на учет
-                </InputLabel>
-                {!inn ? (
-                  <InputDate name="registrationDate" />
-                ) : (
-                  <TextField
-                    {...register('registrationDate')}
-                    disabled
-                    error={!!errors.registrationDate?.message}
-                    helperText={errors.registrationDate?.message || ''}
-                  />
+                {inn && (
+                  <Grid2 size={12}>
+                    <InputLabel>Вышестоящая организация</InputLabel>
+                    <Select
+                      fullWidth
+                      sx={{ padding: 1.6 }}
+                      onChange={handleOrgChange}
+                      value={
+                        chosenUnion
+                          ? chosenUnion?.inn + '/' + chosenUnion?.title
+                          : ''
+                      }
+                    >
+                      {tradeUnions &&
+                        tradeUnions.map((el: ITradeUnion) => {
+                          if (el.title !== myTradeUnion?.title)
+                            return (
+                              <MenuItem
+                                key={el.title + el.inn}
+                                value={el.inn + '/' + el.title}
+                              >
+                                {el.inn + ' - ' + el.title}
+                              </MenuItem>
+                            );
+                        })}
+                    </Select>
+                  </Grid2>
                 )}
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ОКАТО
-                </InputLabel>
-                <TextFieldCustom
-                  register={register('okato')}
-                  placeholder="11111111111"
-                  disabled={inn}
-                  error={errors.okato?.message}
-                  maxL={11}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <InputLabel
-                  sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                >
-                  ОКТМО
-                </InputLabel>
-
-                <TextFieldCustom
-                  register={register('oktmo')}
-                  disabled={inn}
-                  placeholder="11111111111"
-                  error={errors.oktmo?.message}
-                  maxL={11}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputLabel sx={{ marginBottom: 0 }}>Адрес</InputLabel>
-              </Grid2>
-              <Grid2 size={12}>
-                <Autocomplete
-                  options={addressOptions}
-                  getOptionLabel={(option) => option.value}
-                  value={value}
-                  onChange={(event: any, newValue: any) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => (
+                <Grid2 size={9} container>
+                  <Grid2 size={12}>
+                    <InputLabel>Наименование</InputLabel>
                     <TextField
-                      placeholder="Начните вводить адрес"
-                      {...params}
-                      value={addressString}
-                      onChange={handleChange}
+                      {...register('title')}
+                      placeholder="Профсоюз"
+                      error={!!errors.title?.message}
+                      helperText={errors.title?.message || ''}
+                    />
+                  </Grid2>
+                  <Grid2 size={12}>
+                    <InputLabel>Дата образования</InputLabel>
+                    <InputDate name="creationDate" />
+                  </Grid2>
+                </Grid2>
+                <Grid2 size={3}>
+                  <InputImage
+                    sx={{ width: '100%', height: 'calc(100% - 40px)', mt: 4 }}
+                    name="logo"
+                    label="Добавить логотип"
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                  >
+                    ИНН
+                  </InputLabel>
+                  <TextFieldCustom
+                    register={register('inn')}
+                    placeholder="111111111111"
+                    error={errors.inn?.message}
+                    disabled={inn}
+                    maxL={12}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                  >
+                    КПП
+                  </InputLabel>
+                  <TextFieldCustom
+                    register={register('kpp')}
+                    placeholder="111111111"
+                    error={errors.kpp?.message}
+                    disabled={inn}
+                    maxL={9}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                  >
+                    ОГРН
+                  </InputLabel>
+                  <TextFieldCustom
+                    register={register('ogrn')}
+                    placeholder="1111111111111"
+                    error={errors.ogrn?.message}
+                    disabled={inn}
+                    maxL={13}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                  >
+                    Дата пост. на учет
+                  </InputLabel>
+                  {!inn ? (
+                    <InputDate name="registrationDate" />
+                  ) : (
+                    <TextField
+                      {...register('registrationDate')}
+                      disabled
+                      error={!!errors.registrationDate?.message}
+                      helperText={errors.registrationDate?.message || ''}
                     />
                   )}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <TextFieldCustom
-                  register={register('address.postcode')}
-                  placeholder="Индекс"
-                  error={errors.address?.postcode?.message}
-                  maxL={6}
-                />
-              </Grid2>
-              <Grid2 size={8}>
-                <TextField
-                  {...register('address.region')}
-                  placeholder="Регион"
-                  error={!!errors.address?.region?.message}
-                  helperText={errors.address?.region?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('address.area')}
-                  placeholder="Муниципальное образование"
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('address.city')}
-                  placeholder="Населенный пункт"
-                  error={!!errors.address?.city?.message}
-                  helperText={errors.address?.city?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('address.street')}
-                  placeholder="Улица"
-                  error={!!errors.address?.street?.message}
-                  helperText={errors.address?.street?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={3}>
-                <TextField
-                  {...register('address.house')}
-                  placeholder="Здание"
-                  error={!!errors.address?.house?.message}
-                  helperText={errors.address?.house?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={3}>
-                <TextField {...register('address.flat')} placeholder="Пом." />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputLabel sx={{ marginBottom: 0 }}>Председатель</InputLabel>
-              </Grid2>
-              <Grid2 size={12}>
-                <TextField
-                  {...register('chairman.lastName')}
-                  placeholder="Фамилия"
-                  error={!!errors.chairman?.lastName?.message}
-                  helperText={errors.chairman?.lastName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <TextField
-                  {...register('chairman.firstName')}
-                  placeholder="Имя"
-                  error={!!errors.chairman?.firstName?.message}
-                  helperText={errors.chairman?.firstName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <TextField
-                  {...register('chairman.middleName')}
-                  placeholder="Отчество"
-                  error={!!errors.chairman?.middleName?.message}
-                  helperText={errors.chairman?.middleName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>E-mail</InputLabel>
-                <TextField
-                  {...register('chairmanEmail')}
-                  placeholder="prov@mail.ru"
-                  error={!!errors.chairmanEmail?.message}
-                  helperText={errors.chairmanEmail?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>Телефон</InputLabel>
-                <TextFieldCustom
-                  register={register('chairmanPhone')}
-                  placeholder="+79999999999"
-                  error={errors.chairmanPhone?.message}
-                  maxL={11}
-                  allowPlus
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputLabel sx={{ marginBottom: 0 }}>Работодатель</InputLabel>
-              </Grid2>
-              <Grid2 size={12}>
-                <TextField
-                  {...register('employer.title')}
-                  placeholder="Полное наименование организации-работодателя"
-                  error={!!errors.employer?.title?.message}
-                  helperText={errors.employer?.title?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('employer.lastName')}
-                  placeholder="Фамилия руководителя организации-работодателя"
-                  error={!!errors.employer?.lastName?.message}
-                  helperText={errors.employer?.lastName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('employer.firstName')}
-                  placeholder="Имя руководителя организации-работодателя"
-                  error={!!errors.employer?.firstName?.message}
-                  helperText={errors.employer?.firstName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('employer.middleName')}
-                  placeholder="Отчество руководителя организации-работодателя"
-                  error={!!errors.employer?.middleName?.message}
-                  helperText={errors.employer?.middleName?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextFieldCustom
-                  register={register('employer.inn')}
-                  placeholder="ИНН организации-работодателя"
-                  error={errors.employer?.inn?.message}
-                  maxL={12}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputLabel
-                  sx={{
-                    marginBottom: 0,
-                    color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000',
-                  }}
-                >
-                  Банковские реквизиты
-                </InputLabel>
-              </Grid2>
-              <Grid2 size={6}>
-                <TextField
-                  {...register('bank.bank')}
-                  placeholder="Банк"
-                  disabled={inn}
-                  error={!!errors.bank?.bank?.message}
-                  helperText={errors.bank?.bank?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextFieldCustom
-                  register={register('bank.rs')}
-                  placeholder="Р/с"
-                  disabled={inn}
-                  error={errors.bank?.rs?.message}
-                  maxL={20}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextFieldCustom
-                  register={register('bank.bik')}
-                  placeholder="БИК"
-                  disabled={inn}
-                  error={errors.bank?.bik?.message}
-                  maxL={9}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <TextFieldCustom
-                  register={register('bank.ks')}
-                  placeholder="К/с"
-                  disabled={inn}
-                  error={errors.bank?.ks?.message}
-                  maxL={20}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>Телефон организации</InputLabel>
-                <TextFieldCustom
-                  register={register('phone')}
-                  placeholder="+79999999999"
-                  error={errors.phone?.message}
-                  maxL={11}
-                  allowPlus
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <InputLabel>Е-мейл организации</InputLabel>
-                <TextField
-                  {...register('email')}
-                  placeholder="prov@mail.ru"
-                  error={!!errors.email?.message}
-                  helperText={errors.email?.message || ''}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputLabel>Размер взносов (%)</InputLabel>
-                <TextField
-                  {...register('percents')}
-                  error={!!errors.percents?.message}
-                  helperText={errors.percents?.message || ''}
-                  onChange={(e) => {
-                    if (!/^\d+$/.test(e.target.value))
-                      setPercents(chosenUnion?.percents || 0);
-                    else
-                      setPercents(
-                        Math.min(100, Math.max(0, Number(e.target.value))),
-                      );
-                  }}
-                  value={percents}
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputFile
-                  name="scan"
-                  label={
-                    <span>
-                      Прикрепить Устав профсоюзной организации <br />
-                      (документ в формате pdf размером до 2МБ)
-                    </span>
-                  }
-                  accept=".pdf"
-                  imageSelect="pdf"
-                  type="secondary"
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <InputFile
-                  name="participants"
-                  label={
-                    <span>
-                      Загрузить участников <br />
-                      (документ в формате xls размером до 2МБ)
-                    </span>
-                  }
-                  accept=".xls,.xlsx"
-                  imageInit="upload"
-                  type="secondary"
-                />
-              </Grid2>
-              <Grid2 size={12}>
-                <Box
-                  width={'50%'}
-                  m={'0 auto'}
-                  display={'flex'}
-                  alignItems={'center'}
-                  gap={1.2}
-                  justifyContent={'center'}
-                  component={'a'}
-                  href="/members-template.xlsx"
-                  download
-                >
-                  <img src="/images/xml.svg" alt="xml"></img>
-                  <Typography
-                    lineHeight={'27px'}
-                    fontSize={16}
-                    color="rgb(32, 34, 36)"
-                    fontWeight={600}
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    Шаблон списка участников профсоюза
-                  </Typography>
-                </Box>
+                    ОКАТО
+                  </InputLabel>
+                  <TextFieldCustom
+                    register={register('okato')}
+                    placeholder="11111111111"
+                    disabled={inn}
+                    error={errors.okato?.message}
+                    maxL={11}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <InputLabel
+                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
+                  >
+                    ОКТМО
+                  </InputLabel>
+
+                  <TextFieldCustom
+                    register={register('oktmo')}
+                    disabled={inn}
+                    placeholder="11111111111"
+                    error={errors.oktmo?.message}
+                    maxL={11}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel sx={{ marginBottom: 0 }}>Адрес</InputLabel>
+                </Grid2>
+                <Grid2 size={12}>
+                  <Autocomplete
+                    options={addressOptions}
+                    getOptionLabel={(option) => option.value}
+                    value={value}
+                    onChange={(event: any, newValue: any) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        placeholder="Начните вводить адрес"
+                        {...params}
+                        value={addressString}
+                        onChange={handleChange}
+                      />
+                    )}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <TextFieldCustom
+                    register={register('address.postcode')}
+                    placeholder="Индекс"
+                    error={errors.address?.postcode?.message}
+                    maxL={6}
+                  />
+                </Grid2>
+                <Grid2 size={8}>
+                  <TextField
+                    {...register('address.region')}
+                    placeholder="Регион"
+                    error={!!errors.address?.region?.message}
+                    helperText={errors.address?.region?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('address.area')}
+                    placeholder="Муниципальное образование"
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('address.city')}
+                    placeholder="Населенный пункт"
+                    error={!!errors.address?.city?.message}
+                    helperText={errors.address?.city?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('address.street')}
+                    placeholder="Улица"
+                    error={!!errors.address?.street?.message}
+                    helperText={errors.address?.street?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={3}>
+                  <TextField
+                    {...register('address.house')}
+                    placeholder="Здание"
+                    error={!!errors.address?.house?.message}
+                    helperText={errors.address?.house?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={3}>
+                  <TextField {...register('address.flat')} placeholder="Пом." />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel sx={{ marginBottom: 0 }}>Председатель</InputLabel>
+                </Grid2>
+                <Grid2 size={12}>
+                  <TextField
+                    {...register('chairman.lastName')}
+                    placeholder="Фамилия"
+                    error={!!errors.chairman?.lastName?.message}
+                    helperText={errors.chairman?.lastName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <TextField
+                    {...register('chairman.firstName')}
+                    placeholder="Имя"
+                    error={!!errors.chairman?.firstName?.message}
+                    helperText={errors.chairman?.firstName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <TextField
+                    {...register('chairman.middleName')}
+                    placeholder="Отчество"
+                    error={!!errors.chairman?.middleName?.message}
+                    helperText={errors.chairman?.middleName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <InputLabel>E-mail</InputLabel>
+                  <TextField
+                    {...register('chairmanEmail')}
+                    placeholder="prov@mail.ru"
+                    error={!!errors.chairmanEmail?.message}
+                    helperText={errors.chairmanEmail?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <InputLabel>Телефон</InputLabel>
+                  <TextFieldCustom
+                    register={register('chairmanPhone')}
+                    placeholder="+79999999999"
+                    error={errors.chairmanPhone?.message}
+                    maxL={11}
+                    allowPlus
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel sx={{ marginBottom: 0 }}>Работодатель</InputLabel>
+                </Grid2>
+                <Grid2 size={12}>
+                  <TextField
+                    {...register('employer.title')}
+                    placeholder="Полное наименование организации-работодателя"
+                    error={!!errors.employer?.title?.message}
+                    helperText={errors.employer?.title?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('employer.lastName')}
+                    placeholder="Фамилия руководителя организации-работодателя"
+                    error={!!errors.employer?.lastName?.message}
+                    helperText={errors.employer?.lastName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('employer.firstName')}
+                    placeholder="Имя руководителя организации-работодателя"
+                    error={!!errors.employer?.firstName?.message}
+                    helperText={errors.employer?.firstName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('employer.middleName')}
+                    placeholder="Отчество руководителя организации-работодателя"
+                    error={!!errors.employer?.middleName?.message}
+                    helperText={errors.employer?.middleName?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextFieldCustom
+                    register={register('employer.inn')}
+                    placeholder="ИНН организации-работодателя"
+                    error={errors.employer?.inn?.message}
+                    maxL={12}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel
+                    sx={{
+                      marginBottom: 0,
+                      color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000',
+                    }}
+                  >
+                    Банковские реквизиты
+                  </InputLabel>
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextField
+                    {...register('bank.bank')}
+                    placeholder="Банк"
+                    disabled={inn}
+                    error={!!errors.bank?.bank?.message}
+                    helperText={errors.bank?.bank?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextFieldCustom
+                    register={register('bank.rs')}
+                    placeholder="Р/с"
+                    disabled={inn}
+                    error={errors.bank?.rs?.message}
+                    maxL={20}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextFieldCustom
+                    register={register('bank.bik')}
+                    placeholder="БИК"
+                    disabled={inn}
+                    error={errors.bank?.bik?.message}
+                    maxL={9}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextFieldCustom
+                    register={register('bank.ks')}
+                    placeholder="К/с"
+                    disabled={inn}
+                    error={errors.bank?.ks?.message}
+                    maxL={20}
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <InputLabel>Телефон организации</InputLabel>
+                  <TextFieldCustom
+                    register={register('phone')}
+                    placeholder="+79999999999"
+                    error={errors.phone?.message}
+                    maxL={11}
+                    allowPlus
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <InputLabel>Е-мейл организации</InputLabel>
+                  <TextField
+                    {...register('email')}
+                    placeholder="prov@mail.ru"
+                    error={!!errors.email?.message}
+                    helperText={errors.email?.message || ''}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel>Размер взносов (%)</InputLabel>
+                  <TextField
+                    {...register('percents')}
+                    error={!!errors.percents?.message}
+                    helperText={errors.percents?.message || ''}
+                    onChange={(e) => {
+                      if (!/^\d+$/.test(e.target.value))
+                        setPercents(chosenUnion?.percents || 0);
+                      else
+                        setPercents(
+                          Math.min(100, Math.max(0, Number(e.target.value))),
+                        );
+                    }}
+                    value={percents}
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputFile
+                    name="scan"
+                    label={
+                      <span>
+                        Прикрепить Устав профсоюзной организации <br />
+                        (документ в формате pdf размером до 2МБ)
+                      </span>
+                    }
+                    accept=".pdf"
+                    imageSelect="pdf"
+                    type="secondary"
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputFile
+                    name="participants"
+                    label={
+                      <span>
+                        Загрузить участников <br />
+                        (документ в формате xls размером до 2МБ)
+                      </span>
+                    }
+                    accept=".xls,.xlsx"
+                    imageInit="upload"
+                    type="secondary"
+                  />
+                </Grid2>
+                <Grid2 size={12}>
+                  <Box
+                    width={'50%'}
+                    m={'0 auto'}
+                    display={'flex'}
+                    alignItems={'center'}
+                    gap={1.2}
+                    justifyContent={'center'}
+                    component={'a'}
+                    href="/members-template.xlsx"
+                    download
+                  >
+                    <img src="/images/xml.svg" alt="xml"></img>
+                    <Typography
+                      lineHeight={'27px'}
+                      fontSize={16}
+                      color="rgb(32, 34, 36)"
+                      fontWeight={600}
+                    >
+                      Шаблон списка участников профсоюза
+                    </Typography>
+                  </Box>
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputCheckbox
+                    sx={{ justifyContent: 'center' }}
+                    name="isActive"
+                    link={'/politics.pdf'}
+                    label={`Я соглашаюсь с политикой обработки персональных данных `}
+                  />
+                </Grid2>
+                {isLoading == false && (
+                  <>
+                    <Grid2 size={6}>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          width: '100%',
+                          fontSize: '20px',
+                          lineHeight: '27px',
+                        }}
+                        onClick={() => router.push('/documents?incoming')}
+                      >
+                        Отменить
+                      </Button>
+                    </Grid2>
+                    <Grid2 size={6}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          width: '100%',
+                          padding: '16px 25px',
+                          fontSize: '20px',
+                          lineHeight: '27px',
+                        }}
+                        type="submit"
+                      >
+                        Сохранить
+                      </Button>
+                    </Grid2>
+                  </>
+                )}
+                {isLoading == true && (
+                  <Box
+                    display={'flex'}
+                    justifyContent={'center'}
+                    width={'100%'}
+                  >
+                    <CircularProgress />
+                  </Box>
+                )}
               </Grid2>
-              <Grid2 size={12}>
-                <InputCheckbox
-                  sx={{ justifyContent: 'center' }}
-                  name="isActive"
-                  link={'/politics.pdf'}
-                  label={`Я соглашаюсь с политикой обработки персональных данных `}
-                />
-              </Grid2>
-              <Grid2 size={6}>
-                <Button
-                  variant="outlined"
-                  sx={{ width: '100%', fontSize: '20px', lineHeight: '27px' }}
-                  onClick={() => router.push('/documents?incoming')}
-                >
-                  Отменить
-                </Button>
-              </Grid2>
-              <Grid2 size={6}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    width: '100%',
-                    padding: '16px 25px',
-                    fontSize: '20px',
-                    lineHeight: '27px',
-                  }}
-                  type="submit"
-                >
-                  Сохранить
-                </Button>
-              </Grid2>
-            </Grid2>
+            </fieldset>
           </form>
         </FormProvider>
       </LocalizationProvider>

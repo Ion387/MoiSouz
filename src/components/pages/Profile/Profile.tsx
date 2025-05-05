@@ -13,7 +13,7 @@ const ProfilePage = ({
   setSteps?: (arg0: number) => void;
   stepTitle?: string;
 }) => {
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   const { onCancel, onSubmit } = useForm();
 
@@ -39,7 +39,7 @@ const ProfilePage = ({
   ) : (
     <Box sx={{ p: 2 }}>
       <Typography variant="h3" marginBottom={2}>
-        Профиль профсоюза
+        Профиль профсоюзной организации
       </Typography>
       <TradeUnionRegistrationForm />
     </Box>

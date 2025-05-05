@@ -8,7 +8,7 @@ import MembershipForm from '@/components/forms/MembershipForm';
 
 const TradeUnionConfirmMembershipPage = () => {
   const [steps, setSteps] = useState<number>(1);
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   useEffect(() => {
     if (!!info?.phone) {

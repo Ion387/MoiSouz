@@ -15,7 +15,7 @@ export const TradeunionCheckApiDialog = () => {
     select: (data) => data.data,
   });
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
 
   return (
     <TradeunionCheckDialog

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useFetchProfile } from './useFetchProfile';
 
 export function useIsUserActive(): boolean {
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const isActive = useMemo(() => {
     if (!!info?.ROLES?.includes('ROLE_TRADEUNION') && info?.hasTradeunionOwner)
       return true;

@@ -15,7 +15,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 
 export const ProfileHeader = () => {
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const router = useRouter();
   const [profileData, setProfileData] = useState(info);
   const [avatar, setAvatar] = useState();

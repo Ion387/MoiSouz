@@ -32,7 +32,7 @@ const ColleaguesWrapper = () => {
   const params = useSearchParams();
   const router = useRouter();
 
-  const info = useFetchProfile();
+  const { info } = useFetchProfile();
   const {
     data: tuUsers,
     loading: loadingTUUsers,

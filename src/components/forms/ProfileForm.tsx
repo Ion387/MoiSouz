@@ -147,12 +147,12 @@ const ProfileForm: FC<Props> = ({
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (isSubmitSuccessful) {
+    if (!isSubmitting && isSubmitSuccessful) {
       if (path.includes('/trade') && setSteps) setSteps(2);
       else router.push('/documents?incoming');
     }
     queryClient.invalidateQueries({ queryKey: ['profile'] });
-  }, [isSubmitSuccessful, path]);
+  }, [isSubmitting, isSubmitSuccessful, path]);
 
   return (
     <Form

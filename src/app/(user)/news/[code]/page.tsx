@@ -1,5 +1,5 @@
-import NewsShowPage from '@/components/pages/News/NewsShow';
+import NewsOnePage from '@/components/pages/News/NewsOne';
 
 export default function NewsShow() {
-  return <NewsShowPage />;
+  return <NewsOnePage />;
 }

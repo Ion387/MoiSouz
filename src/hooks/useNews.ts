@@ -1,15 +1,19 @@
-import axios from 'axios';
-import { getBackendUrl } from '@/constants/url';
-import { getHeaders } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 import {
   useIsMutating,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { IResponseList } from '@/models/Response';
+import axios from 'axios';
+
+import { useFetchList } from '@/services/universal';
+
+import { getBackendUrl } from '@/constants/url';
+import { getHeaders } from '@/utils/axios';
+
 import { IFormNews } from '@/models/News';
-import { useRouter } from 'next/navigation';
+import { IOptionValue } from '@/models/Option';
 
 interface PropsGetNewsOne {
   code?: string;
@@ -35,38 +39,28 @@ export const useFetchNewsOne = ({ code }: PropsGetNewsOne) => {
 };
 
 interface PropsNewsList {
-  page?: number;
+  prename?: string;
   perPage?: number;
+  status?: IOptionValue | null;
 }
 export const useFetchNewsList = (
-  { page, perPage }: PropsNewsList = { page: 1, perPage: 30 },
+  { prename, perPage, status }: PropsNewsList = { perPage: 15 },
 ) => {
-  const {
-    data: info,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ['news-list'],
-    queryFn: async () =>
-      axios.get<IResponseList<IFormNews[]> | undefined>(
-        `${getBackendUrl}/api/private/news?page=${page}&itemsPerPage=${perPage}`,
-        {
-          headers: {
-            ...(await getHeaders()),
-          },
-        },
-      ),
-    select: (data) => data.data,
-    refetchOnMount: 'always',
+  return useFetchList<IFormNews>({
+    name: `${prename ? `${prename}-` : ''}news-list`,
+    api: '/api/private/news',
+    params: {
+      itemsPerPage: perPage,
+      status,
+    },
   });
-  return { data: info?.data, isLoading, refetch };
 };
 
 export const useForm = () => {
   const router = useRouter();
 
   const onCancel = () => {
-    router.push('/news');
+    router.push('/news/edit');
   };
 
   const mutationKey = 'news-one';
@@ -84,7 +78,7 @@ export const useForm = () => {
       }
     },
     onSuccess: () => {
-      router.push('/news');
+      router.push('/news/edit');
     },
   });
 

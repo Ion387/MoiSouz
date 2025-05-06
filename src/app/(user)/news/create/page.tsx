@@ -1,5 +1,5 @@
-import NewsEditPage from '@/components/pages/News/NewsEdit';
+import NewsEditOnePage from '@/components/pages/News/Edit/NewsOne';
 
 export default function NewsCreate() {
-  return <NewsEditPage />;
+  return <NewsEditOnePage />;
 }

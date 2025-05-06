@@ -4,25 +4,23 @@ import React, { Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
-import { Box, ButtonBase, CircularProgress, Typography } from '@mui/material';
+import { NewsCardSimple } from '@/components/sections/News';
 
 import { useFetchNewsList, useFetchNewsOne } from '@/hooks/useNews';
 
 import { getBackendUrl } from '@/constants/url';
 
-const NewsShowWrapper = () => {
+const NewsOneWrapper = () => {
   const params = useParams();
 
   const { data: newsOne, isLoading: isLoadingNewsOne } =
     useFetchNewsOne(params);
 
-  const { data: newsList, isLoading: isLoadingNewsList } = useFetchNewsList({
-    page: 1,
-    perPage: 3,
-  });
-
-  console.log('newsOne', newsOne);
+  const {
+    data: { data: newsList, isFetching: isLoading },
+  } = useFetchNewsList({ status: 'published', perPage: 3 });
 
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
@@ -74,7 +72,7 @@ const NewsShowWrapper = () => {
             width={300}
             minWidth={300}
           >
-            {isLoadingNewsList ? (
+            {isLoading ? (
               <Box display={'flex'} justifyContent={'center'} width={'100%'}>
                 <CircularProgress />
               </Box>
@@ -85,27 +83,7 @@ const NewsShowWrapper = () => {
                   href={`/news/${el.code}`}
                   style={{ display: 'flex' }}
                 >
-                  <ButtonBase
-                    sx={{
-                      padding: 2,
-                      overflow: 'hidden',
-                      bgcolor: 'white',
-                      borderRadius: 5,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'start',
-                      gap: 1.5,
-                      width: '100%',
-                      boxShadow: '5px 5px 10px rgba(0,0,0,0.05)',
-                    }}
-                  >
-                    <Typography fontSize={14} fontWeight={700}>
-                      {el.title}
-                    </Typography>
-                    <Typography fontSize={10} fontWeight={400} color="gray">
-                      {el.date}
-                    </Typography>
-                  </ButtonBase>
+                  <NewsCardSimple data={el} />
                 </Link>
               ))
             )}
@@ -120,12 +98,12 @@ const NewsShowWrapper = () => {
   );
 };
 
-const NewsShowPage = () => {
+const NewsOnePage = () => {
   return (
     <Suspense>
-      <NewsShowWrapper />
+      <NewsOneWrapper />
     </Suspense>
   );
 };
 
-export default NewsShowPage;
+export default NewsOnePage;

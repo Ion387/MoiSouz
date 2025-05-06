@@ -12,7 +12,7 @@ import { NewsForm } from '@/components/forms/NewsForm';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { useFetchNewsOne, useForm } from '@/hooks/useNews';
 
-const NewsEditWrapper = () => {
+const NewsEditOneWrapper = () => {
   const params = useParams();
   const pathname = usePathname();
   const isCreate = pathname.endsWith('/create');
@@ -73,12 +73,12 @@ const NewsEditWrapper = () => {
   );
 };
 
-const NewsEditPage = () => {
+const NewsEditOnePage = () => {
   return (
     <Suspense>
-      <NewsEditWrapper />
+      <NewsEditOneWrapper />
     </Suspense>
   );
 };
 
-export default NewsEditPage;
+export default NewsEditOnePage;

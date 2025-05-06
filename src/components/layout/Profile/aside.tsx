@@ -39,14 +39,23 @@ export const ProfileAside = () => {
         <ListItem label="Магазин" icon="square-3x3" disabled />
         <ListItem label="Информация" icon="info" disabled />
 
-        {/*
-        <ListItem label="Новости" icon="info" to="/news" />
+        {/* ENABLE NEWS - START
+        {info?.hasTradeunionOwner == false && (
+          <ListItem label="Новости" icon="info" to="/news" />
+        )}
 
-        <ListItem label="Новости" icon="info">
-          <ListItem label="Опубликовано" to="/news/edit?status=published" />
-          <ListItem label="Черновик" to="/news/edit?status=draft" />
-        </ListItem>
-        */}
+        {info?.hasTradeunionOwner == true && (
+          <ListItem
+            label="Новости"
+            icon="info"
+            openDefault={window.location.pathname.startsWith('/news')}
+          >
+            <ListItem label="Новости" to="/news" equals />
+            <ListItem label="Опубликовано" to="/news/edit?status=published" />
+            <ListItem label="Черновик" to="/news/edit?status=draft" />
+          </ListItem>
+        )}
+        ENABLE NEWS - END */}
       </List>
     </List>
   );

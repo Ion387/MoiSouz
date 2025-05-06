@@ -17,6 +17,7 @@ interface Props {
   label: string;
   icon?: IconName;
   to?: string;
+  equals?: boolean;
   indent?: number;
   openDefault?: boolean;
   openAlways?: boolean;
@@ -29,11 +30,6 @@ interface Props {
 interface PropsChildren {
   indent?: number;
   children?: ReactElement | ReactElement[];
-}
-
-interface PropsItem extends Props {
-  selected?: boolean;
-  opened?: boolean;
 }
 const Children = ({ indent = 0, children }: PropsChildren) => {
   return useMemo(() => {
@@ -49,6 +45,9 @@ const Children = ({ indent = 0, children }: PropsChildren) => {
   }, [children]);
 };
 
+interface PropsItem extends Props {
+  selected?: boolean;
+}
 const Item: FC<PropsItem> = ({
   label,
   icon,
@@ -89,7 +88,7 @@ const Item: FC<PropsItem> = ({
         {/*children && (open ? <ExpandLess /> : <ExpandMore />)*/}
       </ListItemButton>
       {children && (
-        <Collapse in={openAlways || open} timeout="auto" unmountOnExit>
+        <Collapse in={open || openAlways} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {<Children indent={indent}>{children}</Children>}
           </List>
@@ -99,34 +98,31 @@ const Item: FC<PropsItem> = ({
   );
 };
 
-const ListItemSP: FC<Props> = ({ to, hidden, ...props }) => {
+const ListItemSP: FC<Props> = ({ to, equals, hidden, ...props }) => {
   const pathname = usePathname();
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
 
-  const param = !!params.entries().toArray().length
-    ? params.entries().toArray()[0][0]
-    : null;
+  const selected = useMemo(() => {
+    if (to == null) return false;
+    if (equals) {
+      if (pathname != to.split('?')[0]) return false;
+    } else {
+      if (pathname.startsWith(to.split('?')[0]) == false) return false;
+    }
+
+    const url = `${pathname}?${searchParams}`;
+    return url.startsWith(to);
+  }, [to, pathname, searchParams]);
 
   if (to) {
     return (
       <Link href={to} style={{ width: '100%', display: hidden ? 'none' : '' }}>
-        <Item
-          {...props}
-          selected={
-            !param ? to == pathname : (pathname + '?' + param).startsWith(to)
-          }
-          opened={to.includes(pathname)}
-        />
+        <Item {...props} selected={selected} />
       </Link>
     );
   }
 
-  return (
-    <Item
-      {...props}
-      selected={!param ? to == pathname : to == pathname + '?' + param}
-    />
-  );
+  return <Item {...props} selected={selected} />;
 };
 
 export const ListItem: FC<Props> = ({ ...props }) => {

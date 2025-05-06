@@ -23,7 +23,7 @@ import { OPTIONS_NEWS_STATUS } from '@/constants/options';
 
 const KEY_PARAM_STATUS = 'status';
 
-const NewsListEditWrapper = () => {
+const NewsEditListWrapper = () => {
   const params = useSearchParams();
   const router = useRouter();
 
@@ -33,10 +33,9 @@ const NewsListEditWrapper = () => {
 
   const { info } = useFetchProfile();
   const {
-    data: newsList,
-    isLoading: loadingNewsList,
-    refetch: refetchNewsList,
-  } = useFetchNewsList();
+    data: { data: newsList, isFetching: isLoading, hasMore },
+    actions: { loadMore: loadMoreNewsList, refetch: refetchNewsList },
+  } = useFetchNewsList({ prename: 'edit', status });
 
   const [newsDelete, setNewsDelete] = useState<IFormNews | null>(null);
   const [newsDeleting, setNewsDeleting] = useState<IFormNews | null>(null);
@@ -132,17 +131,23 @@ const NewsListEditWrapper = () => {
           </Box>
         )}
 
-        {!loadingNewsList ? (
-          <Table
-            news={newsList || []}
-            newsLoading={newsDeleting}
-            owner={info?.hasTradeunionOwner}
-            onClick={handleClick}
-            onShow={handleShow}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ) : (
+        <Table
+          news={newsList || []}
+          newsLoading={newsDeleting}
+          owner={info?.hasTradeunionOwner}
+          onClick={handleClick}
+          onShow={handleShow}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+
+        {!isLoading && hasMore && (
+          <Button variant="text" onClick={loadMoreNewsList}>
+            Показать ещё
+          </Button>
+        )}
+
+        {isLoading && (
           <Box display={'flex'} justifyContent={'center'} width={'100%'}>
             <CircularProgress />
           </Box>
@@ -183,12 +188,12 @@ const NewsListEditWrapper = () => {
   );
 };
 
-const NewsListEditPage = () => {
+const NewsEditListPage = () => {
   return (
     <Suspense>
-      <NewsListEditWrapper />
+      <NewsEditListWrapper />
     </Suspense>
   );
 };
 
-export default NewsListEditPage;
+export default NewsEditListPage;

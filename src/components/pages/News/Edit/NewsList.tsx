@@ -3,15 +3,9 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Dialog, Typography } from '@mui/material';
 
-import { Icon, InputAutocomplete } from '@/components/ui';
+import { Icon, InputAutocomplete, PaginationSimple } from '@/components/ui';
 import { Table } from '@/components/sections/News';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
@@ -32,13 +26,28 @@ const NewsEditListWrapper = () => {
   );
 
   const { info } = useFetchProfile();
+  const perPageNewsList = 9;
   const {
-    data: { data: newsList, isFetching: isLoading, hasMore },
-    actions: { loadMore: loadMoreNewsList, refetch: refetchNewsList },
-  } = useFetchNewsList({ prename: 'edit', status });
+    data: {
+      data: newsList,
+      isFetching: isLoading,
+      page: pageNewsList,
+      total: totalNewsList,
+    },
+    actions: {
+      loadPrev: loadPrevNewsList,
+      loadNext: loadNextNewsList,
+      refetch: refetchNewsList,
+    },
+  } = useFetchNewsList({
+    type: 'page',
+    prename: 'edit',
+    perPage: perPageNewsList,
+    status,
+  });
 
   const [newsDelete, setNewsDelete] = useState<IFormNews | null>(null);
-  const [newsDeleting, setNewsDeleting] = useState<IFormNews | null>(null);
+  const [newsLoading, setNewsLoading] = useState<IFormNews[]>([]);
 
   useEffect(() => {
     setStatus(params.get(KEY_PARAM_STATUS));
@@ -49,8 +58,7 @@ const NewsEditListWrapper = () => {
 
     if (value != null)
       router.push(`${window.location.pathname}?${KEY_PARAM_STATUS}=${value}`);
-    else
-      router.push(`${window.location.pathname}?${KEY_PARAM_STATUS}=published`);
+    else router.push(`${window.location.pathname}`);
 
     setStatus(value);
     refetchNewsList();
@@ -75,10 +83,12 @@ const NewsEditListWrapper = () => {
   const handleNewsDeleteAccept = async () => {
     if (newsDelete == null) return;
     setNewsDelete(null);
-    setNewsDeleting(newsDelete);
-    await deleteFormNews(newsDelete);
-    await refetchNewsList();
-    setNewsDeleting(null);
+    setNewsLoading((prev) => [...prev, newsDelete]);
+    try {
+      await deleteFormNews(newsDelete);
+      await refetchNewsList();
+    } catch {}
+    setNewsLoading((prev) => prev.filter((el) => el.id != newsDelete.id));
   };
 
   return (
@@ -104,7 +114,6 @@ const NewsEditListWrapper = () => {
                 flexDirection="column"
                 minWidth="fit-content"
                 marginTop="auto"
-                gap={1.5}
               >
                 <Link
                   href="/news/create"
@@ -118,12 +127,13 @@ const NewsEditListWrapper = () => {
                     variant="contained"
                     sx={{
                       gap: 1,
-                      height: 'fit-content',
+                      p: 1.5,
+                      px: 2,
                       width: '100%',
                     }}
                   >
                     <Icon name="plus" color="secondary.main" />
-                    Добавить новость
+                    Создать новость
                   </Button>
                 </Link>
               </Box>
@@ -133,7 +143,7 @@ const NewsEditListWrapper = () => {
 
         <Table
           news={newsList || []}
-          newsLoading={newsDeleting}
+          newsLoading={newsLoading}
           owner={info?.hasTradeunionOwner}
           onClick={handleClick}
           onShow={handleShow}
@@ -141,17 +151,14 @@ const NewsEditListWrapper = () => {
           onDelete={handleDelete}
         />
 
-        {!isLoading && hasMore && (
-          <Button variant="text" onClick={loadMoreNewsList}>
-            Показать ещё
-          </Button>
-        )}
-
-        {isLoading && (
-          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-            <CircularProgress />
-          </Box>
-        )}
+        <PaginationSimple
+          page={pageNewsList}
+          perPage={perPageNewsList}
+          total={totalNewsList}
+          loading={isLoading}
+          onPrev={loadPrevNewsList}
+          onNext={loadNextNewsList}
+        />
       </Box>
 
       <Dialog

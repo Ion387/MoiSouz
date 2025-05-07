@@ -45,7 +45,7 @@ const BenefitsWrapper = () => {
 
   const {
     data: { data: products, isFetching, hasMore, empty },
-    actions: { loadMore },
+    actions: { loadNext: loadMore },
   } = useFetchBenefitsProducts({
     category: categoryActive,
   });

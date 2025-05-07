@@ -7,4 +7,6 @@ export interface IFormNews {
   date: string;
   image: object | string;
   status: string;
+  isActive?: boolean | null;
+  isMain?: boolean | null;
 }

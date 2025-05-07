@@ -17,7 +17,7 @@ export const useFetchBenefitsProducts = ({
       category,
     },
     hasMore: (meta) => meta.current_page < meta.last_page,
-    hasAny: (meta) => meta.total == 0,
+    getTotal: (meta) => meta.total,
   });
 };
 

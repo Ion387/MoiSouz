@@ -12,6 +12,7 @@ import {
   InputDate,
   InputImage,
   InputHTML,
+  InputSwitch,
 } from '@/components/ui/form';
 
 import { IFormNews } from '@/models/News';
@@ -33,6 +34,8 @@ const schema = yup
       }),
     date: yup.string().required('Укажите дату').typeError('Укажите дату'),
     status: yup.string().required('Укажите статус'),
+    isActive: yup.bool().notRequired(),
+    isMain: yup.bool().notRequired(),
   })
   .required();
 
@@ -100,7 +103,7 @@ export const NewsForm: FC<Props> = ({
 
       <InputHTML sx={{ mt: 3 }} name="text" label="Контент" />
 
-      <Box sx={{ display: 'flex', gap: 2, mt: 3, mb: 3 }}>
+      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate
           sx={{ width: '30%' }}
           name="date"
@@ -115,6 +118,9 @@ export const NewsForm: FC<Props> = ({
           options={OPTIONS_NEWS_STATUS}
         />
       </Box>
+
+      <InputSwitch sx={{ mt: 3 }} name="isActive" label="Активность" />
+      <InputSwitch sx={{ mt: 1, mb: 3 }} name="isMain" label="Закрепить" />
     </Form>
   );
 };

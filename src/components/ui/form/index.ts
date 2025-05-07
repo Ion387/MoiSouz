@@ -8,4 +8,5 @@ export * from './input-file';
 export * from './input-array-of-objects';
 export * from './input-time';
 export * from './input-html';
+export * from './input-switch';
 export * from './entities';

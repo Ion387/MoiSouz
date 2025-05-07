@@ -1,5 +1,5 @@
-import NewsListPage from '@/components/pages/News/NewsList';
+import NewsMainPage from '@/components/pages/News/NewsMain';
 
 export default function NewsListEdit() {
-  return <NewsListPage />;
+  return <NewsMainPage />;
 }

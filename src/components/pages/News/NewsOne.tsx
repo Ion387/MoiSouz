@@ -3,12 +3,13 @@
 import React, { Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
+//import Link from 'next/link';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-import { NewsCardSimple } from '@/components/sections/News';
+import { BreadCrumbsText } from '@/components/ui';
+//import { NewsCardSimple } from '@/components/sections/News';
 
-import { useFetchNewsList, useFetchNewsOne } from '@/hooks/useNews';
+import { /*useFetchNewsList,*/ useFetchNewsOne } from '@/hooks/useNews';
 
 import { getBackendUrl } from '@/constants/url';
 
@@ -18,12 +19,21 @@ const NewsOneWrapper = () => {
   const { data: newsOne, isLoading: isLoadingNewsOne } =
     useFetchNewsOne(params);
 
+  /*
   const {
     data: { data: newsList, isFetching: isLoading },
   } = useFetchNewsList({ status: 'published', perPage: 3 });
+  */
 
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
+      <BreadCrumbsText
+        data={[
+          { text: 'Главная', link: '/news/all' },
+          { text: newsOne?.title || '' },
+        ]}
+      />
+
       <Typography variant="h3" lineHeight={'57px'}>
         Новости
       </Typography>
@@ -36,19 +46,19 @@ const NewsOneWrapper = () => {
             bgcolor="white"
             borderRadius={5}
             overflow="hidden"
-            width="100%"
+            width="80%"
             boxShadow="5px 5px 10px rgba(0,0,0,0.05)"
           >
             {newsOne?.image && (
               <Image
                 src={`${getBackendUrl}${newsOne?.image}`}
-                width={620}
-                height={360}
+                width={830}
+                height={400}
                 alt={newsOne?.title || ''}
                 style={{
                   width: '100%',
                   height: 'auto',
-                  maxHeight: '360px',
+                  maxHeight: '400px',
                   objectFit: 'cover',
                 }}
               />
@@ -65,6 +75,7 @@ const NewsOneWrapper = () => {
             </Box>
           </Box>
 
+          {/*
           <Box
             display="flex"
             flexDirection="column"
@@ -88,6 +99,7 @@ const NewsOneWrapper = () => {
               ))
             )}
           </Box>
+          */}
         </Box>
       ) : (
         <Box display={'flex'} justifyContent={'center'} width={'100%'}>

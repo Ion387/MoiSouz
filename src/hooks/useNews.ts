@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { useFetchList } from '@/services/universal';
+import { TypeUseFetchList, useFetchList } from '@/services/universal';
 
 import { getBackendUrl } from '@/constants/url';
 import { getHeaders } from '@/utils/axios';
@@ -39,14 +39,17 @@ export const useFetchNewsOne = ({ code }: PropsGetNewsOne) => {
 };
 
 interface PropsNewsList {
+  /** Default is infinity */
+  type?: TypeUseFetchList;
   prename?: string;
   perPage?: number;
   status?: IOptionValue | null;
 }
 export const useFetchNewsList = (
-  { prename, perPage, status }: PropsNewsList = { perPage: 15 },
+  { type, prename, perPage, status }: PropsNewsList = { perPage: 15 },
 ) => {
   return useFetchList<IFormNews>({
+    type,
     name: `${prename ? `${prename}-` : ''}news-list`,
     api: '/api/private/news',
     params: {
@@ -84,8 +87,9 @@ export const useForm = () => {
 
   const isMutation = useIsMutating({ mutationKey: [mutationKey] });
 
-  const onSubmit: (data: IFormNews) => Promise<void> = async (data) =>
-    mutate(data);
+  const onSubmit: (data: IFormNews) => Promise<void> = async (data) => {
+    return mutate(data);
+  };
 
   return { onCancel, onSubmit, isSuccess, isLoading: isMutation > 0, error };
 };
@@ -130,6 +134,8 @@ const generateFormData = (data: IFormNews) => {
   formData.append('text', data.text);
   formData.append('date', data.date);
   formData.append('status', data.status);
+  formData.append('isActive', String(data.isActive == true));
+  formData.append('isMain', String(data.isMain == true));
 
   if (typeof data.image == 'object') {
     formData.append('image', data.image as Blob);

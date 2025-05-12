@@ -32,11 +32,14 @@ export const PaginationSimple: FC<Props> = ({
         width: '100%',
       }}
     >
-      <Typography color="gray">
-        {(page - 1) * perPage + 1}-{Math.min(page * perPage, total)} из {total}
-      </Typography>
+      {total > 0 && (
+        <Typography color="gray">
+          {(page - 1) * perPage + 1}-{Math.min(page * perPage, total)} из{' '}
+          {total}
+        </Typography>
+      )}
 
-      {loading != true && (
+      {total > 0 && loading != true && (
         <Box
           sx={{
             bgcolor: 'white',
@@ -67,7 +70,10 @@ export const PaginationSimple: FC<Props> = ({
       )}
 
       {loading == true && (
-        <CircularProgress sx={{ marginRight: 2.5 }} size={30} />
+        <CircularProgress
+          sx={{ marginRight: 2.5, mx: total > 0 ? undefined : 'auto' }}
+          size={30}
+        />
       )}
     </Box>
   );

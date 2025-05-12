@@ -50,9 +50,8 @@ export const ProfileAside = () => {
             icon="info"
             openDefault={window.location.pathname.startsWith('/news')}
           >
-            <ListItem label="Новости" to="/news" equals />
-            <ListItem label="Опубликовано" to="/news/edit?status=published" />
-            <ListItem label="Черновик" to="/news/edit?status=draft" />
+            <ListItem label="Все новости" to="/news" equals />
+            <ListItem label="Новости организации" to="/news/edit" />
           </ListItem>
         )}
         {/* ENABLE NEWS - END */}

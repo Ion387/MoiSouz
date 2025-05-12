@@ -28,11 +28,15 @@ interface Props {
   title?: string;
   buttonCancel?: string | null;
   buttonSubmit?: string;
+  buttonSubmit2?: string;
   buttonSubmitIcon?: IconName | null;
   buttonSubmitSx?: SxProps<Theme> | null;
   loading?: boolean;
   onCancel?: () => void;
   onSubmit: (data: any | undefined) => void;
+
+  onClickSubmit?: () => void;
+  onClickSubmit2?: () => void;
 
   /** for FormProvider */
   methods: UseFormReturn<any, any, undefined>;
@@ -54,10 +58,13 @@ export const Form: FC<
   loading,
   buttonCancel = 'Отмена',
   buttonSubmit = 'Сохранить',
+  buttonSubmit2 = 'Сохранить 2',
   buttonSubmitIcon,
   buttonSubmitSx,
   onCancel,
   onSubmit,
+  onClickSubmit,
+  onClickSubmit2,
   methods,
   errorsExtra,
   checkTradeUnionMember = true,
@@ -204,6 +211,7 @@ export const Form: FC<
                       gap: 1,
                       ...(buttonSubmitSx || {}),
                     }}
+                    onClick={onClickSubmit}
                     disabled={loading}
                   >
                     {loading ? (
@@ -218,6 +226,31 @@ export const Form: FC<
                         )}
                         {buttonSubmit}
                       </>
+                    )}
+                  </Button>
+                )}
+
+                {buttonSubmit2 && (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      padding: '15px 100px',
+                      fontSize: '20px',
+                      lineHeight: '27px',
+                      '&.Mui-disabled': {
+                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                        color: 'white !important',
+                      },
+                      gap: 1,
+                    }}
+                    onClick={onClickSubmit2}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <CircularProgress color="secondary" size="27px" />
+                    ) : (
+                      <>{buttonSubmit2}</>
                     )}
                   </Button>
                 )}

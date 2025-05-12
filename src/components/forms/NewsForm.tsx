@@ -64,7 +64,19 @@ export const NewsForm: FC<Props> = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
+    setValue,
   } = methods;
+
+  const status = getValues('status');
+
+  const handleClickPublished = () => {
+    setValue('status', 'published');
+  };
+
+  const handleClickDraft = () => {
+    setValue('status', 'draft');
+  };
 
   return (
     <Form
@@ -72,8 +84,11 @@ export const NewsForm: FC<Props> = ({
       title="Добавление новости"
       loading={loading || isSubmitting}
       onCancel={onCancel}
-      buttonSubmit={defaultValues ? undefined : 'Добавить'}
+      buttonSubmit="Опубликовать"
+      buttonSubmit2="В черновик"
       onSubmit={handleSubmit(onSubmit)}
+      onClickSubmit={handleClickPublished}
+      onClickSubmit2={handleClickDraft}
       methods={methods}
       defaultValues={defaultValues}
       errorsExtra={errorsExtra}
@@ -105,22 +120,32 @@ export const NewsForm: FC<Props> = ({
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate
-          sx={{ width: '30%' }}
+          sx={{ width: '85%' }}
           name="date"
           label="Дата"
           isFutureAccess
         />
-        <InputAutocomplete
-          sx={{ width: '70%' }}
-          name="status"
-          label="Статус"
-          placeholder="Выберите из списка"
-          options={OPTIONS_NEWS_STATUS}
-        />
+        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
+          <InputSwitch sx={{ mt: 3 }} name="isActive" label="Активность" />
+          <InputSwitch sx={{ mt: 1 }} name="isMain" label="Закрепить" />
+        </Box>
       </Box>
 
-      <InputSwitch sx={{ mt: 3 }} name="isActive" label="Активность" />
-      <InputSwitch sx={{ mt: 1, mb: 3 }} name="isMain" label="Закрепить" />
+      {status && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0,
+            mt: 3,
+          }}
+        >
+          <InputLabel>Статус</InputLabel>
+          <InputLabel sx={{ color: 'gray !important', mt: '0px !important' }}>
+            {status == 'published' ? 'Опубликовано' : 'Черновик'}
+          </InputLabel>
+        </Box>
+      )}
     </Form>
   );
 };

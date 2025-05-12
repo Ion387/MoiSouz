@@ -32,6 +32,7 @@ const NewsEditOneWrapper = () => {
     return () => clearNewsOne();
   }, []);
 
+  if (info == null || info?.hasTradeunionOwner == false) return null;
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
       <Link href="/news/edit">

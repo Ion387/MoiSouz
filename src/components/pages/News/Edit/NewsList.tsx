@@ -50,6 +50,10 @@ const NewsEditListWrapper = () => {
   const [newsLoading, setNewsLoading] = useState<IFormNews[]>([]);
 
   useEffect(() => {
+    refetchNewsList();
+  }, []);
+
+  useEffect(() => {
     setStatus(params.get(KEY_PARAM_STATUS));
   }, [params]);
 
@@ -91,6 +95,7 @@ const NewsEditListWrapper = () => {
     setNewsLoading((prev) => prev.filter((el) => el.id != newsDelete.id));
   };
 
+  if (info == null || info?.hasTradeunionOwner == false) return null;
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>

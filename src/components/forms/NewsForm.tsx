@@ -8,7 +8,6 @@ import * as yup from 'yup';
 
 import { Form } from '@/components/entities/profile';
 import {
-  InputAutocomplete,
   InputDate,
   InputImage,
   InputHTML,
@@ -81,7 +80,7 @@ export const NewsForm: FC<Props> = ({
   return (
     <Form
       sx={{ pt: 3 }}
-      title="Добавление новости"
+      title={defaultValues ? 'Редактирование новости' : 'Добавление новости'}
       loading={loading || isSubmitting}
       onCancel={onCancel}
       buttonSubmit="Опубликовать"
@@ -142,7 +141,7 @@ export const NewsForm: FC<Props> = ({
         >
           <InputLabel>Статус</InputLabel>
           <InputLabel sx={{ color: 'gray !important', mt: '0px !important' }}>
-            {status == 'published' ? 'Опубликовано' : 'Черновик'}
+            {OPTIONS_NEWS_STATUS.find((el) => el.id == status)?.title}
           </InputLabel>
         </Box>
       )}

@@ -56,7 +56,7 @@ const NewsEditOneWrapper = () => {
             <NewsForm
               onCancel={onCancel}
               onSubmit={onSubmit}
-              defaultValues={newsOne}
+              defaultValues={isCreate ? null : newsOne}
               loading={isLoadingForm}
             />
           ) : (

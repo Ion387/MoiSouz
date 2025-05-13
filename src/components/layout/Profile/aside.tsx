@@ -39,7 +39,7 @@ export const ProfileAside = () => {
         <ListItem label="Магазин" icon="square-3x3" disabled />
         <ListItem label="Информация" icon="info" disabled />
 
-        {/* ENABLE NEWS - START /}
+        {/* ENABLE NEWS - START */}
         {info?.hasTradeunionOwner == false && (
           <ListItem label="Новости" icon="info" to="/news" />
         )}

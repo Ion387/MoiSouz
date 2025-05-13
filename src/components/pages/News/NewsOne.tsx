@@ -11,8 +11,6 @@ import { BreadCrumbsText } from '@/components/ui';
 
 import { /*useFetchNewsList,*/ useFetchNewsOne } from '@/hooks/useNews';
 
-import { getBackendUrl } from '@/constants/url';
-
 const NewsOneWrapper = () => {
   const params = useParams();
 
@@ -51,7 +49,7 @@ const NewsOneWrapper = () => {
           >
             {newsOne?.image && (
               <Image
-                src={`${getBackendUrl}${newsOne?.image}`}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${newsOne?.image}`}
                 width={830}
                 height={400}
                 alt={newsOne?.title || ''}

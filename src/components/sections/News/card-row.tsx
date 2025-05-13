@@ -4,7 +4,6 @@ import { Box, ButtonBase, Typography } from '@mui/material';
 
 import { IFormNews } from '@/models/News';
 import { PropsWithSX } from '@/models/Props';
-import { getBackendUrl } from '@/constants/url';
 
 interface Props {
   data: IFormNews;
@@ -26,7 +25,7 @@ export const NewsCardRow: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
     >
       {data.image && (
         <Image
-          src={`${getBackendUrl}${data.image}`}
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${data.image}`}
           width={299}
           height={230}
           alt={data.title || ''}

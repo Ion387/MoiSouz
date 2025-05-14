@@ -12,10 +12,11 @@ import {
   InputImage,
   InputHTML,
   InputSwitch,
+  //InputAutocomplete,
 } from '@/components/ui/form';
 
 import { IFormNews } from '@/models/News';
-import { OPTIONS_NEWS_STATUS } from '@/constants/options';
+//import { OPTIONS_NEWS_STATUS } from '@/constants/options';
 import { convertSizeToBites } from '@/utils/convertStringToB';
 
 const schema = yup
@@ -63,11 +64,9 @@ export const NewsForm: FC<Props> = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    getValues,
+    //getValues,
     setValue,
   } = methods;
-
-  const status = getValues('status');
 
   const handleClickPublished = () => {
     setValue('status', 'published');
@@ -77,74 +76,124 @@ export const NewsForm: FC<Props> = ({
     setValue('status', 'draft');
   };
 
+  console.log(methods.getValues('text'));
+
   return (
     <Form
       sx={{ pt: 3 }}
-      title={defaultValues ? 'Редактирование новости' : 'Добавление новости'}
+      title={
+        defaultValues
+          ? 'Публикация новости' /* edit */
+          : 'Публикация новости' /* add */
+      }
       loading={loading || isSubmitting}
       onCancel={onCancel}
-      buttonSubmit="Опубликовать"
-      buttonSubmit2="В черновик"
       onSubmit={handleSubmit(onSubmit)}
-      onClickSubmit={handleClickPublished}
-      onClickSubmit2={handleClickDraft}
+      buttonsSubmit={[
+        { text: 'В черновик', variant: 'outlined', onClick: handleClickDraft },
+        { text: 'Опубликовать', onClick: handleClickPublished },
+      ]}
       methods={methods}
       defaultValues={defaultValues}
       errorsExtra={errorsExtra}
       checkTradeUnionMember={false}
     >
-      <InputImage
-        sx={{ minWidth: '100%', height: '400px' }}
-        name="image"
-        label="Изображение"
-      />
-
-      <InputLabel sx={{ mt: 3 }}>Заголовок</InputLabel>
+      <InputLabel>Заголовок</InputLabel>
       <TextField
         {...register('title')}
         placeholder="Заголовок"
         error={!!errors.title?.message}
         helperText={errors.title?.message || ''}
+        multiline
       />
 
-      <InputLabel sx={{ mt: 3 }}>Превью</InputLabel>
+      <InputLabel sx={{ mt: 3 }}>
+        Анонс (для показа на странице со списком новостей)
+      </InputLabel>
       <TextField
         {...register('preview')}
-        placeholder="Превью"
+        placeholder="Краткий анонс (2000 символов)"
         error={!!errors.preview?.message}
         helperText={errors.preview?.message || ''}
+        multiline
+        slotProps={{
+          htmlInput: {
+            maxLength: 2000,
+          },
+        }}
       />
 
-      <InputHTML sx={{ mt: 3 }} name="text" label="Контент" />
+      {/*
+      <InputAutocomplete
+        sx={{ mt: 3 }}
+        name="status"
+        label="Получатель новости"
+        placeholder="Выберите из списка"
+        options={OPTIONS_NEWS_STATUS}
+      />
+      */}
 
-      <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+      <InputHTML sx={{ mt: 3 }} name="text" label="Текст новости" />
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 3 }}>
         <InputDate
-          sx={{ width: '85%' }}
+          sx={{ maxWidth: '190px' }}
           name="date"
-          label="Дата"
+          label="Дата публикации"
           isFutureAccess
         />
-        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
-          <InputSwitch sx={{ mt: 3 }} name="isActive" label="Активность" />
-          <InputSwitch sx={{ mt: 1 }} name="isMain" label="Закрепить" />
-        </Box>
-      </Box>
-
-      {status && (
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 0,
-            mt: 3,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            pb: 2,
           }}
         >
-          <InputLabel>Статус</InputLabel>
-          <InputLabel sx={{ color: 'gray !important', mt: '0px !important' }}>
-            {OPTIONS_NEWS_STATUS.find((el) => el.id == status)?.title}
+          <InputLabel>Активность</InputLabel>
+          <InputSwitch name="isActive" />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            pb: 2,
+          }}
+        >
+          <InputLabel>Закрепить</InputLabel>
+          <InputSwitch name="isMain" />
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <InputImage
+            sx={{
+              height: '70px',
+              maxHeight: '70px',
+              width: '100px',
+              maxWidth: '100px',
+              mt: 'auto',
+              mx: 2,
+              flexDirection: 'column-reverse',
+            }}
+            name="image"
+            icon="plus"
+            errorLabel={false}
+          />
+          <InputLabel
+            sx={{ textAlign: 'center', fontSize: 14, maxWidth: '100%', m: 0 }}
+          >
+            Превью (jpg, png)
           </InputLabel>
         </Box>
-      )}
+      </Box>
     </Form>
   );
 };

@@ -4,7 +4,7 @@ import { createRef, FC, ReactNode, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Box, Button, FormHelperText } from '@mui/material';
 
-import { Icon } from '@/components/ui/Icon';
+import { Icon, IconName } from '@/components/ui/Icon';
 
 import { getBackendUrl } from '@/constants/url';
 import { PropsWithSX } from '@/models/Props';
@@ -13,6 +13,8 @@ interface Props {
   name: string;
   label?: ReactNode;
   disabled?: boolean;
+  icon?: IconName | null;
+  errorLabel?: boolean;
 }
 
 export const InputImage: FC<PropsWithSX & Props> = ({
@@ -20,6 +22,8 @@ export const InputImage: FC<PropsWithSX & Props> = ({
   name,
   label,
   disabled,
+  icon = 'file-add',
+  errorLabel = true,
 }) => {
   const { control, getValues } = useFormContext();
   const ref = createRef<HTMLInputElement>();
@@ -85,12 +89,12 @@ export const InputImage: FC<PropsWithSX & Props> = ({
           <Button
             name={name}
             sx={{
+              p: 0,
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
               gap: 1,
               width: '100%',
-              minWidth: 150,
               flex: 1,
               backgroundColor: 'rgb(241, 244, 249)',
               borderColor: error ? '#d32f2f' : 'rgba(0, 0, 0, 0.23)',
@@ -110,14 +114,20 @@ export const InputImage: FC<PropsWithSX & Props> = ({
             {preview == null && (
               <>
                 {label}
-                {disabled != true && (
-                  <Icon name="file-add" color="rgb(166, 166, 166)" />
+                {disabled != true && icon && (
+                  <Icon name={icon} color="rgb(166, 166, 166)" />
                 )}
               </>
             )}
-            <FormHelperText id={`${name}-helper`} error={true}>
-              {error && error?.message}
-            </FormHelperText>
+            {errorLabel && (
+              <FormHelperText
+                sx={{ maxWidth: '100%', whiteSpace: 'break-spaces' }}
+                id={`${name}-helper`}
+                error={true}
+              >
+                {error && error?.message}
+              </FormHelperText>
+            )}
           </Button>
         </Box>
       )}

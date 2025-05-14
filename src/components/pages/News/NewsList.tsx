@@ -14,7 +14,11 @@ const NewsListWrapper = () => {
   const {
     data: { data: list, isFetching: isLoading, page, total },
     actions: { loadPrev, loadNext },
-  } = useFetchNewsList({ type: 'page', status: 'published', perPage: perPage });
+  } = useFetchNewsList({
+    type: 'page',
+    status: 'published',
+    perPage: perPage,
+  });
 
   return (
     <>
@@ -39,6 +43,12 @@ const NewsListWrapper = () => {
           onPrev={loadPrev}
           onNext={loadNext}
         />
+
+        {!isLoading && list.length == 0 && (
+          <Typography variant="h4" marginBottom={2} textAlign="center">
+            Пока нет новостей
+          </Typography>
+        )}
       </Box>
     </>
   );

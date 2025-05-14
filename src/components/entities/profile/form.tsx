@@ -5,6 +5,7 @@ import { FC, PropsWithChildren, RefObject, useEffect } from 'react';
 import {
   Box,
   Button,
+  ButtonProps,
   CircularProgress,
   Grid2,
   SxProps,
@@ -21,22 +22,28 @@ import { usePathname } from 'next/navigation';
 import { PropsWithClassName, PropsWithSX } from '@/models/Props';
 import { globalTheme } from '@/styles/theme';
 import { Icon, IconName } from '@/components/ui';
-import { Theme } from '@mui/system';
 
 interface Props {
   reference?: RefObject<HTMLFormElement | null>;
   title?: string;
-  buttonCancel?: string | null;
-  buttonSubmit?: string;
-  buttonSubmit2?: string;
-  buttonSubmitIcon?: IconName | null;
-  buttonSubmitSx?: SxProps<Theme> | null;
   loading?: boolean;
+
+  buttonsCancel?: {
+    text: string;
+    variant?: ButtonProps['variant'];
+    icon?: IconName;
+    sx?: SxProps;
+    onClick?: () => void;
+  }[];
+  buttonsSubmit?: {
+    text: string;
+    variant?: ButtonProps['variant'];
+    icon?: IconName;
+    sx?: SxProps;
+    onClick?: () => void;
+  }[];
   onCancel?: () => void;
   onSubmit: (data: any | undefined) => void;
-
-  onClickSubmit?: () => void;
-  onClickSubmit2?: () => void;
 
   /** for FormProvider */
   methods: UseFormReturn<any, any, undefined>;
@@ -56,15 +63,12 @@ export const Form: FC<
   sx,
   title,
   loading,
-  buttonCancel = 'Отмена',
-  buttonSubmit = 'Сохранить',
-  buttonSubmit2 = 'Сохранить 2',
-  buttonSubmitIcon,
-  buttonSubmitSx,
+
+  buttonsCancel = [{ text: 'Отмена' }],
+  buttonsSubmit = [{ text: 'Сохранить' }],
   onCancel,
   onSubmit,
-  onClickSubmit,
-  onClickSubmit2,
+
   methods,
   errorsExtra,
   checkTradeUnionMember = true,
@@ -180,79 +184,63 @@ export const Form: FC<
                   gap: 2,
                 }}
               >
-                {buttonCancel && (
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    sx={{
-                      padding: '15px 100px',
-                      fontSize: '20px',
-                      lineHeight: '27px',
-                    }}
-                    disabled={loading}
-                    onClick={onCancel}
-                  >
-                    {buttonCancel}
-                  </Button>
-                )}
+                {!loading &&
+                  buttonsCancel?.map((el, index) => (
+                    <Button
+                      key={`${index}-cancel-${el.text}`}
+                      type="button"
+                      variant={el.variant || 'outlined'}
+                      sx={{
+                        padding: '15px 30px',
+                        fontSize: '20px',
+                        lineHeight: '27px',
+                        ...(el.sx || {}),
+                      }}
+                      disabled={loading}
+                      onClick={() => {
+                        if (el.onClick) el.onClick();
+                        if (onCancel) onCancel();
+                      }}
+                    >
+                      {el.text}
+                    </Button>
+                  ))}
 
-                {buttonSubmit && (
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      padding: '15px 100px',
-                      fontSize: '20px',
-                      lineHeight: '27px',
-                      '&.Mui-disabled': {
-                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                        color: 'white !important',
-                      },
-                      gap: 1,
-                      ...(buttonSubmitSx || {}),
-                    }}
-                    onClick={onClickSubmit}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <CircularProgress color="secondary" size="27px" />
-                    ) : (
-                      <>
-                        {buttonSubmitIcon && (
-                          <Icon
-                            name={buttonSubmitIcon}
-                            color="secondary.main"
-                          />
-                        )}
-                        {buttonSubmit}
-                      </>
-                    )}
-                  </Button>
-                )}
+                {!loading &&
+                  buttonsSubmit?.map((el, index) => (
+                    <Button
+                      key={`${index}-submit-${el.text}`}
+                      type="submit"
+                      variant={el.variant || 'contained'}
+                      sx={{
+                        padding: '15px 30px',
+                        fontSize: '20px',
+                        lineHeight: '27px',
+                        '&.Mui-disabled': {
+                          backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                          color: 'white !important',
+                        },
+                        gap: 1,
+                        ...(el.sx || {}),
+                      }}
+                      onClick={(e) => {
+                        if (el.onClick) el.onClick();
+                        if (onSubmit) onSubmit(e);
+                      }}
+                    >
+                      {el.icon && (
+                        <Icon name={el.icon} color="secondary.main" />
+                      )}
+                      {el.text}
+                    </Button>
+                  ))}
 
-                {buttonSubmit2 && (
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      padding: '15px 100px',
-                      fontSize: '20px',
-                      lineHeight: '27px',
-                      '&.Mui-disabled': {
-                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                        color: 'white !important',
-                      },
-                      gap: 1,
-                    }}
-                    onClick={onClickSubmit2}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <CircularProgress color="secondary" size="27px" />
-                    ) : (
-                      <>{buttonSubmit2}</>
-                    )}
-                  </Button>
+                {loading && (
+                  <CircularProgress
+                    sx={{ my: '10px' }}
+                    color="primary"
+                    size="40px"
+                  />
                 )}
               </Box>
             </Box>

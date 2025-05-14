@@ -109,8 +109,8 @@ export const FeedbackDialog: FC<IDialogProps> = ({
         </IconButton>
         <Form
           loading={isSubmitting}
-          buttonCancel={null}
-          buttonSubmit="Отправить"
+          buttonsCancel={[]}
+          buttonsSubmit={[{ text: 'Отправить' }]}
           onSubmit={handleSubmit(onSubmit)}
           methods={methods}
           checkTradeUnionMember={false}

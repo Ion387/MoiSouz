@@ -34,12 +34,6 @@ export const ProfileAside = () => {
         <ListItem label="Мои организации" icon="square-2x2" disabled />
         <ListItem label="Коллеги" icon="peoples" to="/colleagues" />
 
-        <ListItem label="Деньги" icon="money" disabled />
-        <ListItem label="Скидки, льготы" icon="gift" to="/benefits" />
-        <ListItem label="Магазин" icon="square-3x3" disabled />
-        <ListItem label="Информация" icon="info" disabled />
-
-        {/* ENABLE NEWS - START */}
         {info?.hasTradeunionOwner == false && (
           <ListItem label="Новости" icon="info" to="/news" />
         )}
@@ -54,7 +48,11 @@ export const ProfileAside = () => {
             <ListItem label="Новости организации" to="/news/edit" />
           </ListItem>
         )}
-        {/* ENABLE NEWS - END */}
+
+        <ListItem label="Деньги" icon="money" disabled />
+        <ListItem label="Скидки, льготы" icon="gift" to="/benefits" />
+        <ListItem label="Магазин" icon="square-3x3" disabled />
+        <ListItem label="Информация" icon="info" disabled />
       </List>
     </List>
   );

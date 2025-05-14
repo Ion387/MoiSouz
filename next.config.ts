@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
         pathname: '/**',
         search: '',
       },
+      {
+        protocol: 'http',
+        hostname: '89.111.174.94',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
     ],
   },
   webpack: (config, { isServer }) => {

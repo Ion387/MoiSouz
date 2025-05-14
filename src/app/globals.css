@@ -62,20 +62,20 @@ a {
   background-color: transparent !important;
 }
 
-.jodit-react-container,
-.jodit-dialog__content,
-.html {
-  a {
-    color: -webkit-link;
-    cursor: pointer;
-    text-decoration: underline;
-  }
+.html * {
+  padding: revert;
+  margin: revert;
+  color: revert;
+  cursor: revert;
+  text-decoration: revert;
 
   td {
     padding: 0.4em;
-    border: 1px solid var(--jd-color-border);
+    border: 1px solid lightgray;
   }
+}
 
+.jodit {
   .jodit-ui-group__about {
     display: none !important;
   }

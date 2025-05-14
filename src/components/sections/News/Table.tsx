@@ -17,6 +17,7 @@ import { FC, PropsWithChildren, useState } from 'react';
 import { IFormNews } from '@/models/News';
 import { Icon, InputSwitch } from '@/components/ui';
 import { PropsWithSX } from '@/models/Props';
+import { OPTIONS_NEWS_STATUS } from '@/constants/options';
 
 interface IRowProps {
   news: IFormNews;
@@ -129,7 +130,7 @@ export const Table: FC<ITableProps> = ({
             №
           </Typography>
         </Grid2>
-        <Grid2 size={5}>
+        <Grid2 size={3.5}>
           <Typography
             variant="body2"
             fontWeight={700}
@@ -166,6 +167,16 @@ export const Table: FC<ITableProps> = ({
             textAlign="center"
           >
             Закрепить
+          </Typography>
+        </Grid2>
+        <Grid2 size={1.5}>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            textTransform={'uppercase'}
+            textAlign="center"
+          >
+            Статус
           </Typography>
         </Grid2>
         <Grid2 size={1}>
@@ -216,7 +227,7 @@ export const Table: FC<ITableProps> = ({
                     {el.id}
                   </Typography>
                 </Grid2>
-                <Grid2 size={5}>
+                <Grid2 size={3.5}>
                   <Typography
                     variant="body2"
                     fontWeight={600}
@@ -245,6 +256,21 @@ export const Table: FC<ITableProps> = ({
                 <Grid2 size={1.5}>
                   <Typography py={1} pl={2} textAlign="center">
                     <InputSwitch checked={el.isMain == true} />
+                  </Typography>
+                </Grid2>
+                <Grid2 size={1.5}>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    py={1}
+                    sx={{ userSelect: 'none' }}
+                    textAlign="center"
+                  >
+                    {
+                      OPTIONS_NEWS_STATUS.find(
+                        (option) => option.id == el.status,
+                      )?.title
+                    }
                   </Typography>
                 </Grid2>
                 {!!owner && (

@@ -125,15 +125,19 @@ export const UploadUsersDialog: FC<IDialogProps> = ({
         </IconButton>
         <Form
           loading={isSubmitting}
-          buttonCancel={null}
-          buttonSubmit="Загрузить участников"
-          buttonSubmitIcon="upload"
-          buttonSubmitSx={{
-            marginTop: 6,
-            width: 300,
-            paddingLeft: 0,
-            paddingRight: 0,
-          }}
+          buttonsCancel={[]}
+          buttonsSubmit={[
+            {
+              text: 'Загрузить участников',
+              icon: 'upload',
+              sx: {
+                marginTop: 6,
+                width: 300,
+                paddingLeft: 0,
+                paddingRight: 0,
+              },
+            },
+          ]}
           onSubmit={handleSubmit(onSubmit)}
           methods={methods}
           checkTradeUnionMember={false}

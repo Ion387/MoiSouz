@@ -106,7 +106,7 @@ const NewsMainWrapper = () => {
 
         <Grid data={newsList} />
 
-        {!isLoading && (
+        {!isLoading && newsList.length > 0 && (
           <Link href="/news/all">
             <Button
               sx={{
@@ -125,6 +125,12 @@ const NewsMainWrapper = () => {
           <Box display={'flex'} justifyContent={'center'} width={'100%'}>
             <CircularProgress />
           </Box>
+        )}
+
+        {!isLoading && newsList.length == 0 && (
+          <Typography variant="h4" marginBottom={2} textAlign="center">
+            Пока нет новостей
+          </Typography>
         )}
       </Box>
     </>

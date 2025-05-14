@@ -4,7 +4,13 @@ import React, { Suspense, useEffect } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid2,
+  Typography,
+} from '@mui/material';
 
 import { Icon } from '@/components/ui';
 import { NewsForm } from '@/components/forms/NewsForm';
@@ -53,12 +59,14 @@ const NewsEditOneWrapper = () => {
       {info != null && (isCreate == true || isLoadingNewsOne == false) ? (
         <>
           {info?.hasTradeunionOwner == true ? (
-            <NewsForm
-              onCancel={onCancel}
-              onSubmit={onSubmit}
-              defaultValues={isCreate ? null : newsOne}
-              loading={isLoadingForm}
-            />
+            <Grid2 sx={{ width: '100%', maxWidth: '700px' }} size={5}>
+              <NewsForm
+                onCancel={onCancel}
+                onSubmit={onSubmit}
+                defaultValues={isCreate ? null : newsOne}
+                loading={isLoadingForm}
+              />
+            </Grid2>
           ) : (
             <Typography fontSize={14} textAlign="center">
               Не удалось выполнить операцию

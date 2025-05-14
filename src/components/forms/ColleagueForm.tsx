@@ -194,7 +194,7 @@ export const ColleagueForm: FC<Props> = ({
       }
       loading={loading || isSubmitting}
       onCancel={onCancel}
-      buttonSubmit={defaultValues ? undefined : 'Добавить'}
+      buttonsSubmit={defaultValues ? undefined : [{ text: 'Добавить' }]}
       onSubmit={handleSubmit(onSubmit)}
       methods={methods}
       defaultValues={defaultValues}

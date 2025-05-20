@@ -2,17 +2,25 @@ import { FC } from 'react';
 import Image from 'next/image';
 import { Box, ButtonBase, Typography } from '@mui/material';
 
+import { Soon } from '@/components/ui';
+
 import { IFormNews } from '@/models/News';
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   data: IFormNews;
+  soon?: boolean;
 }
 
-export const NewsCardBig: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
+export const NewsCardBig: FC<PropsWithSX & Props> = ({
+  sx = {},
+  data,
+  soon,
+}) => {
   return (
     <ButtonBase
       sx={{
+        position: 'relative',
         overflow: 'hidden',
         bgcolor: 'white',
         borderRadius: 5,
@@ -65,6 +73,8 @@ export const NewsCardBig: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
           {data.date}
         </Typography>
       </Box>
+
+      {soon && <Soon />}
     </ButtonBase>
   );
 };

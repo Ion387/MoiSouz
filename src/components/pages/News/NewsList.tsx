@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Box, Typography } from '@mui/material';
 
 import { PaginationSimple } from '@/components/ui';
-import { NewsCardRow } from '@/components/sections/News';
+import { NewsCardRow, NewsNotExists } from '@/components/sections/News';
 
 import { useFetchNewsList } from '@/hooks/useNews';
 
@@ -44,11 +44,7 @@ const NewsListWrapper = () => {
           onNext={loadNext}
         />
 
-        {!isLoading && list.length == 0 && (
-          <Typography variant="h4" marginBottom={2} textAlign="center">
-            Пока нет новостей
-          </Typography>
-        )}
+        {!isLoading && list.length == 0 && <NewsNotExists />}
       </Box>
     </>
   );

@@ -60,6 +60,18 @@ import { Icon as IconBBEnjoy } from '@/assets/icons/bb-enjoy';
 import { Icon as IconBBDeals } from '@/assets/icons/bb-deals';
 import { Icon as IconMail } from '@/assets/icons/mail';
 import { Icon as IconDelete } from '@/assets/icons/delete';
+import { Icon as IconStatsArrowToDown } from '@/assets/icons/stats-arrow-to-down';
+import { Icon as IconStatsArrowToUp } from '@/assets/icons/stats-arrow-to-up';
+import { Icon as IconStatsBox } from '@/assets/icons/stats-box';
+import { Icon as IconStatsDiagramToDown } from '@/assets/icons/stats-diagram-to-down';
+import { Icon as IconStatsDiagramToUp } from '@/assets/icons/stats-diagram-to-up';
+import { Icon as IconStatsReload } from '@/assets/icons/stats-reload';
+import { Icon as IconStatsUsers } from '@/assets/icons/stats-users';
+import { Icon as IconStatsWallet } from '@/assets/icons/stats-wallet';
+import { Icon as IconStatsDiagramRing } from '@/assets/icons/stats-diagram-ring';
+import { Icon as IconSoon } from '@/assets/icons/soon';
+import { Icon as IconNewsNotExists } from '@/assets/icons/news-not-exists';
+import { Icon as IconStar } from '@/assets/icons/star';
 
 const NAMES = [
   'document',
@@ -113,6 +125,18 @@ const NAMES = [
   'bb-deals',
   'mail',
   'delete',
+  'stats-arrow-to-down',
+  'stats-arrow-to-up',
+  'stats-box',
+  'stats-diagram-to-down',
+  'stats-diagram-to-up',
+  'stats-reload',
+  'stats-users',
+  'stats-wallet',
+  'stats-diagram-ring',
+  'soon',
+  'news-not-exists',
+  'star',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -168,6 +192,18 @@ const ICONS: { [key: string]: JSX.Element } = {
   'bb-deals': <IconBBDeals />,
   mail: <IconMail />,
   delete: <IconDelete />,
+  'stats-arrow-to-down': <IconStatsArrowToDown />,
+  'stats-arrow-to-up': <IconStatsArrowToUp />,
+  'stats-box': <IconStatsBox />,
+  'stats-diagram-to-down': <IconStatsDiagramToDown />,
+  'stats-diagram-to-up': <IconStatsDiagramToUp />,
+  'stats-reload': <IconStatsReload />,
+  'stats-users': <IconStatsUsers />,
+  'stats-wallet': <IconStatsWallet />,
+  'stats-diagram-ring': <IconStatsDiagramRing />,
+  soon: <IconSoon />,
+  'news-not-exists': <IconNewsNotExists />,
+  star: <IconStar />,
 };
 
 interface Props {

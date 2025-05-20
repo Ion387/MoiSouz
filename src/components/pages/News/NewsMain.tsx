@@ -1,10 +1,14 @@
 'use client';
 
-import React, { FC, Fragment, Suspense, useMemo } from 'react';
+import React, { FC, Suspense, useMemo } from 'react';
 import Link from 'next/link';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 
-import { NewsCardBig, NewsCardSimple } from '@/components/sections/News';
+import {
+  NewsCardBig,
+  NewsCardSimple,
+  NewsNotExists,
+} from '@/components/sections/News';
 
 import { useFetchNewsList } from '@/hooks/useNews';
 import { chunkArray } from '@/utils/array';
@@ -95,7 +99,7 @@ const RowRight: FC<PropsNews> = ({ data }) => {
 const NewsMainWrapper = () => {
   const {
     data: { data: newsList, isFetching: isLoading },
-  } = useFetchNewsList({ status: 'published', perPage: 14 });
+  } = useFetchNewsList({ status: 'published', perPage: 7 });
 
   return (
     <>
@@ -127,11 +131,7 @@ const NewsMainWrapper = () => {
           </Box>
         )}
 
-        {!isLoading && newsList.length == 0 && (
-          <Typography variant="h4" marginBottom={2} textAlign="center">
-            Пока нет новостей
-          </Typography>
-        )}
+        {!isLoading && newsList.length == 0 && <NewsNotExists />}
       </Box>
     </>
   );

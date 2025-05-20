@@ -46,6 +46,11 @@ export interface ITradeUnion {
   tradeunionOwner?: { guid: string };
   scan: object | null | string;
   participants?: object | null | string;
+  children?: {
+    guid: string;
+    inn: string;
+    title: string;
+  }[];
 }
 
 export interface ITradeUnionUploadUsersForm {

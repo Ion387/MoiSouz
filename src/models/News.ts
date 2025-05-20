@@ -9,4 +9,5 @@ export interface IFormNews {
   status: string;
   isActive?: boolean | null;
   isMain?: boolean | null;
+  tradeunions?: string[] | null;
 }

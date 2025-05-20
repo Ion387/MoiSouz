@@ -10,10 +10,11 @@ interface Props {
   label?: string;
   placeholder?: string;
   options: IOption[];
+  multiple?: boolean;
   disabled?: boolean;
   error?: string;
-  value: IOptionValue | null;
-  onChange: (value: IOptionValue | null) => void;
+  value: IOptionValue | IOptionValue[] | null;
+  onChange: (value: IOptionValue | IOptionValue[] | null) => void;
 }
 
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
@@ -21,6 +22,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   label,
   placeholder,
   options,
+  multiple,
   disabled,
   error,
   value,
@@ -30,10 +32,25 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
     <FormGroup sx={sx}>
       {label && <InputLabel>{label}</InputLabel>}
       <Autocomplete
-        value={options.find((el) => el.id == value) || null}
+        value={
+          (value &&
+            (multiple
+              ? options.filter((el) =>
+                  (value as IOptionValue[]).includes(el.id),
+                )
+              : options.find((el) => el.id == value))) ||
+          (multiple ? [] : null)
+        }
         getOptionLabel={(option) => option.title}
-        onChange={(_, value) => onChange(value?.id || null)}
+        onChange={(_, value) =>
+          onChange(
+            (multiple
+              ? (value as IOption[]).map((el) => el.id)
+              : (value as IOption).id) || (multiple ? [] : null),
+          )
+        }
         disablePortal
+        multiple={multiple}
         options={options}
         renderInput={(params) => (
           <TextField

@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Box, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,12 +12,16 @@ import {
   InputImage,
   InputHTML,
   InputSwitch,
-  //InputAutocomplete,
+  InputAutocomplete,
 } from '@/components/ui/form';
 
-import { IFormNews } from '@/models/News';
-//import { OPTIONS_NEWS_STATUS } from '@/constants/options';
+import { useFetchTUOwner } from '@/hooks/useTU';
+
 import { convertSizeToBites } from '@/utils/convertStringToB';
+
+import { IFormNews } from '@/models/News';
+import { IOption } from '@/models/Option';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 const schema = yup
   .object({
@@ -32,6 +36,11 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
+    tradeunions: yup
+      .array()
+      .of(yup.string().required())
+      .notRequired()
+      .nullable(),
     date: yup.string().required('Укажите дату').typeError('Укажите дату'),
     status: yup.string().required('Укажите статус'),
     isActive: yup.bool().notRequired(),
@@ -58,7 +67,14 @@ export const NewsForm: FC<Props> = ({
   const methods = useForm<IFormNews>({
     mode: 'onChange',
     resolver: yupResolver(schema),
-    defaultValues,
+    defaultValues: defaultValues
+      ? {
+          ...defaultValues,
+          tradeunions: defaultValues.tradeunions
+            ? defaultValues.tradeunions.map((el: ITradeUnion) => el.guid)
+            : [],
+        }
+      : null,
   });
   const {
     register,
@@ -68,6 +84,17 @@ export const NewsForm: FC<Props> = ({
     setValue,
   } = methods;
 
+  const owner = useFetchTUOwner();
+
+  const OPTIONS_TU_CHILDREN = useMemo(() => {
+    const result: IOption[] = [];
+    owner?.children
+      ?.map((el) => ({ id: el.guid, title: el.title }))
+      ?.forEach((el) => result.push(el));
+    //if (owner) result.push({ id: owner.guid || '', title: owner.title });
+    return result;
+  }, [owner, owner]);
+
   const handleClickPublished = () => {
     setValue('status', 'published');
   };
@@ -75,8 +102,6 @@ export const NewsForm: FC<Props> = ({
   const handleClickDraft = () => {
     setValue('status', 'draft');
   };
-
-  console.log(methods.getValues('text'));
 
   return (
     <Form
@@ -123,15 +148,19 @@ export const NewsForm: FC<Props> = ({
         }}
       />
 
-      {/*
       <InputAutocomplete
         sx={{ mt: 3 }}
-        name="status"
+        name="tradeunions"
         label="Получатель новости"
-        placeholder="Выберите из списка"
-        options={OPTIONS_NEWS_STATUS}
+        placeholder={
+          OPTIONS_TU_CHILDREN.length == 0
+            ? 'У вас нет нижестоящих организаций'
+            : 'Выберите из списка'
+        }
+        options={OPTIONS_TU_CHILDREN}
+        disabled={OPTIONS_TU_CHILDREN.length == 0}
+        multiple
       />
-      */}
 
       <InputHTML sx={{ mt: 3 }} name="text" label="Текст новости" />
 

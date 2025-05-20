@@ -136,6 +136,7 @@ const generateFormData = (data: IFormNews) => {
   formData.append('status', data.status);
   formData.append('isActive', String(data.isActive == true));
   formData.append('isMain', String(data.isMain == true));
+  data.tradeunions?.forEach((el) => formData.append('tradeunions[]', el));
 
   if (typeof data.image == 'object') {
     formData.append('image', data.image as Blob);

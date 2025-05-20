@@ -13,6 +13,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   options: IOption[];
+  multiple?: boolean;
   disabled?: boolean;
   error?: string;
 }
@@ -23,6 +24,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   label,
   placeholder,
   options,
+  multiple,
   disabled,
 }) => {
   const { control } = useFormContext();
@@ -39,6 +41,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          multiple={multiple}
           disabled={disabled}
           error={error?.message}
         />

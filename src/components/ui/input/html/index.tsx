@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 import styles from './index.module.scss';
@@ -26,6 +26,31 @@ export const InputHTML: FC<Props> = ({
 }) => {
   const editor = useRef(null);
 
+  useEffect(() => {
+    // fix dialog uploader (set accept for images)
+    const interval = setInterval(() => {
+      const elements = document.getElementsByClassName(
+        'jodit-drag-and-drop__file-box',
+      );
+      if (elements.length == 0) return;
+      const element = elements.item(0) as HTMLDivElement;
+      if (element == null) return;
+      if (element.style.padding == '20px') return;
+      element.style.padding = '20px';
+
+      // set text
+      const childText = element.childNodes.item(1) as HTMLSpanElement;
+      childText.style.whiteSpace = 'break-spaces';
+      childText.innerHTML = '\r\nили нажмите\r\n<i>png, jpg, jpeg</i>';
+
+      // set accept
+      const childFile = element.childNodes.item(2) as HTMLInputElement;
+      childFile.accept = 'image/png, image/jpeg, image/jpg';
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className={`html ${styles.editor} ${error && styles.error}`}>
       <JoditEditor
@@ -40,9 +65,12 @@ export const InputHTML: FC<Props> = ({
           dialog: {
             draggable: false,
           },
+          enableDragAndDropFileToEditor: false,
           uploader: {
             insertImageAsBase64URI: true,
+            imagesExtensions: ['png', 'jpg', 'jpeg'],
           },
+          events: {},
           toolbarAdaptive: false,
         }}
         tabIndex={1}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -31,7 +31,14 @@ const NewsEditOneWrapper = () => {
     clear: clearNewsOne,
   } = useFetchNewsOne({ code: (params.code as string) || '' });
 
-  const { onCancel, onSubmit, isLoading: isLoadingForm } = useForm();
+  const { onCancel, onSubmit, isLoading: isLoadingForm, error } = useForm();
+  const errors = useMemo(() => {
+    switch (error?.message) {
+      case 'image':
+        return { image: 'Загрузка только png, jpg, jpeg, не более 2МБ' };
+    }
+    return null;
+  }, [error]);
 
   useEffect(() => {
     if (isCreate) return;
@@ -65,6 +72,7 @@ const NewsEditOneWrapper = () => {
                 onSubmit={onSubmit}
                 defaultValues={isCreate ? null : newsOne}
                 loading={isLoadingForm}
+                errorsExtra={errors}
               />
             </Grid2>
           ) : (

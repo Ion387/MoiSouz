@@ -5,6 +5,7 @@ import { Box, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import dayjs from 'dayjs';
 
 import { Form } from '@/components/entities/profile';
 import {
@@ -74,7 +75,9 @@ export const NewsForm: FC<Props> = ({
             ? defaultValues.tradeunions.map((el: ITradeUnion) => el.guid)
             : [],
         }
-      : null,
+      : {
+          date: dayjs().format('DD.MM.YYYY'),
+        },
   });
   const {
     register,
@@ -217,9 +220,32 @@ export const NewsForm: FC<Props> = ({
             errorLabel={false}
           />
           <InputLabel
-            sx={{ textAlign: 'center', fontSize: 14, maxWidth: '100%', m: 0 }}
+            sx={{
+              position: 'relative',
+              display: 'flex',
+              textAlign: 'center',
+              fontSize: 14,
+              width: '100%',
+              maxWidth: 140,
+              height: 25,
+              m: 0,
+              color: errors.image ? 'red !important' : undefined,
+              overflow: 'unset !important',
+            }}
           >
-            Превью (jpg, png)
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '100%',
+                whiteSpace: 'break-spaces',
+                lineHeight: 1.2,
+                marginTop: 5,
+              }}
+            >
+              {errors.image ? errors.image.message : 'Превью (jpg, png)'}
+            </div>
           </InputLabel>
         </Box>
       </Box>

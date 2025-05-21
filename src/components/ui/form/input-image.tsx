@@ -75,7 +75,7 @@ export const InputImage: FC<PropsWithSX & Props> = ({
             style={{ display: 'none' }}
             ref={ref}
             type="file"
-            accept="image/*"
+            accept="image/png, image/jpeg, image/jpg"
             id={name}
             name={name}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

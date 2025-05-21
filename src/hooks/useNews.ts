@@ -5,7 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { TypeUseFetchList, useFetchList } from '@/services/universal';
 
@@ -73,11 +73,14 @@ export const useForm = () => {
       try {
         if (data.code) await saveFormNews(data);
         else await addFormNews(data);
-      } catch /*(err)*/ {
-        /*const error = err as AxiosError<{
+      } catch (err) {
+        const error = err as AxiosError<{
           status: string;
           description: string;
-        }>;*/
+        }>;
+        if (error.response?.data.description.startsWith('Загрузка только')) {
+          throw new Error('image');
+        }
       }
     },
     onSuccess: () => {

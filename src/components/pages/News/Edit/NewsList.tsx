@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Box, Button, Dialog, Typography } from '@mui/material';
 
-import { Icon, InputAutocomplete, PaginationSimple } from '@/components/ui';
+import { Icon, /*InputAutocomplete,*/ PaginationSimple } from '@/components/ui';
 import { Table } from '@/components/sections/News';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
@@ -13,7 +13,7 @@ import { deleteFormNews, useFetchNewsList } from '@/hooks/useNews';
 import { IFormNews } from '@/models/News';
 import { IOptionValue } from '@/models/Option';
 
-import { OPTIONS_NEWS_STATUS } from '@/constants/options';
+//import { OPTIONS_NEWS_STATUS } from '@/constants/options';
 
 const KEY_PARAM_STATUS = 'status';
 
@@ -57,6 +57,7 @@ const NewsEditListWrapper = () => {
     setStatus(params.get(KEY_PARAM_STATUS));
   }, [params]);
 
+  /*
   const handleChangeStatus = (value: IOptionValue | null) => {
     if (status == value) return;
 
@@ -67,6 +68,7 @@ const NewsEditListWrapper = () => {
     setStatus(value);
     refetchNewsList();
   };
+  */
 
   const handleClick = (newsOne: IFormNews) => {
     router.push(`/news/edit/${newsOne.code}`);
@@ -99,12 +101,9 @@ const NewsEditListWrapper = () => {
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>
-        <Typography variant="h3" marginBottom={2}>
-          Новости
-        </Typography>
-
         {newsList && (
           <Box display="flex" justifyContent="space-between" gap={1.5}>
+            {/*
             <InputAutocomplete
               sx={{ width: 250 }}
               options={OPTIONS_NEWS_STATUS}
@@ -112,14 +111,11 @@ const NewsEditListWrapper = () => {
               value={status}
               onChange={handleChangeStatus}
             />
+            */}
+            <Typography variant="h3">Новости</Typography>
 
             {info?.hasTradeunionOwner && (
-              <Box
-                display="flex"
-                flexDirection="column"
-                minWidth="fit-content"
-                marginTop="auto"
-              >
+              <Box display="flex" flexDirection="column" minWidth="fit-content">
                 <Link
                   href="/news/create"
                   style={{
@@ -132,8 +128,6 @@ const NewsEditListWrapper = () => {
                     variant="contained"
                     sx={{
                       gap: 1,
-                      p: 1.5,
-                      px: 2,
                       width: '100%',
                     }}
                   >

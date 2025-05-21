@@ -82,11 +82,22 @@ export const useFetchList = <T>({
         total: 0,
       });
     } else {
-      const dataNew = data.data.filter(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (el: T | any) => !result.data.some((el2: any) => el.id == el2.id),
-      );
-      if (dataNew.length > 0) {
+      let dataNew = [];
+      switch (type) {
+        case 'infinity':
+          dataNew = [
+            ...result.data,
+            ...data.data.filter(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (el: T | any) => !result.data.some((el2: any) => el.id == el2.id),
+            ),
+          ];
+          break;
+        case 'page':
+          dataNew = [...data.data];
+          break;
+      }
+      if (JSON.stringify(result.data) != JSON.stringify(dataNew)) {
         setResult({
           ...result,
           data:

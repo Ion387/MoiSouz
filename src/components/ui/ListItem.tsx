@@ -21,6 +21,9 @@ interface Props {
   indent?: number;
   openDefault?: boolean;
   openAlways?: boolean;
+  /** Array of starts urls */
+  openAlwaysOn?: string[];
+  selectedAlways?: boolean;
   children?: ReactElement | ReactElement[];
   onClick?: () => void;
   disabled?: boolean;
@@ -54,7 +57,7 @@ const Item: FC<PropsItem> = ({
   selected,
   indent = 0,
   openDefault = false,
-  openAlways = false,
+  openAlways,
   children,
   onClick,
   disabled,
@@ -88,7 +91,11 @@ const Item: FC<PropsItem> = ({
         {/*children && (open ? <ExpandLess /> : <ExpandMore />)*/}
       </ListItemButton>
       {children && (
-        <Collapse in={open || openAlways} timeout="auto" unmountOnExit>
+        <Collapse
+          in={openAlways == null ? open : openAlways}
+          timeout="auto"
+          unmountOnExit
+        >
           <List component="div" disablePadding>
             {<Children indent={indent}>{children}</Children>}
           </List>
@@ -98,11 +105,20 @@ const Item: FC<PropsItem> = ({
   );
 };
 
-const ListItemSP: FC<Props> = ({ to, equals, hidden, ...props }) => {
+const ListItemSP: FC<Props> = ({
+  to,
+  equals,
+  openAlways,
+  openAlwaysOn,
+  selectedAlways,
+  hidden,
+  ...props
+}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const selected = useMemo(() => {
+    if (selectedAlways != null) return selectedAlways;
     if (to == null) return false;
     if (equals) {
       if (pathname != to.split('?')[0]) return false;
@@ -112,17 +128,24 @@ const ListItemSP: FC<Props> = ({ to, equals, hidden, ...props }) => {
 
     const url = `${pathname}?${searchParams}`;
     return url.startsWith(to);
-  }, [to, pathname, searchParams]);
+  }, [to, equals, selectedAlways, pathname, searchParams]);
+
+  const isOpenAlways = useMemo(() => {
+    if (openAlways != null) return openAlways;
+    if (openAlwaysOn == null) return undefined;
+    if (openAlwaysOn.length == 0) return undefined;
+    return openAlwaysOn.some((el) => pathname.startsWith(el));
+  }, [openAlways, openAlwaysOn, pathname]);
 
   if (to) {
     return (
       <Link href={to} style={{ width: '100%', display: hidden ? 'none' : '' }}>
-        <Item {...props} selected={selected} />
+        <Item {...props} selected={selected} openAlways={isOpenAlways} />
       </Link>
     );
   }
 
-  return <Item {...props} selected={selected} />;
+  return <Item {...props} selected={selected} openAlways={isOpenAlways} />;
 };
 
 export const ListItem: FC<Props> = ({ ...props }) => {

@@ -20,7 +20,7 @@ export const ProfileAside = () => {
           label="Документы"
           icon="document"
           to="/documents?incoming"
-          openAlways
+          openAlwaysOn={['/documents']}
         >
           <ListItem label="Входящие" to="/documents?incoming" />
           <ListItem label="Исходящие" to="/documents?outgoing" />
@@ -42,7 +42,9 @@ export const ProfileAside = () => {
           <ListItem
             label="Новости"
             icon="info"
-            openDefault={window.location.pathname.startsWith('/news')}
+            to="/news"
+            openAlwaysOn={['/news']}
+            selectedAlways={false}
           >
             <ListItem label="Все новости" to="/news" equals />
             <ListItem label="Новости организации" to="/news/edit" />

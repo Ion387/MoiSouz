@@ -139,6 +139,16 @@ export default createTheme(
           root: {},
         },
       },
+      MuiModal: {
+        styleOverrides: {
+          root: {
+            '& .MuiDialog-container': {
+              paddingRight: '0 !important',
+              height: '100vh !important',
+            },
+          },
+        },
+      },
       MuiPaper: {
         styleOverrides: {
           root: {

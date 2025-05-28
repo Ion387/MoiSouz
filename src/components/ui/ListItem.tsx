@@ -63,6 +63,8 @@ const Item: FC<PropsItem> = ({
   disabled,
 }) => {
   const [open, setOpen] = useState(openDefault);
+  const isParentLabelSelected =
+    label !== 'Документы' && label !== 'Скидки, льготы';
 
   const handleClick = () => {
     setOpen(!open);
@@ -77,7 +79,7 @@ const Item: FC<PropsItem> = ({
           pl: indent ? 4.6 * indent : undefined,
           borderRadius: '6px',
         }}
-        selected={selected && label !== 'Документы'}
+        selected={selected && isParentLabelSelected}
         onClick={handleClick}
         disabled={disabled}
       >

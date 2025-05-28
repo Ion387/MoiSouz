@@ -1,8 +1,8 @@
 'use client';
 
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
 import Slider from 'react-slick';
 
@@ -42,6 +42,14 @@ const BenefitsWrapper = () => {
     const param = params?.get(KEY_PARAM_CATEGORY);
     return param ? parseInt(param) : null;
   }, [params]);
+
+  useEffect(() => {
+    if (params.get('page') !== '1') {
+      if (categoryActive)
+        redirect(`/benefits?category=${categoryActive}&page=1`);
+      else redirect('/benefits?page=1');
+    }
+  }, []);
 
   const {
     data: { data: products, isFetching, hasMore, empty },

@@ -100,8 +100,7 @@ export const useFetchList = <T>({
       if (JSON.stringify(result.data) != JSON.stringify(dataNew)) {
         setResult({
           ...result,
-          data:
-            type == 'infinity' ? [...result.data, ...dataNew] : [...dataNew],
+          data: [...dataNew],
           hasMore: hasMore
             ? hasMore(data.meta)
             : data.meta.currentPage * data.meta.itemsPerPage <

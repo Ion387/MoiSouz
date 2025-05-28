@@ -1,5 +1,5 @@
 import BenefitsPage from '@/components/pages/Benefits/Benefits';
 
-export default function Colleagues() {
+export default function Benefits() {
   return <BenefitsPage />;
 }

@@ -1,8 +1,22 @@
 'use client';
 
+import { Icon } from '@/components/ui';
+import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { useMap } from '@/hooks/useMap';
-import { getBenefitsProduct } from '@/services/benefits';
-import { Box, CircularProgress, Grid2, Paper, Typography } from '@mui/material';
+import {
+  getBenefitsProduct,
+  getBenefitsProductPromo,
+} from '@/services/benefits';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  Grid2,
+  IconButton,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { useYMaps } from '@pbe/react-yandex-maps';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
@@ -11,12 +25,44 @@ import React, { useEffect, useRef, useState } from 'react';
 const BenefitsProductPage = () => {
   const pathName = usePathname();
   const id = pathName.split('/')[3];
+  const info = useGetProfileInfo();
+  const [currentId, setCurrentId] = useState<string | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [openChoice, setOpenChoice] = useState<boolean>(false);
+  const [selectedPlacemark, setSelectedPlacemark] = useState<null | number>(
+    null,
+  );
 
   const { data: product, isFetching } = useQuery({
     queryKey: ['benefit-item'],
     queryFn: () => getBenefitsProduct(id),
     select: (data) => data?.data.data,
   });
+  const { data: promo, isFetching: isPromoFetching } = useQuery({
+    queryKey: ['benefit-item-promo', currentId],
+    queryFn: () => {
+      if (!currentId) throw new Error('ID не указан');
+      return getBenefitsProductPromo(currentId);
+    },
+    select: (data) => data?.data,
+    enabled: !!currentId,
+  });
+
+  const handleClick = (id: string) => {
+    setCurrentId(id);
+    handleCloseChoice();
+  };
+
+  const handleClickChoice = () => {
+    setOpenChoice(true);
+  };
+  const handleCloseChoice = () => {
+    setOpenChoice(false);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const mapRef = useRef(null);
   const ymaps = useYMaps([
     'Map',
@@ -24,9 +70,6 @@ const BenefitsProductPage = () => {
     'control.ZoomControl',
     'templateLayoutFactory',
   ]);
-  const [selectedPlacemark, setSelectedPlacemark] = useState<null | number>(
-    null,
-  );
 
   useMap(product, ymaps, mapRef, selectedPlacemark, setSelectedPlacemark);
 
@@ -55,6 +98,21 @@ const BenefitsProductPage = () => {
         el.style.color = 'rgb(72, 128, 255)';
       });
   }, [product, id]);
+
+  useEffect(() => {
+    if (promo && promo.status == 'success') setOpen(true);
+  }, [promo]);
+
+  useEffect(() => {
+    if (open || openChoice) {
+      document.body.style.paddingRight = '0';
+      document.body.style.height = '100vh';
+    } else {
+      document.body.style.paddingRight = '';
+      document.body.style.height = '';
+    }
+  }, [open, openChoice]);
+
   return (
     <Grid2 container spacing={1.6}>
       {!isFetching ? (
@@ -64,55 +122,27 @@ const BenefitsProductPage = () => {
               {product.name}
             </Typography>
           </Grid2>
-          <Grid2 size={4}>
-            <Paper>
+          <Grid2 size={12}>
+            <Paper sx={{ padding: '0' }}>
               <img
                 style={{
                   width: '100%',
-                  aspectRatio: '17 / 9',
-                  borderRadius: '10px',
-                  objectFit: 'cover',
+                  borderRadius: '14px 14px 0 0',
+                  objectFit: 'contain',
                 }}
                 alt={product.name}
                 src={`data:image/png;base64,${product.image}`}
               />
-              {!!product.cities.length && (
-                <Box display={'flex'} gap={0.6} mt={1} flexWrap={'wrap'}>
-                  <Box>
-                    <Typography variant="h4" fontWeight={600}>
-                      Города:
-                    </Typography>
-                  </Box>
-                  {product.cities.map(
-                    (
-                      el: { name: string },
-                      id: number,
-                      arr: { name: string }[],
-                    ) => {
-                      if (id < arr.length - 1)
-                        return <Box key={el.name}>{el.name},</Box>;
-                      else return <Box key={el.name}>{el.name}</Box>;
-                    },
-                  )}
-                </Box>
-              )}
-            </Paper>
-          </Grid2>
-          <Grid2 size={8}>
-            <Paper>
-              <Typography variant="h3" fontWeight={600} marginBottom="12px">
-                Описание
-              </Typography>
-              <Box p={2}>
+              <Box p={2.4}>
                 <div
                   className="description"
                   dangerouslySetInnerHTML={{ __html: product.description }}
                 ></div>
               </Box>
               {!!product.coords.length && (
-                <>
+                <Box padding={'0 20px 20px 20px'}>
                   <Typography variant="h3" fontWeight={600} marginTop="12px">
-                    Местоположение
+                    На карте
                   </Typography>
                   <div
                     style={{
@@ -124,7 +154,37 @@ const BenefitsProductPage = () => {
                     }}
                     ref={mapRef}
                   ></div>
-                </>
+                </Box>
+              )}
+              {info.profileInfo?.hasTradeunionMember && (
+                <Box
+                  padding={'0 20px 20px 20px'}
+                  display="flex"
+                  justifyContent={'center'}
+                >
+                  {product.options && product.options.length ? (
+                    <Button
+                      variant="contained"
+                      sx={{ width: '175px', height: '50px' }}
+                      onClick={handleClickChoice}
+                    >
+                      Выбрать
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => handleClick(id)}
+                      disabled={isPromoFetching}
+                      sx={{ width: '175px', height: '50px' }}
+                    >
+                      {isPromoFetching ? (
+                        <CircularProgress></CircularProgress>
+                      ) : (
+                        'Получить'
+                      )}
+                    </Button>
+                  )}
+                </Box>
               )}
             </Paper>
           </Grid2>
@@ -133,6 +193,91 @@ const BenefitsProductPage = () => {
         <Box display={'flex'} width={'100%'} justifyContent={'center'}>
           <CircularProgress />
         </Box>
+      )}
+      {promo && promo.status == 'success' && (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          sx={{
+            '& .MuiPaper-root': {
+              width: '390px',
+              height: '275px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            },
+          }}
+        >
+          <IconButton
+            onClick={handleClose}
+            sx={{ position: 'absolute', top: '16px', right: '16px' }}
+          >
+            <Icon name="close" color="#000" />
+          </IconButton>
+          <img
+            alt="promoSuccess"
+            src="/images/promo.svg"
+            width={'74px'}
+            height={'71px'}
+          ></img>
+          <Typography variant="h3">Промокод получен!</Typography>
+          <Typography variant="h3">{promo.data.code}</Typography>
+          <Button component={'a'} variant="contained" href="/promo">
+            Посмотреть
+          </Button>
+        </Dialog>
+      )}
+      {openChoice && product.options && (
+        <Dialog
+          open={openChoice}
+          onClose={handleCloseChoice}
+          disablePortal
+          sx={{
+            '& .MuiPaper-root': {
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            },
+          }}
+        >
+          <IconButton
+            onClick={handleCloseChoice}
+            sx={{ position: 'absolute', top: '16px', right: '16px' }}
+          >
+            <Icon name="close" color="#000" />
+          </IconButton>
+          <Typography variant="h3" marginBottom={4}>
+            Выберите предложение
+          </Typography>
+          <Grid2 container spacing={1.1}>
+            {product.options.map((el: { name: string; id: number }) => (
+              <Grid2
+                key={el.id}
+                size={12}
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                borderBottom={'1px solid rgb(235, 235, 235)'}
+                paddingBottom={'11px'}
+              >
+                <Typography>{el.name}</Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleClick(String(id));
+                  }}
+                  disabled={isPromoFetching}
+                  sx={{ width: '90px', height: '40px' }}
+                >
+                  Получить
+                </Button>
+              </Grid2>
+            ))}
+          </Grid2>
+        </Dialog>
       )}
     </Grid2>
   );

@@ -18,7 +18,7 @@ export const Icon = () => (
           />
         </clipPath>
       </defs>
-      <g clip-path="url(#clip1812_1539)">
+      <g clipPath="url(#clip1812_1539)">
         <rect
           id="rect"
           x="3.333008"

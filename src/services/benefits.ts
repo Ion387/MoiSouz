@@ -42,3 +42,22 @@ export const getBenefitsCategories = async () => {
 
   return response;
 };
+
+export const getBenefitsProductPromo = async (id: string) => {
+  const response = await axios.get(
+    `${getBackendUrl}/api/private/discount/${id}/promo`,
+    {
+      headers: { ...(await getHeaders()) },
+    },
+  );
+
+  return response;
+};
+
+export const getBenefitsProductPromos = async () => {
+  const response = await axios.get(`${getBackendUrl}/api/private/promos`, {
+    headers: { ...(await getHeaders()) },
+  });
+
+  return response;
+};

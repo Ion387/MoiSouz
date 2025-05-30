@@ -121,6 +121,17 @@ export const saveFormNews = async (data: IFormNews) => {
   );
 };
 
+export const pathNewsOne = async (
+  code: string,
+  data: { [key: string]: any },
+) => {
+  return axios.patch(`${getBackendUrl}/api/private/news/${code}`, data, {
+    headers: {
+      ...(await getHeaders()),
+    },
+  });
+};
+
 export const deleteFormNews = async (data: IFormNews) => {
   return axios.delete(`${getBackendUrl}/api/private/news/${data.code}`, {
     headers: {

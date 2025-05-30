@@ -9,7 +9,7 @@ import { Icon, /*InputAutocomplete,*/ PaginationSimple } from '@/components/ui';
 import { Table } from '@/components/sections/News';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { deleteFormNews, useFetchNewsList } from '@/hooks/useNews';
+import { deleteFormNews, pathNewsOne, useFetchNewsList } from '@/hooks/useNews';
 import { IFormNews } from '@/models/News';
 import { IOptionValue } from '@/models/Option';
 
@@ -97,6 +97,24 @@ const NewsEditListWrapper = () => {
     setNewsLoading((prev) => prev.filter((el) => el.id != newsDelete.id));
   };
 
+  const handleIsActive = async (newsOne: IFormNews) => {
+    setNewsLoading((prev) => [...prev, newsOne]);
+    try {
+      await pathNewsOne(newsOne.code || '', { isActive: !newsOne.isActive });
+      await refetchNewsList();
+    } catch {}
+    setNewsLoading((prev) => prev.filter((el) => el.id != newsOne.id));
+  };
+
+  const handleIsMain = async (newsOne: IFormNews) => {
+    setNewsLoading((prev) => [...prev, newsOne]);
+    try {
+      await pathNewsOne(newsOne.code || '', { isMain: !newsOne.isMain });
+      await refetchNewsList();
+    } catch {}
+    setNewsLoading((prev) => prev.filter((el) => el.id != newsOne.id));
+  };
+
   if (info == null || info?.hasTradeunionOwner == false) return null;
   return (
     <>
@@ -148,6 +166,8 @@ const NewsEditListWrapper = () => {
           onShow={handleShow}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onChangeIsActive={handleIsActive}
+          onChangeIsMain={handleIsMain}
         />
 
         <PaginationSimple

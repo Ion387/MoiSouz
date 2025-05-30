@@ -18,6 +18,7 @@ import { IFormNews } from '@/models/News';
 import { Icon, InputSwitch } from '@/components/ui';
 import { PropsWithSX } from '@/models/Props';
 import { OPTIONS_NEWS_STATUS } from '@/constants/options';
+import { eventBlock } from '@/utils/event';
 
 interface IRowProps {
   news: IFormNews;
@@ -53,10 +54,12 @@ interface ITableProps {
   news: IFormNews[] | null;
   newsLoading?: IFormNews[] | null;
   owner?: boolean;
-  onClick?: (user: IFormNews) => void;
-  onShow?: (user: IFormNews) => void;
-  onEdit?: (user: IFormNews) => void;
-  onDelete?: (user: IFormNews) => void;
+  onClick?: (data: IFormNews) => void;
+  onShow?: (data: IFormNews) => void;
+  onEdit?: (data: IFormNews) => void;
+  onDelete?: (data: IFormNews) => void;
+  onChangeIsActive?: (data: IFormNews) => void;
+  onChangeIsMain?: (data: IFormNews) => void;
 }
 
 export const Table: FC<ITableProps> = ({
@@ -67,6 +70,8 @@ export const Table: FC<ITableProps> = ({
   onShow,
   onEdit,
   onDelete,
+  onChangeIsActive,
+  onChangeIsMain,
 }) => {
   const groupedData = news;
 
@@ -82,8 +87,7 @@ export const Table: FC<ITableProps> = ({
     event: React.MouseEvent<HTMLElement>,
     index: number,
   ) => {
-    event.preventDefault();
-    event.stopPropagation();
+    eventBlock(event);
     setOpenMenu({
       index,
       anchorE1: event.currentTarget,
@@ -116,6 +120,16 @@ export const Table: FC<ITableProps> = ({
     handleMenuClose();
     if (isLoading(item)) return;
     if (onDelete) onDelete(item);
+  };
+
+  const handleIsActive = (item: IFormNews) => {
+    if (isLoading(item)) return;
+    if (onChangeIsActive) onChangeIsActive(item);
+  };
+
+  const handleIsMain = (item: IFormNews) => {
+    if (isLoading(item)) return;
+    if (onChangeIsMain) onChangeIsMain(item);
   };
 
   return (
@@ -248,14 +262,20 @@ export const Table: FC<ITableProps> = ({
                     {el.date}
                   </Typography>
                 </Grid2>
-                <Grid2 size={1.5}>
+                <Grid2 size={1.5} onClick={eventBlock}>
                   <Typography py={1} pl={2} textAlign="center">
-                    <InputSwitch checked={el.isActive == true} />
+                    <InputSwitch
+                      checked={el.isActive == true}
+                      onClick={(_) => handleIsActive && handleIsActive(el)}
+                    />
                   </Typography>
                 </Grid2>
-                <Grid2 size={1.5}>
+                <Grid2 size={1.5} onClick={eventBlock}>
                   <Typography py={1} pl={2} textAlign="center">
-                    <InputSwitch checked={el.isMain == true} />
+                    <InputSwitch
+                      checked={el.isMain == true}
+                      onClick={(_) => handleIsMain && handleIsMain(el)}
+                    />
                   </Typography>
                 </Grid2>
                 <Grid2 size={1.5}>

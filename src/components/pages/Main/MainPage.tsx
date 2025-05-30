@@ -349,31 +349,28 @@ const Main = () => {
                 {newsList.map((el) => (
                   <Link
                     key={el.code}
-                    href={OWNER ? `/news/${el.code}` : '/main'}
+                    href={`/news/${el.code}`}
                     style={{
                       display: 'flex',
-                      pointerEvents: !OWNER ? 'none' : undefined,
                     }}
                   >
-                    <NewsCardBig data={el} soon={!OWNER} />
+                    <NewsCardBig data={el} />
                   </Link>
                 ))}
               </Box>
 
-              {OWNER && (
-                <Link
-                  style={{
-                    marginLeft: 25,
-                    marginTop: 10,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    textDecoration: 'underline',
-                  }}
-                  href="/news/all"
-                >
-                  Смотреть все
-                </Link>
-              )}
+              <Link
+                style={{
+                  marginLeft: 25,
+                  marginTop: 10,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textDecoration: 'underline',
+                }}
+                href="/news/all"
+              >
+                Смотреть все
+              </Link>
             </>
           )}
 

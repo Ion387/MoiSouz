@@ -266,7 +266,7 @@ export const Table: FC<ITableProps> = ({
                   <Typography py={1} pl={2} textAlign="center">
                     <InputSwitch
                       checked={el.isActive == true}
-                      onClick={(_) => handleIsActive && handleIsActive(el)}
+                      onClick={() => handleIsActive && handleIsActive(el)}
                     />
                   </Typography>
                 </Grid2>
@@ -274,7 +274,7 @@ export const Table: FC<ITableProps> = ({
                   <Typography py={1} pl={2} textAlign="center">
                     <InputSwitch
                       checked={el.isMain == true}
-                      onClick={(_) => handleIsMain && handleIsMain(el)}
+                      onClick={() => handleIsMain && handleIsMain(el)}
                     />
                   </Typography>
                 </Grid2>

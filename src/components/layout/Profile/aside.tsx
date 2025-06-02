@@ -14,8 +14,8 @@ export const ProfileAside = () => {
     <List className={styles.wrapper}>
       <List className={styles.content}>
         <ListItem label="Главная" icon="time" to="/main" />
-        <ListItem label="Уведомления" icon="notify" disabled />
-        <ListItem label="Задачи" icon="tasks" disabled />
+        {/* {<ListItem label="Уведомления" icon="notify" disabled />
+        <ListItem label="Задачи" icon="tasks" disabled />} */}
         <ListItem
           label="Документы"
           icon="document"
@@ -31,7 +31,7 @@ export const ProfileAside = () => {
             hidden={!info?.ROLES?.includes('ROLE_TRADEUNION')}
           />
         </ListItem>
-        <ListItem label="Мои организации" icon="square-2x2" disabled />
+        {/* <ListItem label="Мои организации" icon="square-2x2" disabled /> */}
         <ListItem label="Коллеги" icon="peoples" to="/colleagues" />
 
         {info?.hasTradeunionOwner == false && (
@@ -51,7 +51,7 @@ export const ProfileAside = () => {
           </ListItem>
         )}
 
-        <ListItem label="Деньги" icon="money" disabled />
+        {/* <ListItem label="Деньги" icon="money" disabled />*/}
         <ListItem
           label="Скидки, льготы"
           icon="gift"
@@ -62,8 +62,8 @@ export const ProfileAside = () => {
           <ListItem label="Полученные" to="/promo" />
           {/* {<ListItem label="Избранные" to="/favorites" />} */}
         </ListItem>
-        <ListItem label="Магазин" icon="square-3x3" disabled />
-        <ListItem label="Информация" icon="info" disabled />
+        {/* <ListItem label="Магазин" icon="square-3x3" disabled />
+        <ListItem label="Информация" icon="info" disabled />*/}
       </List>
     </List>
   );

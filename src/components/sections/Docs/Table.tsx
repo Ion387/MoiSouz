@@ -13,22 +13,22 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
+import React, {FC, useEffect, useState } from 'react';
 import s from './table.module.scss';
 import { statusColor } from '@/utils/statusColor';
-import { type INewProt } from '@/models/Protocol';
+import { INewProtocol, type INewProt } from '@/models/Protocol';
 import { Icon } from '@/components/ui';
 import { useRouter } from 'next/navigation';
 import { deleteDoc } from '@/services/getDocs';
-import { useQueryClient } from '@tanstack/react-query';
+import {  useQueryClient } from '@tanstack/react-query';
 
 interface ITableProps {
-  docs: IDoc[] | INewProt[] | INewDoc[] | undefined;
-  isDrafts?: boolean;
+  docs: (IDoc | INewDoc | INewProtocol)[];
 }
 
-const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
-  const groupedDocs = docs ? groupByTU(docs) : [];
+const Table: FC<ITableProps> = ({ docs}) => {
+  const [groupedDocs, setGroupedDocs] = useState(docs ? groupByTU(docs) : [])
+  const [sort, setSort] = useState({documentType: false, user: false, tu: false, documentNumber: false, documentDate: false, step: false})
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState<{
     index: number;
@@ -65,16 +65,34 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
   };
   const queryClient = useQueryClient();
 
-  const handleMenuDelete = (doc: IDoc | INewDoc | INewProt) => {
+  const handleMenuDelete = async (doc: IDoc | INewDoc | INewProt) => {
     handleMenuClose();
-    deleteDoc(doc.guid);
-    queryClient.invalidateQueries({ queryKey: ['docs'] });
+    await deleteDoc(doc.guid);
+    await queryClient.refetchQueries({queryKey: ['docs']})
   };
+
+const handleSort = (param: string, reverse: boolean) => {
+  setGroupedDocs((prev) => {
+    if (!prev) return prev
+    if (param === 'user') return prev.map((group) => ({
+      ...group,
+      // @ts-expect-error none
+      docs: reverse ? [...group.docs].sort((a, b) =>  a.user?.name.localeCompare(b.user?.name)).reverse() : [...group.docs].sort((a, b) =>  a.user?.name.localeCompare(b.user?.name)), 
+    }));
+    return prev.map((group) => ({
+      ...group,
+      // @ts-expect-error none
+      docs: reverse ? [...group.docs].sort((a, b) =>  a[param].localeCompare(b[param])).reverse() : [...group.docs].sort((a, b) =>  a[param].localeCompare(b[param])), 
+    }));
+  });
+};
+
+useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
 
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
       <Grid2 container sx={{ p: 1.6 }}>
-        <Grid2 size={2.5}>
+        <Grid2 size={2}>
           <Typography
             variant="body2"
             fontWeight={700}
@@ -83,13 +101,31 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
             Организация
           </Typography>
         </Grid2>
-        <Grid2 size={3}>
+        <Grid2 size={2}>
           <Typography
             variant="body2"
             fontWeight={700}
             textTransform={'uppercase'}
           >
             Документ
+            <IconButton onClick={() => {
+              handleSort('documentType', sort.documentType)
+              setSort((prev) => {return {...prev, documentType: !prev.documentType}})
+            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+          </Typography>
+        </Grid2>
+         <Grid2 size={2}>
+          <Typography
+            variant="body2"
+            textTransform={'uppercase'}
+            fontWeight={700}
+            textAlign={'center'}
+          >
+            Отправитель
+            <IconButton onClick={() => {
+              handleSort('user', sort.user)
+              setSort((prev) => {return {...prev, user: !prev.user}})
+            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1.5}>
@@ -100,6 +136,10 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
             textAlign={'center'}
           >
             Номер
+            <IconButton onClick={() => {
+              handleSort('documentNumber', sort.documentNumber)
+              setSort((prev) => {return {...prev, documentNumber: !prev.documentNumber}})
+            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1.5}>
@@ -110,7 +150,11 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
             textAlign={'center'}
           >
             Дата
-          </Typography>
+            <IconButton onClick={() => {
+              handleSort('documentDate', sort.documentDate)
+              setSort((prev) => {return {...prev, documentDate: !prev.documentDate}})
+            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+          </Typography> 
         </Grid2>
         <Grid2 size={1.5}>
           <Typography
@@ -120,9 +164,13 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
             textAlign={'center'}
           >
             Статус
+                        <IconButton onClick={() => {
+              handleSort('step', sort.step)
+              setSort((prev) => {return {...prev, step: !prev.step}})
+            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
           </Typography>
         </Grid2>
-        <Grid2 size={1.5}>
+        <Grid2 size={1}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -137,13 +185,13 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
       {groupedDocs && !!groupedDocs.length ? (
         groupedDocs.map((el, index, arr) => (
           <Box key={el.tradeunion + index}>
-            <Grid2 container sx={{ p: 1.6 }}>
-              <Grid2 size={2.5}>
+            <Grid2 container sx={{ p: 1.6}} >
+              <Grid2 size={2}>
                 <Typography variant="body2" fontWeight={700} pt={2.4}>
                   {el.tradeunion}
                 </Typography>
               </Grid2>
-              <Grid2 size={9} position={'relative'}>
+              <Grid2 size={10} position={'relative'}>
                 {el &&
                   el.docs &&
                   el.docs.map((doc, id, array) => (
@@ -151,7 +199,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                       key={doc.guid}
                       className={doc.status === 'NEW' ? s.hoverBold : s.hover}
                     >
-                      <Grid2 container sx={{ py: 2.4 }}>
+                      <Grid2 container sx={{ py: 2.4,  position: 'relative'}}>
                         <Link
                           href={
                             'folder' in doc && doc.folder === 'drafts'
@@ -160,7 +208,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                           }
                           style={{ width: '100%', display: 'flex' }}
                         >
-                          <Grid2 size={4}>
+                          <Grid2 size={2.4}>
                             <Typography
                               variant="body2"
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
@@ -168,13 +216,22 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                               {doc.documentType === 'AM'
                                 ? 'Заявление на вступление'
                                 : doc.documentType === 'AG'
-                                  ? 'Повестка'
+                                  ? 'Повестка заседания профкома'
                                   : doc.documentType === 'PR'
-                                    ? 'Протокол'
+                                    ? 'Протокол заседания профкома'
                                     : doc.documentType}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2}>
+                          <Grid2 size={2.4}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={doc.status === 'NEW' ? 700 : 600}
+                              textAlign={'center'}
+                            >
+                              {doc.documentType === 'AM' && doc.user ? doc.user.name : el.tradeunion}
+                            </Typography>
+                          </Grid2>
+                          <Grid2 size={1.8}>
                             <Typography
                               variant="body2"
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
@@ -183,7 +240,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                               {doc.documentNumber}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2}>
+                          <Grid2 size={1.8}>
                             <Typography
                               variant="body2"
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
@@ -192,7 +249,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                               {doc.documentDate}
                             </Typography>
                           </Grid2>
-                          <Grid2 size={2}>
+                          <Grid2 size={1.8}>
                             <Typography
                               variant="body2"
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
@@ -208,7 +265,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                             </Typography>
                           </Grid2>
                           <Grid2
-                            size={2}
+                            size={1.2}
                             display={'flex'}
                             justifyContent={'center'}
                           >
@@ -227,15 +284,28 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                                   </Typography>
                                 </Link>
                               )}
+                            {doc.documentType === 'AG' && array.find((element) => {if (element.data && 'guid' in element.data) return element.data.guid === doc.guid})?.guid && (
+                                <Link href={`/documents/${array.find((element) => {if (element.data && 'guid' in element.data) return element.data.guid === doc.guid})?.guid}`}>
+                                  <Typography
+                                    variant="body2"
+                                    fontWeight={
+                                      doc.status === 'NEW' ? 700 : 600
+                                    }
+                                    sx={{ textDecoration: 'underline' }}
+                                  >
+                                    Протокол
+                                  </Typography>
+                                </Link>
+                              )} 
                           </Grid2>
+                          <Grid2 size={0.6}></Grid2>
                         </Link>
-                        {isDrafts && (
-                          <Grid2 position={'absolute'} top={5.5} right={-56}>
+                            <Box position={'absolute'} top={6} right={0} >
                             <IconButton
                               onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
-                                handleMenuOpen(e, index);
+                                handleMenuOpen(e, id);
                               }}
                             >
                               <Icon name="menu" color="darkgray" />
@@ -243,7 +313,7 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                             <Popover
                               id="user-menu"
                               anchorEl={openMenu?.anchorE1}
-                              open={openMenu?.index == index}
+                              open={openMenu?.index == id}
                               onClose={handleMenuClose}
                               anchorOrigin={{
                                 vertical: 'bottom',
@@ -294,14 +364,14 @@ const Table: FC<ITableProps> = ({ docs, isDrafts }) => {
                                 <ListItemText>Удалить</ListItemText>
                               </MenuItem>
                             </Popover>
-                          </Grid2>
-                        )}
+              </Box>
                       </Grid2>
-
+                     
                       {id !== array.length - 1 && <Divider></Divider>}
                     </Box>
                   ))}
               </Grid2>
+          
             </Grid2>
             {index !== arr.length - 1 && <Divider></Divider>}
           </Box>

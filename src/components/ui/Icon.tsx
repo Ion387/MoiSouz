@@ -72,6 +72,7 @@ import { Icon as IconStatsDiagramRing } from '@/assets/icons/stats-diagram-ring'
 import { Icon as IconSoon } from '@/assets/icons/soon';
 import { Icon as IconNewsNotExists } from '@/assets/icons/news-not-exists';
 import { Icon as IconStar } from '@/assets/icons/star';
+import { Icon as IconSort } from '@/assets/icons/sort';
 
 const NAMES = [
   'document',
@@ -137,6 +138,7 @@ const NAMES = [
   'soon',
   'news-not-exists',
   'star',
+  'sort'
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -204,6 +206,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   soon: <IconSoon />,
   'news-not-exists': <IconNewsNotExists />,
   star: <IconStar />,
+  sort: <IconSort />,
 };
 
 interface Props {

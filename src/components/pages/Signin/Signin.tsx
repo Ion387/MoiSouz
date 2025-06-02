@@ -66,7 +66,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (session?.user?.token) {
-      router.push('/documents?incoming');
+      router.push('/main');
     }
   }, [session, router]);
 

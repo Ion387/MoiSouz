@@ -1,3 +1,5 @@
+import { IProfile } from "./Profile";
+
 export interface INewProtocol {
   step: string;
   documentDate: string;
@@ -7,7 +9,7 @@ export interface INewProtocol {
   address: string;
   documentAG: string;
   userList: string[];
-
+  folder?: string;
   guid: string;
   files: {
     type: string;
@@ -38,6 +40,7 @@ export interface INewProt {
   userList?: (string | undefined)[];
   step?: string;
   status?: 'VIEWED' | 'NEW';
+  user?: IProfile;
   questions: {
     speaker: string;
     question: string;

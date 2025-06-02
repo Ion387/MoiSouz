@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const ProgressBar: FC<IProps> = ({ steps, initialSteps, decision }) => {
-  console.log('decision', decision);
   return (
     <Paper sx={{ p: 2.4 }}>
       <Typography variant="h3" marginBottom={1.2}>

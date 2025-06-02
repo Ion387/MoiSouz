@@ -1,7 +1,7 @@
 import { type IDoc, type INewDoc } from '@/models/Doc';
 import { type INewProt } from '@/models/Protocol';
 
-export const groupByTU = (docs: IDoc[] | INewProt[] | INewDoc[]) => {
+export const groupByTU = (docs: (IDoc | INewDoc | INewProt)[]) => {
   if (Array.isArray(docs)) {
     const arrOfTU = Array.from(
       new Set(

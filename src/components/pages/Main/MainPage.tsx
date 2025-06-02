@@ -7,18 +7,16 @@ import Link from 'next/link';
 import { Soon } from '@/components/ui';
 import {
   MainList,
-  MainPendingStatus,
   MainStatsCard,
-  MainStatsCardMini,
 } from '@/components/sections/Main';
 import { NewsCardBig, NewsNotExists } from '@/components/sections/News';
 
 import useScreen from '@/hooks/useScreen';
 import { useFetchNewsList } from '@/hooks/useNews';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
+import { useQuery } from '@tanstack/react-query';
+import { getDocs } from '@/services/getDocs';
 
-const PENDING_APPLICATIONS = 0;
-const PENDING_REQUESTS = 10;
 
 const TASKS_ACTIVE = [
   { id: 1, title: 'Активная задача 1' },
@@ -53,6 +51,12 @@ const Main = () => {
 
   const { info: profile, isLoading } = useFetchProfile();
 
+  const { data: docs } = useQuery({
+    queryKey: ['docs'],
+    queryFn: getDocs,
+    select: (data) => data,
+  });
+
   const OWNER = profile?.hasTradeunionOwner;
 
   if (isLoading == true) {
@@ -81,7 +85,7 @@ const Main = () => {
         paddingTop: 3,
       }}
     >
-      <Typography variant="h3">Деньги</Typography>
+      {/* {<Typography variant="h3">Деньги</Typography>
       <Box
         sx={{
           display: 'grid',
@@ -162,9 +166,9 @@ const Main = () => {
             value="6293 ₽"
           />
         </Box>
-      </Box>
+      </Box>} */}
 
-      <Typography variant="h3" marginTop={3}>
+      <Typography variant="h3">
         Документы
       </Typography>
 
@@ -177,26 +181,32 @@ const Main = () => {
             marginTop: 2,
           }}
         >
+          
           <MainStatsCard
             icon="stats-users"
             color="#8280FF"
             title="Заявлений о вступлении"
-            value="1 604"
-            percent={8.5}
+            value={docs && docs.length ? String(docs.filter((doc) => doc.
+documentType === 'AG').length) : '0'}
+            percent={0}
           />
           <MainStatsCard
             icon="stats-box"
             color="#4AD991"
             title="Обращений в организацию"
-            value="320"
-            percent={1.3}
+            value="0"
+            percent={0}
+            sx={{position: 'relative' }}
+            soon
           />
           <MainStatsCard
             icon="stats-diagram-to-down"
             color="#FF9066"
             title="Заявлений о выходе"
-            value="3"
-            percent={-4.3}
+            value="0"
+            percent={0}
+            sx={{position: 'relative' }}
+            soon
           />
         </Box>
       )}
@@ -214,27 +224,27 @@ const Main = () => {
             icon="stats-users"
             color="#8280FF"
             title="Обращений направлено"
-            value="1 604"
-            percent={8.5}
+            value="0"
+            percent={0}
           />
           <MainStatsCard
             icon="stats-box"
             color="#4AD991"
             title="Ответов получено"
-            value="320"
-            percent={1.3}
+            value="0"
+            percent={0}
           />
           <MainStatsCard
             icon="stats-diagram-to-down"
             color="#FF9066"
             title="Обращений на рассмотрении"
-            value="3"
-            percent={-4.3}
+            value="0"
+            percent={0}
           />
         </Box>
       )}
 
-      {OWNER && (
+      {/*OWNER && (
         <>
           <MainList
             sx={{
@@ -264,7 +274,7 @@ const Main = () => {
             Смотреть все
           </Link>
         </>
-      )}
+      )*/}
 
       <Typography variant="h3" marginTop={3}>
         Задачи

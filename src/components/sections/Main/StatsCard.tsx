@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 
-import { Icon, IconName } from '@/components/ui';
+import { Icon, IconName, Soon } from '@/components/ui';
 
 import { PropsWithSX } from '@/models/Props';
 
@@ -11,6 +11,7 @@ interface Props {
   title: string;
   value: string;
   percent: number;
+  soon?: boolean;
 }
 
 export const MainStatsCard: FC<PropsWithSX & Props> = ({
@@ -20,6 +21,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
   title,
   value,
   percent,
+  soon
 }) => {
   return (
     <Box
@@ -32,6 +34,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
         ...sx,
       }}
     >
+  
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box
           sx={{
@@ -40,6 +43,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
             flex: 1,
           }}
         >
+          {soon && <Soon sx={{ zIndex: 1, '& > div': {borderRadius:"14px",}}}></Soon>}
           <Typography fontSize={16} fontWeight={600}>
             {title}
           </Typography>
@@ -57,6 +61,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
             height: 60,
           }}
         >
+          
           <Box
             sx={{
               position: 'absolute',
@@ -70,7 +75,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
           <Icon sx={{ position: 'relative' }} name={icon} color={color} />
         </Box>
       </Box>
-      <Box
+      {percent !== 0 && <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -94,7 +99,7 @@ export const MainStatsCard: FC<PropsWithSX & Props> = ({
         <Typography fontSize={16} fontWeight={600}>
           за месяц
         </Typography>
-      </Box>
+      </Box>}
     </Box>
   );
 };

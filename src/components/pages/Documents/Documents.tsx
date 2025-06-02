@@ -4,7 +4,6 @@ import NewProfileDialog from '@/components/entities/profile/newProfileDialog';
 import Table from '@/components/sections/Docs/Table';
 import { Icon } from '@/components/ui';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { IDoc } from '@/models/Doc';
 import { getDocs } from '@/services/getDocs';
 import { Box, Button, Popover, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -14,24 +13,22 @@ import { Suspense, useEffect, useState } from 'react';
 import { globalTheme } from '@/styles/theme';
 import { TradeunionCheckDialog } from '@/components/entities/profile/dialogs/tradeunion-check-dialog';
 import { useIsUserActive } from '@/hooks/useIsUserActive';
+import { IDoc, INewDoc } from '@/models/Doc';
+import { INewProtocol } from '@/models/Protocol';
 
 const DocumentsWrapper = () => {
   const { data: docs } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
-    select: (data) => data.data,
+    select: (data) => data,
   });
   const params = useSearchParams();
   const param = !!params.entries().toArray().length
     ? params.entries().toArray()[0][0]
     : null;
 
-  const filtredDocs =
-    Array.isArray(docs) && param
-      ? docs.filter((el: IDoc) => el.folder === param)
-      : Array.isArray(docs)
-        ? docs
-        : [];
+  const [filtredDocs, setFiltredDocs] = useState<(IDoc | INewDoc | INewProtocol)[]>([])
+ 
 
   const { info } = useFetchProfile();
   const isActive = useIsUserActive();
@@ -78,6 +75,17 @@ const DocumentsWrapper = () => {
       clearTimeout(timer);
     };
   }, [info?.ROLES, info?.hasTradeunionMember]);
+
+  useEffect(() => {
+    if (docs) {
+      const arr =  Array.isArray(docs) && param
+      ? docs.filter((el) => el.folder === param)
+      : Array.isArray(docs)
+        ? docs
+        : [];
+      setFiltredDocs(arr)}
+    
+  }, [docs, param])
 
   return (
     <Box sx={{ p: 2 }}>
@@ -235,7 +243,7 @@ const DocumentsWrapper = () => {
           </Box>
         </Popover>
       </Box>
-      <Table docs={filtredDocs} isDrafts={param === 'drafts'} />
+      <Table docs={filtredDocs} />
       <TradeunionCheckDialog open={openMember} setOpen={setOpenMember} />
       <NewProfileDialog
         open={open}

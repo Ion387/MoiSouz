@@ -25,8 +25,8 @@ const PromosPage = () => {
       {!isFetching ? (
         <Grid2 container spacing={2}>
           {/*eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-          {promos.map((el: any) => (
-            <Grid2 size={12} key={el.id}>
+          {promos.map((el: any, id: number) => (
+            <Grid2 size={12} key={String(el.id).concat(id.toString())}>
               <Paper
                 sx={{
                   padding: 0,
@@ -45,7 +45,6 @@ const PromosPage = () => {
                       aspectRatio: '17 / 9',
                       height: '231px',
                       borderRadius: '24px 0 0 24px',
-                      objectFit: 'cover',
                     }}
                   ></img>
                 </Box>

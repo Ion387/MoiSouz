@@ -24,7 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { InputDate } from '../ui/form/input-date';
 import dayjs from 'dayjs';
-import { type IDoc, type INewDoc } from '@/models/Doc';
+import {  type INewDoc } from '@/models/Doc';
 import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession } from 'next-auth/react';
@@ -88,7 +88,7 @@ const NewDocumentForm = ({
   const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
-    select: (data) => data.data,
+    select: (data) => data,
   });
 
   const { data: membersData, isLoading: isMembersLoading } = useQuery({
@@ -281,16 +281,18 @@ const NewDocumentForm = ({
   useEffect(() => {
     if (docs && !doc) {
       const filteredDocs = docs.filter(
-        (el: IDoc) =>
+        (el) =>
           el.documentType === 'AM' && el.step === 'На проверке профсоюзом',
       );
       if (filteredDocs && filteredDocs.length) {
-        //@ts-expect-error none
+     
         filteredDocs.forEach((el, id) => {
           setFormValue(`questions.${id}.document`, el.guid);
+       
           setFormValue(
             `questions.${id}.question`,
-            `О включении в профсоюз нового участника на основании заявления\nЗаявитель: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
+            //@ts-expect-error none
+            `О приёме в профсоюз на основании заявления\nЗаявитель: ${el.user.name}\nДата рождения: ${el.user.birthdate}`,
           );
         });
       }

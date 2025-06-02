@@ -174,7 +174,7 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           big
         />
       </Box>
-
+      <Box display="flex">
       <Field
         style={{
           flex: 1,
@@ -183,6 +183,16 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
         value={user.phone}
         big
       />
+
+         <Field
+        style={{
+          flex: 1,
+        }}
+        name="Адрес электронной почти"
+        value={user.email}
+        big
+      />
+      </Box>
 
       {/*user.history && user.history.length > 0 && (
         <Typography fontSize={16} fontWeight="bold" marginTop={4}>

@@ -12,7 +12,7 @@ export const TradeunionCheckApiDialog = () => {
   const { data: docs, isLoading } = useQuery({
     queryKey: ['docs'],
     queryFn: getDocs,
-    select: (data) => data.data,
+    select: (data) => data,
   });
 
   const { info } = useFetchProfile();

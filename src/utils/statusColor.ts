@@ -4,6 +4,9 @@ export const statusColor = (status?: string): string => {
     case 'Ожидает отправки':
       color = 'rgb(255, 226, 153)';
       break;
+    case 'Ожидает утверждения':
+      color = 'rgb(255, 226, 153)';
+      break;
     case 'Отправлено в профсоюз':
       color = 'rgb(121, 216, 191)';
       break;

@@ -123,7 +123,7 @@ export const saveFormNews = async (data: IFormNews) => {
 
 export const pathNewsOne = async (
   code: string,
-  data: { [key: string]: string | number },
+  data: { [key: string]: string | number | boolean },
 ) => {
   return axios.patch(`${getBackendUrl}/api/private/news/${code}`, data, {
     headers: {

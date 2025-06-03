@@ -12,7 +12,7 @@ import {
   Popover,
   CircularProgress,
 } from '@mui/material';
-import { FC, PropsWithChildren, useState } from 'react';
+import { FC, PropsWithChildren, useEffect, useState } from 'react';
 
 import { IFormNews } from '@/models/News';
 import { Icon, InputSwitch } from '@/components/ui';
@@ -73,7 +73,7 @@ export const Table: FC<ITableProps> = ({
   onChangeIsActive,
   onChangeIsMain,
 }) => {
-  const groupedData = news;
+  const [groupedData, setGroupedData] = useState(news);
 
   const isLoading = (item: IFormNews) =>
     newsLoading?.some((el) => el.id == item.id);
@@ -132,6 +132,29 @@ export const Table: FC<ITableProps> = ({
     if (onChangeIsMain) onChangeIsMain(item);
   };
 
+  const handleSort = (param: string) => {
+    setGroupedData((prev) => {
+      if (!prev) return prev;
+      return [
+        ...prev
+          .sort((a, b) => {
+            // @ts-expect-error none
+            if (typeof a[param] === 'string') {
+              // @ts-expect-error none
+              return b[param].localeCompare(a[param]) > 0 ? 1 : 0;
+            }
+            // @ts-expect-error none
+            else return Number(a[param] > b[param]);
+          })
+          .reverse(),
+      ];
+    });
+  };
+
+  useEffect(() => {
+    if (news) setGroupedData(news);
+  }, [news]);
+
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
       <Grid2 container sx={{ p: 1.6 }}>
@@ -142,6 +165,14 @@ export const Table: FC<ITableProps> = ({
             textTransform={'uppercase'}
           >
             №
+            <IconButton
+              onClick={() => {
+                handleSort('id');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={3.5}>
@@ -151,6 +182,14 @@ export const Table: FC<ITableProps> = ({
             textTransform={'uppercase'}
           >
             Заголовок
+            <IconButton
+              onClick={() => {
+                handleSort('title');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={2}>
@@ -161,6 +200,14 @@ export const Table: FC<ITableProps> = ({
             textAlign="center"
           >
             Дата
+            <IconButton
+              onClick={() => {
+                handleSort('date');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1.5}>
@@ -191,6 +238,14 @@ export const Table: FC<ITableProps> = ({
             textAlign="center"
           >
             Статус
+            <IconButton
+              onClick={() => {
+                handleSort('status');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1}>

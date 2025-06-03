@@ -11,7 +11,7 @@ import {
   ListItemText,
   Popover,
 } from '@mui/material';
-import { FC, PropsWithChildren, useState } from 'react';
+import { FC, PropsWithChildren, useEffect, useState } from 'react';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { ITradeUnion } from '@/models/TradeUnion';
@@ -67,7 +67,7 @@ export const Table: FC<ITableProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const groupedData = users;
+  const [groupedData, setGroupedData] = useState(users);
 
   const [openMenu, setOpenMenu] = useState<{
     index: number;
@@ -110,6 +110,29 @@ export const Table: FC<ITableProps> = ({
     if (onDelete) onDelete(user);
   };
 
+  const handleSort = (param: string) => {
+    setGroupedData((prev) => {
+      if (!prev) return prev;
+      return [
+        ...prev
+          .sort((a, b) => {
+            // @ts-expect-error none
+            if (typeof a[param] === 'string') {
+              // @ts-expect-error none
+              return b[param].localeCompare(a[param]) > 0 ? 1 : 0;
+            }
+            // @ts-expect-error none
+            else return Number(a[param] > b[param]);
+          })
+          .reverse(),
+      ];
+    });
+  };
+
+  useEffect(() => {
+    if (users) setGroupedData(users);
+  }, [users]);
+
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
       <Grid2 container sx={{ p: 1.6 }}>
@@ -120,6 +143,14 @@ export const Table: FC<ITableProps> = ({
             textTransform={'uppercase'}
           >
             ФИО
+            <IconButton
+              onClick={() => {
+                handleSort('name');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={!!owner ? 2.5 : 3.5}>
@@ -147,6 +178,14 @@ export const Table: FC<ITableProps> = ({
             fontWeight={700}
           >
             Роль
+            <IconButton
+              onClick={() => {
+                handleSort('role');
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-1px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         {!!owner && (

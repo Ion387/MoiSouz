@@ -38,6 +38,9 @@ export const stepTransformationAg = (str: string) => {
     case 'Ожидает отправки':
       step = 1;
       break;
+    case 'Ожидает утверждения':
+      step = 1;
+      break;
     case 'На согласовании':
       step = 2;
       break;

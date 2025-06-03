@@ -13,7 +13,7 @@ import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: string | React.ReactNode;
   labelExtra?: string;
 
   render: (

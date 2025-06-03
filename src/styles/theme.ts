@@ -264,6 +264,9 @@ export default createTheme(
         },
       },
       MuiMenu: {
+        defaultProps: {
+          disableScrollLock: true,
+        },
         styleOverrides: {
           paper: {
             '&:hover': {},
@@ -344,7 +347,9 @@ export default createTheme(
         },
       },
       MuiPopover: {
-        defaultProps: {},
+        defaultProps: {
+          disableScrollLock: true,
+        },
         styleOverrides: {
           paper: {},
         },

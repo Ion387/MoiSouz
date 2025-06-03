@@ -187,7 +187,7 @@ const Main = () => {
             color="#8280FF"
             title="Заявлений о вступлении"
             value={docs && docs.length ? String(docs.filter((doc) => doc.
-documentType === 'AG').length) : '0'}
+documentType === 'AM').length) : '0'}
             percent={0}
           />
           <MainStatsCard

@@ -34,6 +34,7 @@ import { getSession } from 'next-auth/react';
 import { getBackendUrl } from '@/constants/url';
 import { defaultQuestions } from '@/constants/defaultQuestions';
 import ProtocolQuestion from '../ui/form/protocolQuestions';
+import theme from '@/styles/theme';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -299,7 +300,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
   };
 
   return (
-    <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
+    <Paper
+      className={s.paper}
+      style={{ paddingBottom: '55px' }}
+      key={doc ? doc.guid : 'new'}
+    >
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
         adapterLocale="ru"
@@ -312,7 +317,18 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
             <Grid2 container spacing={2}>
               {agendas && (
                 <Grid2 size={12}>
-                  <InputLabel>Повестка</InputLabel>
+                  <InputLabel>
+                    Повестка{' '}
+                    <span
+                      style={
+                        !!errors.documentAG?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <Select
                     fullWidth
                     sx={{
@@ -351,11 +367,33 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     />
                   </Grid2>
                   <Grid2 size={4}>
-                    <InputLabel>Дата документа</InputLabel>
+                    <InputLabel>
+                      Дата документа{' '}
+                      <span
+                        style={
+                          !!errors.documentDate?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    </InputLabel>
                     <InputDate name="documentDate" />
                   </Grid2>
                   <Grid2 size={4}>
-                    <InputLabel>Начало заседания</InputLabel>
+                    <InputLabel>
+                      Начало заседания{' '}
+                      <span
+                        style={
+                          !!errors.documentTime?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    </InputLabel>
                     <InputTime name="documentTime" />
                   </Grid2>
                   <Grid2 size={12}>
@@ -464,7 +502,18 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         />
                       </Grid2>
                       <Grid2 size={12} marginTop={2.5} position={'relative'}>
-                        <InputLabel>Докладывал:</InputLabel>
+                        <InputLabel>
+                          Докладывал:{' '}
+                          <span
+                            style={
+                              !!errors?.questions?.[0]?.speaker?.message
+                                ? { color: theme.palette.red.main }
+                                : { color: theme.palette.primary.main }
+                            }
+                          >
+                            *
+                          </span>
+                        </InputLabel>
                         {!isMembersLoading && arr && (
                           <>
                             <Select

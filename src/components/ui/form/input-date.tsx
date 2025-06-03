@@ -11,7 +11,7 @@ import { DateView } from '@mui/x-date-pickers/models';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   dis?: boolean;
   isFutureAccess?: boolean;
   views?: DateView[];

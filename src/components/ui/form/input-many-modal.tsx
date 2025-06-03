@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
   Box,
@@ -39,7 +39,7 @@ const Card: FC<CardProps> = ({ label, selected, onClick }) => {
 
 interface Props {
   name: string;
-  label?: string;
+  label?: string | React.ReactNode;
   placeholder?: string;
   options?: IOption[];
   disabled?: boolean;

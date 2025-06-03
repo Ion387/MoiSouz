@@ -17,6 +17,7 @@ import {
 } from 'react-hook-form';
 
 import { defaultOptions, defaultQuestions } from '@/constants/defaultQuestions';
+import theme from '@/styles/theme';
 
 interface IProtocolQuestionsProps {
   id: number;
@@ -114,7 +115,18 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
         />
       </Grid2>
       <Grid2 size={12} marginTop={2.5} position={'relative'}>
-        <InputLabel>Докладывал:</InputLabel>
+        <InputLabel>
+          Докладывал:{' '}
+          <span
+            style={
+              !!errors?.questions?.[id + 1]?.speaker?.message
+                ? { color: theme.palette.red.main }
+                : { color: theme.palette.primary.main }
+            }
+          >
+            *
+          </span>
+        </InputLabel>
         {!isMembersLoading && arr && (
           <>
             <Select
@@ -154,57 +166,96 @@ const ProtocolQuestion: FC<IProtocolQuestionsProps> = ({
         )}
       </Grid2>
       <Grid2 size={12} marginTop={2.5}>
-        <InputLabel>Постановили:</InputLabel>
+        <InputLabel>
+          Постановили:{' '}
+          <span
+            style={
+              !!errors?.questions?.[id + 1]?.decided?.message
+                ? { color: theme.palette.red.main }
+                : { color: theme.palette.primary.main }
+            }
+          >
+            *
+          </span>
+        </InputLabel>
         {!type ? (
           <TextField
             multiline
             rows={3}
             {...register(`questions.${id + 1}.decided`)}
+            error={!!errors?.questions?.[id + 1]?.decided?.message}
+            helperText={errors?.questions?.[id + 1]?.decided?.message}
           />
         ) : type === 'assessors' ? (
-          <Select
-            fullWidth
-            sx={{ padding: 1.6 }}
-            name={`questions.${id + 1}.decided`}
-            defaultValue={getValues(`questions.${id + 1}.decided`)}
-            onChange={(e) => {
-              setFormValue(
-                `questions.${id + 1}.decided`,
-                String(e.target.value),
-              );
-            }}
-            error={!!errors?.questions?.[id + 1]?.decided?.message}
-          >
-            {arr &&
-              arr.map((member) => (
-                <MenuItem
-                  key={member.name}
-                  value={defaultQuestions[id + 1].decided + '- ' + member.name}
-                >
-                  {defaultQuestions[id + 1].decided + '- ' + member.name}
+          <>
+            <Select
+              fullWidth
+              sx={{ padding: 1.6 }}
+              name={`questions.${id + 1}.decided`}
+              defaultValue={getValues(`questions.${id + 1}.decided`)}
+              onChange={(e) => {
+                setFormValue(
+                  `questions.${id + 1}.decided`,
+                  String(e.target.value),
+                );
+              }}
+              error={!!errors?.questions?.[id + 1]?.decided?.message}
+            >
+              {arr &&
+                arr.map((member) => (
+                  <MenuItem
+                    key={member.name}
+                    value={
+                      defaultQuestions[id + 1].decided + '- ' + member.name
+                    }
+                  >
+                    {defaultQuestions[id + 1].decided + '- ' + member.name}
+                  </MenuItem>
+                ))}
+            </Select>
+            {!!errors?.questions?.[id + 1]?.decided?.message && (
+              <FormHelperText
+                sx={{
+                  color: '#FF4949',
+                  position: 'absolute',
+                }}
+              >
+                {errors?.questions?.[id + 1]?.decided?.message}
+              </FormHelperText>
+            )}
+          </>
+        ) : (
+          <>
+            <Select
+              fullWidth
+              sx={{ padding: 1.6 }}
+              name={`questions.${id + 1}.decided`}
+              defaultValue={getValues(`questions.${id + 1}.decided`)}
+              onChange={(e) => {
+                setFormValue(
+                  `questions.${id + 1}.decided`,
+                  String(e.target.value),
+                );
+              }}
+              error={!!errors?.questions?.[id + 1]?.decided?.message}
+            >
+              {defaultOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
-          </Select>
-        ) : (
-          <Select
-            fullWidth
-            sx={{ padding: 1.6 }}
-            name={`questions.${id + 1}.decided`}
-            defaultValue={getValues(`questions.${id + 1}.decided`)}
-            onChange={(e) => {
-              setFormValue(
-                `questions.${id + 1}.decided`,
-                String(e.target.value),
-              );
-            }}
-            error={!!errors?.questions?.[id + 1]?.decided?.message}
-          >
-            {defaultOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
+            </Select>
+            {!!errors?.questions?.[id + 1]?.decided?.message && (
+              <FormHelperText
+                sx={{
+                  color: '#FF4949',
+                  position: 'absolute',
+                }}
+              >
+                {errors?.questions?.[id + 1]?.decided?.message}
+              </FormHelperText>
+            )}
+          </>
         )}
       </Grid2>
       <Grid2 size={12} marginTop={2.5} container spacing={2.5}>

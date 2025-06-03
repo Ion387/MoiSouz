@@ -13,22 +13,29 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import React, {FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import s from './table.module.scss';
 import { statusColor } from '@/utils/statusColor';
 import { INewProtocol, type INewProt } from '@/models/Protocol';
 import { Icon } from '@/components/ui';
 import { useRouter } from 'next/navigation';
 import { deleteDoc } from '@/services/getDocs';
-import {  useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ITableProps {
   docs: (IDoc | INewDoc | INewProtocol)[];
 }
 
-const Table: FC<ITableProps> = ({ docs}) => {
-  const [groupedDocs, setGroupedDocs] = useState(docs ? groupByTU(docs) : [])
-  const [sort, setSort] = useState({documentType: false, user: false, tu: false, documentNumber: false, documentDate: false, step: false})
+const Table: FC<ITableProps> = ({ docs }) => {
+  const [groupedDocs, setGroupedDocs] = useState(docs ? groupByTU(docs) : []);
+  const [sort, setSort] = useState({
+    documentType: false,
+    user: false,
+    tu: false,
+    documentNumber: false,
+    documentDate: false,
+    step: false,
+  });
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState<{
     index: number;
@@ -68,26 +75,43 @@ const Table: FC<ITableProps> = ({ docs}) => {
   const handleMenuDelete = async (doc: IDoc | INewDoc | INewProt) => {
     handleMenuClose();
     await deleteDoc(doc.guid);
-    await queryClient.refetchQueries({queryKey: ['docs']})
+    await queryClient.refetchQueries({ queryKey: ['docs'] });
   };
 
-const handleSort = (param: string, reverse: boolean) => {
-  setGroupedDocs((prev) => {
-    if (!prev) return prev
-    if (param === 'user') return prev.map((group) => ({
-      ...group,
-      // @ts-expect-error none
-      docs: reverse ? [...group.docs].sort((a, b) =>  a.user?.name.localeCompare(b.user?.name)).reverse() : [...group.docs].sort((a, b) =>  a.user?.name.localeCompare(b.user?.name)), 
-    }));
-    return prev.map((group) => ({
-      ...group,
-      // @ts-expect-error none
-      docs: reverse ? [...group.docs].sort((a, b) =>  a[param].localeCompare(b[param])).reverse() : [...group.docs].sort((a, b) =>  a[param].localeCompare(b[param])), 
-    }));
-  });
-};
+  const handleSort = (param: string, reverse: boolean) => {
+    setGroupedDocs((prev) => {
+      if (!prev) return prev;
+      if (param === 'user')
+        return prev.map((group) => ({
+          ...group,
 
-useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
+          docs: reverse
+            ? [...group.docs]
+                // @ts-expect-error none
+                .sort((a, b) => a.user?.name.localeCompare(b.user?.name))
+                .reverse()
+            : [...group.docs].sort(
+                // @ts-expect-error none
+                (a, b) => a.user?.name.localeCompare(b.user?.name),
+              ),
+        }));
+      return prev.map((group) => ({
+        ...group,
+
+        docs: reverse
+          ? [...group.docs]
+              // @ts-expect-error none
+              .sort((a, b) => a[param].localeCompare(b[param]))
+              .reverse()
+          : // @ts-expect-error none
+            [...group.docs].sort((a, b) => a[param].localeCompare(b[param])),
+      }));
+    });
+  };
+
+  useEffect(() => {
+    setGroupedDocs(groupByTU(docs));
+  }, [docs]);
 
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
@@ -108,13 +132,20 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
             textTransform={'uppercase'}
           >
             Документ
-            <IconButton onClick={() => {
-              handleSort('documentType', sort.documentType)
-              setSort((prev) => {return {...prev, documentType: !prev.documentType}})
-            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+            <IconButton
+              onClick={() => {
+                handleSort('documentType', sort.documentType);
+                setSort((prev) => {
+                  return { ...prev, documentType: !prev.documentType };
+                });
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-2px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
-         <Grid2 size={2}>
+        <Grid2 size={2}>
           <Typography
             variant="body2"
             textTransform={'uppercase'}
@@ -122,10 +153,17 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
             textAlign={'center'}
           >
             Отправитель
-            <IconButton onClick={() => {
-              handleSort('user', sort.user)
-              setSort((prev) => {return {...prev, user: !prev.user}})
-            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+            <IconButton
+              onClick={() => {
+                handleSort('user', sort.user);
+                setSort((prev) => {
+                  return { ...prev, user: !prev.user };
+                });
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-2px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1.5}>
@@ -136,10 +174,17 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
             textAlign={'center'}
           >
             Номер
-            <IconButton onClick={() => {
-              handleSort('documentNumber', sort.documentNumber)
-              setSort((prev) => {return {...prev, documentNumber: !prev.documentNumber}})
-            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+            <IconButton
+              onClick={() => {
+                handleSort('documentNumber', sort.documentNumber);
+                setSort((prev) => {
+                  return { ...prev, documentNumber: !prev.documentNumber };
+                });
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-2px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1.5}>
@@ -150,11 +195,18 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
             textAlign={'center'}
           >
             Дата
-            <IconButton onClick={() => {
-              handleSort('documentDate', sort.documentDate)
-              setSort((prev) => {return {...prev, documentDate: !prev.documentDate}})
-            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
-          </Typography> 
+            <IconButton
+              onClick={() => {
+                handleSort('documentDate', sort.documentDate);
+                setSort((prev) => {
+                  return { ...prev, documentDate: !prev.documentDate };
+                });
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-2px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
+          </Typography>
         </Grid2>
         <Grid2 size={1.5}>
           <Typography
@@ -164,10 +216,17 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
             textAlign={'center'}
           >
             Статус
-                        <IconButton onClick={() => {
-              handleSort('step', sort.step)
-              setSort((prev) => {return {...prev, step: !prev.step}})
-            }} sx={{padding: 0.4}}><Icon name='sort' /></IconButton>
+            <IconButton
+              onClick={() => {
+                handleSort('step', sort.step);
+                setSort((prev) => {
+                  return { ...prev, step: !prev.step };
+                });
+              }}
+              sx={{ padding: 0.4, transform: 'translateY(-2px)' }}
+            >
+              <Icon name="sort" />
+            </IconButton>
           </Typography>
         </Grid2>
         <Grid2 size={1}>
@@ -185,7 +244,7 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
       {groupedDocs && !!groupedDocs.length ? (
         groupedDocs.map((el, index, arr) => (
           <Box key={el.tradeunion + index}>
-            <Grid2 container sx={{ p: 1.6}} >
+            <Grid2 container sx={{ p: 1.6 }}>
               <Grid2 size={2}>
                 <Typography variant="body2" fontWeight={700} pt={2.4}>
                   {el.tradeunion}
@@ -199,7 +258,7 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
                       key={doc.guid}
                       className={doc.status === 'NEW' ? s.hoverBold : s.hover}
                     >
-                      <Grid2 container sx={{ py: 2.4,  position: 'relative'}}>
+                      <Grid2 container sx={{ py: 2.4, position: 'relative' }}>
                         <Link
                           href={
                             'folder' in doc && doc.folder === 'drafts'
@@ -228,7 +287,9 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
                               textAlign={'center'}
                             >
-                              {doc.documentType === 'AM' && doc.user ? doc.user.name : el.tradeunion}
+                              {doc.documentType === 'AM' && doc.user
+                                ? doc.user.name
+                                : el.tradeunion}
                             </Typography>
                           </Grid2>
                           <Grid2 size={1.8}>
@@ -284,8 +345,17 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
                                   </Typography>
                                 </Link>
                               )}
-                            {doc.documentType === 'AG' && array.find((element) => {if (element.data && 'guid' in element.data) return element.data.guid === doc.guid})?.guid && (
-                                <Link href={`/documents/${array.find((element) => {if (element.data && 'guid' in element.data) return element.data.guid === doc.guid})?.guid}`}>
+                            {doc.documentType === 'AG' &&
+                              array.find((element) => {
+                                if (element.data && 'guid' in element.data)
+                                  return element.data.guid === doc.guid;
+                              })?.guid && (
+                                <Link
+                                  href={`/documents/${array.find((element) => {
+                                    if (element.data && 'guid' in element.data)
+                                      return element.data.guid === doc.guid;
+                                  })?.guid}`}
+                                >
                                   <Typography
                                     variant="body2"
                                     fontWeight={
@@ -296,82 +366,86 @@ useEffect(() => {setGroupedDocs(groupByTU(docs))}, [docs])
                                     Протокол
                                   </Typography>
                                 </Link>
-                              )} 
+                              )}
                           </Grid2>
                           <Grid2 size={0.6}></Grid2>
                         </Link>
-                            <Box position={'absolute'} top={6} right={0} >
-                            <IconButton
+                        <Box
+                          position={'absolute'}
+                          top={'50%'}
+                          right={0}
+                          sx={{ transform: 'translateY(-50%)' }}
+                        >
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleMenuOpen(e, id);
+                            }}
+                          >
+                            <Icon name="menu" color="darkgray" />
+                          </IconButton>
+                          <Popover
+                            id="user-menu"
+                            anchorEl={openMenu?.anchorE1}
+                            open={openMenu?.index == id}
+                            onClose={handleMenuClose}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            slotProps={{
+                              paper: {
+                                variant: 'popover',
+                              },
+                            }}
+                            disableScrollLock
+                          >
+                            <MenuItem
                               onClick={(e) => {
                                 e.stopPropagation();
-                                e.preventDefault();
-                                handleMenuOpen(e, id);
+                                handleMenuShow(doc);
                               }}
                             >
-                              <Icon name="menu" color="darkgray" />
-                            </IconButton>
-                            <Popover
-                              id="user-menu"
-                              anchorEl={openMenu?.anchorE1}
-                              open={openMenu?.index == id}
-                              onClose={handleMenuClose}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
+                              <ListItemIcon>
+                                <Icon name="eye-on" />
+                              </ListItemIcon>
+                              <ListItemText>Посмотреть</ListItemText>
+                            </MenuItem>
+                            <MenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMenuEdit(doc);
                               }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              slotProps={{
-                                paper: {
-                                  variant: 'popover',
-                                },
-                              }}
-                              disableScrollLock
                             >
-                              <MenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleMenuShow(doc);
-                                }}
-                              >
-                                <ListItemIcon>
-                                  <Icon name="eye-on" />
-                                </ListItemIcon>
-                                <ListItemText>Посмотреть</ListItemText>
-                              </MenuItem>
-                              <MenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleMenuEdit(doc);
-                                }}
-                              >
-                                <ListItemIcon>
-                                  <Icon name="edit" />
-                                </ListItemIcon>
-                                <ListItemText>Редактировать</ListItemText>
-                              </MenuItem>
-                              <MenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleMenuDelete(doc);
-                                }}
-                              >
-                                <ListItemIcon>
-                                  <Icon name="delete" color="red" />
-                                </ListItemIcon>
-                                <ListItemText>Удалить</ListItemText>
-                              </MenuItem>
-                            </Popover>
-              </Box>
+                              <ListItemIcon>
+                                <Icon name="edit" />
+                              </ListItemIcon>
+                              <ListItemText>Редактировать</ListItemText>
+                            </MenuItem>
+                            <MenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMenuDelete(doc);
+                              }}
+                            >
+                              <ListItemIcon>
+                                <Icon name="delete" color="red" />
+                              </ListItemIcon>
+                              <ListItemText>Удалить</ListItemText>
+                            </MenuItem>
+                          </Popover>
+                        </Box>
                       </Grid2>
-                     
+
                       {id !== array.length - 1 && <Divider></Divider>}
                     </Box>
                   ))}
               </Grid2>
-          
             </Grid2>
             {index !== arr.length - 1 && <Divider></Divider>}
           </Box>

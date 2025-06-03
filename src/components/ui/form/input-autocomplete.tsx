@@ -10,7 +10,7 @@ import { IOption } from '@/models/Option';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   placeholder?: string;
   options: IOption[];
   multiple?: boolean;

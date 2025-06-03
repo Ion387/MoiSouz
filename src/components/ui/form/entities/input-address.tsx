@@ -9,7 +9,7 @@ import { TextFieldCustom } from './input-textfield';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: string | React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any;
   disabled?: boolean;

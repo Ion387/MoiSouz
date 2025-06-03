@@ -24,7 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { InputDate } from '../ui/form/input-date';
 import dayjs from 'dayjs';
-import {  type INewDoc } from '@/models/Doc';
+import { type INewDoc } from '@/models/Doc';
 import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession } from 'next-auth/react';
@@ -35,6 +35,7 @@ import { getDocs } from '@/services/getDocs';
 import { getMembers } from '@/services/members';
 import QuestionFields from '../ui/form/question';
 import { removeDuplicatePairs } from '@/utils/removeDuplicates';
+import theme from '@/styles/theme';
 
 type OptionType = {
   role: string;
@@ -102,30 +103,6 @@ const NewDocumentForm = ({
     { role: string; name: string }[]
   >([]);
 
-  const [invitedMembers, setInvitedMembers] = useState<
-    {
-      role: string;
-      firstName: string;
-      lastName: string;
-      middleName: string;
-    }[]
-  >([]);
-
-  const [selectedMembers, setSelectedMembers] = useState<
-    { role: string; name: string }[]
-  >([]);
-
-  const handleArrayChange = (
-    values: {
-      role: string;
-      firstName: string;
-      lastName: string;
-      middleName: string;
-    }[],
-  ) => {
-    setInvitedMembers(values);
-  };
-
   useEffect(() => {
     if (membersData) {
       setMembers(() => {
@@ -140,27 +117,6 @@ const NewDocumentForm = ({
       });
     }
   }, [membersData]);
-
-  useEffect(() => {
-    setSelectedMembers([
-      ...selectedNotInvitedMembers,
-      ...invitedMembers.map((el) => ({
-        role: el.role,
-        name:
-          el.middleName && el.firstName && el.lastName
-            ? el.lastName +
-              ' ' +
-              el.firstName.at(0) +
-              '.' +
-              ' ' +
-              el.middleName.at(0) +
-              '.'
-            : el.lastName && el.lastName
-              ? el.lastName + ' ' + el.firstName.at(0) + '.'
-              : '',
-      })),
-    ]);
-  }, [selectedNotInvitedMembers, invitedMembers]);
 
   const {
     handleSubmit,
@@ -261,11 +217,6 @@ const NewDocumentForm = ({
           );
         });
       }
-      if (doc.data.members && doc.data?.members.length) {
-        doc.data.members?.forEach((el, id) => {
-          setFormValue(`members.${id}`, el);
-        });
-      }
       if (doc.data.invitedMembers && doc.data?.invitedMembers.length) {
         doc.data.invitedMembers?.forEach((el, id) => {
           setFormValue(`invitedMembers.${id}`, el);
@@ -285,10 +236,8 @@ const NewDocumentForm = ({
           el.documentType === 'AM' && el.step === 'На проверке профсоюзом',
       );
       if (filteredDocs && filteredDocs.length) {
-     
         filteredDocs.forEach((el, id) => {
           setFormValue(`questions.${id}.document`, el.guid);
-       
           setFormValue(
             `questions.${id}.question`,
             //@ts-expect-error none
@@ -299,6 +248,19 @@ const NewDocumentForm = ({
       setArticlesL(filteredDocs.length);
     }
   }, [docs, doc]);
+
+  useEffect(() => {
+    if (members) {
+      setSelectedNotInvitedMembers([...members]);
+      if (doc) {
+        if (doc.data.members && doc.data?.members.length) {
+          doc.data.members?.forEach((el, id) => {
+            setFormValue(`members.${id}`, el);
+          });
+        }
+      }
+    }
+  }, [members, doc]);
 
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
@@ -322,11 +284,33 @@ const NewDocumentForm = ({
                 />
               </Grid2>
               <Grid2 size={6}>
-                <InputLabel>Дата документа</InputLabel>
+                <InputLabel>
+                  Дата документа{' '}
+                  <span
+                    style={
+                      !!errors.documentDate?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <InputDate name="documentDate" isFutureAccess />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel>Место проведения</InputLabel>
+                <InputLabel>
+                  Место проведения{' '}
+                  <span
+                    style={
+                      !!errors.address?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <TextField
                   {...register(`address`)}
                   placeholder="Место проведения"
@@ -334,7 +318,7 @@ const NewDocumentForm = ({
                   helperText={errors.address?.message || ''}
                 />
               </Grid2>
-              {!isMembersLoading && (
+              {!isMembersLoading && members && members.length && (
                 <Grid2 size={12}>
                   <InputLabel>
                     Участники - члены профсоюзной организации
@@ -384,56 +368,59 @@ const NewDocumentForm = ({
                   />
                 </Grid2>
               )}
-              <Grid2 size={12}>
-                <InputLabel>Участники - приглашенные</InputLabel>
-                <InputArrayOfObjects
-                  name={'invitedMembers'}
-                  defaultValue={''}
-                  position
-                  desc="Добавить участника"
-                  render={(name, index, register, errors) => (
-                    <Grid2 container spacing={1.2}>
-                      <Grid2 size={12} sx={{ display: 'none' }}>
-                        <TextField
-                          {...register(`${name}.${index}.role`)}
-                          value={'Приглашенный участник'}
-                        ></TextField>
+              {!isLoading && (
+                <Grid2 size={12}>
+                  <InputLabel>Участники - приглашенные</InputLabel>
+                  <InputArrayOfObjects
+                    name={'invitedMembers'}
+                    defaultValue={''}
+                    position
+                    desc="Добавить участника"
+                    render={(name, index, register, errors) => (
+                      <Grid2 container spacing={1.2}>
+                        <Grid2 size={12} sx={{ display: 'none' }}>
+                          <TextField
+                            {...register(`${name}.${index}.role`)}
+                            value={'Приглашенный участник'}
+                          ></TextField>
+                        </Grid2>
+                        <Grid2 size={4}>
+                          <TextField
+                            {...register(`${name}.${index}.lastName`)}
+                            placeholder="Фамилия"
+                            error={!!errors?.invitedMembers?.lastName?.message}
+                            helperText={
+                              errors?.invitedMembers?.lastName?.message || ''
+                            }
+                          ></TextField>
+                        </Grid2>
+                        <Grid2 size={4}>
+                          <TextField
+                            {...register(`${name}.${index}.firstName`)}
+                            placeholder="Имя"
+                            error={!!errors?.invitedMembers?.firstName?.message}
+                            helperText={
+                              errors?.invitedMembers?.firstName?.message || ''
+                            }
+                          ></TextField>
+                        </Grid2>
+                        <Grid2 size={4}>
+                          <TextField
+                            {...register(`${name}.${index}.middleName`)}
+                            placeholder="Отчество"
+                            error={
+                              !!errors?.invitedMembers?.middleName?.message
+                            }
+                            helperText={
+                              errors?.invitedMembers?.middleName?.message || ''
+                            }
+                          ></TextField>
+                        </Grid2>
                       </Grid2>
-                      <Grid2 size={4}>
-                        <TextField
-                          {...register(`${name}.${index}.lastName`)}
-                          placeholder="Фамилия"
-                          error={!!errors?.invitedMembers?.lastName?.message}
-                          helperText={
-                            errors?.invitedMembers?.lastName?.message || ''
-                          }
-                        ></TextField>
-                      </Grid2>
-                      <Grid2 size={4}>
-                        <TextField
-                          {...register(`${name}.${index}.firstName`)}
-                          placeholder="Имя"
-                          error={!!errors?.invitedMembers?.firstName?.message}
-                          helperText={
-                            errors?.invitedMembers?.firstName?.message || ''
-                          }
-                        ></TextField>
-                      </Grid2>
-                      <Grid2 size={4}>
-                        <TextField
-                          {...register(`${name}.${index}.middleName`)}
-                          placeholder="Отчество"
-                          error={!!errors?.invitedMembers?.middleName?.message}
-                          helperText={
-                            errors?.invitedMembers?.middleName?.message || ''
-                          }
-                        ></TextField>
-                      </Grid2>
-                    </Grid2>
-                  )}
-                  onArrayChange={handleArrayChange}
-                />
-              </Grid2>
+                    )}
+                  />
+                </Grid2>
+              )}
               {!isLoading ? (
                 <Grid2 size={12}>
                   <InputArrayOfObjects
@@ -445,7 +432,7 @@ const NewDocumentForm = ({
                         index={index}
                         register={register}
                         errors={errors}
-                        members={selectedMembers}
+                        members={selectedNotInvitedMembers}
                         isMembersLoading={isMembersLoading}
                         articlesL={articlesL}
                         getValues={getValues}

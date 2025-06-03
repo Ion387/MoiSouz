@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
   FormControlLabel,
@@ -15,7 +15,7 @@ import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   defaultValue?: 'female' | 'male';
   disabled?: boolean;
 }

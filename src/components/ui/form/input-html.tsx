@@ -10,7 +10,7 @@ import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
-  label?: string;
+  label?: string | React.ReactNode;
   placeholder?: string;
   disabled?: boolean;
 }

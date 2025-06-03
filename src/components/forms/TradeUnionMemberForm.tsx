@@ -32,6 +32,7 @@ import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
 import { getHeaders } from '@/utils/axios';
 import { InputAutocomplete } from '../ui/form';
+import theme from '@/styles/theme';
 
 const schema = yup
   .object({
@@ -219,7 +220,18 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 </>
               )}
               <Grid2 size={12}>
-                <InputLabel>Фамилия</InputLabel>
+                <InputLabel>
+                  Фамилия{' '}
+                  <span
+                    style={
+                      !!errors.data?.lastName?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <TextField
                   {...register('data.lastName')}
                   placeholder="Иванов"
@@ -229,7 +241,18 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel>Имя</InputLabel>
+                <InputLabel>
+                  Имя{' '}
+                  <span
+                    style={
+                      !!errors.data?.firstName?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <TextField
                   {...register('data.firstName')}
                   placeholder="Иван"
@@ -252,7 +275,20 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
               <InputAutocomplete
                 sx={{ width: '100%' }}
                 name="data.position"
-                label="Должность"
+                label={
+                  <>
+                    Должность{' '}
+                    <span
+                      style={
+                        !!errors.data?.position?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </>
+                }
                 placeholder="Выберите должность"
                 options={
                   info?.position?.map((el) => ({ id: el, title: el })) || []
@@ -260,7 +296,18 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
               />
 
               <Grid2 size={12} sx={{ position: 'relative' }}>
-                <InputLabel>Наименования профсоюза</InputLabel>
+                <InputLabel>
+                  Наименования профсоюза{' '}
+                  <span
+                    style={
+                      !!errors.tradeunion?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <Select
                   fullWidth
                   sx={{ padding: 1.6 }}
@@ -291,11 +338,33 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                 )}
               </Grid2>
               <Grid2 size={4}>
-                <InputLabel>Дата вступления</InputLabel>
+                <InputLabel>
+                  Дата вступления{' '}
+                  <span
+                    style={
+                      !!errors.data?.inviteDate?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <InputDate name="data.inviteDate" isFutureAccess />
               </Grid2>
               <Grid2 size={8}>
-                <InputLabel>Размер взносов (%)</InputLabel>
+                <InputLabel>
+                  Размер взносов (%){' '}
+                  <span
+                    style={
+                      !!errors.data?.percents?.message
+                        ? { color: theme.palette.red.main }
+                        : { color: theme.palette.primary.main }
+                    }
+                  >
+                    *
+                  </span>
+                </InputLabel>
                 <TextField
                   {...register('data.percents')}
                   error={!!errors.data?.percents?.message}

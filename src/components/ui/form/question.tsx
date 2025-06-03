@@ -1,3 +1,4 @@
+import theme from '@/styles/theme';
 import {
   Box,
   FormHelperText,
@@ -62,9 +63,18 @@ const QuestionFields: FC<IQuestionFieldsProps> = ({
 }) => {
   return (
     <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={1.6}>
-      <InputLabel sx={{ marginBottom: '0' }}>{`Вопрос №${
-        index + 1
-      }`}</InputLabel>
+      <InputLabel sx={{ marginBottom: '0' }}>
+        {`Вопрос №${index + 1}`}{' '}
+        <span
+          style={
+            !!errors?.question?.message
+              ? { color: theme.palette.red.main }
+              : { color: theme.palette.primary.main }
+          }
+        >
+          *
+        </span>
+      </InputLabel>
       <TextField
         {...register(`${name}.${index}.question`)}
         multiline
@@ -80,7 +90,18 @@ const QuestionFields: FC<IQuestionFieldsProps> = ({
       />
       {!isMembersLoading && (
         <>
-          <InputLabel sx={{ marginBottom: '0' }}>Докладчик</InputLabel>
+          <InputLabel sx={{ marginBottom: '0' }}>
+            Докладчик{' '}
+            <span
+              style={
+                !!errors?.speaker?.message
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </InputLabel>
           <Select
             fullWidth
             sx={{ padding: 1.6 }}

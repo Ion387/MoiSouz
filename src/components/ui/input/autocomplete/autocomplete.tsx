@@ -7,7 +7,7 @@ import { PropsWithSX } from '@/models/Props';
 import { IOption, IOptionValue } from '@/models/Option';
 
 interface Props {
-  label?: string;
+  label?: string | React.ReactNode;
   placeholder?: string;
   options: IOption[];
   multiple?: boolean;

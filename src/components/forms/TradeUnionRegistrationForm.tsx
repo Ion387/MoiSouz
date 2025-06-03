@@ -45,6 +45,7 @@ import { getMyTU } from '@/services/getMyTU';
 import { convertSizeToBites } from '@/utils/convertStringToB';
 import { saveFormTUUsers } from '@/hooks/useTU';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
+import theme from '@/styles/theme';
 
 const schema = yup
   .object({
@@ -433,7 +434,18 @@ const TradeUnionRegistrationForm = () => {
                 )}
                 <Grid2 size={9} container>
                   <Grid2 size={12}>
-                    <InputLabel>Наименование</InputLabel>
+                    <InputLabel>
+                      Наименование{' '}
+                      <span
+                        style={
+                          !!errors.title?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    </InputLabel>
                     <TextField
                       {...register('title')}
                       placeholder="Профсоюз"
@@ -442,7 +454,18 @@ const TradeUnionRegistrationForm = () => {
                     />
                   </Grid2>
                   <Grid2 size={12}>
-                    <InputLabel>Дата образования</InputLabel>
+                    <InputLabel>
+                      Дата образования{' '}
+                      <span
+                        style={
+                          !!errors.creationDate?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    </InputLabel>
                     <InputDate name="creationDate" />
                   </Grid2>
                 </Grid2>
@@ -457,7 +480,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    ИНН
+                    ИНН{' '}
+                    <span
+                      style={
+                        !!errors.inn?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                   <TextFieldCustom
                     register={register('inn')}
@@ -471,7 +503,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    КПП
+                    КПП{' '}
+                    <span
+                      style={
+                        !!errors.kpp?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                   <TextFieldCustom
                     register={register('kpp')}
@@ -485,7 +526,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    ОГРН
+                    ОГРН{' '}
+                    <span
+                      style={
+                        !!errors.ogrn?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                   <TextFieldCustom
                     register={register('ogrn')}
@@ -499,7 +549,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    Дата пост. на учет
+                    Дата пост. на учет{' '}
+                    <span
+                      style={
+                        !!errors.registrationDate?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                   {!inn ? (
                     <InputDate name="registrationDate" />
@@ -516,7 +575,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    ОКАТО
+                    ОКАТО{' '}
+                    <span
+                      style={
+                        !!errors.okato?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                   <TextFieldCustom
                     register={register('okato')}
@@ -530,7 +598,16 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
                   >
-                    ОКТМО
+                    ОКТМО{' '}
+                    <span
+                      style={
+                        !!errors.oktmo?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
 
                   <TextFieldCustom
@@ -542,7 +619,23 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputLabel sx={{ marginBottom: 0 }}>Адрес</InputLabel>
+                  <InputLabel sx={{ marginBottom: 0 }}>
+                    Адрес{' '}
+                    <span
+                      style={
+                        !!errors.address?.postcode?.message ||
+                        !!errors.address?.region?.message ||
+                        !!errors.address?.city?.message ||
+                        !!errors.address?.street?.message ||
+                        !!errors.address?.house?.message ||
+                        !!errors.address?.house?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                 </Grid2>
                 <Grid2 size={12}>
                   <Autocomplete
@@ -612,7 +705,19 @@ const TradeUnionRegistrationForm = () => {
                   <TextField {...register('address.flat')} placeholder="Пом." />
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputLabel sx={{ marginBottom: 0 }}>Председатель</InputLabel>
+                  <InputLabel sx={{ marginBottom: 0 }}>
+                    Председатель{' '}
+                    <span
+                      style={
+                        !!errors.chairman?.lastName?.message ||
+                        !!errors.chairman?.firstName?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                 </Grid2>
                 <Grid2 size={12}>
                   <TextField
@@ -639,7 +744,18 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <InputLabel>E-mail</InputLabel>
+                  <InputLabel>
+                    E-mail{' '}
+                    <span
+                      style={
+                        !!errors.chairmanEmail?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <TextField
                     {...register('chairmanEmail')}
                     placeholder="prov@mail.ru"
@@ -648,7 +764,18 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <InputLabel>Телефон</InputLabel>
+                  <InputLabel>
+                    Телефон{' '}
+                    <span
+                      style={
+                        !!errors.chairmanPhone?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <TextFieldCustom
                     register={register('chairmanPhone')}
                     placeholder="+79999999999"
@@ -658,7 +785,21 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputLabel sx={{ marginBottom: 0 }}>Работодатель</InputLabel>
+                  <InputLabel sx={{ marginBottom: 0 }}>
+                    Работодатель{' '}
+                    <span
+                      style={
+                        !!errors.employer?.title?.message ||
+                        !!errors.employer?.lastName?.message ||
+                        !!errors.employer?.firstName?.message ||
+                        !!errors.employer?.inn?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                 </Grid2>
                 <Grid2 size={12}>
                   <TextField
@@ -707,7 +848,19 @@ const TradeUnionRegistrationForm = () => {
                       color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000',
                     }}
                   >
-                    Банковские реквизиты
+                    Банковские реквизиты{' '}
+                    <span
+                      style={
+                        !!errors.bank?.bank?.message ||
+                        !!errors.bank?.rs?.message ||
+                        !!errors.bank?.bik?.message ||
+                        !!errors.bank?.ks?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
                   </InputLabel>
                 </Grid2>
                 <Grid2 size={6}>
@@ -747,7 +900,18 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <InputLabel>Телефон организации</InputLabel>
+                  <InputLabel>
+                    Телефон организации{' '}
+                    <span
+                      style={
+                        !!errors.phone?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <TextFieldCustom
                     register={register('phone')}
                     placeholder="+79999999999"
@@ -757,7 +921,18 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <InputLabel>Е-мейл организации</InputLabel>
+                  <InputLabel>
+                    Е-мейл организации{' '}
+                    <span
+                      style={
+                        !!errors.email?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <TextField
                     {...register('email')}
                     placeholder="prov@mail.ru"
@@ -766,7 +941,18 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputLabel>Размер взносов (%)</InputLabel>
+                  <InputLabel>
+                    Размер взносов (%){' '}
+                    <span
+                      style={
+                        !!errors.percents?.message
+                          ? { color: theme.palette.red.main }
+                          : { color: theme.palette.primary.main }
+                      }
+                    >
+                      *
+                    </span>
+                  </InputLabel>
                   <TextField
                     {...register('percents')}
                     error={!!errors.percents?.message}

@@ -23,6 +23,7 @@ import { convertSizeToBites } from '@/utils/convertStringToB';
 import { IFormNews } from '@/models/News';
 import { IOption } from '@/models/Option';
 import { ITradeUnion } from '@/models/TradeUnion';
+import theme from '@/styles/theme';
 
 const schema = yup
   .object({
@@ -126,7 +127,18 @@ export const NewsForm: FC<Props> = ({
       errorsExtra={errorsExtra}
       checkTradeUnionMember={false}
     >
-      <InputLabel>Заголовок</InputLabel>
+      <InputLabel>
+        Заголовок{' '}
+        <span
+          style={
+            !!errors.title?.message
+              ? { color: theme.palette.red.main }
+              : { color: theme.palette.primary.main }
+          }
+        >
+          *
+        </span>
+      </InputLabel>
       <TextField
         {...register('title')}
         placeholder="Заголовок"
@@ -136,7 +148,16 @@ export const NewsForm: FC<Props> = ({
       />
 
       <InputLabel sx={{ mt: 3 }}>
-        Анонс (для показа на странице со списком новостей)
+        Анонс (для показа на странице со списком новостей){' '}
+        <span
+          style={
+            !!errors.preview?.message
+              ? { color: theme.palette.red.main }
+              : { color: theme.palette.primary.main }
+          }
+        >
+          *
+        </span>
       </InputLabel>
       <TextField
         {...register('preview')}
@@ -165,7 +186,24 @@ export const NewsForm: FC<Props> = ({
         multiple
       />
 
-      <InputHTML sx={{ mt: 3 }} name="text" label="Текст новости" />
+      <InputHTML
+        sx={{ mt: 3 }}
+        name="text"
+        label={
+          <>
+            Текст новости{' '}
+            <span
+              style={
+                !!errors.text
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </>
+        }
+      />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 3 }}>
         <InputDate

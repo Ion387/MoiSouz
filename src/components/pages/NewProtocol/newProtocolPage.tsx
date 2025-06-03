@@ -32,7 +32,7 @@ const NewProtocol = () => {
         </Box>
       </Grid2>
       <Grid2 size={8}>
-        <NewProtocolForm doc={doc} />
+        <NewProtocolForm key={doc ? doc.guid : 'new'} doc={doc} />
       </Grid2>
 
       <Grid2 size={4}>

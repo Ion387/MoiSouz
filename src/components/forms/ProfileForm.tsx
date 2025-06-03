@@ -28,6 +28,7 @@ import { useOptions } from '@/hooks/UseOptions';
 import { convertSizeToBites } from '@/utils/convertStringToB';
 import { IFormProfile } from '@/models/Forms';
 import { OPTIONS_EDUCATION } from '@/constants/options';
+import theme from '@/styles/theme';
 
 const schema = yup
   .object({
@@ -39,7 +40,7 @@ const schema = yup
       .string()
       .min(2, 'Минимальная длина фамилии - 2 символа')
       .required('Введите фамилию'),
-    middleName: yup.string(),
+    middleName: yup.string().nullable(),
     birthdate: yup
       .string()
       .required('Укажите дату рождения')
@@ -166,7 +167,18 @@ const ProfileForm: FC<Props> = ({
     >
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>Фамилия</InputLabel>
+          <InputLabel>
+            Фамилия{' '}
+            <span
+              style={
+                !!errors.lastName?.message
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </InputLabel>
           <TextField
             {...register('lastName')}
             placeholder="Иванов"
@@ -174,7 +186,18 @@ const ProfileForm: FC<Props> = ({
             helperText={errors.lastName?.message || ''}
           />
 
-          <InputLabel sx={{ mt: 3 }}>Имя</InputLabel>
+          <InputLabel sx={{ mt: 3 }}>
+            Имя{' '}
+            <span
+              style={
+                !!errors.firstName?.message
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </InputLabel>
           <TextField
             {...register('firstName')}
             placeholder="Иван"
@@ -202,14 +225,57 @@ const ProfileForm: FC<Props> = ({
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-        <InputDate name="birthdate" label="Дата рождения" />
-
-        <InputGender name="gender" label="Пол" />
-
+        <InputDate
+          name="birthdate"
+          label={
+            <>
+              Дата рождения{' '}
+              <span
+                style={
+                  !!errors.birthdate?.message
+                    ? { color: theme.palette.red.main }
+                    : { color: theme.palette.primary.main }
+                }
+              >
+                *
+              </span>
+            </>
+          }
+        />
+        <InputGender
+          name="gender"
+          label={
+            <>
+              Пол{' '}
+              <span
+                style={
+                  !!errors.gender?.message
+                    ? { color: theme.palette.red.main }
+                    : { color: theme.palette.primary.main }
+                }
+              >
+                *
+              </span>
+            </>
+          }
+        />
         <InputAutocomplete
           sx={{ width: '80%' }}
           name="education"
-          label="Образование"
+          label={
+            <>
+              Образование{' '}
+              <span
+                style={
+                  !!errors.education?.message
+                    ? { color: theme.palette.red.main }
+                    : { color: theme.palette.primary.main }
+                }
+              >
+                *
+              </span>
+            </>
+          }
           placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
         />
@@ -218,7 +284,20 @@ const ProfileForm: FC<Props> = ({
       <InputArray
         sx={{ mt: 3 }}
         name="profession"
-        label="Специальность по образованию"
+        label={
+          <>
+            Специальность по образованию{' '}
+            <span
+              style={
+                !!errors.profession
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </>
+        }
         labelExtra="Дополнительная профессия"
         desc="Добавить специальность"
         render={(name, index, register, errors) => (
@@ -236,7 +315,20 @@ const ProfileForm: FC<Props> = ({
       <InputArray
         sx={{ mt: 3 }}
         name="position"
-        label="Должность"
+        label={
+          <>
+            Должность{' '}
+            <span
+              style={
+                !!errors.position
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </>
+        }
         labelExtra="Дополнительная должность"
         desc="Добавить должность"
         render={(name, index, register, errors) => (
@@ -254,13 +346,37 @@ const ProfileForm: FC<Props> = ({
       <InputAddress
         sx={{ mt: 3 }}
         name="address"
-        label="Адрес проживания"
+        label={
+          <>
+            Адрес проживания{' '}
+            <span
+              style={
+                !!errors.position
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </>
+        }
         errors={errors}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>Номер телефона</InputLabel>
+          <InputLabel>
+            Номер телефона{' '}
+            <span
+              style={
+                !!errors.phone?.message
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </InputLabel>
           <TextFieldCustom
             register={register('phone')}
             placeholder="+79999999999"
@@ -306,7 +422,20 @@ const ProfileForm: FC<Props> = ({
       <InputManyModal
         sx={{ mt: 3 }}
         name="hobbies"
-        label="Увлечения"
+        label={
+          <>
+            Увлечения{' '}
+            <span
+              style={
+                !!errors.hobbies
+                  ? { color: theme.palette.red.main }
+                  : { color: theme.palette.primary.main }
+              }
+            >
+              *
+            </span>
+          </>
+        }
         placeholder="Выберите из списка"
         options={hobbies?.data || []}
       />

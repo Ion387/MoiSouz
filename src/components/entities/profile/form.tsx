@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { FC, PropsWithChildren, RefObject, useEffect } from 'react';
+import { FC, PropsWithChildren, RefObject, useEffect, useState } from 'react';
 import {
   Box,
   Button,
   ButtonProps,
   CircularProgress,
   Grid2,
+  Popover,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -22,6 +23,7 @@ import { usePathname } from 'next/navigation';
 import { PropsWithClassName, PropsWithSX } from '@/models/Props';
 import { globalTheme } from '@/styles/theme';
 import { Icon, IconName } from '@/components/ui';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 interface Props {
   reference?: RefObject<HTMLFormElement | null>;
@@ -74,6 +76,21 @@ export const Form: FC<
   checkTradeUnionMember = true,
 }) => {
   const path = usePathname();
+  const [openMenu, setOpenMenu] = useState<{
+    anchorE1: HTMLElement;
+  } | null>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpenMenu({
+      anchorE1: event.currentTarget,
+    });
+  };
+  const handleMenuClose = () => {
+    setOpenMenu(null);
+  };
+  const { info } = useFetchProfile();
 
   useEffect(() => {
     if (errorsExtra == null) return;
@@ -103,7 +120,7 @@ export const Form: FC<
             <Grid2 container>
               {title && (
                 <Grid2 size={8}>
-                  <Typography variant="h3" lineHeight={'57px'}>
+                  <Typography variant="h3" lineHeight={'38.5px'}>
                     {title}
                   </Typography>
                 </Grid2>
@@ -119,40 +136,151 @@ export const Form: FC<
                     alignItems={'flex-end'}
                     gap={'20px'}
                   >
-                    <Link href={'/trade_union_member'}>
-                      <Button
-                        variant="contained"
+                    <Button
+                      variant="contained"
+                      onClick={(e) => {
+                        handleMenuOpen(e);
+                      }}
+                    >
+                      <Icon
+                        name={'newDoc'}
+                        color="#ffffff"
+                        sx={{ marginRight: '6px' }}
+                      ></Icon>
+                      Создать документ
+                    </Button>
+                    <Popover
+                      id="create-doc"
+                      anchorEl={openMenu?.anchorE1}
+                      open={!!openMenu?.anchorE1}
+                      onClose={handleMenuClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      slotProps={{
+                        paper: {
+                          variant: 'popover',
+                        },
+                      }}
+                      disableScrollLock
+                    >
+                      <Box
                         sx={{
-                          padding: '15px 15px',
-                          fontSize: '16px',
-                          lineHeight: '27px',
-                          minWidth: '196px',
-                          '&.Mui-disabled': {
-                            backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                            color: 'white !important',
-                          },
+                          p: 2.4,
+                          position: 'relative',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          m: '0 auto',
                         }}
                       >
-                        Вступить в профсоюз
-                      </Button>
-                    </Link>
-                    <Link href={'/membership'}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          padding: '15px 15px',
-                          fontSize: '16px',
-                          minWidth: '196px',
-                          lineHeight: '27px',
-                          '&.Mui-disabled': {
-                            backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                            color: 'white !important',
-                          },
-                        }}
-                      >
-                        Я уже в профсоюзе
-                      </Button>
-                    </Link>
+                        <Box
+                          display={'flex'}
+                          flexDirection={'row'}
+                          justifyContent={'center'}
+                        >
+                          <Typography
+                            variant="h3"
+                            textAlign={'center'}
+                            marginBottom={2}
+                          >
+                            Выберите тип документа
+                          </Typography>
+                        </Box>
+                        {info?.ROLES?.includes('ROLE_TRADEUNION') ? (
+                          <>
+                            <Link
+                              href={'/new_document'}
+                              style={{ width: '50%', margin: '0 auto ' }}
+                            >
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  padding: '15px',
+                                  fontSize: '16px',
+                                  lineHeight: '20px',
+                                  margin: '0 auto 12px',
+                                  width: '100%',
+                                  '&.Mui-disabled': {
+                                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                                    color: 'white !important',
+                                  },
+                                }}
+                              >
+                                Повестка
+                              </Button>
+                            </Link>
+                            <Link
+                              href={'/new_protocol'}
+                              style={{ width: '50%', margin: '0 auto ' }}
+                            >
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  padding: '15px',
+                                  fontSize: '16px',
+                                  lineHeight: '20px',
+
+                                  width: '100%',
+                                  '&.Mui-disabled': {
+                                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                                    color: 'white !important',
+                                  },
+                                }}
+                              >
+                                Протокол
+                              </Button>
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              href={'/trade_union_member'}
+                              style={{ width: '100%', margin: '0 auto' }}
+                            >
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  padding: '15px ',
+                                  fontSize: '16px',
+                                  lineHeight: '20px',
+                                  margin: '0 auto 12px',
+                                  width: '100%',
+                                  '&.Mui-disabled': {
+                                    backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                                    color: 'white !important',
+                                  },
+                                }}
+                              >
+                                Заявление на вступление в профсоюз
+                              </Button>
+                            </Link>
+                            {/* {<Button
+              variant="contained"
+              disabled
+             sx={{
+                      padding: '15px',
+                      fontSize: '16px',
+                      lineHeight: '20px',
+
+                      width: '100%',
+                      '&.Mui-disabled': {
+                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                        color: 'white !important',
+                      },
+                    }}
+            >
+              Обращение в профсоюз
+            </Button>} */}
+                          </>
+                        )}
+                      </Box>
+                    </Popover>
                   </Grid2>
                 )}
             </Grid2>

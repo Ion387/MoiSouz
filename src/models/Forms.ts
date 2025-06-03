@@ -1,7 +1,7 @@
 export interface IFormProfile {
   firstName: string;
   lastName: string;
-  middleName?: string;
+  middleName?: string | null;
   birthdate: string;
   gender: string;
   education: string;

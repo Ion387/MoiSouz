@@ -4,7 +4,7 @@ export interface IFormColleagueProfile {
   card?: string;
   firstName: string;
   lastName: string;
-  middleName: string;
+  middleName?: string | null;
   birthdate: string;
   gender: string;
   education: string;

@@ -2,6 +2,8 @@ import { type IDoc, type INewDoc } from '@/models/Doc';
 import { groupByTU } from '@/utils/groupByTradeUnion';
 import {
   Box,
+  Button,
+  Dialog,
   Divider,
   Grid2,
   IconButton,
@@ -21,6 +23,7 @@ import { Icon } from '@/components/ui';
 import { useRouter } from 'next/navigation';
 import { deleteDoc } from '@/services/getDocs';
 import { useQueryClient } from '@tanstack/react-query';
+import theme from '@/styles/theme';
 
 interface ITableProps {
   docs: (IDoc | INewDoc | INewProtocol)[];
@@ -28,6 +31,7 @@ interface ITableProps {
 
 const Table: FC<ITableProps> = ({ docs }) => {
   const [groupedDocs, setGroupedDocs] = useState(docs ? groupByTU(docs) : []);
+  const [open, setOpen] = useState<string>('');
   const [sort, setSort] = useState({
     documentType: false,
     user: false,
@@ -71,6 +75,13 @@ const Table: FC<ITableProps> = ({ docs }) => {
     router.push(`/documents/drafts/${doc.guid}`);
   };
   const queryClient = useQueryClient();
+
+  const handleMenuDeleteOpen = (doc: IDoc | INewDoc | INewProt) => {
+    if (doc.guid) setOpen(doc.guid);
+  };
+  const handleMenuDeleteClose = () => {
+    setOpen('');
+  };
 
   const handleMenuDelete = async (doc: IDoc | INewDoc | INewProt) => {
     handleMenuClose();
@@ -430,7 +441,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                             <MenuItem
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleMenuDelete(doc);
+                                handleMenuDeleteOpen(doc);
                               }}
                             >
                               <ListItemIcon>
@@ -443,6 +454,78 @@ const Table: FC<ITableProps> = ({ docs }) => {
                       </Grid2>
 
                       {id !== array.length - 1 && <Divider></Divider>}
+                      <Dialog
+                        open={doc.guid === open}
+                        onClose={handleMenuDeleteClose}
+                      >
+                        {' '}
+                        <Box
+                          sx={{
+                            p: 2.4,
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            m: '0 auto',
+                          }}
+                        >
+                          <IconButton
+                            onClick={handleMenuDeleteClose}
+                            sx={{
+                              position: 'absolute',
+                              top: '-16px',
+                              right: '-16px',
+                            }}
+                          >
+                            <Icon name="close" color="#000" />
+                          </IconButton>
+
+                          <Typography
+                            variant="h3"
+                            marginBottom={2}
+                            textAlign={'center'}
+                          >
+                            Вы точно хотите удалить документ?
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              handleMenuDeleteClose();
+                              handleMenuDelete(doc);
+                            }}
+                            sx={{
+                              padding: '15px 100px',
+                              fontSize: '20px',
+                              lineHeight: '27px',
+                              width: '100px',
+                              marginBottom: '12px',
+                              '&.Mui-disabled': {
+                                backgroundColor: `${theme.palette.primary.main} !important`,
+                                color: 'white !important',
+                              },
+                            }}
+                          >
+                            Да
+                          </Button>
+                          <Button
+                            variant="contained"
+                            onClick={handleMenuDeleteClose}
+                            sx={{
+                              padding: '15px 100px',
+                              fontSize: '20px',
+                              lineHeight: '27px',
+                              width: '100px',
+                              marginBottom: '12px',
+                              '&.Mui-disabled': {
+                                backgroundColor: `${theme.palette.primary.main} !important`,
+                                color: 'white !important',
+                              },
+                            }}
+                          >
+                            Нет
+                          </Button>
+                        </Box>
+                      </Dialog>
                     </Box>
                   ))}
               </Grid2>

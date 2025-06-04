@@ -215,6 +215,11 @@ const NewDocumentForm = ({
             //@ts-expect-error none
             doc.data.questions[id].question,
           );
+          setFormValue(
+            `questions.${id}.document`,
+            //@ts-expect-error none
+            doc.data.questions[id].document,
+          );
         });
       }
       if (doc.data.invitedMembers && doc.data?.invitedMembers.length) {

@@ -28,6 +28,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { IDoc } from '@/models/Doc';
 import { nameOfDoc } from '@/utils/nameOfDoc';
 import { Icon } from '@/components/ui';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -40,6 +41,7 @@ const DocumentItem = () => {
   });
   const number = path.split('/')[2];
   const queryClient = useQueryClient();
+  const info = useFetchProfile();
   const { data: doc, isLoading } = useQuery({
     queryKey: ['doc', number],
     enabled: !!number,
@@ -76,6 +78,20 @@ const DocumentItem = () => {
               </Button>
             </Link>
           )}
+          {doc.documentType === 'AM' &&
+            info.info?.ROLES?.includes('ROLE_TRADEUNION') &&
+            doc.step === 'На проверке профсоюзом' && (
+              <Link href={`/new_document`}>
+                <Button variant="contained">
+                  <Icon
+                    name={'newDoc'}
+                    color="#ffffff"
+                    sx={{ marginRight: '6px' }}
+                  ></Icon>
+                  Создать повестку заседания профкома
+                </Button>
+              </Link>
+            )}
         </Grid2>
       )}
       {doc ? (

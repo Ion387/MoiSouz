@@ -20,7 +20,7 @@ export const statusColor = (status?: string): string => {
       color = 'rgb(255, 226, 153)';
       break;
     case 'Решение положительное, ожидает передачи оригинала в Профсоюз':
-      color = 'rgb(255, 226, 153)';
+      color = 'rgb(121, 216, 191)';
       break;
     case 'Утверждено':
       color = 'rgb(121, 216, 191)';

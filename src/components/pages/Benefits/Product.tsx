@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui';
+import { BreadCrumbsText, Icon } from '@/components/ui';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { useMap } from '@/hooks/useMap';
 import {
@@ -28,6 +28,7 @@ const BenefitsProductPage = () => {
   const info = useGetProfileInfo();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [openChoice, setOpenChoice] = useState<boolean>(false);
   const [selectedPlacemark, setSelectedPlacemark] = useState<null | number>(
     null,
@@ -61,6 +62,9 @@ const BenefitsProductPage = () => {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
   };
 
   const mapRef = useRef(null);
@@ -104,6 +108,14 @@ const BenefitsProductPage = () => {
   }, [promo]);
 
   useEffect(() => {
+    if (
+      info.profileInfo?.ROLES?.includes('ROLE_USER') &&
+      !info.profileInfo.hasTradeunionMember
+    )
+      setOpenAlert(true);
+  }, [info.profileInfo?.ROLES, info.profileInfo?.hasTradeunionMember]);
+
+  useEffect(() => {
     if (open || openChoice) {
       document.body.style.paddingRight = '0';
       document.body.style.height = '100vh';
@@ -117,6 +129,12 @@ const BenefitsProductPage = () => {
     <Grid2 container spacing={1.6}>
       {!isFetching ? (
         <>
+          <BreadCrumbsText
+            data={[
+              { text: 'Скидки и льготы', link: '/benefits' },
+              { text: product.name || '' },
+            ]}
+          />
           <Grid2 size={12}>
             <Typography variant="h3" marginBottom={0}>
               {product.name}
@@ -193,6 +211,39 @@ const BenefitsProductPage = () => {
         <Box display={'flex'} width={'100%'} justifyContent={'center'}>
           <CircularProgress />
         </Box>
+      )}
+      {openAlert && (
+        <Dialog
+          open={openAlert}
+          onClose={handleCloseAlert}
+          sx={{
+            '& .MuiPaper-root': {
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              paddingTop: '54px',
+            },
+          }}
+        >
+          {' '}
+          <IconButton
+            onClick={handleCloseAlert}
+            sx={{ position: 'absolute', top: '16px', right: '16px' }}
+          >
+            <Icon name="close" color="#000" />
+          </IconButton>
+          <Typography variant="h3" textAlign={'center'} marginBottom={'12px'}>
+            Для получения промокода необходимо вступить в Профсоюз
+          </Typography>
+          <Button
+            component={'a'}
+            variant="contained"
+            href="/trade_union_member"
+          >
+            К заявлению
+          </Button>
+        </Dialog>
       )}
       {promo && promo.status == 'success' && (
         <Dialog

@@ -59,7 +59,11 @@ export const ProfileAside = () => {
           openAlwaysOn={['/promo', '/benefits']}
         >
           <ListItem label="Все" to="/benefits" />
-          <ListItem label="Полученные" to="/promo" />
+          {!info?.hasTradeunionOwner ? (
+            <ListItem label="Полученные" to="/promo" />
+          ) : (
+            <></>
+          )}
           {/* {<ListItem label="Избранные" to="/favorites" />} */}
         </ListItem>
         {/* <ListItem label="Магазин" icon="square-3x3" disabled />

@@ -16,7 +16,11 @@ import {
   InputImage,
   InputManyModal,
 } from '@/components/ui/form';
-import { InputAddress, InputGender } from '@/components/ui/form/entities';
+import {
+  InputAddress,
+  InputGender,
+  TextFieldCustom,
+} from '@/components/ui/form/entities';
 import { TradeUnionCardSimple } from '@/components/sections/Colleagues';
 
 import { useFetchTUOwner, useFetchTUs } from '@/hooks/useTU';
@@ -404,24 +408,22 @@ export const ColleagueForm: FC<Props> = ({
               *
             </span>
           </InputLabel>
-          <TextField
-            {...register('phone')}
+          <TextFieldCustom
+            register={register('phone')}
             placeholder="+79999999999"
-            error={!!errors.phone?.message}
-            helperText={errors.phone?.message || ''}
-            slotProps={{ htmlInput: { maxLength: 12 } }}
-            disabled={isDisabled}
+            error={errors.phone?.message}
+            maxL={11}
+            allowPlus
           />
         </Box>
         <Box sx={{ flex: 1 }}>
           <InputLabel>Доп. номер</InputLabel>
-          <TextField
-            {...register('phoneDop')}
+          <TextFieldCustom
+            register={register('phoneDop')}
             placeholder="+79999999999"
-            error={!!errors.phoneDop?.message}
-            helperText={errors.phoneDop?.message || ''}
-            slotProps={{ htmlInput: { maxLength: 12 } }}
-            disabled={isDisabled}
+            error={errors.phone?.message}
+            maxL={11}
+            allowPlus
           />
         </Box>
       </Box>

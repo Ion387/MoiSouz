@@ -75,6 +75,7 @@ const ScanBlock = ({ number }: { number: string }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doc'] });
+      queryClient.refetchQueries({ queryKey: ['docs'] });
     },
   });
 
@@ -118,7 +119,10 @@ const ScanBlock = ({ number }: { number: string }) => {
         file.step.includes('Отправлено в профсоюз')) ||
       (info?.ROLES?.includes('ROLE_TRADEUNION') &&
         file?.documentType === 'AM' &&
-        file.step.includes('На проверке'))
+        file.step.includes('На проверке')) ||
+      (info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        file.step.includes('Отказ'))
     )
       setIsBtn(false);
   }, [info, file]);
@@ -281,7 +285,7 @@ const ScanBlock = ({ number }: { number: string }) => {
                   !info?.ROLES?.includes('ROLE_TRADEUNION')
                     ? 'Отправить в профсоюз'
                     : file?.documentType === 'AM'
-                      ? 'Загрузить документы'
+                      ? 'Сохранить'
                       : 'Утвердить'}
                 </Button>
                 {/*info?.ROLES?.includes('ROLE_TRADEUNION') && (

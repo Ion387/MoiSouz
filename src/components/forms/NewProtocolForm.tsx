@@ -27,7 +27,7 @@ import { Icon } from '../ui/Icon';
 import { InputTime } from '../ui/form/input-time';
 import { TextFieldCustom } from '../ui/form/entities/input-textfield';
 import { type INewDoc } from '@/models/Doc';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAgendas } from '@/services/agendas';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
@@ -73,7 +73,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     resolver: yupResolver(schema),
   });
   const params = useSearchParams();
-
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const {
@@ -226,6 +226,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
         },
       );
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['docs'] });
+    },
   });
 
   const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
@@ -252,6 +255,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
           },
         );
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['docs'] });
+    },
   });
 
   useEffect(() => {
@@ -276,7 +282,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
       const a = q.approved ? q.approved : 0;
       const d = q.declined ? q.declined : 0;
       const i = q.ignored ? q.ignored : 0;
-      if (a + d + i != data.userList?.length) {
+      if (
+        a + d + i !=
+        arr.filter((el) => el.role !== 'Приглашенный участник').length
+      ) {
         setError(`questions.${id}.approved`, {
           message:
             'Число голосов не совпадает с количеством участников заседания',
@@ -530,14 +539,18 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                               error={!!errors?.questions?.[0]?.speaker?.message}
                             >
                               {arr &&
-                                arr.map((member) => (
-                                  <MenuItem
-                                    key={member.role + ' - ' + member.name}
-                                    value={member.name}
-                                  >
-                                    {member.role + ' - ' + member.name}
-                                  </MenuItem>
-                                ))}
+                                arr
+                                  .filter(
+                                    (el) => el.role !== 'Приглашенный участник',
+                                  )
+                                  .map((member) => (
+                                    <MenuItem
+                                      key={member.role + ' - ' + member.name}
+                                      value={member.name}
+                                    >
+                                      {member.role + ' - ' + member.name}
+                                    </MenuItem>
+                                  ))}
                             </Select>
                             {!!errors?.questions?.[0]?.speaker?.message && (
                               <FormHelperText
@@ -665,9 +678,12 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                     </Box>
                   </Grid2>
                   <Grid2 size={12}>
-                    {arr.length > 2 &&
+                    {arr.filter((el) => el.role !== 'Приглашенный участник')
+                      .length > 2 &&
                     isCanView.a >= isCanView.d + isCanView.i &&
-                    isCanView.a + isCanView.d + isCanView.i == arr.length &&
+                    isCanView.a + isCanView.d + isCanView.i ==
+                      arr.filter((el) => el.role !== 'Приглашенный участник')
+                        .length &&
                     currentAgenda &&
                     currentAgenda.data.questions?.length ? (
                       [
@@ -693,18 +709,20 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                           }
                         />
                       ))
-                    ) : arr.length < 3 ? (
+                    ) : arr.filter((el) => el.role !== 'Приглашенный участник')
+                        .length < 3 ? (
                       <Box>
                         <Typography
                           color={'#FF4949'}
                           textAlign={'center'}
                           fontWeight={600}
                         >
-                          Количество участников заседания должно быть больше 2
+                          Количество членов Профкома должно быть больше 2
                         </Typography>
                       </Box>
                     ) : isCanView.a + isCanView.d + isCanView.i !=
-                      arr.length ? (
+                      arr.filter((el) => el.role !== 'Приглашенный участник')
+                        .length ? (
                       <Box>
                         <Typography
                           color={'#FF4949'}

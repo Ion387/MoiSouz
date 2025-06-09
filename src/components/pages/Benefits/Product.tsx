@@ -132,6 +132,10 @@ const BenefitsProductPage = () => {
           <BreadCrumbsText
             data={[
               { text: 'Скидки и льготы', link: '/benefits' },
+              {
+                text: product.categories[0].name || '',
+                link: `/benefits?category=${product.categories[0].id}`,
+              },
               { text: product.name || '' },
             ]}
           />

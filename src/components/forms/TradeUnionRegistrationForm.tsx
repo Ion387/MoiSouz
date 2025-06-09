@@ -410,7 +410,7 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 container spacing={2}>
                 <Grid2 size={12}>
                   <>
-                    <InputLabel>Вышестоящая организация</InputLabel>
+                    <InputLabel>Тип организация</InputLabel>
                     <Controller
                       control={control}
                       name={'tuType'}
@@ -424,7 +424,7 @@ const TradeUnionRegistrationForm = () => {
                             sx={{
                               padding: 1.6,
                               '& .MuiSelect-select span::before': {
-                                content: '"Выберите организацию"',
+                                content: '"Выберите тип организации"',
                                 opacity: '0.54',
                               },
                             }}

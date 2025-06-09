@@ -2,7 +2,7 @@ export interface ITradeUnion {
   title: string;
   creationDate: string;
   ogrn: string;
-  inn: string;
+  inn?: string;
   kpp: string;
   id?: number;
   guid?: string;
@@ -51,8 +51,14 @@ export interface ITradeUnion {
     inn: string;
     title: string;
   }[];
+  tuType: TtyTypes;
 }
 
 export interface ITradeUnionUploadUsersForm {
   tradeunion: number;
 }
+
+export type TtyTypes =
+  | 'Первичная профсоюзная организация'
+  | 'Первичная профсоюзная организация без ИНН'
+  | 'Профсоюзная организация';

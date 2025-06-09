@@ -5,8 +5,8 @@ import {
   Autocomplete,
   Box,
   Button,
-  Checkbox,
   CircularProgress,
+  FormHelperText,
   Grid2,
   InputLabel,
   MenuItem,
@@ -18,9 +18,14 @@ import {
 } from '@mui/material';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ITradeUnion } from '@/models/TradeUnion';
+import { ITradeUnion, TtyTypes } from '@/models/TradeUnion';
 import { useRouter } from 'next/navigation';
 import { InputImage } from '../ui/form/input-image';
 import { InputCheckbox, InputDate } from '../ui/form';
@@ -49,6 +54,18 @@ import theme from '@/styles/theme';
 
 const schema = yup
   .object({
+    parent: yup.string().nullable(),
+    tuType: yup
+      .mixed<TtyTypes>()
+      .oneOf(
+        [
+          'Первичная профсоюзная организация',
+          'Первичная профсоюзная организация без ИНН',
+          'Профсоюзная организация',
+        ],
+        'Выберите корректный тип профсоюза',
+      )
+      .required('Обязательное поле'),
     email: yup
       .string()
       .required('Обязательное поле')
@@ -77,14 +94,17 @@ const schema = yup
         (params) => validateOgrn(params.value),
         (value) => !validateOgrn(String(value)),
       ),
-    inn: yup
-      .string()
-      .required('Обязательное поле')
-      .test(
-        'inn',
-        (params) => validateInn(params.value),
-        (value) => !validateInn(String(value)),
-      ),
+    inn: yup.string().when('type', {
+      is: (type: TtyTypes) =>
+        type === 'Первичная профсоюзная организация без ИНН',
+      then: (schema) => schema.notRequired(), // Необязательно
+      otherwise: (schema) =>
+        schema.required('Обязательное поле').test(
+          'inn-validation',
+          'Некорректный ИНН',
+          (value) => !validateInn(String(value)), // Валидация ИНН
+        ),
+    }),
     kpp: yup
       .string()
       .required('Обязательное поле')
@@ -204,7 +224,6 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
-    parent: yup.string().nullable(),
   })
   .required();
 
@@ -221,6 +240,7 @@ const TradeUnionRegistrationForm = () => {
     formState: { errors },
     setValue: setFormValue,
     setError,
+    control,
   } = methods;
 
   const router = useRouter();
@@ -228,7 +248,7 @@ const TradeUnionRegistrationForm = () => {
   const [addressString, setAddressString] = useState<string>('');
   const [addressOptions, setAddressOptions] = useState<any[]>([]);
   const [value, setValue] = useState<any | null>(null);
-  const [inn, setInn] = useState<boolean>(false);
+  const [type, setType] = useState<TtyTypes | null>(null);
   const [percents, setPercents] = useState<number>();
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
@@ -280,7 +300,6 @@ const TradeUnionRegistrationForm = () => {
             (el: ITradeUnion) => el.guid === myTradeUnion?.parent.guid,
           ),
         );
-        setInn(true);
       }
     }
   }, [myTradeUnion, tradeUnions]);
@@ -314,11 +333,11 @@ const TradeUnionRegistrationForm = () => {
   }, [isSuccess, myTradeUnion]);
 
   useEffect(() => {
-    if (!inn) {
+    if (type !== 'Профсоюзная организация') {
       setChoosenUnion(undefined);
       setFormValue('parent', null);
     }
-  }, [inn]);
+  }, [type]);
 
   useEffect(() => {
     if (addressString) {
@@ -390,21 +409,51 @@ const TradeUnionRegistrationForm = () => {
             >
               <Grid2 container spacing={2}>
                 <Grid2 size={12}>
-                  <Checkbox
-                    checked={inn}
-                    value={inn}
-                    onClick={() => setInn((prev) => !prev)}
-                  />
-                  <Typography
-                    component={'span'}
-                    variant="body1"
-                    fontWeight={600}
-                    pt={0.2}
-                  >
-                    Организация без ИНН
-                  </Typography>
+                  <>
+                    <InputLabel>Вышестоящая организация</InputLabel>
+                    <Controller
+                      control={control}
+                      name={'tuType'}
+                      render={({
+                        field: { value, onChange },
+                        fieldState: { error },
+                      }) => (
+                        <Box sx={{ width: '100%', position: 'relative' }}>
+                          <Select
+                            fullWidth
+                            sx={{
+                              padding: 1.6,
+                              '& .MuiSelect-select span::before': {
+                                content: '"Выберите организацию"',
+                                opacity: '0.54',
+                              },
+                            }}
+                            value={value}
+                            onChange={(e) => {
+                              onChange(e);
+                              setType(() => e.target.value as TtyTypes);
+                            }}
+                            error={!!error?.message}
+                          >
+                            {[
+                              'Первичная профсоюзная организация',
+                              'Первичная профсоюзная организация без ИНН',
+                              'Профсоюзная организация',
+                            ].map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <FormHelperText id={'tuType'} error={true}>
+                            {error && error?.message}
+                          </FormHelperText>
+                        </Box>
+                      )}
+                    />
+                  </>
                 </Grid2>
-                {inn && (
+                {type === 'Профсоюзная организация' && (
                   <Grid2 size={12}>
                     <InputLabel>Вышестоящая организация</InputLabel>
                     <Select
@@ -477,32 +526,29 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     ИНН{' '}
-                    <span
-                      style={
-                        !!errors.inn?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 'Первичная профсоюзная организация без ИНН' && (
+                      <span
+                        style={
+                          !!errors.inn?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
                   <TextFieldCustom
                     register={register('inn')}
                     placeholder="111111111111"
                     error={errors.inn?.message}
-                    disabled={inn}
                     maxL={12}
                   />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     КПП{' '}
                     <span
                       style={
@@ -518,14 +564,11 @@ const TradeUnionRegistrationForm = () => {
                     register={register('kpp')}
                     placeholder="111111111"
                     error={errors.kpp?.message}
-                    disabled={inn}
                     maxL={9}
                   />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     ОГРН{' '}
                     <span
                       style={
@@ -541,14 +584,11 @@ const TradeUnionRegistrationForm = () => {
                     register={register('ogrn')}
                     placeholder="1111111111111"
                     error={errors.ogrn?.message}
-                    disabled={inn}
                     maxL={13}
                   />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     Дата пост. на учет{' '}
                     <span
                       style={
@@ -560,21 +600,10 @@ const TradeUnionRegistrationForm = () => {
                       *
                     </span>
                   </InputLabel>
-                  {!inn ? (
-                    <InputDate name="registrationDate" />
-                  ) : (
-                    <TextField
-                      {...register('registrationDate')}
-                      disabled
-                      error={!!errors.registrationDate?.message}
-                      helperText={errors.registrationDate?.message || ''}
-                    />
-                  )}
+                  <InputDate name="registrationDate" />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     ОКАТО{' '}
                     <span
                       style={
@@ -589,15 +618,12 @@ const TradeUnionRegistrationForm = () => {
                   <TextFieldCustom
                     register={register('okato')}
                     placeholder="11111111111"
-                    disabled={inn}
                     error={errors.okato?.message}
                     maxL={11}
                   />
                 </Grid2>
                 <Grid2 size={4}>
-                  <InputLabel
-                    sx={{ color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000' }}
-                  >
+                  <InputLabel>
                     ОКТМО{' '}
                     <span
                       style={
@@ -612,7 +638,6 @@ const TradeUnionRegistrationForm = () => {
 
                   <TextFieldCustom
                     register={register('oktmo')}
-                    disabled={inn}
                     placeholder="11111111111"
                     error={errors.oktmo?.message}
                     maxL={11}
@@ -845,7 +870,6 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel
                     sx={{
                       marginBottom: 0,
-                      color: inn ? 'rgba(0, 0, 0, 0.38)' : '#000',
                     }}
                   >
                     Банковские реквизиты{' '}
@@ -867,7 +891,6 @@ const TradeUnionRegistrationForm = () => {
                   <TextField
                     {...register('bank.bank')}
                     placeholder="Банк"
-                    disabled={inn}
                     error={!!errors.bank?.bank?.message}
                     helperText={errors.bank?.bank?.message || ''}
                   />
@@ -876,7 +899,6 @@ const TradeUnionRegistrationForm = () => {
                   <TextFieldCustom
                     register={register('bank.rs')}
                     placeholder="Р/с"
-                    disabled={inn}
                     error={errors.bank?.rs?.message}
                     maxL={20}
                   />
@@ -885,7 +907,6 @@ const TradeUnionRegistrationForm = () => {
                   <TextFieldCustom
                     register={register('bank.bik')}
                     placeholder="БИК"
-                    disabled={inn}
                     error={errors.bank?.bik?.message}
                     maxL={9}
                   />
@@ -894,7 +915,6 @@ const TradeUnionRegistrationForm = () => {
                   <TextFieldCustom
                     register={register('bank.ks')}
                     placeholder="К/с"
-                    disabled={inn}
                     error={errors.bank?.ks?.message}
                     maxL={20}
                   />

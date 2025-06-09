@@ -101,6 +101,7 @@ const schema = yup
     email: yup.string().email('Укажите почту').required('Укажите почту'),
     role: yup.string().required('Укажите роль'),
     reason: yup.string().nullable(),
+    isCommittee: yup.boolean().required(),
     history: yup.array(
       yup.object({
         name: yup
@@ -510,6 +511,11 @@ export const ColleagueForm: FC<Props> = ({
           label="Дата вступления"
         />
       </Box>
+      <InputCheckbox
+        sx={{ justifyContent: 'center', margin: '12px 0' }}
+        name="isCommittee"
+        label={`Член профсоюзного комитета`}
+      />
 
       <InputFile
         sx={{ mt: 2 }}

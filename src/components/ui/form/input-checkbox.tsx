@@ -25,7 +25,7 @@ export const InputCheckbox: FC<PropsWithSX & Props> = ({
   let fhalf = '';
   let shalf = '';
   let symb = '';
-  if (typeof label === 'string') {
+  if (typeof label === 'string' && link) {
     if (label.includes('с ')) {
       symb = 'с ';
     }

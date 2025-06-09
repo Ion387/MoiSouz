@@ -15,9 +15,10 @@ import {
   FormHelperText,
   Tabs,
   Tab,
+  Select,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -62,15 +63,22 @@ const Registration = () => {
         .oneOf([yup.ref('password'), ''], 'Пароли должны совпадать')
         .required('Введите пароль'),
       personalData: yup.boolean().isTrue('Необходимо согласие').required(),
+      parentOrganization: yup.string().when('$tabs', {
+        is: (tabs: number) => tabs === 1,
+        then: (schema) => schema.required('Обязательное поле'),
+        otherwise: (schema) => schema.notRequired(),
+      }),
     })
     .required();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<IReg>({
     mode: 'onChange',
     resolver: yupResolver(schema),
+    context: { tabs },
   });
 
   const [showPassword, setShowPassword] = useState({
@@ -214,7 +222,43 @@ const Registration = () => {
               <Tab value={0} label={'Частное лицо'} />
               <Tab value={1} label={'Юридическое лицо'} />
             </Tabs>
-            <InputLabel>Адрес электронной почты:</InputLabel>
+            {tabs === 1 && (
+              <>
+                <InputLabel>Вышестоящая организация</InputLabel>
+                <Controller
+                  control={control}
+                  name={'parentOrganization'}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Box sx={{ width: '100%', position: 'relative' }}>
+                      <Select
+                        fullWidth
+                        sx={{
+                          padding: 1.6,
+                          '& .MuiSelect-select span::before': {
+                            content: '"Выберите организацию"',
+                            opacity: '0.54',
+                          },
+                        }}
+                        value={value ? value : []}
+                        onChange={onChange}
+                        error={!!error?.message}
+                      >
+                        {/*Options из запроса вышестоящим организациям*/}
+                      </Select>
+                      <FormHelperText id={'parentOrganization'} error={true}>
+                        {error && error?.message}
+                      </FormHelperText>
+                    </Box>
+                  )}
+                />
+              </>
+            )}
+            <InputLabel sx={{ marginTop: '20px' }}>
+              Адрес электронной почты:
+            </InputLabel>
             <TextField
               sx={{ marginBottom: '20px' }}
               {...register('email')}

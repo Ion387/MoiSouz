@@ -58,6 +58,7 @@ const PromosPage = () => {
     return () => clearTimeout(timer);
   }, [inputValue, savingId, mutate]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: pdf } = useQuery({
     queryKey: ['promo-pdf'],
     queryFn: () => {

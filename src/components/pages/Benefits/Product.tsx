@@ -109,8 +109,8 @@ const BenefitsProductPage = () => {
 
   useEffect(() => {
     if (
-      info.profileInfo?.ROLES?.includes('ROLE_USER') &&
-      !info.profileInfo.hasTradeunionMember
+      info.profileInfo?.ROLES?.length === 1 &&
+      !info.profileInfo?.hasTradeunionMember
     )
       setOpenAlert(true);
   }, [info.profileInfo?.ROLES, info.profileInfo?.hasTradeunionMember]);
@@ -133,8 +133,8 @@ const BenefitsProductPage = () => {
             data={[
               { text: 'Скидки и льготы', link: '/benefits' },
               {
-                text: product.categories[0].name || '',
-                link: `/benefits?category=${product.categories[0].id}`,
+                text: product.main_category.name || '',
+                link: `/benefits?category=${product.main_category.id}`,
               },
               { text: product.name || '' },
             ]}

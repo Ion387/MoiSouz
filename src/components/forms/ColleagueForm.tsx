@@ -58,6 +58,7 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
+    code: yup.string(),
     profession: yup.array(
       yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
     ),
@@ -475,6 +476,15 @@ export const ColleagueForm: FC<Props> = ({
         error={!!errors.email?.message}
         helperText={errors.email?.message || ''}
         disabled={isDisabled}
+      />
+
+      <InputLabel sx={{ mt: 3 }}>Уникальный номер</InputLabel>
+
+      <TextField
+        {...register('code')}
+        placeholder="Уникальный номер"
+        error={!!errors.code?.message}
+        helperText={errors.code?.message || ''}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>

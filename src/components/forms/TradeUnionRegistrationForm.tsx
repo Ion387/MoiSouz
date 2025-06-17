@@ -5,7 +5,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
+  FormControlLabel,
   FormHelperText,
   Grid2,
   InputLabel,
@@ -51,6 +53,7 @@ import { convertSizeToBites } from '@/utils/convertStringToB';
 import { saveFormTUUsers } from '@/hooks/useTU';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import theme from '@/styles/theme';
+import { getParents } from '@/services/getParents';
 
 const schema = yup
   .object({
@@ -126,6 +129,7 @@ const schema = yup
         (params) => ValidateOktmo(params.value),
         (value) => !ValidateOktmo(String(value)),
       ),
+    titleForDocs: yup.string().required('Обязательное поле'),
     address: yup.object({
       postcode: yup
         .string()
@@ -240,6 +244,7 @@ const TradeUnionRegistrationForm = () => {
     formState: { errors },
     setValue: setFormValue,
     setError,
+    getValues,
     control,
   } = methods;
 
@@ -248,8 +253,11 @@ const TradeUnionRegistrationForm = () => {
   const [addressString, setAddressString] = useState<string>('');
   const [addressOptions, setAddressOptions] = useState<any[]>([]);
   const [value, setValue] = useState<any | null>(null);
+  const [valueAuto, setValueAuto] = useState<string | null>(null);
+  const [inputText, setInputText] = useState<string | null>(null);
   const [type, setType] = useState<TtyTypes | null>(null);
   const [percents, setPercents] = useState<number>();
+  const [isMyName, setIsMyName] = useState<boolean>(false);
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
   const queryClient = useQueryClient();
@@ -291,9 +299,25 @@ const TradeUnionRegistrationForm = () => {
     select: (data) => data.data,
   });
 
+  const { data: options } = useQuery({
+    queryKey: ['parentOrganizations'],
+    queryFn: getParents,
+    select: (data) => data.data.data,
+  });
+
+  useEffect(() => {
+    if (valueAuto) setFormValue('titleForDocs', valueAuto);
+  }, [valueAuto]);
+
+  useEffect(() => {
+    if (inputText) setFormValue('titleForDocs', inputText);
+  }, [inputText]);
+
   useEffect(() => {
     if (myTradeUnion) {
       reset(myTradeUnion);
+      if (myTradeUnion.tuType) setType(myTradeUnion.tuType);
+      if (myTradeUnion?.title == myTradeUnion?.titleForDocs) setIsMyName(true);
       if (myTradeUnion.parent && myTradeUnion.parent.guid && tradeUnions) {
         setChoosenUnion(
           tradeUnions.find(
@@ -348,6 +372,10 @@ const TradeUnionRegistrationForm = () => {
       return () => clearTimeout(timer);
     }
   }, [addressString, mutateAddress]);
+
+  useEffect(() => {
+    if (isMyName) setFormValue('titleForDocs', getValues('title'));
+  }, [isMyName]);
 
   useEffect(() => {
     if (value) {
@@ -410,12 +438,12 @@ const TradeUnionRegistrationForm = () => {
               <Grid2 container spacing={2}>
                 <Grid2 size={12}>
                   <>
-                    <InputLabel>Тип организация</InputLabel>
+                    <InputLabel>Тип организации</InputLabel>
                     <Controller
                       control={control}
                       name={'tuType'}
                       render={({
-                        field: { value, onChange },
+                        field: { onChange },
                         fieldState: { error },
                       }) => (
                         <Box sx={{ width: '100%', position: 'relative' }}>
@@ -428,7 +456,7 @@ const TradeUnionRegistrationForm = () => {
                                 opacity: '0.54',
                               },
                             }}
-                            value={value}
+                            value={type}
                             onChange={(e) => {
                               onChange(e);
                               setType(() => e.target.value as TtyTypes);
@@ -642,6 +670,76 @@ const TradeUnionRegistrationForm = () => {
                     error={errors.oktmo?.message}
                     maxL={11}
                   />
+                </Grid2>
+                <Grid2 size={12}>
+                  <InputLabel sx={{ marginBottom: 0 }}>
+                    Наименование профсоюзной организации для заявлений{' '}
+                  </InputLabel>
+                </Grid2>
+                <Grid2 size={12}>
+                  {isMyName ? (
+                    <TextField
+                      {...register('titleForDocs')}
+                      error={!!errors?.titleForDocs?.message}
+                      helperText={errors?.titleForDocs?.message || ''}
+                      disabled
+                    />
+                  ) : (
+                    options && (
+                      <Controller
+                        name={'titleForDocs'}
+                        control={control}
+                        render={() => (
+                          <Autocomplete
+                            freeSolo
+                            options={options.map((el: any) => el.title)}
+                            value={valueAuto}
+                            onChange={(event, newValue) =>
+                              setValueAuto(newValue)
+                            }
+                            inputValue={inputText ? inputText : ''}
+                            onInputChange={(event, newInputValue) =>
+                              setInputText(newInputValue)
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder="Введите наименование организации"
+                              />
+                            )}
+                          />
+                        )}
+                      />
+                    )
+                  )}
+
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isMyName}
+                          value={isMyName}
+                          onChange={() => setIsMyName((prev) => !prev)}
+                        />
+                      }
+                      label={
+                        <Typography
+                          whiteSpace="break-spaces"
+                          component={'span'}
+                          variant="body1"
+                          fontWeight={600}
+                        >
+                          Совпадает с наименованием профсоюзной организации
+                        </Typography>
+                      }
+                    />
+                  </Box>
                 </Grid2>
                 <Grid2 size={12}>
                   <InputLabel sx={{ marginBottom: 0 }}>

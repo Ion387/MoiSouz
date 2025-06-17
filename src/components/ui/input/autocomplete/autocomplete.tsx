@@ -15,6 +15,7 @@ interface Props {
   error?: string;
   value: IOptionValue | IOptionValue[] | null;
   onChange: (value: IOptionValue | IOptionValue[] | null) => void;
+  freeSolo?: boolean;
 }
 
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
@@ -27,11 +28,13 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   error,
   value,
   onChange,
+  freeSolo,
 }) => {
   return (
     <FormGroup sx={sx}>
       {label && <InputLabel>{label}</InputLabel>}
       <Autocomplete
+        freeSolo={freeSolo ? freeSolo : false}
         value={
           (value &&
             (multiple
@@ -41,7 +44,9 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
               : options.find((el) => el.id == value))) ||
           (multiple ? [] : null)
         }
-        getOptionLabel={(option) => option.title}
+        getOptionLabel={(option) =>
+          typeof option === 'string' ? option : option.title
+        }
         onChange={(_, value) =>
           onChange(
             (multiple

@@ -1,17 +1,77 @@
 'use client';
 
-import { BreadCrumbsText } from '@/components/ui';
+import { BreadCrumbsText, Icon } from '@/components/ui';
+import { getBackendUrl } from '@/constants/url';
 import { getBenefitsProductPromos } from '@/services/benefits';
-import { Box, CircularProgress, Grid2, Paper, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import { getPdf } from '@/services/promos';
+import {
+  Box,
+  CircularProgress,
+  Grid2,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 const PromosPage = () => {
+  const [id, setId] = useState<number | null>(null);
+  const [savingId, setSavingId] = useState<number | null>(null);
   const { data: promos, isFetching } = useQuery({
     queryKey: ['benefit-item'],
     queryFn: () => getBenefitsProductPromos(),
     select: (data) => data?.data,
   });
+  const router = useRouter();
+
+  const [inputValue, setInputValue] = useState<[null | number, string]>([
+    null,
+    '',
+  ]);
+
+  const { mutate } = useMutation({
+    mutationFn: async ({ id, saving }: { id: number; saving: number }) => {
+      const session = await getSession();
+      return axios.post(
+        `${getBackendUrl}/api/private/promo/${id}/saving`,
+        { saving: saving },
+        {
+          headers: { Authorization: `Bearer ${session?.user?.token}` },
+        },
+      );
+    },
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputValue[1] !== '' && savingId !== null) {
+        const args = { id: savingId, saving: Number(inputValue[1]) };
+        mutate(args);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [inputValue, savingId, mutate]);
+
+  const { data: pdf } = useQuery({
+    queryKey: ['promo-pdf'],
+    queryFn: () => {
+      if (id) return getPdf(id);
+    },
+    enabled: !!id,
+  });
+
+  const handleClickView = (id: number) => {
+    router.push(`/benefits/product/${id}`);
+  };
+  const handleClickDownload = (id: number) => {
+    setId(id);
+  };
 
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>
@@ -29,8 +89,6 @@ const PromosPage = () => {
             promos.map((el: any, id: number) => (
               <Grid2 size={12} key={String(el.id).concat(id.toString())}>
                 <Paper
-                  component={'a'}
-                  href={`/benefits/product/${el.id}`}
                   sx={{
                     padding: 0,
                     display: 'flex',
@@ -51,7 +109,7 @@ const PromosPage = () => {
                       }}
                     ></img>
                   </Box>
-                  <Box padding={'20px'}>
+                  <Box padding={'20px'} width={'100%'}>
                     <Typography
                       variant="h3"
                       fontSize={'16px'}
@@ -87,6 +145,75 @@ const PromosPage = () => {
                         ].join('.')}
                       </span>
                     </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginLeft: '-8px',
+                        marginTop: '70px',
+                        width: '100%',
+                      }}
+                    >
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleClickDownload(el.promo.id);
+                        }}
+                      >
+                        <Icon name="print" />
+                        <Typography
+                          variant="h4"
+                          fontWeight={600}
+                          marginLeft={0.4}
+                        >
+                          Скачать
+                        </Typography>
+                      </IconButton>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleClickView(el.id);
+                        }}
+                      >
+                        <Icon name="document" color={'rgb(53, 27, 27)'} />
+                        <Typography
+                          variant="h4"
+                          fontWeight={600}
+                          marginLeft={0.4}
+                        >
+                          Смотреть
+                        </Typography>
+                      </IconButton>
+                      <Box>
+                        <span style={{ lineHeight: '40px' }}>
+                          Сумма экономии
+                        </span>
+                        <TextField
+                          defaultValue={el.saving}
+                          value={
+                            inputValue[0] === id ? inputValue[1] : el.saving
+                          }
+                          onChange={(e) => {
+                            setInputValue([id, e.target.value]);
+                            setSavingId(el.promo.id);
+                          }}
+                          sx={{
+                            height: '40px',
+                            marginLeft: '4px',
+                            width: '70px',
+                            '& > div > input': {
+                              height: '40px',
+                              padding: '0 8px',
+                            },
+                            '& > div': { height: '40px' },
+                          }}
+                          type="number"
+                        />
+                      </Box>
+                    </Box>
                   </Box>
                 </Paper>
               </Grid2>

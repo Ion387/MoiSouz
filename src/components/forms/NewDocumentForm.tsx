@@ -108,7 +108,7 @@ const NewDocumentForm = ({
       setMembers(() => {
         return [
           ...membersData
-            .filter((el) => !!el.role)
+            .filter((el) => el.isCommittee)
             .map((el) => ({
               role: el.role,
               name: el.name || '',

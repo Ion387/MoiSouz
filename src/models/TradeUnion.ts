@@ -1,5 +1,6 @@
 export interface ITradeUnion {
   title: string;
+  titleForDocs: string;
   creationDate: string;
   ogrn: string;
   inn?: string;

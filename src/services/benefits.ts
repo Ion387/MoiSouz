@@ -9,22 +9,22 @@ import { useFetchList } from './universal/fetch-list';
 interface PropsUseFetchBenefitsProducts {
   perPage?: number;
   category?: number | null;
-  search?: string | null;
+  q?: string | null;
   city?: number | string | null;
 }
 export const useFetchBenefitsProducts = ({
-  perPage,
+  //perPage,
   category,
-  search,
+  q,
   city,
 }: PropsUseFetchBenefitsProducts) => {
   return useFetchList<IBenefitsProduct>({
     name: 'benefits-products',
     api: '/api/private/discounts',
     params: {
-      itemsPerPage: perPage,
+      //perPage: perPage,
       category: category || null,
-      q: search || null,
+      q: q || null,
       city: city || null,
     },
     type: 'page',

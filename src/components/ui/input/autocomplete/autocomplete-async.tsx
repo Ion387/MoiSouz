@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 
 import { IOption } from '@/models/Option';
@@ -100,10 +100,10 @@ export const InputAutocompleteAsync: FC<PropsWithSX & Props> = ({
             input: {
               ...params.InputProps,
               endAdornment: (
-                <Fragment>
+                <>
                   {loading ? <CircularProgress size={20} /> : null}
                   {params.InputProps.endAdornment}
-                </Fragment>
+                </>
               ),
             },
           }}

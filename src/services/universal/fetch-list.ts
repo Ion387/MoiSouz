@@ -58,12 +58,16 @@ export const useFetchList = <T>({
     select: (data) => data.data,
   });
 
-  // save params to query
+  // save params to query - change page
   useEffect(() => {
     const from = searchParams.toString();
     const _params = new URLSearchParams(searchParams.toString());
 
     _params.set('page', String(result.page));
+
+    Object.keys(params)
+      .filter((el) => params[el] != null)
+      .forEach((el) => _params.set(el, String(params[el])));
 
     const to = _params.toString();
     if (from == to) return;
@@ -71,25 +75,11 @@ export const useFetchList = <T>({
   }, [result.page]);
 
   useEffect(() => {
-    const keys = Object.keys(params);
-    if (keys.every((el) => params[el] == result.params[el])) return;
-
-    const from = searchParams.toString();
-    const _params = new URLSearchParams(searchParams.toString());
-
-    _params.set('page', String(1));
-
-    const to = _params.toString();
-    if (from == to) return;
-    router.push(`?${to}`, { scroll: false });
-  }, [params]);
-
-  useEffect(() => {
     if (data == null) return;
 
     if (JSON.stringify(result.params) != JSON.stringify(params)) {
       setResult({
-        page: getPageFromQuery(),
+        page: 1, //getPageFromQuery(),
         params,
         data: [],
         hasMore: false,
@@ -115,11 +105,17 @@ export const useFetchList = <T>({
         setResult({
           ...result,
           data: [...dataNew],
-          hasMore: hasMore
-            ? hasMore(data.meta)
-            : data.meta.currentPage * data.meta.itemsPerPage <
-              data.meta.totalItems,
-          total: getTotal ? getTotal(data?.meta || {}) : data?.meta.totalItems,
+          hasMore: data.meta
+            ? hasMore
+              ? hasMore(data.meta)
+              : data.meta.currentPage * data.meta.itemsPerPage <
+                data.meta.totalItems
+            : false,
+          total: data.meta
+            ? getTotal
+              ? getTotal(data?.meta || {})
+              : data?.meta.totalItems
+            : 0,
         });
       }
     }

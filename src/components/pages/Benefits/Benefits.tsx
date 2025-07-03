@@ -44,7 +44,7 @@ const BenefitsWrapper = () => {
   const {
     data: searchParams,
     actions: { set: setSearchParam, remove: removeSearchParam },
-  } = useSearchParamsCustom({ fields: ['category', 'search', 'city'] });
+  } = useSearchParamsCustom({ fields: ['category', 'q', 'city'] });
 
   const { data: categories } = useQuery({
     queryKey: ['benefits-categories'],
@@ -59,8 +59,8 @@ const BenefitsWrapper = () => {
   } = useFetchBenefitsProducts({
     perPage,
     category: searchParams.category as number,
-    search: searchParams.search as string,
-    city: searchParams.city && JSON.parse(searchParams.city as string)?.title,
+    q: searchParams.q as string,
+    city: searchParams.city as string,
   });
 
   const category: IBenefitsCategory | null = useMemo(() => {
@@ -81,8 +81,6 @@ const BenefitsWrapper = () => {
 
     setSearchParam('category', data.id);
   };
-
-  //console.log(searchParams);
 
   return (
     <>
@@ -164,10 +162,8 @@ const BenefitsWrapper = () => {
           <Box sx={{ display: 'flex', width: '100%', gap: 1.5 }}>
             <InputSearch
               sx={{ flex: 1.5 }}
-              defaultValue={
-                searchParams.search ? (searchParams.search as string) : ''
-              }
-              onSearch={(value) => setSearchParam('search', value)}
+              defaultValue={searchParams.q ? (searchParams.q as string) : ''}
+              onSearch={(value) => setSearchParam('q', value)}
             />
 
             <InputAutocompleteAsync

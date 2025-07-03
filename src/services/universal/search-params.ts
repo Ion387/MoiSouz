@@ -12,23 +12,28 @@ export const useSearchParamsCustom = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [inited, setInited] = useState<boolean>(false);
-  const [params, setParams] = useState<{ [key: string]: string | number }>({});
-
-  useEffect(() => {
+  const load = () => {
     const _params = new URLSearchParams(searchParams.toString());
 
     const result: { [key: string]: string | number } = {};
     fields
       .filter((el) => _params.has(el))
       .forEach((el) => (result[el] = _params.get(el) || ''));
-    setParams(result);
+
+    return result;
+  };
+
+  const [inited, setInited] = useState<boolean>(false);
+  const [params, setParams] = useState<{ [key: string]: string | number }>(
+    load(),
+  );
+
+  useEffect(() => {
+    setParams(load());
     setInited(true);
   }, []);
 
-  useEffect(() => {
-    if (inited == false) return;
-
+  const update = (params: { [key: string]: string | number }) => {
     const from = searchParams.toString();
     const _params = new URLSearchParams(searchParams.toString());
 
@@ -40,21 +45,27 @@ export const useSearchParamsCustom = ({
     const to = _params.toString();
     if (from == to) return;
     router.push(`?${to}`, { scroll: false });
-  }, [inited, params]);
+  };
 
   const set = (name: string, value: string | number) => {
-    setParams((prev) => ({ ...prev, [name]: value }));
+    setParams((prev) => {
+      const result = { ...prev, [name]: value };
+      update(result);
+      return result;
+    });
   };
 
   const remove = (name: string) => {
     setParams((prev) => {
       const result = { ...prev };
       delete result[name];
+      update(result);
       return result;
     });
   };
 
   return {
+    inited,
     data: params,
     actions: { set, remove },
   };

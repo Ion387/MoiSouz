@@ -7,7 +7,10 @@ import {
 } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
-import { TypeUseFetchList, useFetchList } from '@/services/universal';
+import {
+  TypeUseFetchList,
+  useFetchList,
+} from '@/services/universal/fetch-list';
 
 import { getBackendUrl } from '@/constants/url';
 import { getHeaders } from '@/utils/axios';

@@ -1,18 +1,22 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo } from 'react';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import { useRouter, useSearchParams, redirect } from 'next/navigation';
+import React, { Suspense, useMemo } from 'react';
+import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import Slider from 'react-slick';
 
-import { SliderArrowNext, SliderArrowPrev } from '@/components/ui';
+import {
+  InputAutocompleteAsync,
+  InputSearch,
+  PaginationSimple,
+  SliderArrowNext,
+  SliderArrowPrev,
+} from '@/components/ui';
 import {
   BenefitsCategory,
   BenefitsProduct,
   BenefitsStat,
 } from '@/components/sections/Benefits';
-import { IBenefitsCategory } from '@/models/Benefits';
 
 import useScreen from '@/hooks/useScreen';
 import { useQuery } from '@tanstack/react-query';
@@ -20,8 +24,9 @@ import {
   getBenefitsCategories,
   useFetchBenefitsProducts,
 } from '@/services/benefits';
+import { useSearchParamsCustom } from '@/services/universal/search-params';
 
-const KEY_PARAM_CATEGORY = 'category';
+import { IBenefitsCategory } from '@/models/Benefits';
 
 const SLIDER_SETTINGS = {
   infinite: true,
@@ -34,29 +39,12 @@ const SLIDER_SETTINGS = {
 };
 
 const BenefitsWrapper = () => {
-  const params = useSearchParams();
-  const router = useRouter();
   const screen = useScreen();
 
-  const categoryActive = useMemo(() => {
-    const param = params?.get(KEY_PARAM_CATEGORY);
-    return param ? parseInt(param) : null;
-  }, [params]);
-
-  useEffect(() => {
-    if (params.get('page') !== '1') {
-      if (categoryActive)
-        redirect(`/benefits?category=${categoryActive}&page=1`);
-      else redirect('/benefits?page=1');
-    }
-  }, []);
-
   const {
-    data: { data: products, isFetching, hasMore, empty },
-    actions: { loadNext: loadMore },
-  } = useFetchBenefitsProducts({
-    category: categoryActive,
-  });
+    data: searchParams,
+    actions: { set: setSearchParam, remove: removeSearchParam },
+  } = useSearchParamsCustom({ fields: ['category', 'search', 'city'] });
 
   const { data: categories } = useQuery({
     queryKey: ['benefits-categories'],
@@ -64,23 +52,37 @@ const BenefitsWrapper = () => {
     select: (data) => data.data.data,
   });
 
+  const perPage = 15;
+  const {
+    data: { data: products, isFetching, empty, page, total },
+    actions: { loadPrev, loadNext },
+  } = useFetchBenefitsProducts({
+    perPage,
+    category: searchParams.category as number,
+    search: searchParams.search as string,
+    city: searchParams.city && JSON.parse(searchParams.city as string)?.title,
+  });
+
   const category: IBenefitsCategory | null = useMemo(() => {
     if (categories)
       return (
-        categories.find((el: IBenefitsCategory) => el.id == categoryActive) ??
-        null
+        categories.find(
+          (el: IBenefitsCategory) => el.id == searchParams.category,
+        ) ?? null
       );
-  }, [categories, categoryActive]);
+  }, [categories, searchParams.category]);
 
   const handleClickCategory = (data: IBenefitsCategory) => {
     // unselect !?
-    if (data.id == category?.id) {
-      router.push(`${window.location.pathname}`);
+    if (searchParams.category == data.id) {
+      removeSearchParam('category');
       return;
     }
 
-    router.push(`${window.location.pathname}?${KEY_PARAM_CATEGORY}=${data.id}`);
+    setSearchParam('category', data.id);
   };
+
+  //console.log(searchParams);
 
   return (
     <>
@@ -124,6 +126,7 @@ const BenefitsWrapper = () => {
         <Box
           position="relative"
           display="flex"
+          justifyContent="space-between"
           flexWrap="wrap"
           width="100%"
           gap={1.5}
@@ -138,7 +141,7 @@ const BenefitsWrapper = () => {
                 }
                 initialSlide={categories.findIndex(
                   (el: IBenefitsCategory) =>
-                    el.id == (params?.get(KEY_PARAM_CATEGORY) || -1),
+                    el.id == (searchParams.category || -1),
                 )}
               >
                 {categories.map((el: IBenefitsCategory) => (
@@ -149,13 +152,40 @@ const BenefitsWrapper = () => {
                         width: '100%',
                       }}
                       data={el}
-                      active={el.id == category?.id}
+                      active={el.id == searchParams.category}
                       onClick={handleClickCategory}
                     />
                   </Box>
                 ))}
               </Slider>
             )}
+          </Box>
+
+          <Box sx={{ display: 'flex', width: '100%', gap: 1.5 }}>
+            <InputSearch
+              sx={{ flex: 1.5 }}
+              defaultValue={
+                searchParams.search ? (searchParams.search as string) : ''
+              }
+              onSearch={(value) => setSearchParam('search', value)}
+            />
+
+            <InputAutocompleteAsync
+              sx={{ flex: 1 }}
+              api="cities"
+              convert={(value) => ({ id: value.id, title: value.name })}
+              placeholder="Выберите город"
+              value={
+                (searchParams.city &&
+                  JSON.parse(searchParams.city as string)) ||
+                null
+              }
+              onChange={(value) =>
+                value
+                  ? setSearchParam('city', JSON.stringify(value))
+                  : removeSearchParam('city')
+              }
+            />
           </Box>
 
           {products.map((el) => (
@@ -182,19 +212,16 @@ const BenefitsWrapper = () => {
               <BenefitsProduct data={el} active={el.id == category?.id} />
             </Link>
           ))}
-
-          {isFetching && (
-            <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-              <CircularProgress />
-            </Box>
-          )}
         </Box>
 
-        {!isFetching && hasMore && (
-          <Button variant="text" onClick={loadMore}>
-            Показать ещё
-          </Button>
-        )}
+        <PaginationSimple
+          page={page}
+          perPage={perPage}
+          total={total}
+          loading={isFetching}
+          onPrev={loadPrev}
+          onNext={loadNext}
+        />
 
         {!isFetching && empty && (
           <Typography fontSize={16} fontWeight="bold" align="center">

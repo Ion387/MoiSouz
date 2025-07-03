@@ -71,7 +71,10 @@ export const PaginationSimple: FC<Props> = ({
 
       {loading == true && (
         <CircularProgress
-          sx={{ marginRight: 2.5, mx: total > 0 ? undefined : 'auto' }}
+          sx={{
+            marginRight: 2.5,
+            mx: total > 0 ? undefined : 'auto',
+          }}
           size={30}
         />
       )}

@@ -1,21 +1,33 @@
+'use client';
+
 import { getBackendUrl } from '@/constants/url';
 import { IBenefitsProduct } from '@/models/Benefits';
 import { getHeaders } from '@/utils/axios';
 import axios from 'axios';
-import { useFetchList } from './universal';
+import { useFetchList } from './universal/fetch-list';
 
 interface PropsUseFetchBenefitsProducts {
+  perPage?: number;
   category?: number | null;
+  search?: string | null;
+  city?: number | string | null;
 }
 export const useFetchBenefitsProducts = ({
+  perPage,
   category,
+  search,
+  city,
 }: PropsUseFetchBenefitsProducts) => {
   return useFetchList<IBenefitsProduct>({
     name: 'benefits-products',
     api: '/api/private/discounts',
     params: {
-      category,
+      itemsPerPage: perPage,
+      category: category || null,
+      q: search || null,
+      city: city || null,
     },
+    type: 'page',
     hasMore: (meta) => meta.current_page < meta.last_page,
     getTotal: (meta) => meta.total,
   });

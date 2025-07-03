@@ -68,7 +68,21 @@ export const useFetchList = <T>({
     const to = _params.toString();
     if (from == to) return;
     router.push(`?${to}`, { scroll: false });
-  }, [result.page, params]);
+  }, [result.page]);
+
+  useEffect(() => {
+    const keys = Object.keys(params);
+    if (keys.every((el) => params[el] == result.params[el])) return;
+
+    const from = searchParams.toString();
+    const _params = new URLSearchParams(searchParams.toString());
+
+    _params.set('page', String(1));
+
+    const to = _params.toString();
+    if (from == to) return;
+    router.push(`?${to}`, { scroll: false });
+  }, [params]);
 
   useEffect(() => {
     if (data == null) return;

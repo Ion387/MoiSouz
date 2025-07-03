@@ -499,7 +499,7 @@ export default createTheme(
       },
       MuiAutocomplete: {
         styleOverrides: {
-          paper: {},
+          paper: { padding: '6px', borderRadius: '12px' },
           listbox: {},
         },
       },

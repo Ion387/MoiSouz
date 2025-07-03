@@ -6,16 +6,25 @@ import { Autocomplete, FormGroup, InputLabel, TextField } from '@mui/material';
 import { PropsWithSX } from '@/models/Props';
 import { IOption, IOptionValue } from '@/models/Option';
 
-interface Props {
+type Props = {
   label?: string | React.ReactNode;
   placeholder?: string;
   options: IOption[];
-  multiple?: boolean;
   disabled?: boolean;
   error?: string;
-  value: IOptionValue | IOptionValue[] | null;
-  onChange: (value: IOptionValue | IOptionValue[] | null) => void;
   freeSolo?: boolean;
+} & (PropsSingle | PropsMultiple);
+
+interface PropsSingle {
+  multiple?: false;
+  value: IOptionValue | null;
+  onChange: (value: IOptionValue | null) => void;
+}
+
+interface PropsMultiple {
+  multiple: true;
+  value: IOptionValue[];
+  onChange: (value: IOptionValue[]) => void;
 }
 
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
@@ -48,11 +57,9 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
           typeof option === 'string' ? option : option.title
         }
         onChange={(_, value) =>
-          onChange(
-            (multiple
-              ? (value as IOption[]).map((el) => el.id)
-              : (value as IOption).id) || (multiple ? [] : null),
-          )
+          multiple == true
+            ? onChange((value as IOption[]).map((el) => el.id))
+            : onChange((value as IOption).id)
         }
         disablePortal
         multiple={multiple}

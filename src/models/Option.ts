@@ -5,8 +5,8 @@ export interface IOption {
   title: string;
 }
 
-export interface IOptionsResponse {
-  data: IOption[];
+export interface IOptionsResponse<T> {
+  data: T[];
   links: {
     self: string;
   };

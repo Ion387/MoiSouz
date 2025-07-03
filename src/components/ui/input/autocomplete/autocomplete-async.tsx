@@ -67,6 +67,12 @@ export const InputAutocompleteAsync: FC<PropsWithSX & Props> = ({
 
   const handleClose = () => {
     setOpen(false);
+
+    if (multiple) {
+      setSearch('');
+      return;
+    }
+    setSearch(value ? value.title : '');
   };
 
   return (

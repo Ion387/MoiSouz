@@ -27,7 +27,6 @@ import {
 import { useSearchParamsCustom } from '@/services/universal/search-params';
 
 import { IBenefitsCategory } from '@/models/Benefits';
-import { IOption } from '@/models/Option';
 
 const SLIDER_SETTINGS = {
   infinite: true,
@@ -61,7 +60,7 @@ const BenefitsWrapper = () => {
     perPage,
     category: searchParams.category as number,
     q: searchParams.q as string,
-    city: searchParams.city as IOption,
+    city: searchParams.city as string,
   });
 
   const category: IBenefitsCategory | null = useMemo(() => {

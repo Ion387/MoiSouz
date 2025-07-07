@@ -13,7 +13,7 @@ interface PropsUseFetchBenefitsProducts {
   perPage?: number;
   category?: number | null;
   q?: string | null;
-  city?: IOption | null;
+  city?: string | null;
 }
 export const useFetchBenefitsProducts = ({
   //perPage,
@@ -32,7 +32,7 @@ export const useFetchBenefitsProducts = ({
     },
     convertParams: (params) => ({
       ...params,
-      city: params.city ? params.city.title : null,
+      city: params.city ? (JSON.parse(params.city) as IOption).title : null,
     }),
     type: 'page',
     hasMore: (meta) => meta.current_page < meta.last_page,

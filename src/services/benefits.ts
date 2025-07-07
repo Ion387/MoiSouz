@@ -1,16 +1,19 @@
 'use client';
 
-import { getBackendUrl } from '@/constants/url';
-import { IBenefitsProduct } from '@/models/Benefits';
-import { getHeaders } from '@/utils/axios';
 import axios from 'axios';
+
+import { getBackendUrl } from '@/constants/url';
+import { getHeaders } from '@/utils/axios';
 import { useFetchList } from './universal/fetch-list';
+
+import { IBenefitsProduct } from '@/models/Benefits';
+import { IOption } from '@/models/Option';
 
 interface PropsUseFetchBenefitsProducts {
   perPage?: number;
   category?: number | null;
   q?: string | null;
-  city?: number | string | null;
+  city?: IOption | null;
 }
 export const useFetchBenefitsProducts = ({
   //perPage,
@@ -27,6 +30,10 @@ export const useFetchBenefitsProducts = ({
       q: q || null,
       city: city || null,
     },
+    convertParams: (params) => ({
+      ...params,
+      city: params.city ? params.city.title : null,
+    }),
     type: 'page',
     hasMore: (meta) => meta.current_page < meta.last_page,
     getTotal: (meta) => meta.total,

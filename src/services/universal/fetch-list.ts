@@ -21,12 +21,15 @@ interface PropsUseFetchList {
   getTotal?: (meta: any) => number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: { [key: string]: any };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  convertParams?: (params: { [key: string]: any }) => { [key: string]: any };
 }
 export const useFetchList = <T>({
   name,
   api,
   type = 'infinity',
   params = {},
+  convertParams,
   hasMore,
   getTotal,
 }: PropsUseFetchList) => {
@@ -53,7 +56,7 @@ export const useFetchList = <T>({
       await getList({
         api,
         page: result.page,
-        params,
+        params: convertParams ? convertParams(params) : params,
       }),
     select: (data) => data.data,
   });

@@ -9,9 +9,11 @@ const LandingFooter = () => {
       <Container>
         <Box className={s.footerBox}>
           <Box className={s.footerList}>
+            {/*
             <Typography component="a" href={`tel:+79052207677`} variant="body2">
               +79052207677
             </Typography>
+            */}
             <Typography
               component="a"
               href={`mailto:info@profsouz24.ru`}

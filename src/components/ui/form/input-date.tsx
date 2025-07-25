@@ -50,7 +50,7 @@ export const InputDate: FC<PropsWithSX & Props> = ({
               textField: {
                 fullWidth: true,
                 variant: 'outlined',
-                error: !!error,
+                error: !!error?.message,
                 helperText: error?.message,
                 inputProps: {
                   placeholder: 'DD.MM.YYYY',

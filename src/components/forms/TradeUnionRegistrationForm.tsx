@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import s from './forms.module.scss';
 import {
   Autocomplete,
@@ -25,6 +25,7 @@ import {
   FormProvider,
   SubmitHandler,
   useForm,
+  useWatch,
 } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ITradeUnion, TtyTypes } from '@/models/TradeUnion';
@@ -188,20 +189,32 @@ const schema = yup
       lastName: yup.string().required('Обязательное поле'),
       middleName: yup.string().nullable(),
     }),
-    employer: yup.object({
-      title: yup.string().required('Обязательное поле'),
-      firstName: yup.string().required('Обязательное поле'),
-      lastName: yup.string().required('Обязательное поле'),
-      middleName: yup.string().nullable(),
-      inn: yup
-        .string()
-        .required('Обязательное поле')
-        .test(
-          'inn',
-          (params) => validateInn(params.value),
-          (value) => !validateInn(String(value)),
-        ),
-    }),
+    employer: yup
+      .object({
+        title: yup.string().required('Обязательное поле'),
+        firstName: yup.string().required('Обязательное поле'),
+        lastName: yup.string().required('Обязательное поле'),
+        middleName: yup.string().nullable(),
+        inn: yup
+          .string()
+          .required('Обязательное поле')
+          .test(
+            'inn',
+            (params) => validateInn(params.value),
+            (value) => !validateInn(String(value)),
+          ),
+      })
+      .when('tuType', {
+        is: (tuType: string) => tuType != 'Профсоюзная организация',
+        otherwise: (schema) =>
+          schema.shape({
+            title: yup.string().nullable(),
+            firstName: yup.string().nullable(),
+            lastName: yup.string().nullable(),
+            middleName: yup.string().nullable(),
+            inn: yup.string().nullable(),
+          }),
+      }),
     percents: yup
       .number()
       .transform((value) => (Number.isNaN(value) ? 0 : value))
@@ -259,6 +272,27 @@ const TradeUnionRegistrationForm = () => {
   const [percents, setPercents] = useState<number>();
   const [isMyName, setIsMyName] = useState<boolean>(false);
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
+
+  const { tuType } = useWatch({ control });
+
+  const chosenUnionRequired = useMemo(() => {
+    switch (tuType) {
+      case 'Первичная профсоюзная организация без ИНН':
+        return true;
+    }
+    return false;
+  }, [tuType]);
+
+  const employerShow = useMemo(() => {
+    switch (tuType) {
+      case 'Первичная профсоюзная организация':
+      case 'Первичная профсоюзная организация без ИНН':
+        return true;
+    }
+    return false;
+  }, [tuType]);
+
+  useEffect(() => {}, [tuType]);
 
   const queryClient = useQueryClient();
 
@@ -329,6 +363,7 @@ const TradeUnionRegistrationForm = () => {
   }, [myTradeUnion, tradeUnions]);
 
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
+    if (chosenUnionRequired == true && chosenUnion == null) return;
     data.percents = Number(data.percents);
     mutate(data);
   };
@@ -481,12 +516,31 @@ const TradeUnionRegistrationForm = () => {
                     />
                   </>
                 </Grid2>
-                {type === 'Профсоюзная организация' && (
+                {tuType && (
                   <Grid2 size={12}>
-                    <InputLabel>Вышестоящая организация</InputLabel>
+                    <InputLabel>
+                      Вышестоящая организация
+                      {chosenUnionRequired && chosenUnion == null && (
+                        <span
+                          style={
+                            !!errors.creationDate?.message
+                              ? { color: theme.palette.red.main }
+                              : { color: theme.palette.primary.main }
+                          }
+                        >
+                          {' *'}
+                        </span>
+                      )}
+                    </InputLabel>
                     <Select
                       fullWidth
-                      sx={{ padding: 1.6 }}
+                      sx={{
+                        padding: 1.6,
+                        outline:
+                          chosenUnionRequired && chosenUnion == null
+                            ? '1px solid red !important'
+                            : '',
+                      }}
                       onChange={handleOrgChange}
                       value={
                         chosenUnion
@@ -691,6 +745,13 @@ const TradeUnionRegistrationForm = () => {
                         control={control}
                         render={() => (
                           <Autocomplete
+                            sx={{
+                              '&>div>div': {
+                                outline: errors.titleForDocs
+                                  ? '1px solid red'
+                                  : '',
+                              },
+                            }}
                             freeSolo
                             options={options.map((el: any) => el.title)}
                             value={valueAuto}
@@ -907,63 +968,67 @@ const TradeUnionRegistrationForm = () => {
                     allowPlus
                   />
                 </Grid2>
-                <Grid2 size={12}>
-                  <InputLabel sx={{ marginBottom: 0 }}>
-                    Работодатель{' '}
-                    <span
-                      style={
-                        !!errors.employer?.title?.message ||
-                        !!errors.employer?.lastName?.message ||
-                        !!errors.employer?.firstName?.message ||
-                        !!errors.employer?.inn?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
-                  </InputLabel>
-                </Grid2>
-                <Grid2 size={12}>
-                  <TextField
-                    {...register('employer.title')}
-                    placeholder="Полное наименование организации-работодателя"
-                    error={!!errors.employer?.title?.message}
-                    helperText={errors.employer?.title?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={6}>
-                  <TextField
-                    {...register('employer.lastName')}
-                    placeholder="Фамилия руководителя организации-работодателя"
-                    error={!!errors.employer?.lastName?.message}
-                    helperText={errors.employer?.lastName?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={6}>
-                  <TextField
-                    {...register('employer.firstName')}
-                    placeholder="Имя руководителя организации-работодателя"
-                    error={!!errors.employer?.firstName?.message}
-                    helperText={errors.employer?.firstName?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={6}>
-                  <TextField
-                    {...register('employer.middleName')}
-                    placeholder="Отчество руководителя организации-работодателя"
-                    error={!!errors.employer?.middleName?.message}
-                    helperText={errors.employer?.middleName?.message || ''}
-                  />
-                </Grid2>
-                <Grid2 size={6}>
-                  <TextFieldCustom
-                    register={register('employer.inn')}
-                    placeholder="ИНН организации-работодателя"
-                    error={errors.employer?.inn?.message}
-                    maxL={12}
-                  />
-                </Grid2>
+                {employerShow && (
+                  <>
+                    <Grid2 size={12}>
+                      <InputLabel sx={{ marginBottom: 0 }}>
+                        Работодатель{' '}
+                        <span
+                          style={
+                            !!errors.employer?.title?.message ||
+                            !!errors.employer?.lastName?.message ||
+                            !!errors.employer?.firstName?.message ||
+                            !!errors.employer?.inn?.message
+                              ? { color: theme.palette.red.main }
+                              : { color: theme.palette.primary.main }
+                          }
+                        >
+                          *
+                        </span>
+                      </InputLabel>
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <TextField
+                        {...register('employer.title')}
+                        placeholder="Полное наименование организации-работодателя"
+                        error={!!errors.employer?.title?.message}
+                        helperText={errors.employer?.title?.message || ''}
+                      />
+                    </Grid2>
+                    <Grid2 size={6}>
+                      <TextField
+                        {...register('employer.lastName')}
+                        placeholder="Фамилия руководителя организации-работодателя"
+                        error={!!errors.employer?.lastName?.message}
+                        helperText={errors.employer?.lastName?.message || ''}
+                      />
+                    </Grid2>
+                    <Grid2 size={6}>
+                      <TextField
+                        {...register('employer.firstName')}
+                        placeholder="Имя руководителя организации-работодателя"
+                        error={!!errors.employer?.firstName?.message}
+                        helperText={errors.employer?.firstName?.message || ''}
+                      />
+                    </Grid2>
+                    <Grid2 size={6}>
+                      <TextField
+                        {...register('employer.middleName')}
+                        placeholder="Отчество руководителя организации-работодателя"
+                        error={!!errors.employer?.middleName?.message}
+                        helperText={errors.employer?.middleName?.message || ''}
+                      />
+                    </Grid2>
+                    <Grid2 size={6}>
+                      <TextFieldCustom
+                        register={register('employer.inn')}
+                        placeholder="ИНН организации-работодателя"
+                        error={errors.employer?.inn?.message}
+                        maxL={12}
+                      />
+                    </Grid2>
+                  </>
+                )}
                 <Grid2 size={12}>
                   <InputLabel
                     sx={{

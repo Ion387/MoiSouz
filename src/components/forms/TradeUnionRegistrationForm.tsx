@@ -362,6 +362,19 @@ const TradeUnionRegistrationForm = () => {
     }
   }, [myTradeUnion, tradeUnions]);
 
+  useEffect(() => {
+    if (options == null) return;
+    if (options.length == 0) return;
+    if (myTradeUnion == null) return;
+    if (myTradeUnion.title == myTradeUnion.titleForDocs) return;
+    if (myTradeUnion.titleForDocs == null) return;
+    if (options.some((el: any) => el.title == myTradeUnion.titleForDocs)) {
+      setValueAuto(myTradeUnion.titleForDocs);
+      return;
+    }
+    setInputText(myTradeUnion.titleForDocs);
+  }, [myTradeUnion, options]);
+
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
     if (chosenUnionRequired == true && chosenUnion == null) return;
     data.percents = Number(data.percents);

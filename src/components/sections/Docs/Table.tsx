@@ -15,12 +15,12 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import s from './table.module.scss';
 import { statusColor } from '@/utils/statusColor';
 import { INewProtocol, type INewProt } from '@/models/Protocol';
 import { Icon } from '@/components/ui';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { deleteDoc } from '@/services/getDocs';
 import { useQueryClient } from '@tanstack/react-query';
 import theme from '@/styles/theme';
@@ -30,6 +30,7 @@ interface ITableProps {
 }
 
 const Table: FC<ITableProps> = ({ docs }) => {
+  const searchParams = useSearchParams();
   const [groupedDocs, setGroupedDocs] = useState(docs ? groupByTU(docs) : []);
   const [open, setOpen] = useState<string>('');
   const [sort, setSort] = useState({
@@ -45,6 +46,11 @@ const Table: FC<ITableProps> = ({ docs }) => {
     index: number;
     anchorE1: HTMLElement;
   } | null>(null);
+
+  const canEdit = useMemo(() => {
+    if (searchParams.has('incoming')) return false;
+    return true;
+  }, [searchParams]);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -427,17 +433,19 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               </ListItemIcon>
                               <ListItemText>Посмотреть</ListItemText>
                             </MenuItem>
-                            <MenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleMenuEdit(doc);
-                              }}
-                            >
-                              <ListItemIcon>
-                                <Icon name="edit" />
-                              </ListItemIcon>
-                              <ListItemText>Редактировать</ListItemText>
-                            </MenuItem>
+                            {canEdit && (
+                              <MenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMenuEdit(doc);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <Icon name="edit" />
+                                </ListItemIcon>
+                                <ListItemText>Редактировать</ListItemText>
+                              </MenuItem>
+                            )}
                             <MenuItem
                               onClick={(e) => {
                                 e.stopPropagation();

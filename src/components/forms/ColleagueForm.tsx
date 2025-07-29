@@ -102,7 +102,7 @@ const schema = yup
     email: yup.string().email('Укажите почту').required('Укажите почту'),
     role: yup.string().required('Укажите роль'),
     reason: yup.string().nullable(),
-    isCommittee: yup.boolean().required(),
+    isCommittee: yup.boolean(),
     history: yup.array(
       yup.object({
         name: yup

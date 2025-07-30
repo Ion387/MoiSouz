@@ -442,6 +442,12 @@ const TradeUnionRegistrationForm = () => {
   }, [value]);
 
   useEffect(() => {
+    switch (tuType) {
+      case 'Первичная профсоюзная организация':
+        return;
+      case 'Профсоюзная организация':
+        return;
+    }
     if (chosenUnion) {
       setFormValue('inn', chosenUnion?.inn);
       setFormValue('kpp', chosenUnion?.kpp);

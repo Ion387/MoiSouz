@@ -39,7 +39,7 @@ const Field: FC<PropsWithStyle & PropsField> = ({
         {!big && ':'}
       </Typography>
       <Typography fontSize={14} fontWeight={600} color="darkgray">
-        {value}
+        {value || '-'}
       </Typography>
     </Box>
   );
@@ -166,7 +166,7 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           name="Домашний адрес"
           value={[
             user?.address?.locality,
-            `${user?.address?.street} ${user?.address?.house}`,
+            `${user?.address?.street || ''} ${user?.address?.house || ''}`,
             user?.address?.flat,
           ]
             .filter((el) => el != null && el.trim().length > 0)
@@ -175,23 +175,23 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
         />
       </Box>
       <Box display="flex">
-      <Field
-        style={{
-          flex: 1,
-        }}
-        name="Контактный телефон"
-        value={user.phone}
-        big
-      />
+        <Field
+          style={{
+            flex: 1,
+          }}
+          name="Контактный телефон"
+          value={user.phone}
+          big
+        />
 
-         <Field
-        style={{
-          flex: 1,
-        }}
-        name="Адрес электронной почти"
-        value={user.email}
-        big
-      />
+        <Field
+          style={{
+            flex: 1,
+          }}
+          name="Адрес электронной почти"
+          value={user.email}
+          big
+        />
       </Box>
 
       {/*user.history && user.history.length > 0 && (

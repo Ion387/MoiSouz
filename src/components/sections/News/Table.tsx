@@ -14,11 +14,17 @@ import {
 } from '@mui/material';
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 
-import { IFormNews } from '@/models/News';
 import { Icon, InputSwitch } from '@/components/ui';
+
+import { useFetchTUOwner } from '@/hooks/useTU';
+
+import { eventBlock } from '@/utils/event';
+
+import { IFormNews } from '@/models/News';
 import { PropsWithSX } from '@/models/Props';
 import { OPTIONS_NEWS_STATUS } from '@/constants/options';
-import { eventBlock } from '@/utils/event';
+import { canEditNews } from '@/hooks/useNews';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 interface IRowProps {
   news: IFormNews;
@@ -74,6 +80,8 @@ export const Table: FC<ITableProps> = ({
   onChangeIsMain,
 }) => {
   const [groupedData, setGroupedData] = useState(news);
+
+  const tuOwner = useFetchTUOwner();
 
   const isLoading = (item: IFormNews) =>
     newsLoading?.some((el) => el.id == item.id);
@@ -261,159 +269,168 @@ export const Table: FC<ITableProps> = ({
       </Grid2>
       <Divider></Divider>
       {groupedData && !!groupedData.length ? (
-        groupedData.map((el, index, arr) => (
-          <Box key={el.id}>
-            <Row
-              sx={{
-                backgroundColor: `${
-                  openMenu?.index == index ? 'rgba(0,0,0,0.1)' : ''
-                } !important`,
-                '&:disabled': {
-                  opacity: 0.5,
-                },
-              }}
-              news={el}
-              clickable={true}
-              onClick={handleRowClick}
-              disabled={isLoading(el)}
-            >
-              <Grid2
-                container
+        groupedData.map((el, index, arr) => {
+          const canEdit = canEditNews(el, tuOwner as ITradeUnion);
+          return (
+            <Box key={el.id}>
+              <Row
                 sx={{
-                  p: 1.6,
-                  width: '100%',
-                  textAlign: 'left',
-                  userSelect: owner ? 'none' : 'all',
+                  backgroundColor: `${
+                    openMenu?.index == index ? 'rgba(0,0,0,0.1)' : ''
+                  } !important`,
+                  '&:disabled': {
+                    opacity: 0.5,
+                  },
                 }}
+                news={el}
+                clickable={true}
+                onClick={handleRowClick}
+                disabled={isLoading(el)}
               >
-                <Grid2 size={1}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    py={1}
-                    sx={{ userSelect: 'none' }}
-                  >
-                    {el.id}
-                  </Typography>
-                </Grid2>
-                <Grid2 size={3.5}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    py={1}
-                    sx={{ userSelect: 'none' }}
-                  >
-                    {el.title}
-                  </Typography>
-                </Grid2>
-                <Grid2 size={2}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    py={1}
-                    sx={{ userSelect: 'none' }}
-                    textAlign="center"
-                  >
-                    {el.date}
-                  </Typography>
-                </Grid2>
-                <Grid2 size={1.5} onClick={eventBlock}>
-                  <Typography py={1} pl={2} textAlign="center">
-                    <InputSwitch
-                      checked={el.isActive == true}
-                      onClick={() => handleIsActive && handleIsActive(el)}
-                    />
-                  </Typography>
-                </Grid2>
-                <Grid2 size={1.5} onClick={eventBlock}>
-                  <Typography py={1} pl={2} textAlign="center">
-                    <InputSwitch
-                      checked={el.isMain == true}
-                      onClick={() => handleIsMain && handleIsMain(el)}
-                    />
-                  </Typography>
-                </Grid2>
-                <Grid2 size={1.5}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    py={1}
-                    sx={{ userSelect: 'none' }}
-                    textAlign="center"
-                  >
-                    {
-                      OPTIONS_NEWS_STATUS.find(
-                        (option) => option.id == el.status,
-                      )?.title
-                    }
-                  </Typography>
-                </Grid2>
-                {!!owner && (
-                  <Grid2 size={1} textAlign="center">
-                    {isLoading(el) ? (
-                      <Box
-                        display={'flex'}
-                        justifyContent={'center'}
-                        width={'100%'}
-                      >
-                        <CircularProgress />
-                      </Box>
-                    ) : (
-                      <>
-                        <IconButton
-                          onClick={(e) => handleMenuOpen(e, index)}
-                          sx={{ width: 42, height: 42 }}
-                        >
-                          <Icon name="menu" color="darkgray" />
-                        </IconButton>
-                        <Popover
-                          id="user-menu"
-                          anchorEl={openMenu?.anchorE1}
-                          open={openMenu?.index == index}
-                          onClose={handleMenuClose}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                          slotProps={{
-                            paper: {
-                              variant: 'popover',
-                            },
-                          }}
-                          disableScrollLock
-                        >
-                          <MenuItem onClick={() => handleMenuShow(el)}>
-                            <ListItemIcon>
-                              <Icon name="eye-on" />
-                            </ListItemIcon>
-                            <ListItemText>Посмотреть</ListItemText>
-                          </MenuItem>
-                          <MenuItem onClick={() => handleMenuEdit(el)}>
-                            <ListItemIcon>
-                              <Icon name="edit" />
-                            </ListItemIcon>
-                            <ListItemText>Редактировать</ListItemText>
-                          </MenuItem>
-                          <MenuItem onClick={() => handleMenuDelete(el)}>
-                            <ListItemIcon>
-                              <Icon name="delete" color="red" />
-                            </ListItemIcon>
-                            <ListItemText>Удалить</ListItemText>
-                          </MenuItem>
-                        </Popover>
-                      </>
-                    )}
+                <Grid2
+                  container
+                  sx={{
+                    p: 1.6,
+                    width: '100%',
+                    textAlign: 'left',
+                    userSelect: owner ? 'none' : 'all',
+                  }}
+                >
+                  <Grid2 size={1}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      py={1}
+                      sx={{ userSelect: 'none' }}
+                    >
+                      {el.id}
+                    </Typography>
                   </Grid2>
-                )}
-              </Grid2>
-            </Row>
-            {index !== arr.length - 1 && <Divider></Divider>}
-          </Box>
-        ))
+                  <Grid2 size={3.5}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      py={1}
+                      sx={{ userSelect: 'none' }}
+                    >
+                      {el.title}
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={2}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      py={1}
+                      sx={{ userSelect: 'none' }}
+                      textAlign="center"
+                    >
+                      {el.date}
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={1.5} onClick={eventBlock}>
+                    <Typography py={1} pl={2} textAlign="center">
+                      <InputSwitch
+                        checked={el.isActive == true}
+                        onClick={() => handleIsActive && handleIsActive(el)}
+                        disabled={!canEdit}
+                      />
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={1.5} onClick={eventBlock}>
+                    <Typography py={1} pl={2} textAlign="center">
+                      <InputSwitch
+                        checked={el.isMain == true}
+                        onClick={() => handleIsMain && handleIsMain(el)}
+                        disabled={!canEdit}
+                      />
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={1.5}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      py={1}
+                      sx={{ userSelect: 'none' }}
+                      textAlign="center"
+                    >
+                      {
+                        OPTIONS_NEWS_STATUS.find(
+                          (option) => option.id == el.status,
+                        )?.title
+                      }
+                    </Typography>
+                  </Grid2>
+                  {!!owner && (
+                    <Grid2 size={1} textAlign="center">
+                      {isLoading(el) ? (
+                        <Box
+                          display={'flex'}
+                          justifyContent={'center'}
+                          width={'100%'}
+                        >
+                          <CircularProgress />
+                        </Box>
+                      ) : (
+                        <>
+                          <IconButton
+                            onClick={(e) => handleMenuOpen(e, index)}
+                            sx={{ width: 42, height: 42 }}
+                          >
+                            <Icon name="menu" color="darkgray" />
+                          </IconButton>
+                          <Popover
+                            id="user-menu"
+                            anchorEl={openMenu?.anchorE1}
+                            open={openMenu?.index == index}
+                            onClose={handleMenuClose}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            slotProps={{
+                              paper: {
+                                variant: 'popover',
+                              },
+                            }}
+                            disableScrollLock
+                          >
+                            <MenuItem onClick={() => handleMenuShow(el)}>
+                              <ListItemIcon>
+                                <Icon name="eye-on" />
+                              </ListItemIcon>
+                              <ListItemText>Посмотреть</ListItemText>
+                            </MenuItem>
+                            {canEdit && (
+                              <>
+                                <MenuItem onClick={() => handleMenuEdit(el)}>
+                                  <ListItemIcon>
+                                    <Icon name="edit" />
+                                  </ListItemIcon>
+                                  <ListItemText>Редактировать</ListItemText>
+                                </MenuItem>
+                                <MenuItem onClick={() => handleMenuDelete(el)}>
+                                  <ListItemIcon>
+                                    <Icon name="delete" color="red" />
+                                  </ListItemIcon>
+                                  <ListItemText>Удалить</ListItemText>
+                                </MenuItem>
+                              </>
+                            )}
+                          </Popover>
+                        </>
+                      )}
+                    </Grid2>
+                  )}
+                </Grid2>
+              </Row>
+              {index !== arr.length - 1 && <Divider></Divider>}
+            </Box>
+          );
+        })
       ) : (
         <Box
           sx={{

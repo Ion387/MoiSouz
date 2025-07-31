@@ -17,6 +17,7 @@ import { getHeaders } from '@/utils/axios';
 
 import { IFormNews } from '@/models/News';
 import { IOptionValue } from '@/models/Option';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 interface PropsGetNewsOne {
   code?: string;
@@ -160,4 +161,13 @@ const generateFormData = (data: IFormNews) => {
   }
 
   return formData;
+};
+
+export const canEditNews = (data: IFormNews, tuOwner: ITradeUnion) => {
+  if (tuOwner == null) return false;
+  if (data == null) return false;
+  if (data.tradeunions == null) return false;
+  if (data.tradeunions.length == 0) return false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (data.tradeunions[0] as any).guid == tuOwner.guid;
 };

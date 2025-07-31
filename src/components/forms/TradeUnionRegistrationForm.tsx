@@ -98,9 +98,9 @@ const schema = yup
         (params) => validateOgrn(params.value),
         (value) => !validateOgrn(String(value)),
       ),
-    inn: yup.string().when('type', {
-      is: (type: TtyTypes) =>
-        type === 'Первичная профсоюзная организация без ИНН',
+    inn: yup.string().when('tuType', {
+      is: (tuType: TtyTypes) =>
+        tuType === 'Первичная профсоюзная организация без ИНН',
       then: (schema) => schema.notRequired(), // Необязательно
       otherwise: (schema) =>
         schema.required('Обязательное поле').test(
@@ -268,7 +268,6 @@ const TradeUnionRegistrationForm = () => {
   const [value, setValue] = useState<any | null>(null);
   const [valueAuto, setValueAuto] = useState<string | null>(null);
   const [inputText, setInputText] = useState<string | null>(null);
-  const [type, setType] = useState<TtyTypes | null>(null);
   const [percents, setPercents] = useState<number>();
   const [isMyName, setIsMyName] = useState<boolean>(false);
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
@@ -350,7 +349,6 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (myTradeUnion) {
       reset(myTradeUnion);
-      if (myTradeUnion.tuType) setType(myTradeUnion.tuType);
       if (myTradeUnion?.title == myTradeUnion?.titleForDocs) setIsMyName(true);
       if (myTradeUnion.parent && myTradeUnion.parent.guid && tradeUnions) {
         setChoosenUnion(
@@ -403,13 +401,6 @@ const TradeUnionRegistrationForm = () => {
     }
     queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
   }, [isSuccess, myTradeUnion]);
-
-  useEffect(() => {
-    if (type !== 'Профсоюзная организация') {
-      setChoosenUnion(undefined);
-      setFormValue('parent', null);
-    }
-  }, [type]);
 
   useEffect(() => {
     if (addressString) {
@@ -491,51 +482,54 @@ const TradeUnionRegistrationForm = () => {
             >
               <Grid2 container spacing={2}>
                 <Grid2 size={12}>
-                  <>
-                    <InputLabel>Тип организации</InputLabel>
-                    <Controller
-                      control={control}
-                      name={'tuType'}
-                      render={({
-                        field: { onChange },
-                        fieldState: { error },
-                      }) => (
-                        <Box sx={{ width: '100%', position: 'relative' }}>
-                          <Select
-                            fullWidth
-                            sx={{
-                              padding: 1.6,
-                              '& .MuiSelect-select span::before': {
-                                content: '"Выберите тип организации"',
-                                opacity: '0.54',
-                              },
-                            }}
-                            value={type}
-                            onChange={(e) => {
-                              onChange(e);
-                              setType(() => e.target.value as TtyTypes);
-                            }}
-                            error={!!error?.message}
-                          >
-                            {[
-                              'Первичная профсоюзная организация',
-                              'Первичная профсоюзная организация без ИНН',
-                              'Профсоюзная организация',
-                            ].map((option) => (
-                              <MenuItem key={option} value={option}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                          <FormHelperText id={'tuType'} error={true}>
-                            {error && error?.message}
-                          </FormHelperText>
-                        </Box>
-                      )}
-                    />
-                  </>
+                  <InputLabel>Тип организации</InputLabel>
+                  <Controller
+                    control={control}
+                    name="tuType"
+                    render={({
+                      field: { value, onChange },
+                      fieldState: { error },
+                    }) => (
+                      <Box sx={{ width: '100%', position: 'relative' }}>
+                        <Select
+                          key={value}
+                          fullWidth
+                          sx={{
+                            padding: 1.6,
+                            '& .MuiSelect-select span::before': {
+                              content: '"Выберите тип организации"',
+                              opacity: '0.54',
+                            },
+                          }}
+                          defaultValue={value}
+                          value={value}
+                          onChange={(e) => {
+                            onChange(e);
+                            if (e.target.value !== 'Профсоюзная организация') {
+                              setChoosenUnion(undefined);
+                              setFormValue('parent', null);
+                            }
+                          }}
+                          error={!!error?.message}
+                        >
+                          {[
+                            'Первичная профсоюзная организация',
+                            'Первичная профсоюзная организация без ИНН',
+                            'Профсоюзная организация',
+                          ].map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <FormHelperText id={'tuType'} error={true}>
+                          {error && error?.message}
+                        </FormHelperText>
+                      </Box>
+                    )}
+                  />
                 </Grid2>
-                {tuType && (
+                {tuType && tradeUnions && (
                   <Grid2 size={12}>
                     <InputLabel>
                       Вышестоящая организация
@@ -629,7 +623,7 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     ИНН{' '}
-                    {type !== 'Первичная профсоюзная организация без ИНН' && (
+                    {tuType !== 'Первичная профсоюзная организация без ИНН' && (
                       <span
                         style={
                           !!errors.inn?.message

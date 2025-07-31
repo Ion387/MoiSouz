@@ -16,13 +16,18 @@ import { Icon } from '@/components/ui';
 import { NewsForm } from '@/components/forms/NewsForm';
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { useFetchNewsOne, useForm } from '@/hooks/useNews';
+import { canEditNews, useFetchNewsOne, useForm } from '@/hooks/useNews';
+import { useFetchTUOwner } from '@/hooks/useTU';
+
+import { IFormNews } from '@/models/News';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 const NewsEditOneWrapper = () => {
   const params = useParams();
   const pathname = usePathname();
   const isCreate = pathname.endsWith('/create');
 
+  const tuOwner = useFetchTUOwner();
   const { info } = useFetchProfile();
 
   const {
@@ -45,6 +50,12 @@ const NewsEditOneWrapper = () => {
     return () => clearNewsOne();
   }, []);
 
+  const canEdit = useMemo(
+    () => canEditNews(newsOne as IFormNews, tuOwner as ITradeUnion),
+    [newsOne, tuOwner],
+  );
+
+  if (canEdit == false) return null;
   if (info == null || info?.hasTradeunionOwner == false) return null;
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>

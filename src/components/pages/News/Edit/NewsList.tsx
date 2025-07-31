@@ -8,10 +8,18 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import { Icon, /*InputAutocomplete,*/ PaginationSimple } from '@/components/ui';
 import { Table } from '@/components/sections/News';
 
+import { useFetchTUOwner } from '@/hooks/useTU';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { deleteFormNews, pathNewsOne, useFetchNewsList } from '@/hooks/useNews';
+import {
+  canEditNews,
+  deleteFormNews,
+  pathNewsOne,
+  useFetchNewsList,
+} from '@/hooks/useNews';
+
 import { IFormNews } from '@/models/News';
 import { IOptionValue } from '@/models/Option';
+import { ITradeUnion } from '@/models/TradeUnion';
 
 //import { OPTIONS_NEWS_STATUS } from '@/constants/options';
 
@@ -25,6 +33,7 @@ const NewsEditListWrapper = () => {
     params.get(KEY_PARAM_STATUS),
   );
 
+  const tuOwner = useFetchTUOwner();
   const { info } = useFetchProfile();
   const perPageNewsList = 9;
   const {
@@ -71,20 +80,29 @@ const NewsEditListWrapper = () => {
   */
 
   const handleClick = (newsOne: IFormNews) => {
-    router.push(`/news/edit/${newsOne.code}`);
+    if (canEditNews(newsOne, tuOwner as ITradeUnion)) {
+      router.push(`/news/edit/${newsOne.code}`);
+      return;
+    }
+    handleShow(newsOne);
   };
 
   const handleShow = (newsOne: IFormNews) => {
-    //router.push(`/news/${newsOne.code}`);
     window.open(`/news/${newsOne.code}`, '_blank');
   };
 
   const handleEdit = (newsOne: IFormNews) => {
-    router.push(`/news/edit/${newsOne.code}`);
+    if (canEditNews(newsOne, tuOwner as ITradeUnion)) {
+      router.push(`/news/edit/${newsOne.code}`);
+      return;
+    }
+    handleShow(newsOne);
   };
 
   const handleDelete = (newsOne: IFormNews) => {
-    setNewsDelete(newsOne);
+    if (canEditNews(newsOne, tuOwner as ITradeUnion)) {
+      setNewsDelete(newsOne);
+    }
   };
   const handleNewsDeleteAccept = async () => {
     if (newsDelete == null) return;

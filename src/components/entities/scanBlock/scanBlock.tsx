@@ -71,7 +71,7 @@ const ScanBlock = ({ number }: { number: string }) => {
 
   const { mutate: mutate2, isSuccess: isSuccess2 } = useMutation({
     mutationFn: async (data: { step: string }) => {
-      postDoc(data, number);
+      await postDoc(data, number);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doc'] });

@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { globalTheme } from '@/styles/theme';
-import { TradeunionCheckDialog } from '@/components/entities/profile/dialogs/tradeunion-check-dialog';
+import { TradeunionCheckDocumentDialog } from '@/components/entities/profile';
 import { useIsUserActive } from '@/hooks/useIsUserActive';
 import { IDoc, INewDoc } from '@/models/Doc';
 import { INewProtocol } from '@/models/Protocol';
@@ -27,8 +27,9 @@ const DocumentsWrapper = () => {
     ? params.entries().toArray()[0][0]
     : null;
 
-  const [filtredDocs, setFiltredDocs] = useState<(IDoc | INewDoc | INewProtocol)[]>([])
- 
+  const [filtredDocs, setFiltredDocs] = useState<
+    (IDoc | INewDoc | INewProtocol)[]
+  >([]);
 
   const { info } = useFetchProfile();
   const isActive = useIsUserActive();
@@ -78,14 +79,15 @@ const DocumentsWrapper = () => {
 
   useEffect(() => {
     if (docs) {
-      const arr =  Array.isArray(docs) && param
-      ? docs.filter((el) => el.folder === param)
-      : Array.isArray(docs)
-        ? docs
-        : [];
-      setFiltredDocs(arr)}
-    
-  }, [docs, param])
+      const arr =
+        Array.isArray(docs) && param
+          ? docs.filter((el) => el.folder === param)
+          : Array.isArray(docs)
+            ? docs
+            : [];
+      setFiltredDocs(arr);
+    }
+  }, [docs, param]);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -244,7 +246,10 @@ const DocumentsWrapper = () => {
         </Popover>
       </Box>
       <Table docs={filtredDocs} />
-      <TradeunionCheckDialog open={openMember} setOpen={setOpenMember} />
+      <TradeunionCheckDocumentDialog
+        open={openMember}
+        setOpen={setOpenMember}
+      />
       <NewProfileDialog
         open={open}
         btn="Заполнить"

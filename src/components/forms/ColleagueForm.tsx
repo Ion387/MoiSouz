@@ -31,7 +31,7 @@ import { IFormColleagueProfile } from '@/models/Colleague';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { IOption } from '@/models/Option';
 import { OPTIONS_EDUCATION, OPTIONS_ROLES } from '@/constants/options';
-import theme from '@/styles/theme';
+import { InputLabelRequired } from '../ui';
 
 const schema = yup
   .object({
@@ -49,7 +49,7 @@ const schema = yup
       .required('Укажите дату рождения')
       .typeError('Укажите дату рождения'),
     gender: yup.string().required('Укажите пол'),
-    education: yup.string().required('Укажите образование'),
+    education: yup.string().nullable(),
     avatar: yup
       .mixed()
       .nullable()
@@ -78,8 +78,9 @@ const schema = yup
     }),
     phone: yup
       .string()
-      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон')
-      .required('Укажите телефон'),
+      .nullable()
+      .transform((_, value) => (value?.length > 0 ? value : null))
+      .matches(/^(\+7|7|8)+([0-9]){10}$/, 'Укажите корректный телефон'),
     phoneDop: yup
       .string()
       .nullable()
@@ -209,18 +210,9 @@ export const ColleagueForm: FC<Props> = ({
 
       <Box sx={{ display: 'flex', gap: 2 }}>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>
-            Фамилия{' '}
-            <span
-              style={
-                !!errors.lastName?.message
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </InputLabel>
+          <InputLabelRequired error={errors.lastName?.message}>
+            Фамилия
+          </InputLabelRequired>
           <TextField
             {...register('lastName')}
             placeholder="Иванов"
@@ -229,18 +221,9 @@ export const ColleagueForm: FC<Props> = ({
             disabled={isDisabled}
           />
 
-          <InputLabel sx={{ mt: 3 }}>
-            Имя{' '}
-            <span
-              style={
-                !!errors.firstName?.message
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </InputLabel>
+          <InputLabelRequired sx={{ mt: 3 }} error={errors.firstName?.message}>
+            Имя
+          </InputLabelRequired>
           <TextField
             {...register('firstName')}
             placeholder="Иван"
@@ -264,59 +247,22 @@ export const ColleagueForm: FC<Props> = ({
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <InputDate
           name="birthdate"
-          label={
-            <>
-              Дата рождения{' '}
-              <span
-                style={
-                  !!errors.birthdate?.message
-                    ? { color: theme.palette.red.main }
-                    : { color: theme.palette.primary.main }
-                }
-              >
-                *
-              </span>
-            </>
-          }
+          label="Дата рождения"
+          labelRequired
           disabled={isDisabled}
         />
 
         <InputGender
           name="gender"
-          label={
-            <>
-              Пол{' '}
-              <span
-                style={
-                  !!errors.birthdate?.message
-                    ? { color: theme.palette.red.main }
-                    : { color: theme.palette.primary.main }
-                }
-              >
-                *
-              </span>
-            </>
-          }
+          label="Пол"
+          labelRequired
           disabled={isDisabled}
         />
 
         <InputAutocomplete
           sx={{ width: '80%' }}
           name="education"
-          label={
-            <>
-              Образование{' '}
-              <span
-                style={
-                  !!errors.education?.message
-                    ? { color: theme.palette.red.main }
-                    : { color: theme.palette.primary.main }
-                }
-              >
-                *
-              </span>
-            </>
-          }
+          label="Образование"
           placeholder="Выберите из списка"
           options={OPTIONS_EDUCATION}
           disabled={isDisabled}
@@ -345,20 +291,8 @@ export const ColleagueForm: FC<Props> = ({
       <InputArray
         sx={{ mt: 3 }}
         name="position"
-        label={
-          <>
-            Должность{' '}
-            <span
-              style={
-                !!errors.position
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </>
-        }
+        label="Должность"
+        labelRequired
         labelExtra="Дополнительная должность"
         desc="Добавить должность"
         render={(name, index, register, errors) => (
@@ -378,38 +312,15 @@ export const ColleagueForm: FC<Props> = ({
       <InputAddress
         sx={{ mt: 3 }}
         name="address"
-        label={
-          <>
-            Адрес проживания{' '}
-            <span
-              style={
-                !!errors.position
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </>
-        }
+        label="Адрес проживания"
+        labelRequired
         errors={errors}
         disabled={isDisabled}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
         <Box sx={{ flex: 1 }}>
-          <InputLabel>
-            Номер телефона{' '}
-            <span
-              style={
-                !!errors.phone
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </InputLabel>
+          <InputLabel>Номер телефона</InputLabel>
           <TextFieldCustom
             register={register('phone')}
             placeholder="+79999999999"
@@ -458,18 +369,9 @@ export const ColleagueForm: FC<Props> = ({
         disabled={isDisabled}
       />
 
-      <InputLabel sx={{ mt: 3 }}>
-        Почта{' '}
-        <span
-          style={
-            !!errors.email
-              ? { color: theme.palette.red.main }
-              : { color: theme.palette.primary.main }
-          }
-        >
-          *
-        </span>
-      </InputLabel>
+      <InputLabelRequired sx={{ mt: 3 }} error={errors.email?.message}>
+        Почта
+      </InputLabelRequired>
       <TextField
         {...register('email')}
         placeholder="Почта"
@@ -491,20 +393,8 @@ export const ColleagueForm: FC<Props> = ({
         <InputAutocomplete
           sx={{ flex: 1 }}
           name="role"
-          label={
-            <>
-              Роль{' '}
-              <span
-                style={
-                  !!errors.role
-                    ? { color: theme.palette.red.main }
-                    : { color: theme.palette.primary.main }
-                }
-              >
-                *
-              </span>
-            </>
-          }
+          label="Роль"
+          labelRequired
           placeholder="Выберите из списка"
           options={OPTIONS_ROLES}
         />

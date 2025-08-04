@@ -10,10 +10,12 @@ import {
 
 import { Icon } from '@/components/ui/Icon';
 import { PropsWithSX } from '@/models/Props';
+import { InputLabelRequired } from '../input';
 
 interface Props {
   name: string;
   label?: string | React.ReactNode;
+  labelRequired?: boolean;
   labelExtra?: string;
 
   render: (
@@ -32,6 +34,7 @@ export const InputArray: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   labelExtra,
   render,
   defaultValue,
@@ -56,7 +59,14 @@ export const InputArray: FC<PropsWithSX & Props> = ({
   return (
     <Box sx={sx}>
       <Box sx={{ display: 'flex' }}>
-        {label && <InputLabel>{label}</InputLabel>}
+        {label &&
+          (labelRequired ? (
+            <InputLabelRequired error={errors[name] != null}>
+              {label}
+            </InputLabelRequired>
+          ) : (
+            <InputLabel>{label}</InputLabel>
+          ))}
         {!disabled && (
           <>
             <InputLabel

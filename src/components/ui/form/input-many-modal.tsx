@@ -12,6 +12,7 @@ import {
 
 import { PropsWithSX } from '@/models/Props';
 import { IOption, IOptionValue } from '@/models/Option';
+import { InputLabelRequired } from '../input';
 
 interface CardProps {
   label: string;
@@ -40,6 +41,7 @@ const Card: FC<CardProps> = ({ label, selected, onClick }) => {
 interface Props {
   name: string;
   label?: string | React.ReactNode;
+  labelRequired?: boolean;
   placeholder?: string;
   options?: IOption[];
   disabled?: boolean;
@@ -49,6 +51,7 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   placeholder,
   options = [],
   disabled,
@@ -56,7 +59,11 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
   const refButton = useRef<HTMLButtonElement>(null);
   const [width, setWidth] = useState<number>(500);
 
-  const { control, getValues } = useFormContext();
+  const {
+    control,
+    getValues,
+    formState: { errors },
+  } = useFormContext();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -111,7 +118,14 @@ export const InputManyModal: FC<PropsWithSX & Props> = ({
           }}
           ref={refButton}
         >
-          {label && <InputLabel>{label}</InputLabel>}
+          {label &&
+            (labelRequired ? (
+              <InputLabelRequired error={errors[name] != null}>
+                {label}
+              </InputLabelRequired>
+            ) : (
+              <InputLabel>{label}</InputLabel>
+            ))}
           <Button
             name={name}
             aria-describedby={name}

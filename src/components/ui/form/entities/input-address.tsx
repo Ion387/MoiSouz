@@ -4,12 +4,15 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box, FormGroup, InputLabel, TextField } from '@mui/material';
 
-import { PropsWithSX } from '@/models/Props';
 import { TextFieldCustom } from './input-textfield';
+import { InputLabelRequired } from '../../input';
+
+import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
   label?: string | React.ReactNode;
+  labelRequired?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any;
   disabled?: boolean;
@@ -19,6 +22,7 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   errors,
   disabled,
 }) => {
@@ -31,7 +35,14 @@ export const InputAddress: FC<PropsWithSX & Props> = ({
         ...(sx || {}),
       }}
     >
-      {label && <InputLabel>{label}</InputLabel>}
+      {label &&
+        (labelRequired ? (
+          <InputLabelRequired error={errors[name] != null}>
+            {label}
+          </InputLabelRequired>
+        ) : (
+          <InputLabel>{label}</InputLabel>
+        ))}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <TextFieldCustom

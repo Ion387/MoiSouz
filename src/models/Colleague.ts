@@ -8,7 +8,7 @@ export interface IFormColleagueProfile {
   middleName?: string | null;
   birthdate: string;
   gender: string;
-  education: string;
+  education?: string | null;
   avatar?: object | string | null;
   profession?: string[];
   position: string[];
@@ -22,7 +22,7 @@ export interface IFormColleagueProfile {
     house?: string | null;
     flat?: string | null;
   };
-  phone: string;
+  phone?: string | null;
   phoneDop?: string | null;
   children?: {
     name: string;

@@ -4,13 +4,17 @@ import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Box, FormGroup, FormHelperText, InputLabel } from '@mui/material';
 
-import { InputHTML as InputHTMLEditor } from '@/components/ui';
+import {
+  InputHTML as InputHTMLEditor,
+  InputLabelRequired,
+} from '@/components/ui';
 
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
   label?: string | React.ReactNode;
+  labelRequired?: boolean;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -19,14 +23,25 @@ export const InputHTML: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   placeholder,
   disabled,
 }) => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <FormGroup sx={sx}>
-      {label && <InputLabel>{label}</InputLabel>}
+      {label &&
+        (labelRequired ? (
+          <InputLabelRequired error={errors[name] != null}>
+            {label}
+          </InputLabelRequired>
+        ) : (
+          <InputLabel>{label}</InputLabel>
+        ))}
       <Controller
         name={name}
         control={control}

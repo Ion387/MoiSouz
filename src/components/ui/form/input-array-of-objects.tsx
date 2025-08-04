@@ -10,10 +10,12 @@ import {
 } from 'react-hook-form';
 import { Icon } from '@/components/ui/Icon';
 import { PropsWithSX } from '@/models/Props';
+import { InputLabelRequired } from '../input';
 
 interface Props {
   name: string;
   label?: string;
+  labelRequired?: boolean;
   labelExtra?: string;
   render: (
     name: string,
@@ -32,6 +34,7 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   labelExtra,
   render,
   defaultValue,
@@ -70,7 +73,13 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
         <>
           {labelExtra && (
             <Box sx={{ display: 'flex', mt: 3 }}>
-              <InputLabel>{labelExtra}</InputLabel>
+              {labelRequired ? (
+                <InputLabelRequired error={errors[name] != null}>
+                  {labelExtra}
+                </InputLabelRequired>
+              ) : (
+                <InputLabel>{labelExtra}</InputLabel>
+              )}
               <IconButton variant="contained-gray" onClick={() => remove(1)}>
                 <Icon name="minus" color="white" />
               </IconButton>
@@ -114,7 +123,14 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
       <Box
         sx={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}
       >
-        {label && <InputLabel>{label}</InputLabel>}
+        {label &&
+          (labelRequired ? (
+            <InputLabelRequired error={errors[name] != null}>
+              {label}
+            </InputLabelRequired>
+          ) : (
+            <InputLabel>{label}</InputLabel>
+          ))}
         <InputLabel
           sx={{
             maxWidth: 'fit-content',

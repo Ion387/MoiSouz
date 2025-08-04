@@ -55,7 +55,7 @@ const NewsEditOneWrapper = () => {
     [newsOne, tuOwner],
   );
 
-  if (canEdit == false) return null;
+  if (isCreate != true && canEdit == false) return null;
   if (info == null || info?.hasTradeunionOwner == false) return null;
   return (
     <Box display="flex" flexDirection="column" gap={1.5}>

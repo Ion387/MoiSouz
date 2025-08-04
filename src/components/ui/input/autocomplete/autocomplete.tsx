@@ -3,11 +3,14 @@
 import { FC } from 'react';
 import { Autocomplete, FormGroup, InputLabel, TextField } from '@mui/material';
 
+import { InputLabelRequired } from '../label-required';
+
 import { PropsWithSX } from '@/models/Props';
 import { IOption, IOptionValue } from '@/models/Option';
 
 type Props = {
   label?: string | React.ReactNode;
+  labelRequired?: boolean;
   placeholder?: string;
   options: IOption[];
   disabled?: boolean;
@@ -30,6 +33,7 @@ interface PropsMultiple {
 export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   sx,
   label,
+  labelRequired,
   placeholder,
   options,
   multiple,
@@ -41,7 +45,12 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
 }) => {
   return (
     <FormGroup sx={sx}>
-      {label && <InputLabel>{label}</InputLabel>}
+      {label &&
+        (labelRequired ? (
+          <InputLabelRequired error={error}>{label}</InputLabelRequired>
+        ) : (
+          <InputLabel>{label}</InputLabel>
+        ))}
       <Autocomplete
         freeSolo={freeSolo ? freeSolo : false}
         value={

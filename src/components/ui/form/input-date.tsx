@@ -6,12 +6,15 @@ import { FormGroup, InputLabel } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
+import { InputLabelRequired } from '../input';
+
 import { PropsWithSX } from '@/models/Props';
 import { DateView } from '@mui/x-date-pickers/models';
 
 interface Props {
   name: string;
   label?: React.ReactNode;
+  labelRequired?: boolean;
   dis?: boolean;
   isFutureAccess?: boolean;
   views?: DateView[];
@@ -22,16 +25,27 @@ export const InputDate: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   dis,
   isFutureAccess,
   views,
   disabled,
 }) => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <FormGroup sx={sx}>
-      {label && <InputLabel>{label}</InputLabel>}
+      {label &&
+        (labelRequired ? (
+          <InputLabelRequired error={errors[name] != null}>
+            {label}
+          </InputLabelRequired>
+        ) : (
+          <InputLabel>{label}</InputLabel>
+        ))}
       <Controller
         name={name}
         control={control}

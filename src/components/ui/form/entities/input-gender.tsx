@@ -11,11 +11,14 @@ import {
   Typography,
 } from '@mui/material';
 
+import { InputLabelRequired } from '../../input';
+
 import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   name: string;
   label?: React.ReactNode;
+  labelRequired?: boolean;
   defaultValue?: 'female' | 'male';
   disabled?: boolean;
 }
@@ -24,6 +27,7 @@ export const InputGender: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   disabled,
 }) => {
   const { control } = useFormContext();
@@ -39,7 +43,14 @@ export const InputGender: FC<PropsWithSX & Props> = ({
             ...(sx || {}),
           }}
         >
-          {label && <InputLabel error={error != null}>{label}</InputLabel>}
+          {label &&
+            (labelRequired ? (
+              <InputLabelRequired error={error != null}>
+                {label}
+              </InputLabelRequired>
+            ) : (
+              <InputLabel error={error != null}>{label}</InputLabel>
+            ))}
           <RadioGroup
             sx={{ mr: 'auto' }}
             name={name}

@@ -11,6 +11,7 @@ import { IOption } from '@/models/Option';
 interface Props {
   name: string;
   label?: React.ReactNode;
+  labelRequired?: boolean;
   placeholder?: string;
   options: IOption[];
   multiple?: boolean;
@@ -22,6 +23,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
   sx,
   name,
   label,
+  labelRequired,
   placeholder,
   options,
   multiple,
@@ -37,6 +39,7 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
         <BaseInputAutocomplete
           sx={sx}
           label={label}
+          labelRequired={labelRequired}
           options={options}
           placeholder={placeholder}
           value={value}

@@ -47,7 +47,7 @@ export const BenefitsProduct: FC<PropsWithSX & IProps> = ({
             backgroundColor: 'gray',
             pointerEvents: 'none',
           }}
-          src={`data:image/png;base64,${data.image}`}
+          src={data.image_url || `data:image/png;base64,${data.image}`}
         />
         <Box
           display="flex"

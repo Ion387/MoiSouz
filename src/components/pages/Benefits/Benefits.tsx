@@ -124,7 +124,7 @@ const BenefitsWrapper = () => {
         <Box
           position="relative"
           display="flex"
-          justifyContent="space-between"
+          justifyContent={products.length > 2 ? 'space-between' : ''}
           flexWrap="wrap"
           width="100%"
           gap={1.5}

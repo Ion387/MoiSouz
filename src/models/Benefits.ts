@@ -13,7 +13,9 @@ export interface IBenefitsCategory {
 export interface IBenefitsProduct {
   id: number;
   name: string;
+  description: string;
   image: string;
+  image_url: string;
   main_category: {
     id: number;
     order: number;
@@ -29,6 +31,7 @@ export interface IBenefitsProduct {
     name: string;
   }[];
   isFavorite: boolean;
+  favoriteId?: number;
   updated_at: string;
   end: string;
 }

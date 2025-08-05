@@ -7,6 +7,7 @@ import {
   getBenefitsProduct,
   getBenefitsProductPromo,
 } from '@/services/benefits';
+import { useFavorite, useFetchFavorites } from '@/services/favorites';
 import {
   Box,
   Button,
@@ -20,7 +21,7 @@ import {
 import { useYMaps } from '@pbe/react-yandex-maps';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const BenefitsProductPage = () => {
   const pathName = usePathname();
@@ -48,6 +49,41 @@ const BenefitsProductPage = () => {
     select: (data) => data?.data,
     enabled: !!currentId,
   });
+
+  // FAVORITE - START
+  const {
+    data: { data: favorites, isLoading: isLoadingFavorites },
+    actions: { refetch: refetchFavorites },
+  } = useFetchFavorites({ type: 'benefits' });
+
+  const {
+    data: { isLoading: isLoadingFavorite },
+    actions: { add: addFavorite, remove: removeFavorite },
+  } = useFavorite();
+
+  const dataFavorite = useMemo(() => {
+    if (product == null) return null;
+    if (favorites == null) return null;
+    return favorites.find((el) => el.data.id == product.id);
+  }, [product, favorites]);
+
+  const handleClickFavorite = async () => {
+    if (dataFavorite == null)
+      await addFavorite({
+        title: product.name,
+        data: {
+          type: 'benefits',
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          image: product.image_url || `data:image/png;base64,${product.image}`,
+        },
+        source: `/benefits/product/${product.id}`,
+      });
+    else await removeFavorite(dataFavorite.id);
+    await refetchFavorites();
+  };
+  // FAVORITE - END
 
   const handleClick = (id: string) => {
     setCurrentId(id);
@@ -183,6 +219,7 @@ const BenefitsProductPage = () => {
                   padding={'0 20px 20px 20px'}
                   display="flex"
                   justifyContent={'center'}
+                  gap={2}
                 >
                   {product.options && product.options.length ? (
                     <Button
@@ -206,6 +243,20 @@ const BenefitsProductPage = () => {
                       )}
                     </Button>
                   )}
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleClickFavorite()}
+                    disabled={isLoadingFavorite || isLoadingFavorites}
+                    sx={{ width: '210px', height: '50px' }}
+                  >
+                    {isLoadingFavorite || isLoadingFavorites ? (
+                      <CircularProgress></CircularProgress>
+                    ) : dataFavorite ? (
+                      'Удалить из избранного'
+                    ) : (
+                      'В избранное'
+                    )}
+                  </Button>
                 </Box>
               )}
             </Paper>

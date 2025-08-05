@@ -13,8 +13,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosResponse } from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -27,6 +27,7 @@ const PromosPage = () => {
     queryFn: () => getBenefitsProductPromos(),
     select: (data) => data?.data,
   });
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const [inputValue, setInputValue] = useState<[null | number, string]>([
@@ -59,10 +60,14 @@ const PromosPage = () => {
   }, [inputValue, savingId, mutate]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: pdf } = useQuery({
+  const { isFetching: loadingPDF } = useQuery({
     queryKey: ['promo-pdf'],
-    queryFn: () => {
-      if (id) return getPdf(id);
+    queryFn: async () => {
+      if (id) {
+        const pdf = await getPdf(id);
+        openPDF(pdf);
+        return pdf;
+      }
     },
     enabled: !!id,
   });
@@ -72,6 +77,20 @@ const PromosPage = () => {
   };
   const handleClickDownload = (id: number) => {
     setId(id);
+  };
+
+  const openPDF = (pdf: AxiosResponse | undefined) => {
+    if (pdf == null) return;
+    if (pdf.data == null) return;
+    if (pdf.data.source == null) return;
+    setTimeout(() => {
+      setId(null);
+      queryClient.removeQueries({ queryKey: ['promo-pdf'] });
+    });
+    window.open(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}${pdf.data.source}`,
+      '_blank',
+    );
   };
 
   return (
@@ -102,7 +121,7 @@ const PromosPage = () => {
                   <Box>
                     <img
                       alt="promo"
-                      src={el.image_url}
+                      src={el.image_url || `data:image/png;base64,${el.image}`}
                       style={{
                         aspectRatio: '17 / 9',
                         height: '231px',
@@ -156,22 +175,26 @@ const PromosPage = () => {
                         width: '100%',
                       }}
                     >
-                      <IconButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleClickDownload(el.promo.id);
-                        }}
-                      >
-                        <Icon name="print" />
-                        <Typography
-                          variant="h4"
-                          fontWeight={600}
-                          marginLeft={0.4}
+                      {loadingPDF == false ? (
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleClickDownload(el.promo.id);
+                          }}
                         >
-                          Скачать
-                        </Typography>
-                      </IconButton>
+                          <Icon name="print" />
+                          <Typography
+                            variant="h4"
+                            fontWeight={600}
+                            marginLeft={0.4}
+                          >
+                            Скачать
+                          </Typography>
+                        </IconButton>
+                      ) : (
+                        <CircularProgress sx={{ marginX: 3.6 }} size={34} />
+                      )}
                       <IconButton
                         onClick={(e) => {
                           e.stopPropagation();

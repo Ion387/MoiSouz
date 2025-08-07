@@ -1,7 +1,14 @@
 'use client';
 
 import { FC } from 'react';
-import { Autocomplete, FormGroup, InputLabel, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  FormGroup,
+  InputLabel,
+  TextField,
+} from '@mui/material';
 
 import { InputLabelRequired } from '../label-required';
 
@@ -80,6 +87,25 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
             error={error != null}
             helperText={error}
           />
+        )}
+        renderTags={(value, getTagProps) => (
+          <Box
+            sx={{
+              maxHeight: 230,
+              overflowY: 'auto',
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}
+          >
+            {value.map((option, index) => (
+              <Chip
+                label={option.title}
+                {...getTagProps({ index })}
+                key={option.id}
+                sx={{ m: 0.5 }}
+              />
+            ))}
+          </Box>
         )}
         disabled={disabled}
       />

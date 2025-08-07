@@ -66,6 +66,11 @@ const NewsOneWrapper = () => {
               <Typography variant="h3" lineHeight={'57px'}>
                 {newsOne?.title}
               </Typography>
+              {/*newsOne?.tradeunions && newsOne?.tradeunions.length > 0 && (
+                <Typography fontSize={22}>
+                  {(newsOne?.tradeunions[0] as any).title}
+                </Typography>
+              )*/}
               <div
                 className="html"
                 dangerouslySetInnerHTML={{ __html: newsOne?.text || '' }}

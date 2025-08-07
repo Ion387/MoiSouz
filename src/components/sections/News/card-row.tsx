@@ -47,10 +47,26 @@ export const NewsCardRow: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
           p: 2,
         }}
       >
-        <Typography fontSize={14} fontWeight={700} align="left">
-          {data.title}
-        </Typography>
-        <Typography fontSize={14} fontWeight={400} align="left" color="gray">
+        <Box display="flex" flexDirection="row" justifyContent="space-between">
+          <Typography fontSize={14} fontWeight={700} align="left">
+            {data.title}
+          </Typography>
+          {data.tradeunions && data.tradeunions.length > 0 && (
+            <Typography
+              fontSize={14}
+              fontWeight={700}
+              align="left"
+              color="primary"
+            >
+              Источник:{' '}
+              {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (data.tradeunions[0] as any).title
+              }
+            </Typography>
+          )}
+        </Box>
+        <Typography fontSize={14} fontWeight={400} align="left">
           {data.preview}
         </Typography>
         <Typography

@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useMemo } from 'react';
-import { Box, InputLabel, TextField } from '@mui/material';
+import { Box, Button, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -92,12 +92,23 @@ export const NewsForm: FC<Props> = ({
 
   const OPTIONS_TU_CHILDREN = useMemo(() => {
     const result: IOption[] = [];
+
     owner?.children
-      ?.map((el) => ({ id: el.guid, title: el.title }))
+      ?.map((el) => ({
+        id: el.guid,
+        title: el.title,
+      }))
       ?.forEach((el) => result.push(el));
     //if (owner) result.push({ id: owner.guid || '', title: owner.title });
     return result;
   }, [owner, owner]);
+
+  const handleSelectAllTU = () => {
+    setValue(
+      'tradeunions',
+      OPTIONS_TU_CHILDREN.map((el) => el.id as string),
+    );
+  };
 
   const handleClickPublished = () => {
     setValue('status', 'published');
@@ -186,23 +197,13 @@ export const NewsForm: FC<Props> = ({
         multiple
       />
 
+      <Button onClick={handleSelectAllTU}>Выбрать всех получателей</Button>
+
       <InputHTML
         sx={{ mt: 3 }}
         name="text"
-        label={
-          <>
-            Текст новости{' '}
-            <span
-              style={
-                !!errors.text
-                  ? { color: theme.palette.red.main }
-                  : { color: theme.palette.primary.main }
-              }
-            >
-              *
-            </span>
-          </>
-        }
+        label="Текст новости"
+        labelRequired
       />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 3 }}>

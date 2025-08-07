@@ -16,7 +16,7 @@ import { PropsWithStyle } from '@/models/Props';
 
 interface PropsField {
   name: string;
-  value?: string | number;
+  value?: string | number | null;
   big?: boolean;
 }
 
@@ -101,6 +101,8 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
               .join(' ')}
           />
 
+          <Field name="Номер участника профсоюза" value={user.code} />
+
           <Field
             name="Специальность по образованию"
             value={user.profession && user.profession[0]}
@@ -113,6 +115,8 @@ export const ColleagueCardExtended: FC<Props> = ({ user }) => {
           <Field name="Дата вступления в Профсоюз" value={user.invitedAt} />
 
           <Field name="Дата заполнения карточки" value={user.updatedAt} />
+
+          <Field name="Роль" value={user.role} />
         </Box>
 
         {user.avatar && (

@@ -5,9 +5,7 @@ import {
   CircularProgress,
   Grid2,
   InputLabel,
-  MenuItem,
   Paper,
-  Select,
   TextField,
 } from '@mui/material';
 import * as yup from 'yup';
@@ -36,11 +34,6 @@ import { getDocs } from '@/services/getDocs';
 import { getMembers } from '@/services/members';
 import QuestionFields from '../ui/form/question';
 import { InputLabelRequired, InputAutocomplete } from '../ui';
-
-type OptionType = {
-  role: string;
-  name: string;
-};
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -315,7 +308,7 @@ const NewDocumentForm = ({
                     name="members"
                     control={control}
                     render={({
-                      field: { value, onChange },
+                      field: { onChange },
                       fieldState: { error },
                     }) => (
                       <InputAutocomplete

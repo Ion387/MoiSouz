@@ -17,6 +17,7 @@ import {
   FormProvider,
   SubmitHandler,
   useForm,
+  useWatch,
 } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -34,8 +35,7 @@ import { type INewDocument } from '@/models/NewDocument';
 import { getDocs } from '@/services/getDocs';
 import { getMembers } from '@/services/members';
 import QuestionFields from '../ui/form/question';
-import { removeDuplicatePairs } from '@/utils/removeDuplicates';
-import theme from '@/styles/theme';
+import { InputLabelRequired, InputAutocomplete } from '../ui';
 
 type OptionType = {
   role: string;
@@ -128,11 +128,13 @@ const NewDocumentForm = ({
     control,
   } = methods;
 
+  const { members: membersWatch } = useWatch({ control });
+
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: INewDocument) => {
       const session = await getSession();
 
-      return axios.post(
+      return await axios.post(
         `${getBackendUrl}/api/private/document`,
         {
           documentDate: data.documentDate,
@@ -155,7 +157,7 @@ const NewDocumentForm = ({
     mutationFn: async (data: INewDocument) => {
       const session = await getSession();
       if (doc)
-        return axios.post(
+        return await axios.post(
           `${getBackendUrl}/api/private/document`,
           {
             documentDate: data.documentDate,
@@ -289,33 +291,17 @@ const NewDocumentForm = ({
                 />
               </Grid2>
               <Grid2 size={6}>
-                <InputLabel>
-                  Дата документа{' '}
-                  <span
-                    style={
-                      !!errors.documentDate?.message
-                        ? { color: theme.palette.red.main }
-                        : { color: theme.palette.primary.main }
-                    }
-                  >
-                    *
-                  </span>
-                </InputLabel>
-                <InputDate name="documentDate" isFutureAccess />
+                <InputDate
+                  name="documentDate"
+                  label="Дата документа"
+                  labelRequired
+                  isFutureAccess
+                />
               </Grid2>
               <Grid2 size={12}>
-                <InputLabel>
-                  Место проведения{' '}
-                  <span
-                    style={
-                      !!errors.address?.message
-                        ? { color: theme.palette.red.main }
-                        : { color: theme.palette.primary.main }
-                    }
-                  >
-                    *
-                  </span>
-                </InputLabel>
+                <InputLabelRequired error={!!errors.address?.message}>
+                  Место проведения
+                </InputLabelRequired>
                 <TextField
                   {...register(`address`)}
                   placeholder="Место проведения"
@@ -325,64 +311,50 @@ const NewDocumentForm = ({
               </Grid2>
               {!isMembersLoading && members && members.length && (
                 <Grid2 size={12}>
-                  <InputLabel>
-                    Участники - члены профсоюзной организации
-                  </InputLabel>
                   <Controller
+                    name="members"
                     control={control}
-                    name={'members'}
-                    render={({ field: { value, onChange } }) => (
-                      <Select
-                        fullWidth
-                        multiple
-                        sx={{
-                          padding: 1.6,
-                          '& .MuiSelect-select span::before': {
-                            content: '"Выберите участников"',
-                            opacity: '0.54',
-                          },
-                        }}
-                        value={value ? value : []}
-                        onChange={(e) => {
-                          setSelectedNotInvitedMembers(
-                            removeDuplicatePairs(
-                              e.target.value as OptionType[],
-                            ),
-                          );
-                          onChange(
-                            removeDuplicatePairs(
-                              e.target.value as OptionType[],
-                            ),
-                          );
-                        }}
-                        renderValue={(selected) =>
-                          selected
-                            .map((el) => el.role + '-' + el.name)
-                            .join(', ')
+                    render={({
+                      field: { value, onChange },
+                      fieldState: { error },
+                    }) => (
+                      <InputAutocomplete
+                        label="Участники - члены профсоюзной организации"
+                        options={members.map((el) => ({
+                          id: `${el.role} - ${el.name}`,
+                          title: `${el.role} - ${el.name}`,
+                        }))}
+                        placeholder="Выберите участников"
+                        value={
+                          membersWatch?.map(
+                            (el) => `${el.role} - ${el.name}`,
+                          ) || []
                         }
-                      >
-                        {members &&
-                          members.map((el) => (
-                            //@ts-expect-error none
-                            <MenuItem key={el.role + '-' + el.name} value={el}>
-                              {el.role + '-' + el.name}
-                            </MenuItem>
-                          ))}
-                      </Select>
+                        onChange={(value) =>
+                          onChange(
+                            (members || []).filter((el) =>
+                              value.includes(`${el.role} - ${el.name}`),
+                            ),
+                          )
+                        }
+                        multiple
+                        error={error?.message}
+                      />
                     )}
                   />
                 </Grid2>
               )}
               {!isLoading && (
                 <Grid2 size={12}>
-                  <InputLabel>Участники - приглашенные</InputLabel>
                   <InputArrayOfObjects
                     name={'invitedMembers'}
                     defaultValue={''}
                     position
                     desc="Добавить участника"
+                    labelExtra="Участники - приглашенные"
+                    labelRequired
                     render={(name, index, register, errors) => (
-                      <Grid2 container spacing={1.2}>
+                      <Grid2 container spacing={1.2} marginBottom={2}>
                         <Grid2 size={12} sx={{ display: 'none' }}>
                           <TextField
                             {...register(`${name}.${index}.role`)}
@@ -393,32 +365,24 @@ const NewDocumentForm = ({
                           <TextField
                             {...register(`${name}.${index}.lastName`)}
                             placeholder="Фамилия"
-                            error={!!errors?.invitedMembers?.lastName?.message}
-                            helperText={
-                              errors?.invitedMembers?.lastName?.message || ''
-                            }
+                            error={!!errors?.lastName}
+                            helperText={errors?.lastName?.message || ''}
                           ></TextField>
                         </Grid2>
                         <Grid2 size={4}>
                           <TextField
                             {...register(`${name}.${index}.firstName`)}
                             placeholder="Имя"
-                            error={!!errors?.invitedMembers?.firstName?.message}
-                            helperText={
-                              errors?.invitedMembers?.firstName?.message || ''
-                            }
+                            error={!!errors?.firstName}
+                            helperText={errors?.firstName?.message || ''}
                           ></TextField>
                         </Grid2>
                         <Grid2 size={4}>
                           <TextField
                             {...register(`${name}.${index}.middleName`)}
                             placeholder="Отчество"
-                            error={
-                              !!errors?.invitedMembers?.middleName?.message
-                            }
-                            helperText={
-                              errors?.invitedMembers?.middleName?.message || ''
-                            }
+                            error={!!errors?.middleName}
+                            helperText={errors?.middleName?.message || ''}
                           ></TextField>
                         </Grid2>
                       </Grid2>

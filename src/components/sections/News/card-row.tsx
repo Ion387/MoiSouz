@@ -47,8 +47,18 @@ export const NewsCardRow: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
           p: 2,
         }}
       >
-        <Box display="flex" flexDirection="row" justifyContent="space-between">
-          <Typography fontSize={14} fontWeight={700} align="left">
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          gap={2}
+        >
+          <Typography
+            fontSize={14}
+            fontWeight={700}
+            align="left"
+            maxWidth="65%"
+          >
             {data.title}
           </Typography>
           {data.tradeunions && data.tradeunions.length > 0 && (
@@ -57,6 +67,7 @@ export const NewsCardRow: FC<PropsWithSX & Props> = ({ sx = {}, data }) => {
               fontWeight={700}
               align="left"
               color="primary"
+              maxWidth="65%"
             >
               Источник:{' '}
               {

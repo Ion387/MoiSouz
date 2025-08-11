@@ -262,6 +262,10 @@ const NewDocumentForm = ({
     }
   }, [members, doc]);
 
+  useEffect(() => {
+    console.log('inv', getValues('invitedMembers'));
+  }, [getValues('invitedMembers')]);
+
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>
       <LocalizationProvider

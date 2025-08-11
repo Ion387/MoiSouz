@@ -80,7 +80,7 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
               ) : (
                 <InputLabel>{labelExtra}</InputLabel>
               )}
-              <IconButton variant="contained-gray" onClick={() => remove(1)}>
+              <IconButton variant="contained-gray" onClick={() => remove(0)}>
                 <Icon name="minus" color="white" />
               </IconButton>
             </Box>
@@ -102,7 +102,7 @@ export const InputArrayOfObjects: FC<PropsWithSX & Props> = ({
                 register,
                 errors[name] && errors[name][index],
               )}
-              {(!labelExtra || index > 1) && (
+              {(!labelExtra || index >= 1) && (
                 <IconButton
                   sx={{
                     mt: 1.2,

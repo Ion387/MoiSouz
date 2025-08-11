@@ -493,6 +493,79 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         ))}
                     </Typography>
                   </Grid2>
+
+                  <Grid2 size={12}>
+                    {
+                      /*(
+                    arr.filter((el) => el.role !== 'Приглашенный участник')
+                      .length > 2 &&
+                    isCanView.a >= isCanView.d + isCanView.i &&
+                    isCanView.a + isCanView.d + isCanView.i ==
+                      arr.filter((el) => el.role !== 'Приглашенный участник')
+                        .length &&
+                    )*/
+                      currentAgenda && currentAgenda.data.questions?.length ? (
+                        [
+                          ...defaultQuestions.slice(1),
+                          ...currentAgenda?.data.questions,
+                        ].map((agenda, id, array) => (
+                          <ProtocolQuestion
+                            key={agenda.question + id + 1}
+                            id={id}
+                            array={array}
+                            arr={arr}
+                            setFormValue={setFormValue}
+                            errors={errors}
+                            isMembersLoading={isMembersLoading}
+                            register={register}
+                            getValues={getValues}
+                            type={
+                              id < 3
+                                ? 'assessors'
+                                : agenda.document
+                                  ? 'members'
+                                  : undefined
+                            }
+                          />
+                        ))
+                      ) : arr.filter(
+                          (el) => el.role !== 'Приглашенный участник',
+                        ).length < 3 ? (
+                        <Box>
+                          <Typography
+                            color={'#FF4949'}
+                            textAlign={'center'}
+                            fontWeight={600}
+                          >
+                            Количество членов Профкома должно быть больше 2
+                          </Typography>
+                        </Box>
+                      ) : isCanView.a + isCanView.d + isCanView.i !=
+                        arr.filter((el) => el.role !== 'Приглашенный участник')
+                          .length ? (
+                        <Box>
+                          <Typography
+                            color={'#FF4949'}
+                            textAlign={'center'}
+                            fontWeight={600}
+                          >
+                            Число голосов не совпадает с количеством участников
+                            заседания
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Box>
+                          <Typography
+                            color={'#FF4949'}
+                            textAlign={'center'}
+                            fontWeight={600}
+                          >
+                            Необходимо утвердить повестку заседания
+                          </Typography>
+                        </Box>
+                      )
+                    }
+                  </Grid2>
                   <Grid2 size={12}>
                     <Box
                       sx={{
@@ -676,74 +749,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         </Grid2>
                       </Grid2>
                     </Box>
-                  </Grid2>
-                  <Grid2 size={12}>
-                    {arr.filter((el) => el.role !== 'Приглашенный участник')
-                      .length > 2 &&
-                    isCanView.a >= isCanView.d + isCanView.i &&
-                    isCanView.a + isCanView.d + isCanView.i ==
-                      arr.filter((el) => el.role !== 'Приглашенный участник')
-                        .length &&
-                    currentAgenda &&
-                    currentAgenda.data.questions?.length ? (
-                      [
-                        ...defaultQuestions.slice(1),
-                        ...currentAgenda?.data.questions,
-                      ].map((agenda, id, array) => (
-                        <ProtocolQuestion
-                          key={agenda.question + id + 1}
-                          id={id}
-                          array={array}
-                          arr={arr}
-                          setFormValue={setFormValue}
-                          errors={errors}
-                          isMembersLoading={isMembersLoading}
-                          register={register}
-                          getValues={getValues}
-                          type={
-                            id < 3
-                              ? 'assessors'
-                              : agenda.document
-                                ? 'members'
-                                : undefined
-                          }
-                        />
-                      ))
-                    ) : arr.filter((el) => el.role !== 'Приглашенный участник')
-                        .length < 3 ? (
-                      <Box>
-                        <Typography
-                          color={'#FF4949'}
-                          textAlign={'center'}
-                          fontWeight={600}
-                        >
-                          Количество членов Профкома должно быть больше 2
-                        </Typography>
-                      </Box>
-                    ) : isCanView.a + isCanView.d + isCanView.i !=
-                      arr.filter((el) => el.role !== 'Приглашенный участник')
-                        .length ? (
-                      <Box>
-                        <Typography
-                          color={'#FF4949'}
-                          textAlign={'center'}
-                          fontWeight={600}
-                        >
-                          Число голосов не совпадает с количеством участников
-                          заседания
-                        </Typography>
-                      </Box>
-                    ) : (
-                      <Box>
-                        <Typography
-                          color={'#FF4949'}
-                          textAlign={'center'}
-                          fontWeight={600}
-                        >
-                          Необходимо утвердить повестку заседания
-                        </Typography>
-                      </Box>
-                    )}
                   </Grid2>
                 </>
               )}

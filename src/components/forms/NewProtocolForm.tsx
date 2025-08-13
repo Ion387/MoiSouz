@@ -308,6 +308,8 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
     else mutate(data);
   };
 
+  useEffect(() => {}, [isCanView]);
+
   return (
     <Paper
       className={s.paper}
@@ -504,14 +506,11 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                       arr.filter((el) => el.role !== 'Приглашенный участник')
                         .length &&
                     )*/
-                      currentAgenda && currentAgenda.data.questions?.length ? (
-                        [
-                          ...defaultQuestions.slice(1),
-                          ...currentAgenda?.data.questions,
-                        ].map((agenda, id, array) => (
+                      [...defaultQuestions.slice(0, 3)].map(
+                        (agenda, id, array) => (
                           <ProtocolQuestion
-                            key={agenda.question + id + 1}
-                            id={id}
+                            key={agenda.question + id}
+                            id={id - 1}
                             array={array}
                             arr={arr}
                             setFormValue={setFormValue}
@@ -519,16 +518,12 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                             isMembersLoading={isMembersLoading}
                             register={register}
                             getValues={getValues}
-                            type={
-                              id < 3
-                                ? 'assessors'
-                                : agenda.document
-                                  ? 'members'
-                                  : undefined
-                            }
+                            type={'assessors'}
                           />
-                        ))
-                      ) : arr.filter(
+                        ),
+                      )
+                    }
+                    {/*: arr.filter(
                           (el) => el.role !== 'Приглашенный участник',
                         ).length < 3 ? (
                         <Box>
@@ -563,8 +558,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                             Необходимо утвердить повестку заседания
                           </Typography>
                         </Box>
-                      )
-                    }
+                      ) */}
                   </Grid2>
                   <Grid2 size={12}>
                     <Box
@@ -577,7 +571,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                       <Grid2 size={12}>
                         <InputLabel>Слушали:</InputLabel>
                         <TextField
-                          {...register(`questions.${0}.question`)}
+                          {...register(`questions.${3}.question`)}
                           multiline
                           rows={3}
                           disabled
@@ -588,7 +582,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                           Докладывал:{' '}
                           <span
                             style={
-                              !!errors?.questions?.[0]?.speaker?.message
+                              !!errors?.questions?.[3]?.speaker?.message
                                 ? { color: theme.palette.red.main }
                                 : { color: theme.palette.primary.main }
                             }
@@ -601,15 +595,15 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                             <Select
                               fullWidth
                               sx={{ padding: 1.6 }}
-                              name={`questions.${0}.speaker`}
+                              name={`questions.${3}.speaker`}
                               value={getValues(`questions.${0}.speaker`)}
                               onChange={(e) => {
                                 setFormValue(
-                                  `questions.${0}.speaker`,
+                                  `questions.${3}.speaker`,
                                   String(e.target.value),
                                 );
                               }}
-                              error={!!errors?.questions?.[0]?.speaker?.message}
+                              error={!!errors?.questions?.[3]?.speaker?.message}
                             >
                               {arr &&
                                 arr
@@ -625,14 +619,14 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                     </MenuItem>
                                   ))}
                             </Select>
-                            {!!errors?.questions?.[0]?.speaker?.message && (
+                            {!!errors?.questions?.[3]?.speaker?.message && (
                               <FormHelperText
                                 sx={{
                                   color: '#FF4949',
                                   position: 'absolute',
                                 }}
                               >
-                                {errors?.questions?.[0]?.speaker?.message}
+                                {errors?.questions?.[3]?.speaker?.message}
                               </FormHelperText>
                             )}
                           </>
@@ -643,7 +637,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         <TextField
                           multiline
                           rows={3}
-                          {...register(`questions.${0}.decided`)}
+                          {...register(`questions.${3}.decided`)}
                           disabled
                         />
                       </Grid2>
@@ -657,10 +651,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                 textAlign: 'center',
                               },
                             }}
-                            register={register(`questions.${0}.approved`)}
+                            register={register(`questions.${3}.approved`)}
                             error={
                               errors.questions
-                                ? errors?.questions[0]?.approved?.message
+                                ? errors?.questions[3]?.approved?.message
                                 : undefined
                             }
                             onChange={(
@@ -690,10 +684,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                 textAlign: 'center',
                               },
                             }}
-                            register={register(`questions.${0}.declined`)}
+                            register={register(`questions.${3}.declined`)}
                             error={
                               errors.questions
-                                ? errors?.questions[0]?.declined?.message
+                                ? errors?.questions[3]?.declined?.message
                                 : undefined
                             }
                             onChange={(
@@ -702,7 +696,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                               >,
                             ) => {
                               setFormValue(
-                                `questions.${0}.declined`,
+                                `questions.${3}.declined`,
                                 e.target.value == ''
                                   ? null
                                   : Number(e.target.value),
@@ -723,10 +717,10 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                                 textAlign: 'center',
                               },
                             }}
-                            register={register(`questions.${0}.ignored`)}
+                            register={register(`questions.${3}.ignored`)}
                             error={
                               errors.questions
-                                ? errors?.questions[0]?.ignored?.message
+                                ? errors?.questions[3]?.ignored?.message
                                 : undefined
                             }
                             onChange={(
@@ -735,7 +729,7 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                               >,
                             ) => {
                               setFormValue(
-                                `questions.${0}.ignored`,
+                                `questions.${3}.ignored`,
                                 e.target.value == ''
                                   ? null
                                   : Number(e.target.value),
@@ -749,6 +743,26 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
                         </Grid2>
                       </Grid2>
                     </Box>
+                  </Grid2>
+                  <Grid2 size={12}>
+                    {currentAgenda &&
+                      currentAgenda.data.questions?.length &&
+                      [...currentAgenda?.data.questions].map(
+                        (agenda, id, array) => (
+                          <ProtocolQuestion
+                            key={agenda.question + id + 4}
+                            id={id + 3}
+                            array={array}
+                            arr={arr}
+                            setFormValue={setFormValue}
+                            errors={errors}
+                            isMembersLoading={isMembersLoading}
+                            register={register}
+                            getValues={getValues}
+                            type={agenda.document ? 'members' : undefined}
+                          />
+                        ),
+                      )}
                   </Grid2>
                 </>
               )}

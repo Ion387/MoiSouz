@@ -10,12 +10,12 @@ import Circle from '@/components/sections/Home/Circle/Circle';
 import Steps from '@/components/sections/Home/Steps/Steps';
 import Plus from '@/components/sections/Home/Plus/Plus';
 import Benefits from '@/components/sections/Home/Benefits/Benefits';
-import Tariffs from '@/components/sections/Home/Tariffs/Tariffs';
+//import Tariffs from '@/components/sections/Home/Tariffs/Tariffs';
 
 const HomePage = () => {
   return (
     <Box component={'main'} className={s.wrapper}>
-      <Container>
+      <Container className={s.content}>
         <LandingHeader />
         <Hero />
         <InfoSection />
@@ -23,7 +23,7 @@ const HomePage = () => {
         <Steps />
         <Plus />
         <Benefits />
-        <Tariffs noPrice isSoon />
+        {/*<Tariffs noPrice isSoon />*/}
       </Container>
       <LandingFooter />
       <ScrollButton />

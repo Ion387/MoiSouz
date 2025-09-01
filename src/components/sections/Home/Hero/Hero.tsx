@@ -19,7 +19,7 @@ const Hero = () => {
       <Link href="/registration">
         <Button variant="contained" className={s.btn}>
           <Icon name="heart" color="secondary" />
-          Попробовать бесплатно
+          Начать пользоваться
         </Button>
       </Link>
     </Box>

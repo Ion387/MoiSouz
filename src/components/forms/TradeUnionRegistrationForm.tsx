@@ -326,7 +326,7 @@ const TradeUnionRegistrationForm = () => {
     select: (data) => data.data.data,
   });
 
-  const { data: myTradeUnion } = useQuery({
+  const { data: myTradeUnion, isFetching: isFetchingTradeUnion } = useQuery({
     queryKey: ['myTradeUnion'],
     queryFn: getMyTU,
     select: (data) => data.data,
@@ -433,12 +433,14 @@ const TradeUnionRegistrationForm = () => {
   }, [value]);
 
   useEffect(() => {
+    /*
     switch (tuType) {
       case 'Первичная профсоюзная организация':
         return;
       case 'Профсоюзная организация':
         return;
     }
+    */
     if (chosenUnion) {
       setFormValue('inn', chosenUnion?.inn);
       setFormValue('kpp', chosenUnion?.kpp);
@@ -529,7 +531,15 @@ const TradeUnionRegistrationForm = () => {
                     )}
                   />
                 </Grid2>
-                {tuType && tradeUnions && (
+                {(isFetchingTradeUnion || !tradeUnions) && (
+                  <Grid2
+                    size={12}
+                    sx={{ display: 'flex', justifyContent: 'center' }}
+                  >
+                    <CircularProgress />
+                  </Grid2>
+                )}
+                {!isFetchingTradeUnion && tuType && tradeUnions && (
                   <Grid2 size={12}>
                     <InputLabel>
                       Вышестоящая организация

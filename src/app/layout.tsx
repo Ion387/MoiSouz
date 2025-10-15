@@ -22,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <meta name="color-scheme" content="only light"></meta>
+      <meta name="yandex-verification" content="30cf19e6efee6408" />
       <body className={nunitoSans.className}>
         <Providers>{children}</Providers>
         <CookieRequest />

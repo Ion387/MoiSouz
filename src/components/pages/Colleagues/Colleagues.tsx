@@ -4,15 +4,9 @@ import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Dialog, Typography } from '@mui/material';
 
-import { Icon } from '@/components/ui';
+import { Icon, InputSearch, PaginationSimple } from '@/components/ui';
 import {
   TradeUnionCard,
   Table,
@@ -21,10 +15,13 @@ import {
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 
-import { useFetchUserTUs, useFetchTUUsers } from '@/hooks/useTU';
+import { useFetchUserTUs } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { IFormColleagueProfile } from '@/models/Colleague';
-import { deleteColleagueProfile } from '@/hooks/UseFormColleagueProfile';
+import {
+  deleteColleagueProfile,
+  useFetchColleagueList,
+} from '@/hooks/UseFormColleagueProfile';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -33,12 +30,29 @@ const ColleaguesWrapper = () => {
   const router = useRouter();
 
   const { info } = useFetchProfile();
-  const {
-    data: tuUsers,
-    loading: loadingTUUsers,
-    refetch: refetchTUUsers,
-  } = useFetchTUUsers({ guid: params?.get(KEY_PARAM_ORGANIZATION) || '' });
   const tuList = useFetchUserTUs();
+
+  const [search, setSearch] = useState<string>(params?.get('q') || '');
+  const perPageColleagueList = 10;
+  const {
+    data: {
+      data: colleagueList,
+      isFetching: isLoadingColleagueList,
+      page: pageColleagueList,
+      total: totalColleagueList,
+    },
+    actions: {
+      loadPrev: loadPrevColleagueList,
+      loadNext: loadNextColleagueList,
+      refetch: refetchColleagueList,
+    },
+  } = useFetchColleagueList({
+    type: 'page',
+    prename: 'edit',
+    perPage: perPageColleagueList,
+    guid: params?.get(KEY_PARAM_ORGANIZATION) || '',
+    search,
+  });
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [userDelete, setUserDelete] = useState<IFormColleagueProfile | null>(
@@ -64,14 +78,14 @@ const ColleaguesWrapper = () => {
     // unselect !?
     if (data.guid == tuActive?.guid) {
       //router.push(`${window.location.pathname}`);
-      refetchTUUsers();
+      refetchColleagueList();
       return;
     }
 
     router.push(
       `${window.location.pathname}?${KEY_PARAM_ORGANIZATION}=${data.guid}`,
     );
-    refetchTUUsers();
+    refetchColleagueList();
   };
 
   const handleClickUpload = () => {
@@ -79,7 +93,7 @@ const ColleaguesWrapper = () => {
   };
 
   const handleSuccessUpload = () => {
-    refetchTUUsers();
+    refetchColleagueList();
   };
 
   const handleUserClick = (user: IFormColleagueProfile) => {
@@ -101,7 +115,7 @@ const ColleaguesWrapper = () => {
     if (userDelete == null) return;
     setUserDelete(null);
     await deleteColleagueProfile(userDelete);
-    refetchTUUsers();
+    refetchColleagueList();
   };
 
   return (
@@ -118,7 +132,7 @@ const ColleaguesWrapper = () => {
                 <TradeUnionCard
                   key={el.guid}
                   data={el}
-                  count={tuUsers?.length}
+                  count={totalColleagueList}
                   onClick={handleClickTradeunion}
                   active={tuActive?.guid == el.guid}
                 />
@@ -171,21 +185,31 @@ const ColleaguesWrapper = () => {
           </Box>
         )}
 
-        {!loadingTUUsers ? (
-          <Table
-            users={(tuActive && tuUsers) || []}
-            tradeunion={tuActive}
-            owner={info?.hasTradeunionOwner}
-            onClick={handleUserClick}
-            onShow={handleUserShow}
-            onEdit={handleUserEdit}
-            onDelete={handleUserDelete}
-          />
-        ) : (
-          <Box display={'flex'} justifyContent={'center'} width={'100%'}>
-            <CircularProgress />
-          </Box>
-        )}
+        <InputSearch
+          defaultValue={search}
+          onSearch={setSearch}
+          disabled={isLoadingColleagueList}
+        />
+
+        <Table
+          users={(tuActive && colleagueList) || []}
+          tradeunion={tuActive}
+          owner={info?.hasTradeunionOwner}
+          onClick={handleUserClick}
+          onShow={handleUserShow}
+          onEdit={handleUserEdit}
+          onDelete={handleUserDelete}
+          disabled={isLoadingColleagueList}
+        />
+
+        <PaginationSimple
+          page={pageColleagueList}
+          perPage={perPageColleagueList}
+          total={totalColleagueList}
+          loading={isLoadingColleagueList}
+          onPrev={loadPrevColleagueList}
+          onNext={loadNextColleagueList}
+        />
       </Box>
 
       {info?.hasTradeunionOwner && (

@@ -14,6 +14,10 @@ import { getBackendUrl } from '@/constants/url';
 
 import { IFormColleagueProfile } from '@/models/Colleague';
 import { IDoc } from '@/models/Doc';
+import {
+  TypeUseFetchList,
+  useFetchList,
+} from '@/services/universal/fetch-list';
 
 export const useForm = () => {
   const router = useRouter();
@@ -162,4 +166,29 @@ export const useProtocols = () => {
   });
 
   return { data };
+};
+
+interface PropsColleagueList {
+  /** Default is infinity */
+  type?: TypeUseFetchList;
+  prename?: string;
+  perPage?: number;
+  guid?: string;
+  search?: string;
+}
+export const useFetchColleagueList = (
+  { type, prename, perPage, guid, search }: PropsColleagueList = {
+    perPage: 10,
+  },
+) => {
+  return useFetchList<IFormColleagueProfile>({
+    type,
+    name: `${prename ? `${prename}-` : ''}tradeunion-users-${guid}`,
+    api: '/api/private/tradeunion-users',
+    params: {
+      guid,
+      itemsPerPage: perPage,
+      q: search,
+    },
+  });
 };

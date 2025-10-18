@@ -52,6 +52,7 @@ interface ITableProps {
   users: IFormColleagueProfile[] | undefined;
   tradeunion?: ITradeUnion | null;
   owner?: boolean;
+  disabled?: boolean;
   onClick?: (user: IFormColleagueProfile) => void;
   onShow?: (user: IFormColleagueProfile) => void;
   onEdit?: (user: IFormColleagueProfile) => void;
@@ -62,6 +63,7 @@ export const Table: FC<ITableProps> = ({
   users,
   tradeunion,
   owner,
+  disabled,
   onClick,
   onShow,
   onEdit,
@@ -110,6 +112,7 @@ export const Table: FC<ITableProps> = ({
     if (onDelete) onDelete(user);
   };
 
+  /*
   const handleSort = (param: string) => {
     setGroupedData((prev) => {
       if (!prev) return prev;
@@ -128,13 +131,14 @@ export const Table: FC<ITableProps> = ({
       ];
     });
   };
+  */
 
   useEffect(() => {
     if (users) setGroupedData(users);
   }, [users]);
 
   return (
-    <Paper sx={{ p: 0, pb: 1.6 }}>
+    <Paper sx={{ p: 0, pb: 1.6, pointerEvents: disabled ? 'none' : 'auto' }}>
       <Grid2 container sx={{ p: 1.6 }}>
         <Grid2 size={2}>
           <Typography
@@ -143,6 +147,7 @@ export const Table: FC<ITableProps> = ({
             textTransform={'uppercase'}
           >
             ФИО
+            {/*
             <IconButton
               onClick={() => {
                 handleSort('name');
@@ -151,6 +156,7 @@ export const Table: FC<ITableProps> = ({
             >
               <Icon name="sort" />
             </IconButton>
+            */}
           </Typography>
         </Grid2>
         <Grid2 size={!!owner ? 2.5 : 3.5}>
@@ -178,6 +184,7 @@ export const Table: FC<ITableProps> = ({
             fontWeight={700}
           >
             Роль
+            {/*
             <IconButton
               onClick={() => {
                 handleSort('role');
@@ -186,6 +193,7 @@ export const Table: FC<ITableProps> = ({
             >
               <Icon name="sort" />
             </IconButton>
+            */}
           </Typography>
         </Grid2>
         {!!owner && (

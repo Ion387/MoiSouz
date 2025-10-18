@@ -75,7 +75,7 @@ export const useFetchList = <T>({
     const to = _params.toString();
     if (from == to) return;
     router.push(`?${to}`, { scroll: false });
-  }, [result.page]);
+  }, [result.page, params]);
 
   useEffect(() => {
     if (data == null) return;

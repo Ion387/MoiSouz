@@ -8,12 +8,14 @@ import { PropsWithSX } from '@/models/Props';
 
 interface Props {
   defaultValue?: string;
+  disabled?: boolean;
   onSearch: (value: string) => void;
 }
 
 export const InputSearch: FC<PropsWithSX & Props> = ({
   sx,
   defaultValue,
+  disabled,
   onSearch,
 }) => {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
@@ -62,6 +64,7 @@ export const InputSearch: FC<PropsWithSX & Props> = ({
       }}
       value={value || ''}
       onChange={(e) => handleChange(e.target.value)}
+      disabled={disabled}
     />
   );
 };

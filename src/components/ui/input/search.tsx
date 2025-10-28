@@ -48,6 +48,7 @@ export const InputSearch: FC<PropsWithSX & Props> = ({
       placeholder="Поиск"
       slotProps={{
         input: {
+          style: { background: '#fff' },
           startAdornment: (
             <InputAdornment position="start">
               <Icon name="search" sx={{ scale: 1.35 }} />

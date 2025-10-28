@@ -97,7 +97,7 @@ const NewDocumentForm = ({
   >([]);
 
   useEffect(() => {
-    if (membersData) {
+    if (membersData && Array.isArray(membersData)) {
       setMembers(() => {
         return [
           ...membersData
@@ -306,7 +306,7 @@ const NewDocumentForm = ({
                   helperText={errors.address?.message || ''}
                 />
               </Grid2>
-              {!isMembersLoading && members && members.length && (
+              {!isMembersLoading && !!members && !!members.length && (
                 <Grid2 size={12}>
                   <Controller
                     name="members"

@@ -9,6 +9,7 @@ import { useOptions } from '@/hooks/UseOptions';
 
 type Props = {
   api: string;
+  bg?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   convert?: (value: any) => IOption;
   placeholder?: string;
@@ -40,6 +41,7 @@ export const InputAutocompleteAsync: FC<PropsWithSX & Props> = ({
   value,
   onChange,
   freeSolo,
+  bg = 'rgb(241, 244, 249)',
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<string>('');
@@ -104,6 +106,7 @@ export const InputAutocompleteAsync: FC<PropsWithSX & Props> = ({
           helperText={error}
           slotProps={{
             input: {
+              style: { background: bg },
               ...params.InputProps,
               endAdornment: (
                 <>

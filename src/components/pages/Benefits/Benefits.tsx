@@ -168,6 +168,7 @@ const BenefitsWrapper = () => {
 
             <InputAutocompleteAsync
               sx={{ flex: 1 }}
+              bg={'#fff'}
               api="cities"
               convert={(value) => ({ id: value.id, title: value.name })}
               placeholder="Выберите город"

@@ -101,7 +101,7 @@ export const useFetchList = <T>({
           ];
           break;
         case 'page':
-          dataNew = [...data.data];
+          dataNew = data && Array.isArray(data.data) ? [...data?.data] : [];
           break;
       }
       if (JSON.stringify(result.data) != JSON.stringify(dataNew)) {

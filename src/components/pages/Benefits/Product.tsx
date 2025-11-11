@@ -214,7 +214,7 @@ const BenefitsProductPage = () => {
                   ></div>
                 </Box>
               )}
-              {info.profileInfo?.hasTradeunionMember && (
+              {info.profileInfo?.isDiscount && (
                 <Box
                   padding={'0 20px 20px 20px'}
                   display="flex"

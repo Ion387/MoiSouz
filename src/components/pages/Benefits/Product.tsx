@@ -1,6 +1,7 @@
 'use client';
 
 import { BreadCrumbsText, Icon } from '@/components/ui';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { useMap } from '@/hooks/useMap';
 import {
@@ -34,6 +35,8 @@ const BenefitsProductPage = () => {
   const [selectedPlacemark, setSelectedPlacemark] = useState<null | number>(
     null,
   );
+
+  const { info: profile } = useFetchProfile();
 
   const { data: product, isFetching } = useQuery({
     queryKey: ['benefit-item'],
@@ -214,7 +217,7 @@ const BenefitsProductPage = () => {
                   ></div>
                 </Box>
               )}
-              {info.profileInfo?.isDiscount && (
+              {profile?.isDiscount && (
                 <Box
                   padding={'0 20px 20px 20px'}
                   display="flex"

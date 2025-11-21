@@ -13,8 +13,10 @@ import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { getMyTU } from '@/services/getMyTU';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useTokenFromQuery } from '@/hooks/UseToken';
 
 export const ProfileHeader = () => {
+  const { clearToken } = useTokenFromQuery();
   const { info } = useFetchProfile();
   const router = useRouter();
   const [profileData, setProfileData] = useState(info);
@@ -82,6 +84,7 @@ export const ProfileHeader = () => {
           <IconButton
             onClick={async () => {
               await signOut({ redirect: false });
+              clearToken();
               router.push('/signin');
             }}
           >

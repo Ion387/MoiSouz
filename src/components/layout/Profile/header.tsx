@@ -82,6 +82,7 @@ export const ProfileHeader = () => {
           <IconButton
             onClick={async () => {
               await signOut({ redirect: false });
+              cookieStore.delete('token');
               router.push('/signin');
             }}
           >

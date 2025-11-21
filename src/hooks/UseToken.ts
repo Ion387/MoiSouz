@@ -62,6 +62,7 @@ export const useTokenFromQuery = (options: UseTokenFromQueryOptions = {}) => {
 
   const clearToken = () => {
     deleteCookie(cookieName);
+    cookieStore.delete('token');
     setHasToken(false);
   };
 

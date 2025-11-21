@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, IconButton, List, ListItem, Slide } from '@mui/material';
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -13,10 +13,8 @@ import { Icon } from '@/components/ui';
 import useMobile from '@/hooks/UseMobile';
 
 import s from './layout.module.scss';
-import { useTokenFromQuery } from '@/hooks/UseToken';
 
-const LandingHeaderContent = () => {
-  const { clearToken } = useTokenFromQuery();
+const LandingHeader = () => {
   const mobile = useMobile();
   const [open, setOpen] = useState(false);
 
@@ -58,7 +56,7 @@ const LandingHeaderContent = () => {
           <IconButton
             onClick={() => {
               signOut({ redirect: false });
-              clearToken();
+              cookieStore.delete('token');
             }}
           >
             <Icon name="logout" />
@@ -84,14 +82,6 @@ const LandingHeaderContent = () => {
         </List>
       </Slide>
     </>
-  );
-};
-
-const LandingHeader = () => {
-  return (
-    <Suspense>
-      <LandingHeaderContent />
-    </Suspense>
   );
 };
 

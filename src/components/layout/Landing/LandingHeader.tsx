@@ -13,8 +13,10 @@ import { Icon } from '@/components/ui';
 import useMobile from '@/hooks/UseMobile';
 
 import s from './layout.module.scss';
+import { useTokenFromQuery } from '@/hooks/UseToken';
 
 const LandingHeader = () => {
+  const { clearToken } = useTokenFromQuery();
   const mobile = useMobile();
   const [open, setOpen] = useState(false);
 
@@ -53,7 +55,12 @@ const LandingHeader = () => {
           </>
         )}
         {session?.user?.token && (
-          <IconButton onClick={() => signOut({ redirect: false })}>
+          <IconButton
+            onClick={() => {
+              signOut({ redirect: false });
+              clearToken();
+            }}
+          >
             <Icon name="logout" />
           </IconButton>
         )}

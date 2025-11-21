@@ -11,13 +11,18 @@ export async function middleware(req: NextRequest) {
     '/trade_union_registration',
     '/tariffs',
     '/benefits',
-    'news',
-    '/promos'
+    '/news',
+    '/promos',
+    '/colleagues',
   ];
 
-  const isPathProtected = protectedPaths?.some((path) => pathname == path);
+  const isPathProtected = protectedPaths?.some((path) =>
+    pathname.includes(path),
+  );
   const res = NextResponse.next();
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token =
+    (await getToken({ req, secret: process.env.AUTH_SECRET })) ||
+    req.cookies.get('token')?.value;
 
   if (isPathProtected) {
     if (!token) {

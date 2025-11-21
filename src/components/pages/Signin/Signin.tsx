@@ -26,6 +26,7 @@ import { ButtonFeedback } from '@/components/entities/profile';
 import { type ISignin } from '@/models/Signin';
 
 import s from './signin.module.scss';
+import { useTokenFromQuery } from '@/hooks/UseToken';
 
 const schema = yup
   .object({
@@ -64,11 +65,21 @@ const Signin = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const { hasToken } = useTokenFromQuery({
+    redirectPath: '/dashboard',
+    onSuccess: (token) => {
+      console.log('Token successfully saved to cookies', token);
+    },
+    onError: (error) => {
+      console.error('Failed to save token:', error);
+    },
+  });
+
   useEffect(() => {
-    if (session?.user?.token) {
+    if (session?.user?.token || hasToken) {
       router.push('/main');
     }
-  }, [session, router]);
+  }, [session, router, hasToken]);
 
   return (
     <Box className={s.container}>

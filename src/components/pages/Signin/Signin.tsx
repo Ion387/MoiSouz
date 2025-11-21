@@ -66,7 +66,7 @@ const Signin = () => {
   const router = useRouter();
 
   const { hasToken } = useTokenFromQuery({
-    redirectPath: '/dashboard',
+    redirectPath: '/main',
     onSuccess: (token) => {
       console.log('Token successfully saved to cookies', token);
     },

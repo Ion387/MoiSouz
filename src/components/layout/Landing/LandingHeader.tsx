@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, IconButton, List, ListItem, Slide } from '@mui/material';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -15,7 +15,7 @@ import useMobile from '@/hooks/UseMobile';
 import s from './layout.module.scss';
 import { useTokenFromQuery } from '@/hooks/UseToken';
 
-const LandingHeader = () => {
+const LandingHeaderContent = () => {
   const { clearToken } = useTokenFromQuery();
   const mobile = useMobile();
   const [open, setOpen] = useState(false);
@@ -84,6 +84,14 @@ const LandingHeader = () => {
         </List>
       </Slide>
     </>
+  );
+};
+
+const LandingHeader = () => {
+  return (
+    <Suspense>
+      <LandingHeaderContent />
+    </Suspense>
   );
 };
 

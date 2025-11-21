@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Grid2,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signIn, useSession } from 'next-auth/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,7 +41,7 @@ const schema = yup
   })
   .required();
 
-const Signin = () => {
+const SigninContent = () => {
   const {
     register,
     handleSubmit,
@@ -185,6 +185,22 @@ const Signin = () => {
         </form>
       </Paper>
     </Box>
+  );
+};
+
+const Signin = () => {
+  return (
+    <Suspense
+      fallback={
+        <Box className={s.container}>
+          <Paper className={s.paper}>
+            <CircularProgress />
+          </Paper>
+        </Box>
+      }
+    >
+      <SigninContent />
+    </Suspense>
   );
 };
 

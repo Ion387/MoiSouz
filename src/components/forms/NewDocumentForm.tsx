@@ -31,9 +31,9 @@ import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { type INewDocument } from '@/models/NewDocument';
 import { getDocs } from '@/services/getDocs';
-import { getMembers } from '@/services/members';
 import QuestionFields from '../ui/form/question';
 import { InputLabelRequired, InputAutocomplete } from '../ui';
+import { useFetchColleagueList } from '@/hooks/UseFormColleagueProfile';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -85,10 +85,15 @@ const NewDocumentForm = ({
     select: (data) => data,
   });
 
-  const { data: membersData, isLoading: isMembersLoading } = useQuery({
-    queryKey: ['members'],
-    queryFn: getMembers,
-    select: (data) => data.data,
+  const {
+    data: { data: membersData, isFetching: isMembersLoading },
+  } = useFetchColleagueList({
+    type: 'page',
+    prename: 'edit',
+    isCommittee: true,
+    perPage: 1000,
+    guid: undefined,
+    search: '',
   });
 
   const [members, setMembers] = useState<{ role: string; name: string }[]>([]);
@@ -100,12 +105,10 @@ const NewDocumentForm = ({
     if (membersData && Array.isArray(membersData)) {
       setMembers(() => {
         return [
-          ...membersData
-            .filter((el) => el.isCommittee)
-            .map((el) => ({
-              role: el.role,
-              name: el.name || '',
-            })),
+          ...membersData.map((el) => ({
+            role: el.role,
+            name: el.name || '',
+          })),
         ];
       });
     }

@@ -175,9 +175,10 @@ interface PropsColleagueList {
   perPage?: number;
   guid?: string;
   search?: string;
+  isCommittee?: boolean;
 }
 export const useFetchColleagueList = (
-  { type, prename, perPage, guid, search }: PropsColleagueList = {
+  { type, prename, perPage, guid, search, isCommittee }: PropsColleagueList = {
     perPage: 10,
   },
 ) => {
@@ -189,6 +190,7 @@ export const useFetchColleagueList = (
       guid,
       itemsPerPage: perPage,
       q: search,
+      isCommittee: isCommittee,
     },
   });
 };

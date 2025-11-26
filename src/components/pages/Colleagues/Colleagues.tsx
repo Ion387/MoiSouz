@@ -193,7 +193,7 @@ const ColleaguesWrapper = () => {
                     minWidth: 'fit-content',
                     marginTop: 'auto',
                   }}
-                  //disabled={count.total >= count.max}
+                  disabled={count.total >= count.max}
                   onClick={handleClickUpload}
                 >
                   <Icon name="upload" color="secondary.main" />

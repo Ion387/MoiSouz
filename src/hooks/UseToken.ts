@@ -36,7 +36,7 @@ export const useTokenFromQuery = (options: UseTokenFromQueryOptions = {}) => {
 
       try {
         setCookie(cookieName, token, {
-          maxAge: 30 * 24 * 60 * 60,
+          maxAge: 24 * 60 * 60,
           path: '/',
           secure: false,
           sameSite: 'lax',

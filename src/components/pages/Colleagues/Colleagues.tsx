@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-import { Box, Button, Dialog, Typography } from '@mui/material';
+import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
 
 import { Icon, InputSearch, PaginationSimple } from '@/components/ui';
 import {
@@ -15,7 +15,7 @@ import {
 
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 
-import { useFetchUserTUs } from '@/hooks/useTU';
+import { useFetchTUOwner, useFetchUserTUs } from '@/hooks/useTU';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { IFormColleagueProfile } from '@/models/Colleague';
 import {
@@ -31,6 +31,12 @@ const ColleaguesWrapper = () => {
 
   const { info } = useFetchProfile();
   const tuList = useFetchUserTUs();
+  const tuOwner = useFetchTUOwner();
+
+  const [count, setCount] = useState<{ max: number; total: number }>({
+    max: 0,
+    total: 0,
+  });
 
   const [search, setSearch] = useState<string>(params?.get('q') || '');
   const perPageColleagueList = 10;
@@ -54,6 +60,7 @@ const ColleaguesWrapper = () => {
     search,
   });
 
+  const [openCountDialog, setOpenCountDialog] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [userDelete, setUserDelete] = useState<IFormColleagueProfile | null>(
     null,
@@ -66,13 +73,6 @@ const ColleaguesWrapper = () => {
       ) ?? null,
     [tuList, params],
   );
-
-  useEffect(() => {
-    if (tuActive != null) return;
-    if (tuList == null) return;
-    if (tuList.length == 0) return;
-    handleClickTradeunion(tuList[0]);
-  }, [tuList]);
 
   const handleClickTradeunion = (data: ITradeUnion) => {
     // unselect !?
@@ -118,6 +118,22 @@ const ColleaguesWrapper = () => {
     refetchColleagueList();
   };
 
+  useEffect(() => {
+    if (tuActive != null) return;
+    if (tuList == null) return;
+    if (tuList.length == 0) return;
+    handleClickTradeunion(tuList[0]);
+  }, [tuList, tuActive, handleClickTradeunion]);
+
+  useEffect(() => {
+    if (tuOwner)
+      setCount({ max: tuOwner.numberOfUsers, total: tuOwner.countOfUsers });
+  }, [tuOwner]);
+
+  useEffect(() => {
+    if (count.total >= count.max) setOpenCountDialog(true);
+  }, [count]);
+
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1.5} marginTop={3}>
@@ -132,7 +148,8 @@ const ColleaguesWrapper = () => {
                 <TradeUnionCard
                   key={el.guid}
                   data={el}
-                  count={totalColleagueList}
+                  count={count.total}
+                  max={count.max}
                   onClick={handleClickTradeunion}
                   active={tuActive?.guid == el.guid}
                 />
@@ -148,7 +165,7 @@ const ColleaguesWrapper = () => {
                 gap={1.5}
               >
                 <Link
-                  href="/colleagues/create"
+                  href={count.total >= count.max ? '' : '/colleagues/create'}
                   style={{
                     gap: 1,
                     height: 'fit-content',
@@ -162,6 +179,7 @@ const ColleaguesWrapper = () => {
                       height: 'fit-content',
                       width: '100%',
                     }}
+                    disabled={count.total >= count.max}
                   >
                     <Icon name="plus" color="secondary.main" />
                     Добавить участника
@@ -175,6 +193,7 @@ const ColleaguesWrapper = () => {
                     minWidth: 'fit-content',
                     marginTop: 'auto',
                   }}
+                  //disabled={count.total >= count.max}
                   onClick={handleClickUpload}
                 >
                   <Icon name="upload" color="secondary.main" />
@@ -211,6 +230,30 @@ const ColleaguesWrapper = () => {
           onNext={loadNextColleagueList}
         />
       </Box>
+
+      {count.total >= count.max && (
+        <Dialog
+          open={openCountDialog}
+          onClose={() => setOpenCountDialog(false)}
+          PaperProps={{
+            sx: {
+              p: 4,
+              gap: 2,
+            },
+          }}
+        >
+          <IconButton
+            sx={{ position: 'absolute', right: 10, top: 10 }}
+            onClick={() => setOpenCountDialog(false)}
+          >
+            <Icon name="close" />
+          </IconButton>
+          <Typography variant="h3" textAlign="center" whiteSpace="pre-line">
+            Вы достигли максимального количества пользователей в тарифе. Чтобы
+            добавить новых пользователей перейдите на другой тариф
+          </Typography>
+        </Dialog>
+      )}
 
       {info?.hasTradeunionOwner && (
         <UploadUsersDialog

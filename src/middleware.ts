@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Исключаем статические файлы и API routes из обработки middleware
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/api/') ||
@@ -35,14 +34,12 @@ export async function middleware(req: NextRequest) {
     (await getToken({ req, secret: process.env.AUTH_SECRET })) ||
     req.cookies.get('token')?.value;
 
-  // Защищенные routes
   if (isPathProtected && !token) {
     const url = new URL('/signin', req.url);
     url.searchParams.set('callbackUrl', pathname);
     return NextResponse.redirect(url);
   }
 
-  // Редирект с главной если есть токен
   if (pathname === '/' && token) {
     const url = new URL('/main', req.url);
     return NextResponse.redirect(url);

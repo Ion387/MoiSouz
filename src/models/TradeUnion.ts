@@ -1,4 +1,6 @@
 export interface ITradeUnion {
+  numberOfUsers: number;
+  countOfUsers: number;
   title: string;
   titleForDocs: string;
   creationDate: string;

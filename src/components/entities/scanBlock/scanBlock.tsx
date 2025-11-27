@@ -152,7 +152,7 @@ const ScanBlock = ({ number }: { number: string }) => {
             : 'На согласовании',
       });
     }
-  }, [file]);
+  }, [file, info]);
 
   useEffect(() => {
     if (

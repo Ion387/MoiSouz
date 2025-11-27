@@ -6,10 +6,10 @@ import { List } from '@mui/material';
 import { ListItem } from '@/components/ui';
 
 import styles from './aside.module.scss';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 export const ProfileAside = () => {
-  const { profileInfo: info } = useGetProfileInfo();
+  const { info } = useFetchProfile();
   return (
     <List className={styles.wrapper}>
       <List className={styles.content}>

@@ -5,6 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { User } from 'next-auth';
 
 export const useFetchProfile = () => {
+  type UserWithDiscount = User & {
+    isDiscount: boolean;
+  };
   const {
     data: info,
     refetch,
@@ -12,7 +15,7 @@ export const useFetchProfile = () => {
   } = useQuery({
     queryKey: ['profile'],
     queryFn: async () =>
-      axios.get<User>(`${getBackendUrl}/api/private/profile`, {
+      axios.get<UserWithDiscount>(`${getBackendUrl}/api/private/profile`, {
         headers: {
           ...(await getHeaders()),
         },

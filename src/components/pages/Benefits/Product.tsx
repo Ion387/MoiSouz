@@ -2,7 +2,6 @@
 
 import { BreadCrumbsText, Icon } from '@/components/ui';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { useMap } from '@/hooks/useMap';
 import {
   getBenefitsProduct,
@@ -27,7 +26,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 const BenefitsProductPage = () => {
   const pathName = usePathname();
   const id = pathName.split('/')[3];
-  const info = useGetProfileInfo();
+  const { info } = useFetchProfile();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
@@ -147,12 +146,9 @@ const BenefitsProductPage = () => {
   }, [promo]);
 
   useEffect(() => {
-    if (
-      info.profileInfo?.ROLES?.length === 1 &&
-      !info.profileInfo?.hasTradeunionMember
-    )
+    if (info?.ROLES?.length === 1 && !info.hasTradeunionMember)
       setOpenAlert(true);
-  }, [info.profileInfo?.ROLES, info.profileInfo?.hasTradeunionMember]);
+  }, [info?.ROLES, info?.hasTradeunionMember]);
 
   useEffect(() => {
     if (open || openChoice) {

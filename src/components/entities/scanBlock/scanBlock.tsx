@@ -20,10 +20,10 @@ import React, { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { globalTheme } from '@/styles/theme';
-import { useGetProfileInfo } from '@/hooks/UseGetProfileInfo';
 import { getDoc } from '@/services/getDocs';
 import { type Filetype } from '@/models/File';
 import { convertSizeToBites } from '@/utils/convertStringToB';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 const schema = yup
   .object({
@@ -49,7 +49,7 @@ const schemaForUsers = yup
   .required();
 
 const ScanBlock = ({ number }: { number: string }) => {
-  const { profileInfo: info } = useGetProfileInfo();
+  const { info } = useFetchProfile();
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(

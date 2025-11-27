@@ -30,11 +30,11 @@ import { type INewDoc } from '@/models/Doc';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAgendas } from '@/services/agendas';
 import axios from 'axios';
-import { getSession } from 'next-auth/react';
 import { getBackendUrl } from '@/constants/url';
 import { defaultQuestions } from '@/constants/defaultQuestions';
 import ProtocolQuestion from '../ui/form/protocolQuestions';
 import theme from '@/styles/theme';
+import { getHeaders } from '@/utils/axios';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -205,8 +205,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: INewProt) => {
-      const session = await getSession();
-
       return axios.post(
         `${getBackendUrl}/api/private/document`,
         {
@@ -222,7 +220,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
           },
         },
         {
-          headers: { Authorization: `Bearer ${session?.user?.token}` },
+          headers: {
+            ...(await getHeaders()),
+          },
         },
       );
     },
@@ -233,7 +233,6 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
 
   const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
     mutationFn: async (data: INewProt) => {
-      const session = await getSession();
       if (doc)
         return axios.post(
           `${getBackendUrl}/api/private/document`,
@@ -251,7 +250,9 @@ const NewProtocolFormChild = ({ doc }: { doc?: INewProt | null }) => {
             },
           },
           {
-            headers: { Authorization: `Bearer ${session?.user?.token}` },
+            headers: {
+              ...(await getHeaders()),
+            },
           },
         );
     },

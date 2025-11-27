@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSession } from 'next-auth/react';
 import axios from 'axios';
-
 import { getBackendUrl } from '@/constants/url';
 import { IOption, IOptionsResponse } from '@/models/Option';
+import { getHeaders } from '@/utils/axios';
 
 enum NAMES {
   hobbies = 'hobbies',
@@ -15,15 +14,15 @@ interface PropsGetOptions {
   params?: { [key: string]: string | number };
 }
 const getOptions = async <T>({ name, params = {} }: PropsGetOptions) => {
-  const session = await getSession();
-
   const result = new URLSearchParams();
   result.append('itemsPerPage', String(1000));
   Object.keys(params).forEach((el) => result.append(el, String(params[el])));
   const search = result.toString();
 
   return axios.get<T>(`${getBackendUrl}/api/${name}?${search}`, {
-    headers: { Authorization: `Bearer ${session?.user?.token}` },
+    headers: {
+      ...(await getHeaders()),
+    },
   });
 };
 

@@ -26,7 +26,6 @@ import dayjs from 'dayjs';
 import { type INewDoc } from '@/models/Doc';
 import { InputArrayOfObjects } from '../ui/form/input-array-of-objects';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { type INewDocument } from '@/models/NewDocument';
@@ -34,6 +33,7 @@ import { getDocs } from '@/services/getDocs';
 import QuestionFields from '../ui/form/question';
 import { InputLabelRequired, InputAutocomplete } from '../ui';
 import { useFetchColleagueList } from '@/hooks/UseFormColleagueProfile';
+import { getHeaders } from '@/utils/axios';
 
 const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
@@ -128,8 +128,6 @@ const NewDocumentForm = ({
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: INewDocument) => {
-      const session = await getSession();
-
       return await axios.post(
         `${getBackendUrl}/api/private/document`,
         {
@@ -143,7 +141,9 @@ const NewDocumentForm = ({
           },
         },
         {
-          headers: { Authorization: `Bearer ${session?.user?.token}` },
+          headers: {
+            ...(await getHeaders()),
+          },
         },
       );
     },
@@ -151,7 +151,6 @@ const NewDocumentForm = ({
 
   const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
     mutationFn: async (data: INewDocument) => {
-      const session = await getSession();
       if (doc)
         return await axios.post(
           `${getBackendUrl}/api/private/document`,
@@ -167,7 +166,9 @@ const NewDocumentForm = ({
             guid: doc.guid,
           },
           {
-            headers: { Authorization: `Bearer ${session?.user?.token}` },
+            headers: {
+              ...(await getHeaders()),
+            },
           },
         );
     },
@@ -264,10 +265,6 @@ const NewDocumentForm = ({
       }
     }
   }, [members, doc]);
-
-  useEffect(() => {
-    console.log('inv', getValues('invitedMembers'));
-  }, [getValues('invitedMembers')]);
 
   return (
     <Paper className={s.paper} style={{ paddingBottom: '55px' }}>

@@ -15,7 +15,6 @@ import s from './forms.module.scss';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getApplications } from '@/services/getApplications';
 import { useRouter } from 'next/navigation';
-import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { ITradeUnion } from '@/models/TradeUnion';
@@ -66,12 +65,13 @@ const MembershipForm = () => {
 
   const { mutate, error } = useMutation({
     mutationFn: async (data: { tu: string }) => {
-      const session = await getSession();
       return axios.put(
         `${getBackendUrl}/api/private/tradeunion-user-exists/${data.tu}`,
         null,
         {
-          headers: { Authorization: `Bearer ${session?.user?.token}` },
+          headers: {
+            ...(await getHeaders()),
+          },
         },
       );
     },

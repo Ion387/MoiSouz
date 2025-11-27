@@ -26,7 +26,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getApplications } from '@/services/getApplications';
 import { ITradeUnion } from '@/models/TradeUnion';
 import { InputCheckbox } from '../ui/form/input-checkbox';
-import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { IDoc } from '@/models/Doc';
@@ -95,23 +94,24 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
 
   const { mutate, isSuccess, data } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
-      const session = await getSession();
-
       return axios.post(`${getBackendUrl}/api/private/document`, data, {
-        headers: { Authorization: `Bearer ${session?.user?.token}` },
+        headers: {
+          ...(await getHeaders()),
+        },
       });
     },
   });
 
   const { mutate: mutateByGuid, isSuccess: isSuccessByGuid } = useMutation({
     mutationFn: async (data: ITradeUnionMember) => {
-      const session = await getSession();
       if (doc)
         return axios.post(
           `${getBackendUrl}/api/private/document`,
           { ...data, guid: doc.guid },
           {
-            headers: { Authorization: `Bearer ${session?.user?.token}` },
+            headers: {
+              ...(await getHeaders()),
+            },
           },
         );
     },

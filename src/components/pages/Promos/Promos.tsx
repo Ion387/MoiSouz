@@ -4,6 +4,7 @@ import { BreadCrumbsText, Icon } from '@/components/ui';
 import { getBackendUrl } from '@/constants/url';
 import { getBenefitsProductPromos } from '@/services/benefits';
 import { getPdf } from '@/services/promos';
+import { getHeaders } from '@/utils/axios';
 import {
   Box,
   CircularProgress,
@@ -15,7 +16,6 @@ import {
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosResponse } from 'axios';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -37,12 +37,13 @@ const PromosPage = () => {
 
   const { mutate } = useMutation({
     mutationFn: async ({ id, saving }: { id: number; saving: number }) => {
-      const session = await getSession();
       return axios.post(
         `${getBackendUrl}/api/private/promo/${id}/saving`,
         { saving: saving },
         {
-          headers: { Authorization: `Bearer ${session?.user?.token}` },
+          headers: {
+            ...(await getHeaders()),
+          },
         },
       );
     },

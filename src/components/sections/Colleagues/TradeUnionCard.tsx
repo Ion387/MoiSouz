@@ -12,7 +12,7 @@ interface IProps {
   count?: number;
   onClick?: (data: ITradeUnion) => void;
   active?: boolean;
-  max?: number;
+  max?: number | null;
 }
 
 export const TradeUnionCard: FC<IProps> = ({
@@ -46,7 +46,7 @@ export const TradeUnionCard: FC<IProps> = ({
         <Box display="flex" flexDirection="column" gap={2}>
           <Typography fontSize={16}>{data.title}</Typography>
 
-          {count != null && max != null && (
+          {count != null && max != null ? (
             <Box display="flex" gap={0.5}>
               <Typography fontSize={25} fontWeight="bold">
                 {`${count} / ${max}`}
@@ -55,6 +55,17 @@ export const TradeUnionCard: FC<IProps> = ({
                 {numberToStringEnd(count, 'человек', 'человека', 'человек')}
               </Typography>
             </Box>
+          ) : (
+            count != null && (
+              <Box display="flex" gap={0.5}>
+                <Typography fontSize={25} fontWeight="bold">
+                  {`${count} `}
+                </Typography>
+                <Typography fontSize={16} marginTop={0.25}>
+                  {numberToStringEnd(count, 'человек', 'человека', 'человек')}
+                </Typography>
+              </Box>
+            )
           )}
         </Box>
         <Box

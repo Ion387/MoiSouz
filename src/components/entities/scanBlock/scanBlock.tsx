@@ -122,7 +122,10 @@ const ScanBlock = ({ number }: { number: string }) => {
         file.step.includes('На проверке')) ||
       (info?.ROLES?.includes('ROLE_TRADEUNION') &&
         file?.documentType === 'AM' &&
-        file.step.includes('Отказ'))
+        file.step.includes('Отказ')) ||
+      (!info?.ROLES?.includes('ROLE_TRADEUNION') &&
+        file?.documentType === 'AM' &&
+        (file.step.includes('Решение') || file.step.includes('Оригинал')))
     )
       setIsBtn(false);
   }, [info, file]);
@@ -198,13 +201,17 @@ const ScanBlock = ({ number }: { number: string }) => {
         {!(
           info?.ROLES?.includes('ROLE_TRADEUNION') &&
           file?.documentType === 'AM'
-        ) && (
-          <ListItem
-            label="Редактировать"
-            to={`/documents/drafts/${number}`}
-            icon="edit"
-          />
-        )}
+        ) ||
+          (!info?.ROLES?.includes('ROLE_TRADEUNION') &&
+            file?.documentType === 'AM' &&
+            (file.step.includes('Решение') ||
+              file.step.includes('Оригинал')) && (
+              <ListItem
+                label="Редактировать"
+                to={`/documents/drafts/${number}`}
+                icon="edit"
+              />
+            ))}
         {!info?.ROLES?.includes('ROLE_TRADEUNION') ||
           (file?.documentType !== 'AM' && (
             <ListItem

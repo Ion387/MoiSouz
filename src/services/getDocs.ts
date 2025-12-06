@@ -1,10 +1,12 @@
 import { getBackendUrl } from '@/constants/url';
-import { IDoc, INewDoc } from '@/models/Doc';
+import { IDoc, IDocAppeal, INewDoc } from '@/models/Doc';
 import { INewProtocol } from '@/models/Protocol';
 import { getHeaders } from '@/utils/axios';
 import axios from 'axios';
 
-export const getDocs = async <T extends IDoc | INewDoc | INewProtocol> (): Promise<T[] | null> => {
+export const getDocs = async <
+  T extends IDoc | INewDoc | INewProtocol,
+>(): Promise<T[] | null> => {
   const response = await axios.get(`${getBackendUrl}/api/private/documents`, {
     headers: { ...(await getHeaders()) },
   });
@@ -12,7 +14,9 @@ export const getDocs = async <T extends IDoc | INewDoc | INewProtocol> (): Promi
   return response.data;
 };
 
-export const getDoc = async <T extends IDoc | INewDoc | INewProtocol>(
+export const getDoc = async <
+  T extends IDoc | INewDoc | INewProtocol | IDocAppeal,
+>(
   guid: string | undefined,
 ): Promise<T | null> => {
   if (guid) {

@@ -9,7 +9,7 @@ import { numberToStringEnd } from '@/utils/string';
 
 interface IProps {
   data: ITradeUnion;
-  count?: number;
+  count?: number | null;
   onClick?: (data: ITradeUnion) => void;
   active?: boolean;
   max?: number | null;

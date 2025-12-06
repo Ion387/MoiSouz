@@ -24,6 +24,7 @@ export async function middleware(req: NextRequest) {
     '/news',
     '/promos',
     '/colleagues',
+    '/appeal',
   ];
 
   const isPathProtected = protectedPaths.some((path) =>

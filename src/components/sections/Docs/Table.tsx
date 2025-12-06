@@ -43,7 +43,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
   });
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState<{
-    index: number;
+    index: string;
     anchorE1: HTMLElement;
   } | null>(null);
 
@@ -54,7 +54,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
-    index: number,
+    index: string,
   ) => {
     event.preventDefault();
     event.stopPropagation();
@@ -72,7 +72,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
     router.push(
       'folder' in doc && doc.folder === 'drafts'
         ? `/documents/drafts/${doc.guid}`
-        : `/documents/${doc.guid}`,
+        : doc.documentType === 'AP'
+          ? `/documents/appeal/${doc.guid}`
+          : `/documents/${doc.guid}`,
     );
   };
 
@@ -280,7 +282,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
                           href={
                             'folder' in doc && doc.folder === 'drafts'
                               ? `/documents/drafts/${doc.guid}`
-                              : `/documents/${doc.guid}`
+                              : doc.documentType === 'AP'
+                                ? `/documents/appeal/${doc.guid}`
+                                : `/documents/${doc.guid}`
                           }
                           style={{ width: '100%', display: 'flex' }}
                         >
@@ -295,7 +299,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                   ? 'Повестка заседания профкома'
                                   : doc.documentType === 'PR'
                                     ? 'Протокол заседания профкома'
-                                    : doc.documentType}
+                                    : doc.documentType === 'AP'
+                                      ? 'Обращение в профсоюз'
+                                      : doc.documentType}
                             </Typography>
                           </Grid2>
                           <Grid2 size={2.4}>
@@ -397,7 +403,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              handleMenuOpen(e, id);
+                              handleMenuOpen(e, String(doc.guid));
                             }}
                           >
                             <Icon name="menu" color="darkgray" />
@@ -405,7 +411,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                           <Popover
                             id="user-menu"
                             anchorEl={openMenu?.anchorE1}
-                            open={openMenu?.index == id}
+                            open={openMenu?.index == String(doc.guid)}
                             onClose={handleMenuClose}
                             anchorOrigin={{
                               vertical: 'bottom',

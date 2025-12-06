@@ -2,7 +2,7 @@ export interface IFormColleagueProfile {
   id?: number;
   guid?: string;
   card?: string;
-  code?: string;
+  code?: string | null;
   firstName: string;
   lastName: string;
   middleName?: string | null;

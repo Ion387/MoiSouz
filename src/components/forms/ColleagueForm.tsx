@@ -58,7 +58,7 @@ const schema = yup
         //@ts-expect-error none
         return convertSizeToBites(value.size) <= 2 * 1048576;
       }),
-    code: yup.string(),
+    code: yup.string().nullable(),
     profession: yup.array(
       yup.string().min(2, 'Укажите профессию').required('Укажите профессию'),
     ),

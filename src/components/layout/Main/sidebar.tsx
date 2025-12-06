@@ -1,9 +1,15 @@
-import { Box, Typography } from '@mui/material';
+'use client';
+
+import { Box, Button, Typography } from '@mui/material';
 import { FC } from 'react';
 import { MainSidebarCard } from './sidebar-card';
 import { Icon } from '@/components/ui';
+import Link from 'next/link';
+import { globalTheme } from '@/styles/theme';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 export const MainSidebar: FC = () => {
+  const { info } = useFetchProfile();
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <MainSidebarCard
@@ -29,6 +35,28 @@ export const MainSidebar: FC = () => {
           Часы
         </Typography>
       </MainSidebarCard>
+
+      {info?.hasTradeunionMember && (
+        <Link href={'/appeal'} style={{ width: '100%', margin: '0 auto' }}>
+          <Button
+            variant="contained"
+            disabled
+            sx={{
+              padding: '15px',
+              fontSize: '16px',
+              lineHeight: '20px',
+
+              width: '100%',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
+            }}
+          >
+            Обращение в профсоюз
+          </Button>
+        </Link>
+      )}
     </Box>
   );
 };

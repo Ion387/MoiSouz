@@ -74,6 +74,7 @@ import { Icon as IconNewsNotExists } from '@/assets/icons/news-not-exists';
 import { Icon as IconStar } from '@/assets/icons/star';
 import { Icon as IconSort } from '@/assets/icons/sort';
 import { Icon as IconSearch } from '@/assets/icons/search';
+import { Icon as IconStructure } from '@/assets/icons/structure';
 
 const NAMES = [
   'document',
@@ -141,6 +142,7 @@ const NAMES = [
   'star',
   'sort',
   'search',
+  'structure',
 ] as const;
 export type IconName = (typeof NAMES)[number];
 
@@ -210,6 +212,7 @@ const ICONS: { [key: string]: JSX.Element } = {
   star: <IconStar />,
   sort: <IconSort />,
   search: <IconSearch />,
+  structure: <IconStructure />,
 };
 
 interface Props {

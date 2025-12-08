@@ -51,6 +51,16 @@ export const ProfileAside = () => {
           </ListItem>
         )}
 
+        {info?.hasTradeunionOwner == true && (
+          <ListItem
+            label="Орг. структура"
+            icon="structure"
+            to="/structure"
+            openAlwaysOn={['/structure']}
+            selectedAlways={false}
+          ></ListItem>
+        )}
+
         {/* <ListItem label="Деньги" icon="money" disabled />*/}
         <ListItem
           label="Скидки, льготы"

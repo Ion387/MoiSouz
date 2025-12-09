@@ -5,7 +5,7 @@ import { List } from '@mui/material';
 
 import { ListItem } from '@/components/ui';
 
-import styles from './6.module.scss';
+import styles from './aside.module.scss';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 
 export const ProfileAside = () => {

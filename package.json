@@ -30,7 +30,7 @@
     "jodit-react": "^5.2.19",
     "js-cookie": "^3.0.5",
     "mui-tel-input": "^7.0.0",
-    "next": "15.0.4",
+    "next": "15.0.5",
     "next-auth": "^5.0.0-beta.25",
     "pdfjs-dist": "3.4.120",
     "raw-loader": "^4.0.2",

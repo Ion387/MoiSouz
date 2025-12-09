@@ -35,7 +35,7 @@ export interface IDoc {
 export interface INewDoc {
   tradeunion?: ITradeUnion;
   user?: IProfile;
-  status: 'VIEWED' | 'NEW';
+  status: 'VIEWED' | 'NEW' | '';
   title: string;
   files: {
     type: string;

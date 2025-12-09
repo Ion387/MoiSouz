@@ -134,7 +134,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
 
   return (
     <Paper sx={{ p: 0, pb: 1.6 }}>
-      <Grid2 container sx={{ p: 1.6 }}>
+      <Grid2 container sx={{ p: 1.6 }} spacing={0.8}>
         <Grid2 size={2}>
           <Typography
             variant="body2"
@@ -263,7 +263,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
       {groupedDocs && !!groupedDocs.length ? (
         groupedDocs.map((el, index, arr) => (
           <Box key={el.tradeunion + index}>
-            <Grid2 container sx={{ p: 1.6 }}>
+            <Grid2 container sx={{ p: 1.6 }} spacing={0.8}>
               <Grid2 size={2}>
                 <Typography variant="body2" fontWeight={700} pt={2.4}>
                   {el.tradeunion}

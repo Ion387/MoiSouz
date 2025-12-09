@@ -56,7 +56,11 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<ISignin> = async (data) => {
-    const res = await signIn('credentials', { ...data, redirect: false });
+    const formattedData = { ...data, email: data.email.toLowerCase() };
+    const res = await signIn('credentials', {
+      ...formattedData,
+      redirect: false,
+    });
     if (res?.error === 'CredentialsSignin') {
       setSignInError(true);
     }
@@ -67,12 +71,8 @@ const Signin = () => {
 
   const { hasToken } = useTokenFromQuery({
     redirectPath: '/main',
-    onSuccess: (token) => {
-      console.log('Token successfully saved to cookies', token);
-    },
-    onError: (error) => {
-      console.error('Failed to save token:', error);
-    },
+    onSuccess: () => {},
+    onError: () => {},
   });
 
   useEffect(() => {

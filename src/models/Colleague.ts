@@ -31,7 +31,7 @@ export interface IFormColleagueProfile {
   }[];
   hobbies?: number[];
   email: string;
-  role: string;
+  role?: string | null;
   isCommittee?: boolean | null;
   reason?: string | null;
   reasonFile?: string | null;

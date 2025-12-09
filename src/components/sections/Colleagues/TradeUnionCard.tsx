@@ -44,7 +44,18 @@ export const TradeUnionCard: FC<IProps> = ({
         height={110}
       >
         <Box display="flex" flexDirection="column" gap={2}>
-          <Typography fontSize={16}>{data.title}</Typography>
+          <Typography
+            fontSize={16}
+            sx={{
+              maxWidth: '180px',
+              width: '100%', // или конкретная ширина
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {data.title}
+          </Typography>
 
           {count != null && max != null ? (
             <Box display="flex" gap={0.5}>

@@ -48,7 +48,18 @@ export const UserNav: FC<Props & PropsWithSX> = ({
             ml: 1,
           }}
         >
-          <Typography fontSize={14} lineHeight="19px" fontWeight={700}>
+          <Typography
+            fontSize={14}
+            lineHeight="19px"
+            fontWeight={700}
+            sx={{
+              maxWidth: '200px',
+              width: '100%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {name}
           </Typography>
           <Typography fontSize={12} lineHeight="16px">

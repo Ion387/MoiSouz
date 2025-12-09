@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Box, InputLabel, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -101,7 +101,7 @@ const schema = yup
       .transform((value) => (value ? value : [])),
     isActive: yup.bool(),
     email: yup.string().email('Укажите почту').required('Укажите почту'),
-    role: yup.string().required('Укажите роль'),
+    role: yup.string().nullable(),
     reason: yup.string().nullable(),
     isCommittee: yup.boolean().nullable(),
     history: yup.array(
@@ -188,6 +188,8 @@ export const ColleagueForm: FC<Props> = ({
 
     return true;
   }, [defaultValues]);
+
+  useEffect(() => {}, []);
 
   return (
     <Form
@@ -412,7 +414,7 @@ export const ColleagueForm: FC<Props> = ({
         />
       </Box>
       <InputCheckbox
-        sx={{ justifyContent: 'center', margin: '12px 0' }}
+        sx={{ justifyContent: 'center', margin: '12px 0', display: 'none' }}
         name="isCommittee"
         label={`Член профсоюзного комитета`}
       />

@@ -130,7 +130,10 @@ const ColleaguesWrapper = () => {
 
   useEffect(() => {
     if (tuOwner && info?.ROLES?.includes('ROLE_TRADEUNION'))
-      setCount({ max: tuOwner.numberOfUsers, total: tuOwner.countOfUsers });
+      setCount({
+        max: tuOwner.numberOfUsers === undefined ? null : tuOwner.numberOfUsers,
+        total: tuOwner.countOfUsers === undefined ? null : tuOwner.countOfUsers,
+      });
     else setCount({ max: null, total: totalColleagueList });
   }, [tuOwner, info, tuActive, totalColleagueList]);
 

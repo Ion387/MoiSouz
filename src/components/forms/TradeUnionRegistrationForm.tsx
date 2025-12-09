@@ -59,17 +59,7 @@ import { getParents } from '@/services/getParents';
 const schema = yup
   .object({
     parent: yup.string().nullable(),
-    tuType: yup
-      .mixed<TtyTypes>()
-      .oneOf(
-        [
-          'Первичная профсоюзная организация',
-          'Первичная профсоюзная организация без ИНН',
-          'Профсоюзная организация',
-        ],
-        'Выберите корректный тип профсоюза',
-      )
-      .required('Обязательное поле'),
+    type: yup.number().required('Обязательное поле'),
     email: yup
       .string()
       .required('Обязательное поле')
@@ -272,26 +262,28 @@ const TradeUnionRegistrationForm = () => {
   const [isMyName, setIsMyName] = useState<boolean>(false);
   const [chosenUnion, setChoosenUnion] = useState<ITradeUnion>();
 
-  const { tuType } = useWatch({ control });
+  const { type } = useWatch({ control });
 
   const chosenUnionRequired = useMemo(() => {
-    switch (tuType) {
-      case 'Первичная профсоюзная организация без ИНН':
+    switch (type) {
+      case 5:
         return true;
     }
     return false;
-  }, [tuType]);
+  }, [type]);
 
   const employerShow = useMemo(() => {
-    switch (tuType) {
-      case 'Первичная профсоюзная организация':
-      case 'Первичная профсоюзная организация без ИНН':
+    switch (type) {
+      case 5:
+      case 4:
         return true;
     }
     return false;
-  }, [tuType]);
+  }, [type]);
 
-  useEffect(() => {}, [tuType]);
+  useEffect(() => {
+    console.log('type', type);
+  }, [type]);
 
   const queryClient = useQueryClient();
 
@@ -441,29 +433,32 @@ const TradeUnionRegistrationForm = () => {
         return;
     }
     */
+
     if (chosenUnion) {
-      setFormValue('inn', chosenUnion?.inn);
-      setFormValue('kpp', chosenUnion?.kpp);
-      setFormValue('ogrn', chosenUnion?.ogrn);
-      setFormValue('registrationDate', chosenUnion?.registrationDate);
-      setFormValue('okato', chosenUnion?.okato);
-      setFormValue('oktmo', chosenUnion?.oktmo);
-      setFormValue('bank.bank', chosenUnion?.bank?.bank);
-      setFormValue('bank.rs', chosenUnion?.bank?.rs);
-      setFormValue('bank.bik', chosenUnion?.bank?.bik);
-      setFormValue('bank.ks', chosenUnion?.bank?.ks);
       setFormValue('parent', chosenUnion?.guid);
-      setError('inn', {});
-      setError('kpp', {});
-      setError('ogrn', {});
-      setError('okato', {});
-      setError('oktmo', {});
-      setError('bank.rs', {});
-      setError('bank.ks', {});
-      setError('bank.bik', {});
-      setError('registrationDate', {});
+      if (type && type > 4) {
+        setFormValue('inn', chosenUnion?.inn);
+        setFormValue('kpp', chosenUnion?.kpp);
+        setFormValue('ogrn', chosenUnion?.ogrn);
+        setFormValue('registrationDate', chosenUnion?.registrationDate);
+        setFormValue('okato', chosenUnion?.okato);
+        setFormValue('oktmo', chosenUnion?.oktmo);
+        setFormValue('bank.bank', chosenUnion?.bank?.bank);
+        setFormValue('bank.rs', chosenUnion?.bank?.rs);
+        setFormValue('bank.bik', chosenUnion?.bank?.bik);
+        setFormValue('bank.ks', chosenUnion?.bank?.ks);
+        setError('inn', {});
+        setError('kpp', {});
+        setError('ogrn', {});
+        setError('okato', {});
+        setError('oktmo', {});
+        setError('bank.rs', {});
+        setError('bank.ks', {});
+        setError('bank.bik', {});
+        setError('registrationDate', {});
+      }
     }
-  }, [chosenUnion]);
+  }, [chosenUnion, type]);
 
   return (
     <Paper className={s.paper}>
@@ -487,7 +482,7 @@ const TradeUnionRegistrationForm = () => {
                   <InputLabel>Тип организации</InputLabel>
                   <Controller
                     control={control}
-                    name="tuType"
+                    name="type"
                     render={({
                       field: { value, onChange },
                       fieldState: { error },
@@ -507,24 +502,36 @@ const TradeUnionRegistrationForm = () => {
                           value={value}
                           onChange={(e) => {
                             onChange(e);
-                            if (e.target.value !== 'Профсоюзная организация') {
-                              setChoosenUnion(undefined);
-                              setFormValue('parent', null);
-                            }
+                            setChoosenUnion(undefined);
+                            setFormValue('parent', null);
                           }}
                           error={!!error?.message}
                         >
                           {[
-                            'Первичная профсоюзная организация',
-                            'Первичная профсоюзная организация без ИНН',
-                            'Профсоюзная организация',
+                            {
+                              name: 'Первичная профсоюзная организация без ИНН',
+                              number: 5,
+                            },
+                            {
+                              name: 'Первичная профсоюзная организация',
+                              number: 4,
+                            },
+                            {
+                              name: 'Территориальная профсоюзная организация',
+                              number: 3,
+                            },
+                            {
+                              name: 'Региональная профсоюзная организация',
+                              number: 2,
+                            },
+                            { name: 'Федерация профсоюзов', number: 1 },
                           ].map((option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
+                            <MenuItem key={option.name} value={option.number}>
+                              {option.name}
                             </MenuItem>
                           ))}
                         </Select>
-                        <FormHelperText id={'tuType'} error={true}>
+                        <FormHelperText id={'type'} error={true}>
                           {error && error?.message}
                         </FormHelperText>
                       </Box>
@@ -539,7 +546,7 @@ const TradeUnionRegistrationForm = () => {
                     <CircularProgress />
                   </Grid2>
                 )}
-                {!isFetchingTradeUnion && tuType && tradeUnions && (
+                {!isFetchingTradeUnion && type && tradeUnions && (
                   <Grid2 size={12}>
                     <InputLabel>
                       Вышестоящая организация
@@ -633,7 +640,7 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     ИНН{' '}
-                    {tuType !== 'Первичная профсоюзная организация без ИНН' && (
+                    {type !== 5 && (
                       <span
                         style={
                           !!errors.inn?.message

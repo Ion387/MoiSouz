@@ -1,6 +1,6 @@
 export interface ITradeUnion {
-  numberOfUsers: number;
-  countOfUsers: number;
+  numberOfUsers?: number;
+  countOfUsers?: number;
   title: string;
   titleForDocs: string;
   creationDate: string;
@@ -54,7 +54,8 @@ export interface ITradeUnion {
     inn: string;
     title: string;
   }[];
-  tuType: TtyTypes;
+  tuType?: TtyTypes;
+  type: number;
 }
 
 export interface ITradeUnionUploadUsersForm {
@@ -64,4 +65,6 @@ export interface ITradeUnionUploadUsersForm {
 export type TtyTypes =
   | 'Первичная профсоюзная организация'
   | 'Первичная профсоюзная организация без ИНН'
-  | 'Профсоюзная организация';
+  | 'Территориальная профсоюзная организация'
+  | 'Региональная профсоюзная организация'
+  | 'Федерация профсоюзов';

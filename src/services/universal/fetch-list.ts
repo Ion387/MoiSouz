@@ -8,7 +8,7 @@ import axios from 'axios';
 import { getBackendUrl } from '@/constants/url';
 import { getHeaders } from '@/utils/axios';
 
-export type TypeUseFetchList = 'infinity' | 'page';
+export type TypeUseFetchList = 'infinity' | 'page' | 'arr';
 
 interface PropsUseFetchList {
   name: string;
@@ -102,6 +102,9 @@ export const useFetchList = <T>({
           break;
         case 'page':
           dataNew = data && Array.isArray(data.data) ? [...data?.data] : [];
+          break;
+        case 'arr':
+          dataNew = data && Array.isArray(data) ? [...data] : [];
           break;
       }
       if (JSON.stringify(result.data) != JSON.stringify(dataNew)) {

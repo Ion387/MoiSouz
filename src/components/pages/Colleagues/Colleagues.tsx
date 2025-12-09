@@ -33,7 +33,10 @@ const ColleaguesWrapper = () => {
   const tuList = useFetchUserTUs();
   const tuOwner = useFetchTUOwner();
 
-  const [count, setCount] = useState<{ max: number | null; total: number }>({
+  const [count, setCount] = useState<{
+    max: number | null;
+    total: number | null;
+  }>({
     max: null,
     total: 0,
   });
@@ -127,13 +130,16 @@ const ColleaguesWrapper = () => {
 
   useEffect(() => {
     if (tuOwner && info?.ROLES?.includes('ROLE_TRADEUNION'))
-      setCount({ max: tuOwner.numberOfUsers, total: tuOwner.countOfUsers });
+      setCount({
+        max: tuOwner.numberOfUsers === undefined ? null : tuOwner.numberOfUsers,
+        total: tuOwner.countOfUsers === undefined ? null : tuOwner.countOfUsers,
+      });
     else setCount({ max: null, total: totalColleagueList });
   }, [tuOwner, info, tuActive, totalColleagueList]);
 
   useEffect(() => {
     if (
-      count.total >= Number(count.max) &&
+      Number(count.total) >= Number(count.max) &&
       info?.ROLES?.includes('ROLE_TRADEUNION')
     )
       setOpenCountDialog(true);
@@ -153,7 +159,7 @@ const ColleaguesWrapper = () => {
                 <TradeUnionCard
                   key={el.guid}
                   data={el}
-                  count={count.total}
+                  count={Number(count.total)}
                   max={count.max}
                   onClick={handleClickTradeunion}
                   active={tuActive?.guid == el.guid}
@@ -171,7 +177,9 @@ const ColleaguesWrapper = () => {
               >
                 <Link
                   href={
-                    count.total >= Number(count.max) ? '' : '/colleagues/create'
+                    Number(count.total) >= Number(count.max)
+                      ? ''
+                      : '/colleagues/create'
                   }
                   style={{
                     gap: 1,
@@ -186,7 +194,7 @@ const ColleaguesWrapper = () => {
                       height: 'fit-content',
                       width: '100%',
                     }}
-                    disabled={count.total >= Number(count.max)}
+                    disabled={Number(count.total) >= Number(count.max)}
                   >
                     <Icon name="plus" color="secondary.main" />
                     Добавить участника
@@ -200,7 +208,7 @@ const ColleaguesWrapper = () => {
                     minWidth: 'fit-content',
                     marginTop: 'auto',
                   }}
-                  disabled={count.total >= Number(count.max)}
+                  disabled={Number(count.total) >= Number(count.max)}
                   onClick={handleClickUpload}
                 >
                   <Icon name="upload" color="secondary.main" />
@@ -238,7 +246,7 @@ const ColleaguesWrapper = () => {
         />
       </Box>
 
-      {count.total >= Number(count.max) && (
+      {Number(count.total) >= Number(count.max) && (
         <Dialog
           open={openCountDialog}
           onClose={() => setOpenCountDialog(false)}

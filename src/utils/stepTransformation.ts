@@ -61,6 +61,12 @@ export const stepTransformationAp = (str: string) => {
     case 'Отправлено в профсоюз':
       step = 1;
       break;
+    case 'Ожидает отправки':
+      step = 1;
+      break;
+    case 'Утверждено':
+      step = 1;
+      break;
     case 'В работе':
       step = 2;
       break;

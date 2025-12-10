@@ -65,7 +65,6 @@ export const InputFile: FC<PropsWithSX & Props> = ({
 }) => {
   const { control, getValues, setValue } = useFormContext();
   const ref = createRef<HTMLInputElement>();
-
   const [preview, setPreview] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | string | null>(null);
   const value = getValues(name);

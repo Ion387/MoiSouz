@@ -146,15 +146,13 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
   useEffect(() => {
     const fn = async () => {
       if (isSuccess) {
-        if (doc && !Array.isArray(doc.files))
-          await saveFormTU2Scan(getValues('upload'), doc.guid);
-
+        if (typeof getValues('upload') === 'object')
+          await saveFormTU2Scan(getValues('upload'), data?.data.guid);
         router.push(`/documents/appeal/${data?.data.guid}`);
       }
       if (isSuccessByGuid && doc) {
-        if (doc && !Array.isArray(doc.files))
+        if (typeof getValues('upload') === 'object')
           await saveFormTU2Scan(getValues('upload'), doc.guid);
-
         router.push(`/documents/appeal/${doc.guid}`);
       }
     };
@@ -182,6 +180,10 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
       setFormValue('tradeunion', chosenUnion.id);
     }
   }, [chosenUnion]);
+
+  useEffect(() => {
+    setFormValue('data.type', chosenType);
+  }, [chosenType]);
 
   return (
     <Paper className={s.paper}>

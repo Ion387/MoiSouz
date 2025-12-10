@@ -15,6 +15,7 @@ import axios from 'axios';
 import { getHeaders } from '@/utils/axios';
 import { type IDocAppeal } from '@/models/Doc';
 import { getParentNode, useFetchTree } from '@/hooks/UseTree';
+import { useRouter } from 'next/navigation';
 
 const ScanAppealBlock = ({
   number,
@@ -27,7 +28,7 @@ const ScanAppealBlock = ({
   const queryClient = useQueryClient();
   const [parent, setParent] = useState<number | null>(null);
   const { data } = useFetchTree({ type: 'arr', perPage: 1000 });
-
+  const router = useRouter();
   const { data: file } = useQuery({
     queryKey: ['doc', number],
     queryFn: () => getDoc(number),
@@ -126,6 +127,7 @@ const ScanAppealBlock = ({
                       onClick={() => {
                         if (file?.step === 'В работе') {
                           mutate({ doc: file as IDocAppeal, id: parent });
+                          router.push('/documents?incoming');
                         } else onOpenDialog('decline');
                       }}
                     >
@@ -151,7 +153,11 @@ const ScanAppealBlock = ({
                           },
                         }}
                         onClick={() => {
-                          if (file?.step === 'Отправлено в профсоюз')
+                          if (
+                            file?.step === 'Отправлено в профсоюз' ||
+                            file?.step === 'Утверждено' ||
+                            file?.step === 'Ожидает отправки'
+                          )
                             mutate2({ step: 'В работе' });
                           else onOpenDialog('success');
                         }}

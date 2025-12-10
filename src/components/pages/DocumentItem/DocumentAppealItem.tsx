@@ -51,7 +51,7 @@ const DocumentAppealItem = () => {
   const { data: doc, isLoading } = useQuery({
     queryKey: ['doc', number],
     enabled: !!number,
-    refetchOnMount: true,
+    refetchOnMount: false,
     queryFn: () => getDoc<IDocAppeal>(number),
   });
 
@@ -118,7 +118,12 @@ const DocumentAppealItem = () => {
     }
     if (doc && doc.data.answer && info?.ROLES?.includes('ROLE_TRADEUNION')) {
       setValue('answer', doc.data.answer);
-      if (doc.step === 'Отправлено в профсоюз') setOpen('decline');
+      if (
+        doc.step === 'Отправлено в профсоюз' ||
+        doc.step === 'Утверждено' ||
+        doc.step === 'Ожидает отправки'
+      )
+        setOpen('decline');
       else if (doc.step === 'В работе') setOpen('success');
     }
   }, [doc, info]);
@@ -190,25 +195,31 @@ const DocumentAppealItem = () => {
                     {doc.data.text}
                   </Typography>
                 </Grid2>
-                {Array.isArray(doc.files) && (
-                  <Grid2 size={12}>
-                    <FormProvider {...methods2}>
-                      <form>
-                        <InputFile
-                          mw={'100%'}
-                          name="upload"
-                          label="Прикрепить скан (pdf)"
-                          accept=".pdf"
-                          imageSelect="pdf"
-                          type="secondary"
-                          defaultFile={doc.files[0].source}
-                        />
-                      </form>
-                    </FormProvider>
-                  </Grid2>
+                {doc && !isLoading ? (
+                  Array.isArray(doc.files) && doc.files?.[0]?.source ? (
+                    <Grid2 size={12}>
+                      <FormProvider {...methods2}>
+                        <form>
+                          <InputFile
+                            mw={'100%'}
+                            name="upload"
+                            label="Прикрепить скан (pdf)"
+                            accept=".pdf"
+                            imageSelect="pdf"
+                            type="secondary"
+                            defaultFile={doc.files[0].source}
+                          />
+                        </form>
+                      </FormProvider>
+                    </Grid2>
+                  ) : null
+                ) : (
+                  <CircularProgress />
                 )}
                 {doc.data.answer &&
                   doc.step !== 'Отправлено в профсоюз' &&
+                  doc.step !== 'Утверждено' &&
+                  doc.step !== 'Ожидает отправки' &&
                   doc.step !== 'В работе' && (
                     <Grid2 size={12} display={'flex'} flexDirection={'column'}>
                       <Typography

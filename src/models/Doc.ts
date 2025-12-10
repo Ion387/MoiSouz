@@ -25,6 +25,7 @@ export interface IDocAppeal {
     text: string;
     isActive: boolean;
     answer?: string;
+    action?: string;
   };
 }
 

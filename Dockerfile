@@ -3,7 +3,7 @@ WORKDIR /var/www
 COPY package.json yarn.lock .env ./
 #RUN npm install
 # Add any dependencies required to build modules ie: modules with native code.
-RUN apk add --no-cache \
+RUN  apk update && apk upgrade && apk add --no-cache \
 	build-base \
 	cairo-dev \
 	libpng-dev \

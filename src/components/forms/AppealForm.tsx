@@ -30,6 +30,7 @@ import { ruRU } from '@mui/x-date-pickers/locales';
 import { InputCheckbox, InputDate, InputFile } from '../ui/form';
 import { convertSizeToBites } from '@/utils/convertStringToB';
 import { type Filetype } from '@/models/File';
+import { saveFormTU2Scan } from '@/services/postLogoandFile';
 
 const OPTIONS = ['Обращение', 'Жалоба'] as const;
 
@@ -38,19 +39,21 @@ const schema = yup
     documentDate: yup.string(),
     documentNumber: yup.string(),
     data: yup.object({
-      upload: yup
-        .mixed<Filetype>()
-        .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
-          if (!value || typeof value === 'string') return true;
-          return convertSizeToBites(value.size) <= 2 * 1048576;
-        }),
       type: yup.string().required('Выберите тип обращения'),
       text: yup.string().required('Введите текст обращения'),
+      action: yup.string().nullable(),
       isActive: yup
         .bool()
         .oneOf([true], 'Необходимо принять согласие')
         .required('Необходимо принять согласие'),
     }),
+    upload: yup
+      .mixed<Filetype>()
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
+        if (!value || typeof value === 'string') return true;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
+      })
+      .nullable(),
     tradeunion: yup.number().required('Обязательное поле'),
     id: yup.number().nullable(),
   })
@@ -68,7 +71,6 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue: setFormValue,
     getValues,
@@ -119,6 +121,17 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
     else mutateByGuid(data);
   };
 
+  const handleFormSubmit = async (data: IAppeal, action: 'send' | 'draft') => {
+    const formData = {
+      ...data,
+      data: {
+        ...data.data,
+        action: action,
+      },
+    };
+    await onSubmit(formData);
+  };
+
   useEffect(() => {
     setFormValue('documentNumber', 'APXXXXX');
     setFormValue('documentDate', dayjs().format('DD.MM.YYYY'));
@@ -126,21 +139,26 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
   }, []);
 
   useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
-
-  useEffect(() => {
     if (infoUT && Array.isArray(infoUT) && infoUT[0])
       setChoosenUnion(infoUT[0]);
   }, [infoUT]);
 
   useEffect(() => {
-    if (isSuccess) {
-      router.push(`/documents/appeal/${data?.data.guid}`);
-    }
-    if (isSuccessByGuid && doc) {
-      router.push(`/documents/appeal/${doc.guid}`);
-    }
+    const fn = async () => {
+      if (isSuccess) {
+        if (doc && !Array.isArray(doc.files))
+          await saveFormTU2Scan(getValues('upload'), doc.guid);
+
+        router.push(`/documents/appeal/${data?.data.guid}`);
+      }
+      if (isSuccessByGuid && doc) {
+        if (doc && !Array.isArray(doc.files))
+          await saveFormTU2Scan(getValues('upload'), doc.guid);
+
+        router.push(`/documents/appeal/${doc.guid}`);
+      }
+    };
+    fn();
   }, [isSuccess, data, doc, isSuccessByGuid]);
 
   useEffect(() => {
@@ -151,13 +169,16 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
       setFormValue('data.type', doc.data.type);
       setFormValue('data.isActive', doc.data.isActive);
       setFormValue('id', doc.id ? doc.id : null);
+      setFormValue(
+        'upload',
+        doc.files && doc.files[0] ? doc.files[0].source : undefined,
+      );
       setChoosenUnion(doc.tradeunion);
     }
   }, [doc]);
 
   useEffect(() => {
     if (chosenUnion && chosenUnion.id) {
-      console.log(chosenUnion);
       setFormValue('tradeunion', chosenUnion.id);
     }
   }, [chosenUnion]);
@@ -172,7 +193,11 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
         }
       >
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={methods.handleSubmit((data) =>
+              handleFormSubmit(data, 'send'),
+            )}
+          >
             <Grid2 container spacing={2}>
               {doc && (
                 <>
@@ -255,7 +280,8 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
                     lineHeight: '27px',
                   }}
                   onClick={async () => {
-                    await onSubmit(getValues());
+                    const values = getValues();
+                    await handleFormSubmit(values, 'draft');
                     router.push('/documents?drafts');
                   }}
                 >

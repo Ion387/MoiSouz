@@ -58,7 +58,7 @@ export const stepTransformationAg = (str: string) => {
 export const stepTransformationAp = (str: string) => {
   let step = 0;
   switch (str) {
-    case 'Обращение зарегистрировано':
+    case 'Отправлено в профсоюз':
       step = 1;
       break;
     case 'В работе':

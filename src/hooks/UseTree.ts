@@ -25,6 +25,26 @@ export const useFetchTree = (
   });
 };
 
+export const getParentNode = (
+  nodes: OrganizationNode[],
+  childId: number,
+): OrganizationNode | null => {
+  for (const node of nodes) {
+    if (node.children) {
+      const isDirectChild = node.children.some((child) => child.id === childId);
+      if (isDirectChild) {
+        return node;
+      }
+      const parentInChildren = getParentNode(node.children, childId);
+      if (parentInChildren) {
+        return parentInChildren;
+      }
+    }
+  }
+
+  return null;
+};
+
 export const isChildOf = (
   nodes: OrganizationNode[],
   parentId: number,

@@ -47,7 +47,7 @@ export interface ITradeUnion {
   logo?: object | null | string;
   percents?: number;
   tradeunionOwner?: { guid: string };
-  scan: object | null | string;
+  scan?: object | null | string;
   participants?: object | null | string;
   children?: {
     guid: string;

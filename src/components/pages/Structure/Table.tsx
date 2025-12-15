@@ -12,11 +12,16 @@ import {
   IconButton,
   Box,
   Collapse,
+  ListItemIcon,
+  MenuItem,
+  Popover,
+  ListItemText,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Icon } from '@/components/ui';
 import { useFetchTUOwner } from '@/hooks/useTU';
 import { isChildOf } from '@/hooks/UseTree';
+import { useRouter } from 'next/navigation';
 
 // Типы для данных
 interface OrganizationNode {
@@ -44,7 +49,7 @@ const getTypeName = (type: number | null): string => {
       return 'Территориальная организация';
     case 4:
       return 'Первичная профсоюзная организация';
-    case 4:
+    case 5:
       return 'Первичная профсоюзная организация без ИНН';
     default:
       return 'Не указан';
@@ -57,19 +62,48 @@ const TreeTableRow: React.FC<{
   data?: OrganizationNode[];
 }> = ({ node, level = 0, data }) => {
   const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<{
+    index: number;
+    anchorE1: HTMLElement;
+  } | null>(null);
   const hasChildren = node.children && node.children.length > 0;
   const childrenCount = node.children?.length || 0;
   const tuOwner = useFetchTUOwner();
   const [isActive, setIsActive] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (tuOwner && data) {
-      console.log(tuOwner.id === node.id);
       setIsActive(
         isChildOf(data, Number(tuOwner?.id), node.id) || tuOwner.id === node.id,
       );
     }
   }, [tuOwner, data, node]);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpenMenu({
+      index,
+      anchorE1: event.currentTarget,
+    });
+  };
+  const handleMenuClose = () => {
+    setOpenMenu(null);
+  };
+
+  const handleEdit = (id: number, guid: string) => {
+    if (tuOwner?.id === id) router.push('/profile');
+    else router.push(`/structure/edit?guid=${guid}`);
+  };
+
+  const handleCreate = (guid?: string) => {
+    if (guid) router.push(`/structure/create?guid=${guid}`);
+    else router.push(`/structure/create`);
+  };
 
   return (
     <>
@@ -189,14 +223,78 @@ const TreeTableRow: React.FC<{
         <TableCell sx={{ width: '10.3%' }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
             {isActive && (
-              <IconButton
-                size="small"
-                sx={{
-                  color: node.selected ? 'primary.main' : 'action.active',
-                }}
-              >
-                <Icon name={'menu'} />
-              </IconButton>
+              <>
+                <IconButton
+                  size="small"
+                  sx={{
+                    color: node.selected ? 'primary.main' : 'action.active',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleMenuOpen(e, node.id);
+                  }}
+                >
+                  <Icon name={'menu'} />
+                </IconButton>
+                <Popover
+                  id="user-menu"
+                  anchorEl={openMenu?.anchorE1}
+                  open={openMenu?.index == node.id}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  slotProps={{
+                    paper: {
+                      variant: 'popover',
+                    },
+                  }}
+                  disableScrollLock
+                >
+                  {Number(node.type) < 4 && Number(node.type) > 0 && (
+                    <MenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCreate(node.guid);
+                      }}
+                    >
+                      <ListItemIcon>
+                        <Icon name="plus" />
+                      </ListItemIcon>
+                      <ListItemText>Создать организацию</ListItemText>
+                    </MenuItem>
+                  )}
+
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEdit(node.id, node.guid);
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Icon name="edit" />
+                    </ListItemIcon>
+                    <ListItemText>Редактировать</ListItemText>
+                  </MenuItem>
+                  {/* {<Divider></Divider>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Icon name="delete" color="red" />
+                    </ListItemIcon>
+                    <ListItemText>Удалить</ListItemText>
+                  </MenuItem>} */}
+                </Popover>
+              </>
             )}
           </Box>
         </TableCell>

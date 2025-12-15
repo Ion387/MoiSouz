@@ -27,15 +27,15 @@ import {
   useForm,
   useWatch,
 } from 'react-hook-form';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ITradeUnion, TtyTypes } from '@/models/TradeUnion';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { type ITradeUnion, type TtyTypes } from '@/models/TradeUnion';
 import { useRouter } from 'next/navigation';
-import { InputImage } from '../ui/form/input-image';
+
 import { InputCheckbox, InputDate } from '../ui/form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { ruRU } from '@mui/x-date-pickers/locales';
-import { registration } from '@/hooks/UseFormTUReg';
+import { createStructure } from '@/hooks/UseFormTUReg';
 import { getAddress } from '@/services/getAddress';
 import { getApplications } from '@/services/getApplications';
 import {
@@ -46,12 +46,7 @@ import {
   validateKpp,
   validateOgrn,
 } from '@/utils/validateDocs';
-import { InputFile } from '../ui/form/input-file';
 import { TextFieldCustom } from '../ui/form/entities/input-textfield';
-import { saveFormTULogo, saveFormTUScan } from '@/services/postLogoandFile';
-import { getMyTU } from '@/services/getMyTU';
-import { convertSizeToBites } from '@/utils/convertStringToB';
-import { saveFormTUUsers } from '@/hooks/useTU';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import theme from '@/styles/theme';
 import { getParents } from '@/services/getParents';
@@ -215,26 +210,20 @@ const schema = yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
       .required('Необходимо принять согласие'),
-    logo: yup
-      .mixed()
-      .nullable()
-      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
-        if (!value || typeof value === 'string') return true;
-        //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 2 * 1048576;
-      }),
-    scan: yup
-      .mixed()
-      .required('Обязательное поле')
-      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
-        if (!value || typeof value === 'string') return true;
-        //@ts-expect-error none
-        return convertSizeToBites(value.size) <= 2 * 1048576;
-      }),
   })
   .required();
 
-const TradeUnionRegistrationForm = () => {
+const StructureCreateForm = ({
+  guid,
+  parentType,
+  owner,
+  tu,
+}: {
+  guid?: string;
+  parentType?: number | null;
+  owner?: string;
+  tu?: ITradeUnion | null;
+}) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -243,12 +232,12 @@ const TradeUnionRegistrationForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
     setValue: setFormValue,
     setError,
     getValues,
     control,
+    reset,
   } = methods;
 
   const router = useRouter();
@@ -281,25 +270,15 @@ const TradeUnionRegistrationForm = () => {
     return false;
   }, [type]);
 
-  useEffect(() => {
-    console.log('type', type);
-  }, [type]);
-
-  const queryClient = useQueryClient();
-
   const { refetch } = useFetchProfile();
 
-  const {
-    mutate,
-    isSuccess,
-    isPending: isLoading,
-  } = useMutation({
+  const { mutate, isPending: isLoading } = useMutation({
     mutationFn: async (data: ITradeUnion) => {
-      await registration(data);
-      await saveFormTULogo(data.logo);
-      await saveFormTUScan(data.scan);
-      await saveFormTUUsers(data.participants);
+      await createStructure(data);
       await refetch();
+    },
+    onSuccess: () => {
+      router.push('/structure?page=1&itemsPerPage=1000');
     },
   });
 
@@ -318,17 +297,18 @@ const TradeUnionRegistrationForm = () => {
     select: (data) => data.data.data,
   });
 
-  const { data: myTradeUnion, isFetching: isFetchingTradeUnion } = useQuery({
-    queryKey: ['myTradeUnion'],
-    queryFn: getMyTU,
-    select: (data) => data.data,
-  });
-
   const { data: options } = useQuery({
     queryKey: ['parentOrganizations'],
     queryFn: getParents,
     select: (data) => data.data.data,
   });
+
+  useEffect(() => {
+    if (guid && tradeUnions) {
+      const union = tradeUnions.find((el: ITradeUnion) => el.guid === guid);
+      setChoosenUnion(union);
+    }
+  }, [guid, tradeUnions, type]);
 
   useEffect(() => {
     if (valueAuto) setFormValue('titleForDocs', valueAuto);
@@ -338,37 +318,17 @@ const TradeUnionRegistrationForm = () => {
     if (inputText) setFormValue('titleForDocs', inputText);
   }, [inputText]);
 
-  useEffect(() => {
-    if (myTradeUnion) {
-      reset(myTradeUnion);
-      if (myTradeUnion?.title == myTradeUnion?.titleForDocs) setIsMyName(true);
-      if (myTradeUnion.parent && myTradeUnion.parent.guid && tradeUnions) {
-        setChoosenUnion(
-          tradeUnions.find(
-            (el: ITradeUnion) => el.guid === myTradeUnion?.parent.guid,
-          ),
-        );
-      }
-    }
-  }, [myTradeUnion, tradeUnions]);
-
-  useEffect(() => {
-    if (options == null) return;
-    if (options.length == 0) return;
-    if (myTradeUnion == null) return;
-    if (myTradeUnion.title == myTradeUnion.titleForDocs) return;
-    if (myTradeUnion.titleForDocs == null) return;
-    if (options.some((el: any) => el.title == myTradeUnion.titleForDocs)) {
-      setValueAuto(myTradeUnion.titleForDocs);
-      return;
-    }
-    setInputText(myTradeUnion.titleForDocs);
-  }, [myTradeUnion, options]);
-
   const onSubmit: SubmitHandler<ITradeUnion> = async (data) => {
     if (chosenUnionRequired == true && chosenUnion == null) return;
     data.percents = Number(data.percents);
-    mutate(data);
+    if (tu) mutate(data);
+    else {
+      const formatedData = {
+        ...data,
+        tradeunionOwner: { guid: String(owner) },
+      };
+      mutate(formatedData);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -386,15 +346,6 @@ const TradeUnionRegistrationForm = () => {
   };
 
   useEffect(() => {
-    if (isSuccess && !myTradeUnion?.tariff?.id) {
-      router.push('/tariffs');
-    } else if (isSuccess) {
-      router.push('/documents?incoming');
-    }
-    queryClient.invalidateQueries({ queryKey: ['myTradeUnion'] });
-  }, [isSuccess, myTradeUnion]);
-
-  useEffect(() => {
     if (addressString) {
       const timer = setTimeout(() => {
         mutateAddress(addressString);
@@ -407,6 +358,21 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (isMyName) setFormValue('titleForDocs', getValues('title'));
   }, [isMyName]);
+
+  useEffect(() => {
+    if (tu) {
+      //@ts-expect-error none
+      reset(tu);
+      setFormValue('type', tu.type);
+      //@ts-expect-error none
+      if (tu.parent?.guid) {
+        //@ts-expect-error none
+        const guid = tu.parent?.guid;
+        const union = tradeUnions.find((el: ITradeUnion) => el.guid === guid);
+        setChoosenUnion(union);
+      }
+    } else if (parentType) setFormValue('type', parentType + 1);
+  }, [parentType, tu]);
 
   useEffect(() => {
     if (value) {
@@ -425,15 +391,6 @@ const TradeUnionRegistrationForm = () => {
   }, [value]);
 
   useEffect(() => {
-    /*
-    switch (tuType) {
-      case 'Первичная профсоюзная организация':
-        return;
-      case 'Профсоюзная организация':
-        return;
-    }
-    */
-
     if (chosenUnion) {
       setFormValue('parent', chosenUnion?.guid);
       if (type && type > 4) {
@@ -525,11 +482,16 @@ const TradeUnionRegistrationForm = () => {
                               number: 2,
                             },
                             { name: 'Федерация профсоюзов', number: 1 },
-                          ].map((option) => (
-                            <MenuItem key={option.name} value={option.number}>
-                              {option.name}
-                            </MenuItem>
-                          ))}
+                          ]
+                            .filter((el) => {
+                              if (parentType) return el.number > parentType;
+                              else return true;
+                            })
+                            .map((option) => (
+                              <MenuItem key={option.name} value={option.number}>
+                                {option.name}
+                              </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText id={'type'} error={true}>
                           {error && error?.message}
@@ -538,7 +500,7 @@ const TradeUnionRegistrationForm = () => {
                     )}
                   />
                 </Grid2>
-                {(isFetchingTradeUnion || !tradeUnions) && (
+                {!tradeUnions && (
                   <Grid2
                     size={12}
                     sx={{ display: 'flex', justifyContent: 'center' }}
@@ -546,7 +508,7 @@ const TradeUnionRegistrationForm = () => {
                     <CircularProgress />
                   </Grid2>
                 )}
-                {!isFetchingTradeUnion && type && tradeUnions && (
+                {tradeUnions && (
                   <Grid2 size={12}>
                     <InputLabel>
                       Вышестоящая организация
@@ -564,6 +526,7 @@ const TradeUnionRegistrationForm = () => {
                     </InputLabel>
                     <Select
                       fullWidth
+                      disabled={!!guid}
                       sx={{
                         padding: 1.6,
                         outline:
@@ -582,25 +545,24 @@ const TradeUnionRegistrationForm = () => {
                         tradeUnions
                           .filter((elem: ITradeUnion) => elem.type < 4)
                           .map((el: ITradeUnion) => {
-                            if (el.title !== myTradeUnion?.title)
-                              return (
-                                <MenuItem
-                                  key={el.title + el.inn}
-                                  value={el.inn + '/' + el.title}
-                                >
-                                  {el.title.length > 80
-                                    ? el.inn +
-                                      ' - ' +
-                                      el.title.slice(0, 80) +
-                                      '...'
-                                    : el.inn + ' - ' + el.title}
-                                </MenuItem>
-                              );
+                            return (
+                              <MenuItem
+                                key={el.title + el.inn}
+                                value={el.inn + '/' + el.title}
+                              >
+                                {el.title.length > 80
+                                  ? el.inn +
+                                    ' - ' +
+                                    el.title.slice(0, 80) +
+                                    '...'
+                                  : el.inn + ' - ' + el.title}
+                              </MenuItem>
+                            );
                           })}
                     </Select>
                   </Grid2>
                 )}
-                <Grid2 size={9} container>
+                <Grid2 size={12} container>
                   <Grid2 size={12}>
                     <InputLabel>
                       Наименование{' '}
@@ -636,13 +598,6 @@ const TradeUnionRegistrationForm = () => {
                     </InputLabel>
                     <InputDate name="creationDate" />
                   </Grid2>
-                </Grid2>
-                <Grid2 size={3}>
-                  <InputImage
-                    sx={{ width: '100%', height: 'calc(100% - 40px)', mt: 4 }}
-                    name="logo"
-                    label="Добавить логотип"
-                  />
                 </Grid2>
                 <Grid2 size={4}>
                   <InputLabel>
@@ -1189,57 +1144,6 @@ const TradeUnionRegistrationForm = () => {
                   />
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputFile
-                    name="scan"
-                    label={
-                      <span>
-                        Прикрепить Устав профсоюзной организации <br />
-                        (документ в формате pdf размером до 2МБ)
-                      </span>
-                    }
-                    accept=".pdf"
-                    imageSelect="pdf"
-                    type="secondary"
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <InputFile
-                    name="participants"
-                    label={
-                      <span>
-                        Загрузить участников <br />
-                        (документ в формате xls размером до 2МБ)
-                      </span>
-                    }
-                    accept=".xls,.xlsx"
-                    imageInit="upload"
-                    type="secondary"
-                  />
-                </Grid2>
-                <Grid2 size={12}>
-                  <Box
-                    width={'50%'}
-                    m={'0 auto'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    gap={1.2}
-                    justifyContent={'center'}
-                    component={'a'}
-                    href="/members-template.xlsx"
-                    download
-                  >
-                    <img src="/images/xml.svg" alt="xml"></img>
-                    <Typography
-                      lineHeight={'27px'}
-                      fontSize={16}
-                      color="rgb(32, 34, 36)"
-                      fontWeight={600}
-                    >
-                      Шаблон списка участников профсоюза
-                    </Typography>
-                  </Box>
-                </Grid2>
-                <Grid2 size={12}>
                   <InputCheckbox
                     sx={{ justifyContent: 'center' }}
                     name="isActive"
@@ -1257,7 +1161,9 @@ const TradeUnionRegistrationForm = () => {
                           fontSize: '20px',
                           lineHeight: '27px',
                         }}
-                        onClick={() => router.push('/documents?incoming')}
+                        onClick={() =>
+                          router.push('/structure?page=1&itemsPerPage=1000')
+                        }
                       >
                         Отменить
                       </Button>
@@ -1296,4 +1202,4 @@ const TradeUnionRegistrationForm = () => {
   );
 };
 
-export default TradeUnionRegistrationForm;
+export default StructureCreateForm;

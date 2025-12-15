@@ -310,7 +310,9 @@ const Table: FC<ITableProps> = ({ docs }) => {
                               fontWeight={doc.status === 'NEW' ? 700 : 600}
                               textAlign={'center'}
                             >
-                              {doc.documentType === 'AM' && doc.user
+                              {(doc.documentType === 'AM' ||
+                                doc.documentType === 'AP') &&
+                              doc.user
                                 ? doc.user.name
                                 : el.tradeunion}
                             </Typography>

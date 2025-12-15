@@ -3,6 +3,8 @@ import {
   TypeUseFetchList,
   useFetchList,
 } from '@/services/universal/fetch-list';
+import { useQuery } from '@tanstack/react-query';
+import { getStructure } from './UseFormTUReg';
 
 interface PropsTreeList {
   type?: TypeUseFetchList;
@@ -25,6 +27,18 @@ export const useFetchTree = (
   });
 };
 
+export const useFetchTradeUnionsTree = (guid: string) => {
+  const { data: info } = useQuery({
+    queryKey: ['tradeunionTree'],
+    queryFn: async () => {
+      await getStructure(guid);
+    },
+    select: (data) => data,
+    refetchOnMount: 'always',
+  });
+  return info;
+};
+
 export const getParentNode = (
   nodes: OrganizationNode[],
   childId: number,
@@ -43,6 +57,30 @@ export const getParentNode = (
   }
 
   return null;
+};
+
+export const getNodeByGuid = (
+  nodes: OrganizationNode[],
+  targetGuid: string,
+): OrganizationNode | null => {
+  const search = (
+    currentNodes: OrganizationNode[],
+  ): OrganizationNode | null => {
+    for (const node of currentNodes) {
+      if (node.guid === targetGuid) {
+        return node;
+      }
+
+      if (node.children) {
+        const result = search(node.children);
+        if (result) return result;
+      }
+    }
+
+    return null;
+  };
+
+  return search(nodes);
 };
 
 export const isChildOf = (

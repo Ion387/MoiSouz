@@ -139,6 +139,16 @@ const StructurePageCreateContent = () => {
                       formHelperText: { style: { whiteSpace: 'wrap' } },
                     }}
                   />
+                  {data &&
+                    data.data.status === 'error' &&
+                    typeof data.data.description === 'string' && (
+                      <Typography
+                        variant="h4"
+                        color={globalTheme.palette.red.main}
+                      >
+                        {data.data.description}
+                      </Typography>
+                    )}
                   <Grid2 size={12} display={'flex'} justifyContent={'center'}>
                     <Button
                       type="submit"
@@ -170,7 +180,7 @@ const StructurePageCreateContent = () => {
       </Box>
     );
 
-  if (data?.data.description.guid)
+  if (typeof data?.data.description === 'object' && data?.data.description.guid)
     return (
       <StructureCreateForm
         owner={data?.data.description.guid}

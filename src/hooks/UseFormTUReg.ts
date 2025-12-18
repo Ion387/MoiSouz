@@ -41,7 +41,7 @@ export const createStructureOwner = async (data: {
   email: string;
   password: string;
 }) => {
-  return axios.post<{ description: IProfile; status: string }>(
+  return axios.post<{ description: IProfile | string; status: string }>(
     `${getBackendUrl}/api/private/orgstructure/owner`,
     data,
     {
@@ -56,6 +56,17 @@ export const createStructure = async (data: ITradeUnion) => {
   return axios.post<ITradeUnion>(
     `${getBackendUrl}/api/private/orgstructure/tradeunion`,
     data,
+    {
+      headers: {
+        ...(await getHeaders()),
+      },
+    },
+  );
+};
+
+export const deleteStructure = async (guid: string) => {
+  return axios.delete<ITradeUnion>(
+    `${getBackendUrl}/api/private/orgstructure/tradeunion/${guid}`,
     {
       headers: {
         ...(await getHeaders()),

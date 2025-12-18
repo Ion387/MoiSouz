@@ -16,12 +16,16 @@ import {
   MenuItem,
   Popover,
   ListItemText,
+  Divider,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Icon } from '@/components/ui';
 import { useFetchTUOwner } from '@/hooks/useTU';
 import { isChildOf } from '@/hooks/UseTree';
 import { useRouter } from 'next/navigation';
+import { useFetchProfile } from '@/hooks/useFetchProfile';
+import { deleteStructure } from '@/hooks/UseFormTUReg';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Типы для данных
 interface OrganizationNode {
@@ -71,14 +75,16 @@ const TreeTableRow: React.FC<{
   const tuOwner = useFetchTUOwner();
   const [isActive, setIsActive] = useState<boolean>(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { info } = useFetchProfile();
 
   useEffect(() => {
-    if (tuOwner && data) {
+    if (tuOwner && data && info && info.isOrgstructure) {
       setIsActive(
         isChildOf(data, Number(tuOwner?.id), node.id) || tuOwner.id === node.id,
       );
     }
-  }, [tuOwner, data, node]);
+  }, [tuOwner, data, node, info]);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -103,6 +109,15 @@ const TreeTableRow: React.FC<{
   const handleCreate = (guid?: string) => {
     if (guid) router.push(`/structure/create?guid=${guid}`);
     else router.push(`/structure/create`);
+  };
+
+  const handleDelete = async (guid?: string) => {
+    if (guid) {
+      await deleteStructure(guid);
+      await queryClient.invalidateQueries({
+        queryKey: ['/api/private/orgstructure/tree'],
+      });
+    }
   };
 
   return (
@@ -282,17 +297,22 @@ const TreeTableRow: React.FC<{
                     </ListItemIcon>
                     <ListItemText>Редактировать</ListItemText>
                   </MenuItem>
-                  {/* {<Divider></Divider>
-                  <MenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Icon name="delete" color="red" />
-                    </ListItemIcon>
-                    <ListItemText>Удалить</ListItemText>
-                  </MenuItem>} */}
+                  {tuOwner?.id !== node.id && (
+                    <>
+                      <Divider></Divider>
+                      <MenuItem
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(node.guid);
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Icon name="delete" color="red" />
+                        </ListItemIcon>
+                        <ListItemText>Удалить</ListItemText>
+                      </MenuItem>
+                    </>
+                  )}
                 </Popover>
               </>
             )}

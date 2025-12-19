@@ -19,6 +19,12 @@ import {
   useFetchList,
 } from '@/services/universal/fetch-list';
 
+const isCommitteeRoles: string[] = [
+  'Председатель',
+  'Заместитель председателя',
+  'Член профкома',
+];
+
 export const useForm = () => {
   const router = useRouter();
 
@@ -58,7 +64,13 @@ export const useForm = () => {
 
   const onSubmit: (data: IFormColleagueProfile) => Promise<void> = async (
     data,
-  ) => mutate(data);
+  ) => {
+    const formattedData: IFormColleagueProfile = {
+      ...data,
+      isCommittee: isCommitteeRoles.includes(String(data.role)),
+    };
+    mutate(formattedData);
+  };
 
   return { onCancel, onSubmit, isSuccess, isLoading: isMutation > 0, error };
 };

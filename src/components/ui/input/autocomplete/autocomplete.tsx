@@ -72,11 +72,22 @@ export const InputAutocomplete: FC<PropsWithSX & Props> = ({
         getOptionLabel={(option) =>
           typeof option === 'string' ? option : option.title
         }
-        onChange={(_, value) =>
-          multiple == true
-            ? onChange((value as IOption[]).map((el) => el.id))
-            : onChange((value as IOption).id)
-        }
+        onChange={(_, value) => {
+          if (multiple) {
+            if (Array.isArray(value)) {
+              //@ts-expect-error none
+              onChange(value.map((el) => el.id));
+            } else {
+              onChange([]);
+            }
+          } else {
+            if (value && typeof value === 'object' && 'id' in value) {
+              onChange((value as IOption).id);
+            } else {
+              onChange(null);
+            }
+          }
+        }}
         disablePortal
         multiple={multiple}
         options={options}

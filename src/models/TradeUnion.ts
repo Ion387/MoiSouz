@@ -47,14 +47,15 @@ export interface ITradeUnion {
   logo?: object | null | string;
   percents?: number;
   tradeunionOwner?: { guid: string };
-  scan: object | null | string;
+  scan?: object | null | string;
   participants?: object | null | string;
   children?: {
     guid: string;
     inn: string;
     title: string;
   }[];
-  tuType: TtyTypes;
+  tuType?: TtyTypes;
+  type: number;
 }
 
 export interface ITradeUnionUploadUsersForm {
@@ -64,4 +65,6 @@ export interface ITradeUnionUploadUsersForm {
 export type TtyTypes =
   | 'Первичная профсоюзная организация'
   | 'Первичная профсоюзная организация без ИНН'
-  | 'Профсоюзная организация';
+  | 'Территориальная профсоюзная организация'
+  | 'Региональная профсоюзная организация'
+  | 'Федерация профсоюзов';

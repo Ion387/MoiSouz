@@ -223,23 +223,30 @@ const DocumentsWrapper = () => {
                     Заявление на вступление в профсоюз
                   </Button>
                 </Link>
-                {/* {<Button
-              variant="contained"
-              disabled
-             sx={{
-                      padding: '15px',
-                      fontSize: '16px',
-                      lineHeight: '20px',
+                {info?.hasTradeunionMember && (
+                  <Link
+                    href={'/appeal'}
+                    style={{ width: '100%', margin: '0 auto' }}
+                  >
+                    <Button
+                      variant="contained"
+                      disabled
+                      sx={{
+                        padding: '15px',
+                        fontSize: '16px',
+                        lineHeight: '20px',
 
-                      width: '100%',
-                      '&.Mui-disabled': {
-                        backgroundColor: `${globalTheme.palette.primary.main} !important`,
-                        color: 'white !important',
-                      },
-                    }}
-            >
-              Обращение в профсоюз
-            </Button>} */}
+                        width: '100%',
+                        '&.Mui-disabled': {
+                          backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                          color: 'white !important',
+                        },
+                      }}
+                    >
+                      Обращение в профсоюз
+                    </Button>
+                  </Link>
+                )}
               </>
             )}
           </Box>

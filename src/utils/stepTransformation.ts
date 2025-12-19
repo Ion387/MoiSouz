@@ -54,3 +54,32 @@ export const stepTransformationAg = (str: string) => {
   }
   return step;
 };
+
+export const stepTransformationAp = (str: string) => {
+  let step = 0;
+  switch (str) {
+    case 'Отправлено в профсоюз':
+      step = 1;
+      break;
+    case 'Ожидает отправки':
+      step = 1;
+      break;
+    case 'Утверждено':
+      step = 1;
+      break;
+    case 'В работе':
+      step = 2;
+      break;
+    case 'Обращение решено':
+      step = 3;
+      break;
+    case 'Отклонено':
+      step = 3;
+      break;
+
+    default:
+      step = 0;
+      break;
+  }
+  return step;
+};

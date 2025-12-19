@@ -7,6 +7,7 @@ import { User } from 'next-auth';
 export const useFetchProfile = () => {
   type UserWithDiscount = User & {
     isDiscount: boolean;
+    isOrgstructure: boolean;
   };
   const {
     data: info,

@@ -1,6 +1,8 @@
-import { IProfile } from "./Profile";
+import { IProfile } from './Profile';
+import { ITradeUnion } from './TradeUnion';
 
 export interface INewProtocol {
+  tradeunion?: ITradeUnion;
   step: string;
   documentDate: string;
   documentNumber: string;
@@ -30,6 +32,7 @@ export interface INewProtocol {
 }
 
 export interface INewProt {
+  tradeunion?: ITradeUnion;
   documentDate: string;
   documentNumber: string;
   documentType?: string;

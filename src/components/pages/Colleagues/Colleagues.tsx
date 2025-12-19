@@ -38,7 +38,7 @@ const ColleaguesWrapper = () => {
     total: number | null;
   }>({
     max: null,
-    total: 0,
+    total: null,
   });
 
   const [search, setSearch] = useState<string>(params?.get('q') || '');
@@ -140,10 +140,11 @@ const ColleaguesWrapper = () => {
   useEffect(() => {
     if (
       Number(count.total) >= Number(count.max) &&
-      info?.ROLES?.includes('ROLE_TRADEUNION')
+      info?.ROLES?.includes('ROLE_TRADEUNION') &&
+      tuOwner
     )
       setOpenCountDialog(true);
-  }, [count, info]);
+  }, [count, info, tuOwner]);
 
   return (
     <>

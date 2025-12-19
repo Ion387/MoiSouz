@@ -1,6 +1,34 @@
 import { type ITradeUnion } from './TradeUnion';
 import { type IProfile } from './Profile';
 
+export interface IDocAppeal {
+  tradeunion: ITradeUnion;
+  user: IProfile;
+  title: string;
+  files: {
+    type: string;
+    source: string;
+    originalName: string;
+    size: number;
+  }[];
+  documentDate: string;
+  documentType: string;
+  documentNumber: string;
+  folder: string;
+  id?: number;
+  file: string;
+  step: string;
+  status: 'VIEWED' | 'NEW';
+  guid: string;
+  data: {
+    type: string;
+    text: string;
+    isActive: boolean;
+    answer?: string;
+    action?: string;
+  };
+}
+
 export interface IDoc {
   tradeunion: ITradeUnion;
   user: IProfile;

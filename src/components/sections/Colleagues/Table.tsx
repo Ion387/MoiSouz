@@ -139,7 +139,7 @@ export const Table: FC<ITableProps> = ({
 
   return (
     <Paper sx={{ p: 0, pb: 1.6, pointerEvents: disabled ? 'none' : 'auto' }}>
-      <Grid2 container sx={{ p: 1.6 }}>
+      <Grid2 container sx={{ p: 1.6 }} spacing={0.8}>
         <Grid2 size={2}>
           <Typography
             variant="body2"
@@ -224,6 +224,7 @@ export const Table: FC<ITableProps> = ({
             >
               <Grid2
                 container
+                spacing={0.8}
                 sx={{
                   p: 1.6,
                   width: '100%',
@@ -231,11 +232,25 @@ export const Table: FC<ITableProps> = ({
                   userSelect: owner ? 'none' : 'all',
                 }}
               >
-                <Grid2 size={2}>
+                <Grid2 size={2} position={'relative'}>
+                  <Box
+                    sx={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      backgroundColor: el.isActive
+                        ? 'rgb(121, 216, 191)'
+                        : 'rgb(255, 152, 112)',
+                      opacity: 1,
+                      position: 'absolute',
+                      top: '16px',
+                    }}
+                  />
                   <Typography
                     variant="body2"
                     fontWeight={600}
                     py={1}
+                    pl={1.2}
                     sx={{ userSelect: 'none' }}
                   >
                     {el.name}

@@ -79,7 +79,7 @@ const schema = yup
         return cleaned?.length === 11;
       }),
     title: yup.string().required('Обязательное поле'),
-    creationDate: yup.string().required('Обязательное поле'),
+    creationDate: yup.string().nullable(),
     ogrn: yup
       .string()
       .required('Обязательное поле')
@@ -99,50 +99,62 @@ const schema = yup
           (value) => !validateInn(String(value)), // Валидация ИНН
         ),
     }),
-    kpp: yup
-      .string()
-      .required('Обязательное поле')
-      .test(
-        'kpp',
-        (params) => validateKpp(params.value),
-        (value) => !validateKpp(String(value)),
-      ),
-    registrationDate: yup.string().required('Обязательное поле'),
-    okato: yup
-      .string()
-      .required('Обязательное поле')
-      .max(11, 'ОКАТО состоит макс. из 11 цифр'),
-    oktmo: yup
-      .string()
-      .required('Обязательное поле')
-      .test(
-        'oktmo',
-        (params) => ValidateOktmo(params.value),
-        (value) => !ValidateOktmo(String(value)),
-      ),
+    kpp: yup.string().when('tuType', {
+      is: (tuType: TtyTypes) =>
+        tuType === 'Первичная профсоюзная организация без ИНН',
+      then: (schema) => schema.notRequired(), // Необязательно
+      otherwise: (schema) =>
+        schema.required('Обязательное поле').test(
+          'kpp',
+          (params) => validateKpp(params.value),
+          (value) => !validateKpp(String(value)),
+        ),
+    }),
+    registrationDate: yup.string().when('tuType', {
+      is: (tuType: TtyTypes) =>
+        tuType === 'Первичная профсоюзная организация без ИНН',
+      then: (schema) => schema.notRequired(), // Необязательно
+      otherwise: (schema) => schema.required('Обязательное поле'),
+    }),
+    okato: yup.string().when('tuType', {
+      is: (tuType: TtyTypes) =>
+        tuType === 'Первичная профсоюзная организация без ИНН',
+      then: (schema) => schema.notRequired(), // Необязательно
+      otherwise: (schema) =>
+        schema
+          .required('Обязательное поле')
+          .max(11, 'ОКАТО состоит макс. из 11 цифр'),
+    }),
+    oktmo: yup.string().when('tuType', {
+      is: (tuType: TtyTypes) =>
+        tuType === 'Первичная профсоюзная организация без ИНН',
+      then: (schema) => schema.notRequired(), // Необязательно
+      otherwise: (schema) =>
+        schema.required('Обязательное поле').test(
+          'oktmo',
+          (params) => ValidateOktmo(params.value),
+          (value) => !ValidateOktmo(String(value)),
+        ),
+    }),
     titleForDocs: yup.string().required('Обязательное поле'),
     address: yup.object({
-      postcode: yup
-        .string()
-        .required('Укажите индекс')
-        .length(6, 'Почтовый индекс должен содержать 6 символов'),
-      region: yup.string().required('Укажите регион'),
-      area: yup.string(),
-      city: yup.string().required('Укажите населенный пункт'),
-      street: yup.string().required('Укажите улицу'),
-      house: yup.string().required('Укажите дом/здание'),
-      flat: yup.string(),
+      postcode: yup.string().nullable(),
+      region: yup.string().nullable(),
+      area: yup.string().nullable(),
+      city: yup.string().nullable(),
+      street: yup.string().nullable(),
+      house: yup.string().nullable(),
+      flat: yup.string().nullable(),
     }),
     chairmanEmail: yup
       .string()
-      .required('Обязательное поле')
       .matches(
         /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
         'Некорректный адрес электронной почты',
       ),
     chairmanPhone: yup
       .string()
-      .required('Обязательное поле')
+      .nullable()
       .matches(
         /^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/,
         'Введите корректный номер (+7XXXXXXXXXX)',
@@ -175,19 +187,19 @@ const schema = yup
         ),
     }),
     chairman: yup.object({
-      firstName: yup.string().required('Обязательное поле'),
-      lastName: yup.string().required('Обязательное поле'),
+      firstName: yup.string().nullable(),
+      lastName: yup.string().nullable(),
       middleName: yup.string().nullable(),
     }),
     employer: yup
       .object({
-        title: yup.string().required('Обязательное поле'),
-        firstName: yup.string().required('Обязательное поле'),
-        lastName: yup.string().required('Обязательное поле'),
+        title: yup.string().nullable(),
+        firstName: yup.string().nullable(),
+        lastName: yup.string().nullable(),
         middleName: yup.string().nullable(),
         inn: yup
           .string()
-          .required('Обязательное поле')
+          .nullable()
           .test(
             'inn',
             (params) => validateInn(params.value),
@@ -214,7 +226,7 @@ const schema = yup
     isActive: yup
       .bool()
       .oneOf([true], 'Необходимо принять согласие')
-      .required('Необходимо принять согласие'),
+      .nullable(),
     logo: yup
       .mixed()
       .nullable()
@@ -225,7 +237,7 @@ const schema = yup
       }),
     scan: yup
       .mixed()
-      .required('Обязательное поле')
+      .nullable()
       .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
         if (!value || typeof value === 'string') return true;
         //@ts-expect-error none
@@ -622,18 +634,7 @@ const TradeUnionRegistrationForm = () => {
                     />
                   </Grid2>
                   <Grid2 size={12}>
-                    <InputLabel>
-                      Дата образования{' '}
-                      <span
-                        style={
-                          !!errors.creationDate?.message
-                            ? { color: theme.palette.red.main }
-                            : { color: theme.palette.primary.main }
-                        }
-                      >
-                        *
-                      </span>
-                    </InputLabel>
+                    <InputLabel>Дата образования </InputLabel>
                     <InputDate name="creationDate" />
                   </Grid2>
                 </Grid2>
@@ -669,15 +670,17 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     КПП{' '}
-                    <span
-                      style={
-                        !!errors.kpp?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 5 && (
+                      <span
+                        style={
+                          !!errors.kpp?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
                   <TextFieldCustom
                     register={register('kpp')}
@@ -689,15 +692,17 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     ОГРН{' '}
-                    <span
-                      style={
-                        !!errors.ogrn?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 5 && (
+                      <span
+                        style={
+                          !!errors.ogrn?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
                   <TextFieldCustom
                     register={register('ogrn')}
@@ -709,30 +714,34 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     Дата пост. на учет{' '}
-                    <span
-                      style={
-                        !!errors.registrationDate?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 5 && (
+                      <span
+                        style={
+                          !!errors.registrationDate?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
                   <InputDate name="registrationDate" />
                 </Grid2>
                 <Grid2 size={4}>
                   <InputLabel>
                     ОКАТО{' '}
-                    <span
-                      style={
-                        !!errors.okato?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 5 && (
+                      <span
+                        style={
+                          !!errors.okato?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
                   <TextFieldCustom
                     register={register('okato')}
@@ -744,15 +753,17 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={4}>
                   <InputLabel>
                     ОКТМО{' '}
-                    <span
-                      style={
-                        !!errors.oktmo?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
+                    {type !== 5 && (
+                      <span
+                        style={
+                          !!errors.oktmo?.message
+                            ? { color: theme.palette.red.main }
+                            : { color: theme.palette.primary.main }
+                        }
+                      >
+                        *
+                      </span>
+                    )}
                   </InputLabel>
 
                   <TextFieldCustom
@@ -840,23 +851,7 @@ const TradeUnionRegistrationForm = () => {
                   </Box>
                 </Grid2>
                 <Grid2 size={12}>
-                  <InputLabel sx={{ marginBottom: 0 }}>
-                    Адрес{' '}
-                    <span
-                      style={
-                        !!errors.address?.postcode?.message ||
-                        !!errors.address?.region?.message ||
-                        !!errors.address?.city?.message ||
-                        !!errors.address?.street?.message ||
-                        !!errors.address?.house?.message ||
-                        !!errors.address?.house?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
-                  </InputLabel>
+                  <InputLabel sx={{ marginBottom: 0 }}>Адрес</InputLabel>
                 </Grid2>
                 <Grid2 size={12}>
                   <Autocomplete
@@ -928,16 +923,6 @@ const TradeUnionRegistrationForm = () => {
                 <Grid2 size={12}>
                   <InputLabel sx={{ marginBottom: 0 }}>
                     Председатель{' '}
-                    <span
-                      style={
-                        !!errors.chairman?.lastName?.message ||
-                        !!errors.chairman?.firstName?.message
-                          ? { color: theme.palette.red.main }
-                          : { color: theme.palette.primary.main }
-                      }
-                    >
-                      *
-                    </span>
                   </InputLabel>
                 </Grid2>
                 <Grid2 size={12}>
@@ -1010,18 +995,6 @@ const TradeUnionRegistrationForm = () => {
                     <Grid2 size={12}>
                       <InputLabel sx={{ marginBottom: 0 }}>
                         Работодатель{' '}
-                        <span
-                          style={
-                            !!errors.employer?.title?.message ||
-                            !!errors.employer?.lastName?.message ||
-                            !!errors.employer?.firstName?.message ||
-                            !!errors.employer?.inn?.message
-                              ? { color: theme.palette.red.main }
-                              : { color: theme.palette.primary.main }
-                          }
-                        >
-                          *
-                        </span>
                       </InputLabel>
                     </Grid2>
                     <Grid2 size={12}>
@@ -1243,7 +1216,7 @@ const TradeUnionRegistrationForm = () => {
                   <InputCheckbox
                     sx={{ justifyContent: 'center' }}
                     name="isActive"
-                    link={'/politics.pdf'}
+                    link={'/policy'}
                     label={`Я соглашаюсь с политикой обработки персональных данных `}
                   />
                 </Grid2>

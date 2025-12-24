@@ -35,9 +35,11 @@ const ColleaguesWrapper = () => {
 
   const [count, setCount] = useState<{
     max: number | null;
+    discount: number | null;
     total: number | null;
   }>({
     max: null,
+    discount: null,
     total: null,
   });
 
@@ -132,10 +134,17 @@ const ColleaguesWrapper = () => {
     if (tuOwner && info?.ROLES?.includes('ROLE_TRADEUNION'))
       setCount({
         max: tuOwner.numberOfUsers === undefined ? null : tuOwner.numberOfUsers,
+        discount:
+          tuOwner.discountUsers === undefined ? null : tuOwner.discountUsers,
         total: tuOwner.countOfUsers === undefined ? null : tuOwner.countOfUsers,
       });
-    else setCount({ max: null, total: totalColleagueList });
-  }, [tuOwner, info, tuActive, totalColleagueList]);
+    else
+      setCount({
+        max: null,
+        discount: null,
+        total: totalColleagueList,
+      });
+  }, [tuOwner, info, tuActive, totalColleagueList, colleagueList]);
 
   useEffect(() => {
     if (
@@ -161,7 +170,6 @@ const ColleaguesWrapper = () => {
                   key={el.guid}
                   data={el}
                   count={count.total}
-                  max={count.max}
                   onClick={handleClickTradeunion}
                   active={tuActive?.guid == el.guid}
                 />
@@ -177,11 +185,7 @@ const ColleaguesWrapper = () => {
                 gap={1.5}
               >
                 <Link
-                  href={
-                    Number(count.total) >= Number(count.max)
-                      ? ''
-                      : '/colleagues/create'
-                  }
+                  href={'/colleagues/create'}
                   style={{
                     gap: 1,
                     height: 'fit-content',
@@ -195,7 +199,6 @@ const ColleaguesWrapper = () => {
                       height: 'fit-content',
                       width: '100%',
                     }}
-                    disabled={Number(count.total) >= Number(count.max)}
                   >
                     <Icon name="plus" color="secondary.main" />
                     Добавить участника
@@ -209,7 +212,6 @@ const ColleaguesWrapper = () => {
                     minWidth: 'fit-content',
                     marginTop: 'auto',
                   }}
-                  disabled={Number(count.total) >= Number(count.max)}
                   onClick={handleClickUpload}
                 >
                   <Icon name="upload" color="secondary.main" />
@@ -235,6 +237,8 @@ const ColleaguesWrapper = () => {
           onEdit={handleUserEdit}
           onDelete={handleUserDelete}
           disabled={isLoadingColleagueList}
+          count={count}
+          setCount={setCount}
         />
 
         <PaginationSimple
@@ -247,7 +251,7 @@ const ColleaguesWrapper = () => {
         />
       </Box>
 
-      {Number(count.total) >= Number(count.max) && (
+      {tuOwner && Number(count.discount) >= Number(count.max) && (
         <Dialog
           open={openCountDialog}
           onClose={() => setOpenCountDialog(false)}
@@ -265,8 +269,9 @@ const ColleaguesWrapper = () => {
             <Icon name="close" />
           </IconButton>
           <Typography variant="h3" textAlign="center" whiteSpace="pre-line">
-            Вы достигли максимального количества пользователей в тарифе. Чтобы
-            добавить новых пользователей перейдите на другой тариф
+            Вы достигли максимального количества пользователей c допуском к
+            разделу &quot;Скидки, льготы&quot; в тарифе. Чтобы добавить новых
+            пользователей перейдите на другой тариф
           </Typography>
         </Dialog>
       )}

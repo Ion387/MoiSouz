@@ -1,4 +1,5 @@
 export interface IFormColleagueProfile {
+  isDiscount?: boolean;
   id?: number;
   guid?: string;
   card?: string;

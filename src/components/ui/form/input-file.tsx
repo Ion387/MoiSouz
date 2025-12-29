@@ -50,6 +50,7 @@ interface Props {
   /** Deafult is "primary" */
   type?: 'primary' | 'secondary'; //
   defaultFile?: string;
+  originalName?: string;
 }
 
 export const InputFile: FC<PropsWithSX & Props> = ({
@@ -62,6 +63,7 @@ export const InputFile: FC<PropsWithSX & Props> = ({
   imageSelect,
   type = 'primary',
   defaultFile,
+  originalName,
 }) => {
   const { control, getValues, setValue } = useFormContext();
   const ref = createRef<HTMLInputElement>();
@@ -92,7 +94,11 @@ export const InputFile: FC<PropsWithSX & Props> = ({
         break;
 
       case 'string':
-        setPreview(`${getBackendUrl}${value}`);
+        setPreview(
+          `${originalName ? '' : getBackendUrl}${
+            originalName ? originalName : value
+          }`,
+        );
         setUploadedFile(`${getBackendUrl}${value}`);
         break;
 

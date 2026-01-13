@@ -479,7 +479,7 @@ export const ColleagueForm: FC<Props> = ({
       <InputCheckbox
         sx={{ justifyContent: 'center' }}
         name="isActive"
-        link={'/politics.pdf'}
+        link={'/policy'}
         label={`Я соглашаюсь с политикой обработки персональных данных `}
         disabled={isDisabled}
       />

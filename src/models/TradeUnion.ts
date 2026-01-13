@@ -1,40 +1,41 @@
 export interface ITradeUnion {
+  discountUsers?: number | null;
   numberOfUsers?: number;
   countOfUsers?: number;
   title: string;
   titleForDocs: string;
-  creationDate: string;
+  creationDate?: string | null;
   ogrn: string;
   inn?: string;
-  kpp: string;
+  kpp?: string;
   id?: number;
   guid?: string;
   address?: {
-    postcode: string;
-    region: string;
+    postcode?: string | null;
+    region?: string | null;
     area?: string | null;
-    city: string;
-    street: string;
-    house: string;
+    city?: string | null;
+    street?: string | null;
+    house?: string | null;
     flat?: string | null;
   };
-  registrationDate: string;
-  okato: string;
-  oktmo: string;
+  registrationDate?: string;
+  okato?: string;
+  oktmo?: string;
   chairman?: {
-    lastName: string;
-    firstName: string;
+    lastName?: string | null;
+    firstName?: string | null;
     middleName?: string | null;
   };
   employer?: {
-    lastName: string;
-    firstName: string;
+    lastName?: string | null;
+    firstName?: string | null;
     middleName?: string | null;
-    inn: string;
-    title: string;
+    inn?: string | null;
+    title?: string | null;
   };
-  chairmanEmail: string;
-  chairmanPhone: string;
+  chairmanEmail?: string | null;
+  chairmanPhone?: string | null;
   bank: {
     bank: string;
     rs: string;
@@ -43,7 +44,7 @@ export interface ITradeUnion {
   };
   email: string;
   phone: string;
-  isActive: boolean;
+  isActive?: boolean | null;
   logo?: object | null | string;
   percents?: number;
   tradeunionOwner?: { guid: string };

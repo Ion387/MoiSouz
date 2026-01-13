@@ -7,12 +7,14 @@ import { IFormFeedback } from '@/models/Forms';
 
 export const saveFormFeedback = async (data: IFormFeedback) => {
   return axios.post<{ description: string; status: string }>(
-    `${getBackendUrl}/api/feedback`,
+    `${getBackendUrl}/api/${data.email ? '' : 'private/'}feedback`,
     data,
     {
-      headers: {
-        ...(await getHeaders()),
-      },
+      headers: data.email
+        ? {}
+        : {
+            ...(await getHeaders()),
+          },
     },
   );
 };

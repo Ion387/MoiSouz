@@ -6,10 +6,12 @@ import ProgressBar from '@/components/ui/progressBar';
 import { getBackendUrl } from '@/constants/url';
 import { useFetchProfile } from '@/hooks/useFetchProfile';
 import { type IDocAppeal } from '@/models/Doc';
+import { Filetype } from '@/models/File';
 import { getDoc } from '@/services/getDocs';
-import { postDoc } from '@/services/postLogoandFile';
+import { postDoc, saveFormTU2Scan } from '@/services/postLogoandFile';
 import { globalTheme } from '@/styles/theme';
 import { getHeaders } from '@/utils/axios';
+import { convertSizeToBites } from '@/utils/convertStringToB';
 import { stepTransformationAp } from '@/utils/stepTransformation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -31,6 +33,13 @@ import * as yup from 'yup';
 const schema = yup
   .object({
     answer: yup.string().required('Введите ответ'),
+    upload: yup
+      .mixed<Filetype>()
+      .test('fileSize', 'Максимальный размер - 2 МБ', (value) => {
+        if (!value || typeof value === 'string') return true;
+        return convertSizeToBites(value.size) <= 2 * 1048576;
+      })
+      .nullable(),
   })
   .required();
 
@@ -101,8 +110,16 @@ const DocumentAppealItem = () => {
 
   const onSubmit: SubmitHandler<{
     answer: string;
+    upload?: Filetype | null;
   }> = async (data) => {
     mutate({ answer: data.answer, doc: doc as IDocAppeal });
+    if (data.upload && doc && doc.guid) {
+      const fn = async () => {
+        if (typeof getValues('upload') === 'object')
+          await saveFormTU2Scan(getValues('upload'), doc?.guid, 'AP_answer');
+      };
+      fn();
+    }
     if (open == 'decline') mutate2({ step: 'Отклонено' });
     if (open == 'success') mutate2({ step: 'Обращение решено' });
     setOpen(null);
@@ -196,18 +213,25 @@ const DocumentAppealItem = () => {
                   </Typography>
                 </Grid2>
                 {doc && !isLoading ? (
-                  Array.isArray(doc.files) && doc.files?.[0]?.source ? (
+                  Array.isArray(doc.files) &&
+                  doc.files.find((el) => el.type === 'AP') ? (
                     <Grid2 size={12}>
                       <FormProvider {...methods2}>
                         <form>
                           <InputFile
+                            originalName={
+                              doc.files.find((el) => el.type === 'AP')
+                                ?.originalName
+                            }
                             mw={'100%'}
                             name="upload"
                             label="Прикрепить скан (pdf)"
                             accept=".pdf"
                             imageSelect="pdf"
                             type="secondary"
-                            defaultFile={doc.files[0].source}
+                            defaultFile={
+                              doc.files.find((el) => el.type === 'AP')?.source
+                            }
                           />
                         </form>
                       </FormProvider>
@@ -233,6 +257,28 @@ const DocumentAppealItem = () => {
                       <Typography color="rgba(166, 166, 166, 1)">
                         {doc.data.answer}
                       </Typography>
+                      {doc.files.find((el) => el.type === 'AP_answer') && (
+                        <FormProvider {...methods2}>
+                          <form>
+                            <InputFile
+                              mw={'100%'}
+                              originalName={
+                                doc.files.find((el) => el.type === 'AP_answer')
+                                  ?.originalName
+                              }
+                              name="upload"
+                              label="Прикрепить скан (pdf)"
+                              accept=".pdf"
+                              imageSelect="pdf"
+                              type="secondary"
+                              defaultFile={
+                                doc.files.find((el) => el.type === 'AP_answer')
+                                  ?.source
+                              }
+                            />
+                          </form>
+                        </FormProvider>
+                      )}
                     </Grid2>
                   )}
                 {!!open && (
@@ -249,6 +295,17 @@ const DocumentAppealItem = () => {
                             placeholder="Введите ответ"
                             rows={6}
                           ></TextField>
+                        </Grid2>
+                        <Grid2 size={12}>
+                          <InputFile
+                            mw={'100%'}
+                            name="upload"
+                            label="Прикрепить скан (pdf)"
+                            accept=".pdf"
+                            imageSelect="pdf"
+                            type="secondary"
+                            defaultFile={doc.files[0].source}
+                          />
                         </Grid2>
                         <Grid2 size={6}>
                           <Button

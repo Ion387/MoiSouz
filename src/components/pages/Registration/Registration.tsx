@@ -299,7 +299,7 @@ const Registration = () => {
                     variant="body1"
                     fontWeight={600}
                   >
-                    <a href={'/politics.pdf'} target="_blank">
+                    <a href={'/policy'} target="_blank">
                       Я соглашаюсь с политикой обработки персональных данных
                     </a>
                   </Typography>
@@ -341,7 +341,7 @@ const Registration = () => {
               Регистрируясь в сервисе, Вы соглашаетесь с
               <span>
                 {' '}
-                <a href={'/politics.pdf'} target="_blank">
+                <a href={'/policy'} target="_blank">
                   политикой обработки персональных данных,
                 </a>{' '}
               </span>

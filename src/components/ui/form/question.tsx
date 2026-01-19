@@ -46,7 +46,7 @@ interface IQuestionFieldsProps {
     address: string;
   }>;
   isMembersLoading: boolean;
-  members: { role: string; name: string }[] | undefined;
+  members: { role: string | null | undefined; name: string }[] | undefined;
   articlesL: number;
 }
 

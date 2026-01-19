@@ -22,6 +22,7 @@ import {
   deleteColleagueProfile,
   useFetchColleagueList,
 } from '@/hooks/UseFormColleagueProfile';
+import { globalTheme } from '@/styles/theme';
 
 const KEY_PARAM_ORGANIZATION = 'organization';
 
@@ -67,6 +68,7 @@ const ColleaguesWrapper = () => {
 
   const [openCountDialog, setOpenCountDialog] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openWarning, setOpenWarning] = useState<number>(0);
   const [userDelete, setUserDelete] = useState<IFormColleagueProfile | null>(
     null,
   );
@@ -94,6 +96,7 @@ const ColleaguesWrapper = () => {
   };
 
   const handleClickUpload = () => {
+    setOpenWarning(0);
     setOpenDialog(true);
   };
 
@@ -184,26 +187,19 @@ const ColleaguesWrapper = () => {
                 marginTop="auto"
                 gap={1.5}
               >
-                <Link
-                  href={'/colleagues/create'}
-                  style={{
+                <Button
+                  variant="contained"
+                  sx={{
                     gap: 1,
                     height: 'fit-content',
                     width: '100%',
                   }}
+                  onClick={() => setOpenWarning(1)}
                 >
-                  <Button
-                    variant="contained"
-                    sx={{
-                      gap: 1,
-                      height: 'fit-content',
-                      width: '100%',
-                    }}
-                  >
-                    <Icon name="plus" color="secondary.main" />
-                    Добавить участника
-                  </Button>
-                </Link>
+                  <Icon name="plus" color="secondary.main" />
+                  Добавить участника
+                </Button>
+
                 <Button
                   variant="contained"
                   sx={{
@@ -212,7 +208,7 @@ const ColleaguesWrapper = () => {
                     minWidth: 'fit-content',
                     marginTop: 'auto',
                   }}
-                  onClick={handleClickUpload}
+                  onClick={() => setOpenWarning(2)}
                 >
                   <Icon name="upload" color="secondary.main" />
                   Загрузить участников
@@ -313,6 +309,79 @@ const ColleaguesWrapper = () => {
           </Button>
           <Button onClick={() => setUserDelete(null)}>Отмена</Button>
         </Box>
+      </Dialog>
+
+      <Dialog
+        open={!!openWarning}
+        onClose={() => setOpenWarning(0)}
+        PaperProps={{
+          sx: {
+            p: 4,
+            gap: 2,
+          },
+        }}
+      >
+        <IconButton
+          sx={{ position: 'absolute', right: 10, top: 10 }}
+          onClick={() => setOpenWarning(0)}
+        >
+          <Icon name="close" />
+        </IconButton>
+        <Typography variant="h3" textAlign="center" whiteSpace="pre-line">
+          Сохраняя данные, вы подтверждаете, что вами получено согласие на
+          передачу и обработку персональных данных от новых пользователей
+          системы, в том числе на передачу данных третьим лицам (в т.ч. АНО
+          МойСоюз) в целях предоставления доступа к функциональным возможностям
+          МойСоюз. При отсутствии согласия со стороны пользователя Вы несете
+          ответственность в соответствии с действующим законодательством
+        </Typography>
+        {openWarning == 1 ? (
+          <Link
+            href={'/colleagues/create'}
+            style={{
+              gap: 1,
+              height: 'fit-content',
+              width: 'fit-content',
+              alignSelf: 'center',
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                padding: '15px 30px',
+                fontSize: '20px',
+                lineHeight: '27px',
+                width: 'fit-content',
+                '&.Mui-disabled': {
+                  backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                  color: 'white !important',
+                },
+                gap: 1,
+              }}
+            >
+              Далее
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            variant="contained"
+            sx={{
+              padding: '15px 30px',
+              fontSize: '20px',
+              lineHeight: '27px',
+              width: 'fit-content',
+              alignSelf: 'center',
+              '&.Mui-disabled': {
+                backgroundColor: `${globalTheme.palette.primary.main} !important`,
+                color: 'white !important',
+              },
+              gap: 1,
+            }}
+            onClick={handleClickUpload}
+          >
+            Далее
+          </Button>
+        )}
       </Dialog>
     </>
   );

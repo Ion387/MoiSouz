@@ -26,14 +26,14 @@ export interface ITradeUnion {
     lastName?: string | null;
     firstName?: string | null;
     middleName?: string | null;
-  };
+  } | null;
   employer?: {
     lastName?: string | null;
     firstName?: string | null;
     middleName?: string | null;
     inn?: string | null;
     title?: string | null;
-  };
+  } | null;
   chairmanEmail?: string | null;
   chairmanPhone?: string | null;
   bank: {

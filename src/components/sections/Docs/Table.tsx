@@ -82,6 +82,14 @@ const Table: FC<ITableProps> = ({ docs }) => {
     handleMenuClose();
     router.push(`/documents/drafts/${doc.guid}`);
   };
+  const handleMenuEP = () => {
+    handleMenuClose();
+    router.push(`/new_ep`);
+  };
+  const handleMenuRU = () => {
+    handleMenuClose();
+    router.push(`/new_ru`);
+  };
   const queryClient = useQueryClient();
 
   const handleMenuDeleteOpen = (doc: IDoc | INewDoc | INewProt) => {
@@ -464,6 +472,36 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                 <ListItemText>Редактировать</ListItemText>
                               </MenuItem>
                             )}
+                            {doc.documentType === 'PR' &&
+                              doc.step === 'Утверждено' && (
+                                <>
+                                  <MenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMenuEP();
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <Icon name="document" />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                      Создать постановление
+                                    </ListItemText>
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMenuRU();
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <Icon name="info" />
+                                    </ListItemIcon>
+                                    <ListItemText>Создать выписку</ListItemText>
+                                  </MenuItem>
+                                </>
+                              )}
+                            <Divider></Divider>
                             <MenuItem
                               onClick={(e) => {
                                 e.stopPropagation();

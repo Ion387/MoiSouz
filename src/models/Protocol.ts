@@ -1,6 +1,16 @@
 import { IProfile } from './Profile';
 import { ITradeUnion } from './TradeUnion';
 
+export interface IQuestion {
+  speaker: string;
+  question: string;
+  decided: string;
+  document?: string;
+  approved?: number | null;
+  declined?: number | null;
+  ignored?: number | null;
+}
+
 export interface INewProtocol {
   tradeunion?: ITradeUnion;
   step: string;
@@ -58,15 +68,7 @@ export interface INewProt {
     documentTime?: string;
     guid?: string;
     address?: string;
-    questions: {
-      speaker: string;
-      question: string;
-      decided: string;
-      document?: string;
-      approved?: number | null;
-      declined?: number | null;
-      ignored?: number | null;
-    }[];
+    questions: IQuestion[];
     userList?: (string | undefined)[];
   };
 }

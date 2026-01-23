@@ -309,7 +309,9 @@ const DocumentAppealItem = () => {
                             accept=".pdf"
                             imageSelect="pdf"
                             type="secondary"
-                            defaultFile={doc.files[0].source}
+                            defaultFile={
+                              doc.files && doc.files[0] && doc.files[0]?.source
+                            }
                           />
                         </Grid2>
                         <Grid2 size={6}>

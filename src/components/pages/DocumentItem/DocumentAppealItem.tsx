@@ -130,8 +130,13 @@ const DocumentAppealItem = () => {
   }, [number, queryClient]);
 
   useEffect(() => {
-    if (doc && Array.isArray(doc.files)) {
-      setValue2('upload', doc.files[0].source);
+    if (
+      doc &&
+      Array.isArray(doc.files) &&
+      doc.files[0] &&
+      doc.files[0]?.source
+    ) {
+      setValue2('upload', doc.files[0]?.source);
     }
     if (doc && doc.data.answer && info?.ROLES?.includes('ROLE_TRADEUNION')) {
       setValue('answer', doc.data.answer);

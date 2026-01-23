@@ -318,6 +318,8 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                   {tradeUnions &&
                     infoUT &&
                     tradeUnions
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      .filter((t: any) => t.isActive)
                       .filter(
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         (t: any) =>
@@ -327,7 +329,9 @@ const TradeUnionMemberForm = ({ doc }: { doc?: IDoc | null }) => {
                       )
                       .map((el: ITradeUnion) => (
                         <MenuItem key={el.id} value={el.id}>
-                          {el.title}
+                          {el.title.length > 100
+                            ? el.title.slice(0, 100) + '...'
+                            : el.title}
                         </MenuItem>
                       ))}
                 </Select>

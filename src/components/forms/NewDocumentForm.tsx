@@ -96,9 +96,11 @@ const NewDocumentForm = ({
     search: '',
   });
 
-  const [members, setMembers] = useState<{ role: string; name: string }[]>([]);
+  const [members, setMembers] = useState<
+    { role: string | null | undefined; name: string }[]
+  >([]);
   const [selectedNotInvitedMembers, setSelectedNotInvitedMembers] = useState<
-    { role: string; name: string }[]
+    { role: string | null | undefined; name: string }[]
   >([]);
 
   useEffect(() => {

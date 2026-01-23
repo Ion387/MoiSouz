@@ -82,6 +82,14 @@ const Table: FC<ITableProps> = ({ docs }) => {
     handleMenuClose();
     router.push(`/documents/drafts/${doc.guid}`);
   };
+  const handleMenuEP = () => {
+    handleMenuClose();
+    router.push(`/new_ep`);
+  };
+  const handleMenuRU = () => {
+    handleMenuClose();
+    router.push(`/new_ru`);
+  };
   const queryClient = useQueryClient();
 
   const handleMenuDeleteOpen = (doc: IDoc | INewDoc | INewProt) => {
@@ -94,36 +102,46 @@ const Table: FC<ITableProps> = ({ docs }) => {
   const handleMenuDelete = async (doc: IDoc | INewDoc | INewProt) => {
     handleMenuClose();
     await deleteDoc(doc.guid);
+    queryClient.invalidateQueries({ queryKey: ['docs'] });
     await queryClient.refetchQueries({ queryKey: ['docs'] });
   };
 
   const handleSort = (param: string, reverse: boolean) => {
     setGroupedDocs((prev) => {
       if (!prev) return prev;
-      if (param === 'user')
-        return prev.map((group) => ({
-          ...group,
 
-          docs: reverse
-            ? [...group.docs]
-                // @ts-expect-error none
-                .sort((a, b) => a.user?.name.localeCompare(b.user?.name))
-                .reverse()
-            : [...group.docs].sort(
-                // @ts-expect-error none
-                (a, b) => a.user?.name.localeCompare(b.user?.name),
-              ),
-        }));
       return prev.map((group) => ({
         ...group,
+        docs: [...group.docs].sort((a, b) => {
+          let comparison = 0;
 
-        docs: reverse
-          ? [...group.docs]
-              // @ts-expect-error none
-              .sort((a, b) => a[param].localeCompare(b[param]))
-              .reverse()
-          : // @ts-expect-error none
-            [...group.docs].sort((a, b) => a[param].localeCompare(b[param])),
+          if (param === 'user') {
+            const nameA = a.user?.name || '';
+            const nameB = b.user?.name || '';
+            comparison = nameA.localeCompare(nameB);
+          } else if (param === 'documentDate') {
+            const parseDate = (dateStr: string | undefined): number => {
+              if (!dateStr) return 0;
+              const parts = dateStr.split('.');
+              if (parts.length !== 3) return 0;
+
+              const [day, month, year] = parts;
+              return new Date(`${year}-${month}-${day}`).getTime();
+            };
+
+            const dateA = parseDate(a.documentDate);
+            const dateB = parseDate(b.documentDate);
+            comparison = dateA - dateB;
+          } else {
+            // @ts-expect-error none
+            const valueA = a[param] || '';
+            // @ts-expect-error none
+            const valueB = b[param] || '';
+            comparison = String(valueA).localeCompare(String(valueB));
+          }
+
+          return reverse ? -comparison : comparison;
+        }),
       }));
     });
   };
@@ -454,6 +472,36 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                 <ListItemText>Редактировать</ListItemText>
                               </MenuItem>
                             )}
+                            {doc.documentType === 'PR' &&
+                              doc.step === 'Утверждено' && (
+                                <>
+                                  <MenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMenuEP();
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <Icon name="document" />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                      Создать постановление
+                                    </ListItemText>
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMenuRU();
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <Icon name="info" />
+                                    </ListItemIcon>
+                                    <ListItemText>Создать выписку</ListItemText>
+                                  </MenuItem>
+                                </>
+                              )}
+                            <Divider></Divider>
                             <MenuItem
                               onClick={(e) => {
                                 e.stopPropagation();

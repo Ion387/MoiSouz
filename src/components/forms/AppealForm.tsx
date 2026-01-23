@@ -169,7 +169,7 @@ const AppealForm = ({ doc }: { doc?: IDocAppeal | null }) => {
       setFormValue('id', doc.id ? doc.id : null);
       setFormValue(
         'upload',
-        doc.files && doc.files[0] ? doc.files[0].source : undefined,
+        doc.files && doc.files[0] ? doc.files[0]?.source : undefined,
       );
       setChoosenUnion(doc.tradeunion);
     }

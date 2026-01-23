@@ -186,11 +186,13 @@ const schema = yup
           (value) => !ValidateKsOrRs(String(value)),
         ),
     }),
-    chairman: yup.object({
-      firstName: yup.string().nullable(),
-      lastName: yup.string().nullable(),
-      middleName: yup.string().nullable(),
-    }),
+    chairman: yup
+      .object({
+        firstName: yup.string().nullable(),
+        lastName: yup.string().nullable(),
+        middleName: yup.string().nullable(),
+      })
+      .nullable(),
     employer: yup
       .object({
         title: yup.string().nullable(),
@@ -216,7 +218,8 @@ const schema = yup
             middleName: yup.string().nullable(),
             inn: yup.string().nullable(),
           }),
-      }),
+      })
+      .nullable(),
     percents: yup
       .number()
       .transform((value) => (Number.isNaN(value) ? 0 : value))
@@ -349,6 +352,10 @@ const TradeUnionRegistrationForm = () => {
   useEffect(() => {
     if (inputText) setFormValue('titleForDocs', inputText);
   }, [inputText]);
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   useEffect(() => {
     if (myTradeUnion) {

@@ -1,6 +1,6 @@
 import { getBackendUrl } from '@/constants/url';
 import { IDoc, IDocAppeal, INewDoc } from '@/models/Doc';
-import { IEPDoc } from '@/models/EPDoc';
+import { IEPDoc, IRuDoc } from '@/models/EPDoc';
 import { INewProtocol } from '@/models/Protocol';
 import { getHeaders } from '@/utils/axios';
 import axios from 'axios';
@@ -16,7 +16,7 @@ export const getDocs = async <
 };
 
 export const getDoc = async <
-  T extends IDoc | INewDoc | INewProtocol | IDocAppeal | IEPDoc,
+  T extends IDoc | INewDoc | INewProtocol | IDocAppeal | IEPDoc | IRuDoc,
 >(
   guid: string | undefined,
 ): Promise<T | null> => {

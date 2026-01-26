@@ -5,7 +5,7 @@ import ProgressBar from '@/components/ui/progressBar';
 import { type IEPDoc } from '@/models/EPDoc';
 import { type INewProtocol } from '@/models/Protocol';
 import { getDoc } from '@/services/getDocs';
-import { stepTransformationAg } from '@/utils/stepTransformation';
+import { stepTransformation } from '@/utils/stepTransformation';
 import { Box, Grid2, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -43,12 +43,8 @@ const NewEPPageWrapper = () => {
 
       <Grid2 size={4}>
         <ProgressBar
-          initialSteps={
-            doc?.step === 'Отказ' || doc?.step === 'Отклонено'
-              ? ['Черновик', 'На согласовании', 'Отклонено']
-              : ['Черновик', 'На согласовании', 'Утверждено']
-          }
-          steps={stepTransformationAg(String(doc?.step))}
+          initialSteps={['На согласовании', 'Утверждено']}
+          steps={stepTransformation(String(doc?.step))}
         />
       </Grid2>
     </Grid2>

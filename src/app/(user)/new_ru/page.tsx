@@ -1,7 +1,8 @@
+import NewRuPage from '@/components/pages/NewRUPage/NewRuPage';
 import React from 'react';
 
 const page = () => {
-  return <div>page</div>;
+  return <NewRuPage />;
 };
 
 export default page;

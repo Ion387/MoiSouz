@@ -319,7 +319,11 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                     ? 'Протокол заседания профкома'
                                     : doc.documentType === 'AP'
                                       ? 'Обращение в профсоюз'
-                                      : doc.documentType}
+                                      : doc.documentType === 'EP'
+                                        ? 'Постановление'
+                                        : doc.documentType === 'RU'
+                                          ? 'Выписка'
+                                          : doc.documentType}
                             </Typography>
                           </Grid2>
                           <Grid2 size={2.4}>

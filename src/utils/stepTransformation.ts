@@ -4,6 +4,12 @@ export const stepTransformation = (str: string) => {
     case 'Ожидает отправки':
       step = 1;
       break;
+    case 'На согласовании':
+      step = 1;
+      break;
+    case 'Утверждено':
+      step = 2;
+      break;
     case 'Отправлено в профсоюз':
       step = 2;
       break;

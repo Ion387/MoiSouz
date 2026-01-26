@@ -4,6 +4,12 @@ export const nameOfDoc = (type: string): string => {
     case 'AM':
       name = 'Заявление о вступлении в профсоюзную организацию №';
       break;
+    case 'EP':
+      name = 'Постановление №';
+      break;
+    case 'RU':
+      name = 'Выписка №';
+      break;
     case 'AG':
       name = 'Повестка заседания Профкома №';
       break;

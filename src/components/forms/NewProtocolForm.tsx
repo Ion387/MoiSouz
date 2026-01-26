@@ -36,7 +36,7 @@ import ProtocolQuestion from '../ui/form/protocolQuestions';
 import theme from '@/styles/theme';
 import { getHeaders } from '@/utils/axios';
 
-const itemSchema = yup.object().shape({
+export const itemSchema = yup.object().shape({
   speaker: yup.string().required('Обязательное поле'),
   question: yup.string().required('Обязательное поле'),
   decided: yup.string().required('Обязательное поле'),

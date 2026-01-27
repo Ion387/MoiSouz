@@ -17,6 +17,7 @@ export interface IRu {
   documentNumber?: string;
   data: {
     questions: IQuestion[];
+    parentGuid: string;
   };
   tradeunion: number;
   id?: number | null;

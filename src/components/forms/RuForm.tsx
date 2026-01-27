@@ -23,6 +23,7 @@ const schema = yup
     documentDate: yup.string(),
     documentNumber: yup.string(),
     data: yup.object({
+      parentGuid: yup.string().required('Обязательное поле'),
       questions: yup.array().of(itemSchema).required('Обязательное поле'),
     }),
     tradeunion: yup.number().required('Обязательное поле'),
@@ -81,6 +82,7 @@ const RuForm = ({
       protocol?.data?.questions?.filter((_, index) => index <= 3) || [];
     if (protocol && arr) setQuestions(arr);
     setFormValue('data.questions', arr);
+    if (protocol?.guid) setFormValue('data.parentGuid', protocol?.guid);
   }, [protocol]);
 
   useEffect(() => {
@@ -99,6 +101,7 @@ const RuForm = ({
       setFormValue('documentNumber', doc.documentNumber);
       setFormValue('documentDate', doc.documentDate);
       setFormValue('data.questions', doc.data.questions);
+      setFormValue('data.parentGuid', doc.data.parentGuid);
       setFormValue('id', doc.id ? doc.id : null);
       setFormValue('tradeunion', Number(doc.tradeunion.id));
     }

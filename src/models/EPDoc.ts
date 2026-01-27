@@ -31,6 +31,7 @@ export interface IRuDoc {
   step: string;
   tradeunion: ITradeUnion;
   data: {
+    parentGuid: string;
     questions: IQuestion[];
   };
   id?: number;

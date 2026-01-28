@@ -7,6 +7,7 @@ export interface IEP {
     parent?: string | null;
     question: string;
     resolution: string;
+    parentGuid: string;
   };
   tradeunion: number;
   id?: number | null;

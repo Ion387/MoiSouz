@@ -23,6 +23,7 @@ const schema = yup
     documentNumber: yup.string(),
     data: yup.object({
       parent: yup.string().nullable(),
+      parentGuid: yup.string().required('Обязательное поле'),
       question: yup.string().required('Выберите вопрос'),
       resolution: yup.string().required('Обязательное поле'),
     }),
@@ -76,11 +77,17 @@ const EPForm = ({
     },
   });
 
-  const { setValue: setFormValue, handleSubmit } = methods;
+  const {
+    setValue: setFormValue,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = methods;
 
   useEffect(() => {
     if (protocol)
       setQuestions(protocol?.data?.questions?.filter((_, index) => index > 3));
+    if (protocol?.guid) setFormValue('data.parentGuid', protocol?.guid);
   }, [protocol]);
 
   useEffect(() => {
@@ -107,6 +114,7 @@ const EPForm = ({
       setFormValue('documentDate', doc.documentDate);
       setFormValue('data.question', doc.data.question);
       setFormValue('data.resolution', doc.data.resolution);
+      setFormValue('data.parentGuid', doc.data.parentGuid);
       setFormValue('data.parent', doc.data.parent);
       setFormValue('id', doc.id ? doc.id : null);
       setFormValue('tradeunion', Number(doc.tradeunion.id));
@@ -141,6 +149,7 @@ const EPForm = ({
         question={question}
         questions={questions}
         setQuestion={setQuestion}
+        errors={errors}
       />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -164,7 +173,11 @@ const EPForm = ({
                   fontSize: '20px',
                   lineHeight: '27px',
                 }}
-                type="submit"
+                onClick={() => {
+                  if (!question)
+                    setError('data.question', { message: 'Выберите вопрос' });
+                }}
+                type={question ? 'submit' : 'button'}
               >
                 Далее
               </Button>

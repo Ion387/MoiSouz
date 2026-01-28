@@ -1,18 +1,34 @@
 import { type IQuestion } from '@/models/Protocol';
+import theme from '@/styles/theme';
 import { Box, Grid2, Typography } from '@mui/material';
 import React, { FC } from 'react';
+import { FieldErrors } from 'react-hook-form';
 
 interface IQuestionsProps {
   question: null | IQuestion;
   questions: undefined | IQuestion[];
   setQuestion: React.Dispatch<React.SetStateAction<IQuestion | null>>;
+  errors?: FieldErrors<{
+    documentDate?: string | undefined;
+    documentNumber?: string | undefined;
+    id?: number | null | undefined;
+    data: {
+      parent?: string | null | undefined;
+      parentGuid: string;
+      question: string;
+      resolution: string;
+    };
+    tradeunion: number;
+  }>;
 }
 
 const EPQuestions: FC<IQuestionsProps> = ({
   questions,
   question,
   setQuestion,
+  errors,
 }) => {
+  console.log('errors', errors);
   return (
     <Grid2 container spacing={1.2}>
       <Grid2 size={12}>
@@ -51,6 +67,18 @@ const EPQuestions: FC<IQuestionsProps> = ({
             </Box>
           </Grid2>
         ))}
+      {errors?.data?.question?.message && (
+        <Typography
+          variant="h4"
+          sx={{
+            color: theme.palette.red.main,
+            width: '100%',
+            textAlign: 'center',
+          }}
+        >
+          {errors?.data?.question?.message}
+        </Typography>
+      )}
     </Grid2>
   );
 };

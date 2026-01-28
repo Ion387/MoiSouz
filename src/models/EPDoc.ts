@@ -12,6 +12,7 @@ export interface IEPDoc {
     parent?: string | null;
     question: string;
     resolution: string;
+    parentGuid: string;
   };
   id?: number;
   file: null;

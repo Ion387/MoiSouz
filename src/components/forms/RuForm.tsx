@@ -39,7 +39,7 @@ const RuForm = ({
   protocol?: INewProt | null;
 }) => {
   const [questions, setQuestions] = useState<undefined | IQuestion[]>(
-    protocol?.data?.questions?.filter((el, index) => index <= 3),
+    protocol?.data?.questions,
   );
   const router = useRouter();
 
@@ -78,8 +78,7 @@ const RuForm = ({
   const { setValue: setFormValue, handleSubmit } = methods;
 
   useEffect(() => {
-    const arr =
-      protocol?.data?.questions?.filter((_, index) => index <= 3) || [];
+    const arr = protocol?.data?.questions || [];
     if (protocol && arr) setQuestions(arr);
     setFormValue('data.questions', arr);
     if (protocol?.guid) setFormValue('data.parentGuid', protocol?.guid);

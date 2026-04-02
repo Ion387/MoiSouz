@@ -21,6 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <meta name="color-scheme" content="only light"></meta>
       <meta name="yandex-verification" content="30cf19e6efee6408" />
       <body className={nunitoSans.className}>

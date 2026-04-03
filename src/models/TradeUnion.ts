@@ -57,6 +57,7 @@ export interface ITradeUnion {
   }[];
   tuType?: TtyTypes;
   type: number;
+  parent?: { guid: string; title: string; inn: string } | string | null;
 }
 
 export interface ITradeUnionUploadUsersForm {

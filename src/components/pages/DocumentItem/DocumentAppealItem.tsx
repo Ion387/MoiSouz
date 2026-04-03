@@ -218,7 +218,9 @@ const DocumentAppealItem = () => {
                   </Typography>
                 </Grid2>
                 {doc && !isLoading ? (
+                  doc.files &&
                   Array.isArray(doc.files) &&
+                  doc.files.length > 0 &&
                   doc.files.find((el) => el.type === 'AP') ? (
                     <Grid2 size={12}>
                       <FormProvider {...methods2}>
@@ -262,28 +264,33 @@ const DocumentAppealItem = () => {
                       <Typography color="rgba(166, 166, 166, 1)">
                         {doc.data.answer}
                       </Typography>
-                      {doc.files.find((el) => el.type === 'AP_answer') && (
-                        <FormProvider {...methods2}>
-                          <form>
-                            <InputFile
-                              mw={'100%'}
-                              originalName={
-                                doc.files.find((el) => el.type === 'AP_answer')
-                                  ?.originalName
-                              }
-                              name="upload"
-                              label="Прикрепить скан (pdf)"
-                              accept=".pdf"
-                              imageSelect="pdf"
-                              type="secondary"
-                              defaultFile={
-                                doc.files.find((el) => el.type === 'AP_answer')
-                                  ?.source
-                              }
-                            />
-                          </form>
-                        </FormProvider>
-                      )}
+                      {doc.files &&
+                        Array.isArray(doc.files) &&
+                        doc.files.length > 0 &&
+                        doc.files.find((el) => el.type === 'AP_answer') && (
+                          <FormProvider {...methods2}>
+                            <form>
+                              <InputFile
+                                mw={'100%'}
+                                originalName={
+                                  doc.files.find(
+                                    (el) => el.type === 'AP_answer',
+                                  )?.originalName
+                                }
+                                name="upload"
+                                label="Прикрепить скан (pdf)"
+                                accept=".pdf"
+                                imageSelect="pdf"
+                                type="secondary"
+                                defaultFile={
+                                  doc.files.find(
+                                    (el) => el.type === 'AP_answer',
+                                  )?.source
+                                }
+                              />
+                            </form>
+                          </FormProvider>
+                        )}
                     </Grid2>
                   )}
                 {!!open && (

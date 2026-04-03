@@ -82,13 +82,13 @@ const Table: FC<ITableProps> = ({ docs }) => {
     handleMenuClose();
     router.push(`/documents/drafts/${doc.guid}`);
   };
-  const handleMenuEP = () => {
+  const handleMenuEP = (doc: INewProt) => {
     handleMenuClose();
-    router.push(`/new_ep`);
+    router.push(`/new_ep?protocol=${doc.guid}`);
   };
-  const handleMenuRU = () => {
+  const handleMenuRU = (doc: INewProt) => {
     handleMenuClose();
-    router.push(`/new_ru`);
+    router.push(`/new_ru?protocol=${doc.guid}`);
   };
   const queryClient = useQueryClient();
 
@@ -319,7 +319,11 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                     ? 'Протокол заседания профкома'
                                     : doc.documentType === 'AP'
                                       ? 'Обращение в профсоюз'
-                                      : doc.documentType}
+                                      : doc.documentType === 'EP'
+                                        ? 'Постановление'
+                                        : doc.documentType === 'RU'
+                                          ? 'Выписка'
+                                          : doc.documentType}
                             </Typography>
                           </Grid2>
                           <Grid2 size={2.4}>
@@ -478,7 +482,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                   <MenuItem
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleMenuEP();
+                                      handleMenuEP(doc as INewProt);
                                     }}
                                   >
                                     <ListItemIcon>
@@ -491,7 +495,7 @@ const Table: FC<ITableProps> = ({ docs }) => {
                                   <MenuItem
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleMenuRU();
+                                      handleMenuRU(doc as INewProt);
                                     }}
                                   >
                                     <ListItemIcon>

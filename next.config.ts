@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'profsouz24.ru',
+        hostname: 'souz365.ru',
         port: '',
         pathname: '/**',
         search: '',

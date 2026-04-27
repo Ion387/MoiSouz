@@ -176,12 +176,12 @@ const Signin = () => {
               'Войти'
             )}
           </Button>
-          <Typography variant="body1" className={s.bottomText}>
+          {/* {<Typography variant="body1" className={s.bottomText}>
             Ещё нет аккаунта?
             <Link href={'/registration'} className={s.link}>
               Регистрация
             </Link>
-          </Typography>
+          </Typography>} */}
         </form>
       </Paper>
     </Box>

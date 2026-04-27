@@ -36,6 +36,7 @@ const HomePage = () => {
         <FeedbackDialog
           open={isContactModalOpen}
           onClose={() => setIsContactModalOpen(false)}
+          withEmail
         />
       </div>
     </Box>

@@ -9,17 +9,15 @@ const LandingFooter = () => {
       <Container>
         <Box className={s.footerBox}>
           <Box className={s.footerList}>
-            {/*
-            <Typography component="a" href={`tel:+79052207677`} variant="body2">
-              +79052207677
-            </Typography>
-            */}
             <Typography
               component="a"
-              href={`mailto:info@profsouz24.ru`}
+              href={`mailto:souz365@bk.ru`}
               variant="body2"
             >
-              info@profsouz24.ru
+              souz365@bk.ru
+            </Typography>
+            <Typography component="a" href={`tel:+78129856420`} variant="body2">
+              +7 (812) 985-64-20
             </Typography>
           </Box>
           <Box>
